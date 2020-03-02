@@ -1,18 +1,16 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import Homepage from './Homepage';
-import Login from './Login';
-import Signup from './Signup';
-import ResetPassword from './ResetPassword';
-import Home from './Home';
-import House from './House';
-import HandleRooms from './HandleRooms';
-import AddRoom from './AddRoom';
-import Room from './Room';
-import AddRoomDevice from './AddRoomDevice';
-import Devices from './Devices';
-import AddDevice from './AddDevice';
+import Homepage from './components/Homepage';
+import Login from './components/Login';
+import Signup from './components/Signup';
+import ResetPassword from './components/ResetPassword';
+import Home from './components/Home';
+import House from './components/House';
+import HandleRooms from './components/HandleRooms';
+import AddRoom from './components/AddRoom';
+import Room from './components/Room';
+import Devices from './components/Devices';
+import AddDevice from './components/AddDevice';
 import {
     BrowserRouter as Router,
     Switch,
@@ -26,7 +24,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            toX: false
+            toX: true
         }
     }
 
@@ -40,14 +38,10 @@ class App extends React.Component {
         return (
             <Router>
                 {
-                    this.state.toX ? <Redirect to='/X' /> : <React.Fragment /> 
+                    this.state.toX ? <Redirect to='/' /> : <React.Fragment /> 
                 }
                 <div>
                     <Switch>
-                        <Route path="/">
-                            <Homepage />
-                        </Route>
-
                         <Route path="/login">
                             <Login />
                         </Route>
@@ -80,16 +74,16 @@ class App extends React.Component {
                             <Room />
                         </Route>
 
-                        <Route path="/addRoomDevice">
-                            <AddRoomDevice />
-                        </Route>
-
                         <Route path="/devices">
                             <Devices />
                         </Route>
 
                         <Route path="/addDevice">
                             <AddDevice />
+                        </Route>
+
+                        <Route path="/">
+                            <Homepage />
                         </Route>
                     </Switch>
                 </div>
