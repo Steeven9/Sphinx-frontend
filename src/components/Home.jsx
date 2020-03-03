@@ -4,11 +4,11 @@ import '../App.css';
 class Home extends React.Component {
 
     constructor(props) {
-		super(props);
-		this.state = {
-			// placeholder
-		}
-	}
+        super(props);
+        this.state = {
+            // placeholder
+        }
+    }
 
     render() {
         return (

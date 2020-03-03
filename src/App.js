@@ -1,5 +1,8 @@
 import React from 'react';
 import './App.css';
+import 'materialize-css'; // It installs the JS asset only
+import 'materialize-css/dist/css/materialize.min.css';
+
 import Homepage from './components/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -11,6 +14,7 @@ import AddRoom from './components/AddRoom';
 import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
+
 import {
     BrowserRouter as Router,
     Switch,
