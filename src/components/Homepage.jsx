@@ -47,8 +47,15 @@ class Homepage extends React.Component {
                             <a className="waves-effect waves-light btn btn-primary center-align">Join now</a>
                         </div>
                     </section>
-
                 </div>
+
+                <footer className="page-footer">
+                    <div className="footer-copyright">
+                        <div className="container">
+                            © 2020 Sphinx Software
+                        </div>
+                    </div>
+                </footer>
             </div>
         );
     }
