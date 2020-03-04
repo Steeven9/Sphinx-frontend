@@ -14,6 +14,7 @@ import AddRoom from './components/AddRoom';
 import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
+import Template from './components/Template';
 
 import {
     BrowserRouter as Router,
@@ -28,7 +29,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            toX: true
+            toX: false
         }
     }
 
@@ -86,9 +87,15 @@ class App extends React.Component {
                             <AddDevice />
                         </Route>
 
+                        <Route path="/template">
+                            <Template />
+                        </Route>
+
                         <Route path="/">
                             <Homepage />
                         </Route>
+
+
                     </Switch>
                 </div>
             </Router>
