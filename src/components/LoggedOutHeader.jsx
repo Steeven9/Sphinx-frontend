@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import logo from "./img/logo-horizontal.svg";
 
-class NotLoggedInHeader extends React.Component {
+class LoggedOutHeader extends React.Component {
 
     constructor(props) {
 		super(props);
@@ -13,11 +13,11 @@ class NotLoggedInHeader extends React.Component {
 
     render() {
         return (
-            <header id="page-header" className="notLoggedInHeader">
+            <header id="page-header" className="loggedOutHeader">
                 <nav className="navbar-fixed">
                     <div className="nav-wrapper">
                         <a href="/" className="brand-logo">
-                        <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
+                            <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
                         </a>
                         <ul className="right nav-menu-desktop-right hide-on-med-and-down">
                             <li><a href="signup">Create account</a></li>
@@ -30,4 +30,4 @@ class NotLoggedInHeader extends React.Component {
     }
 }
 
-export default NotLoggedInHeader;
+export default LoggedOutHeader;

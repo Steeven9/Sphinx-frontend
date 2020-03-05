@@ -13,7 +13,7 @@ class LoggedInHeader extends React.Component {
 
     render() {
         return (
-            <header className="loggedInHeader">
+            <header id="page-header" className="loggedInHeader">
                 <nav className="navbar-fixed">
                     <div className="nav-wrapper">
                         <a href="/home" className="brand-logo">
