@@ -1,7 +1,6 @@
 import React from 'react';
 import '../App.css';
-import logo from './img/logo-horizontal.svg'
-import imgSmartHouse from './img/smart-home.svg'
+import imgSmartHouse from './img/smart-home.svg';
 
 class Homepage extends React.Component {
 
@@ -15,20 +14,6 @@ class Homepage extends React.Component {
     render() {
         return (
             <div id="wrapper" className="homepage img-homepage-headline main-img-background">
-                <header id="page-header">
-                    <nav className="navbar-fixed">
-                        <div className="nav-wrapper">
-                            <a href="/" className="brand-logo">
-                            <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
-                            </a>
-                            <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                <li><a href="signup">Create account</a></li>
-                                <li><a href="login">Log in</a></li>
-                            </ul>
-                        </div>
-                    </nav>
-                </header>
-
                 <div id="content" className="container">
                     <main>
                         <article>
@@ -52,12 +37,6 @@ class Homepage extends React.Component {
                         </article>
                     </main>
                 </div>
-
-                <footer className="page-footer">
-                    <div className="footer-copyright">
-                        <span>&copy;2020 Sphinx Software</span>
-                    </div>
-                </footer>
             </div>
         );
     }
