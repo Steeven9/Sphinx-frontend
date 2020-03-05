@@ -3,7 +3,7 @@ import './App.css';
 import 'materialize-css'; // It installs the JS asset only
 import 'materialize-css/dist/css/materialize.min.css';
 import LoggedInHeader from './components/LoggedInHeader';
-import NotLoggedInHeader from './components/NotLoggedInHeader';
+import LoggedOutHeader from './components/LoggedOutHeader';
 import Homepage from './components/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -49,9 +49,9 @@ class App extends React.Component {
                     this.state.toX ? <Redirect to='/' /> : <React.Fragment /> 
                 }
 
-                <div>
+                <div id="wrapper">
                     {
-                        this.state.loggedIn ? <LoggedInHeader /> : <NotLoggedInHeader /> 
+                        this.state.loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />
                     }
 
                     <Switch>
