@@ -10,6 +10,9 @@ class Footer extends React.Component {
 		}
 	}
 
+    /**
+     * Returns the Footer for all pages. It has no special components.
+     */
     render() {
         return (
             <footer className="page-footer">

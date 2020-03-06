@@ -10,6 +10,9 @@ class HandleRooms extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="handleRooms">

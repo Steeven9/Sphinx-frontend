@@ -10,6 +10,9 @@ class Home extends React.Component {
         }
     }
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="home">
