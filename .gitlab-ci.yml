@@ -1,0 +1,24 @@
+image: "node"
+
+stages:
+    - build
+    - test
+    - deploy
+
+install:
+    stage: build
+    script:
+        - yarn install
+    artifacts:
+        paths:
+            − node_modules/
+
+test:
+    stage: test
+    script:
+        - yarn test
+
+build:
+    stage: deploy
+    script:
+        - yarn build
