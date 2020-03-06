@@ -10,6 +10,9 @@ class AddRoom extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="addRoom">
