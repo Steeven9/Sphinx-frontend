@@ -10,8 +10,7 @@ install:
     script:
         - yarn install
     artifacts:
-        paths:
-            − node_modules/
+        paths: [node_modules/]
 
 test:
     stage: test
