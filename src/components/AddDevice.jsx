@@ -10,6 +10,9 @@ class AddDevice extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="addDevice">
