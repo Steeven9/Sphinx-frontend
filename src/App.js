@@ -2,8 +2,7 @@ import React from 'react';
 import './App.css';
 import 'materialize-css'; // It installs the JS asset only
 import 'materialize-css/dist/css/materialize.min.css';
-import LoggedInHeader from './components/LoggedInHeader';
-import LoggedOutHeader from './components/LoggedOutHeader';
+import Header from './components/Header';
 import Homepage from './components/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
@@ -50,9 +49,9 @@ class App extends React.Component {
                 }
 
                 <div id="wrapper">
-                    {
-                        this.state.loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />
-                    }
+                    <Header 
+                        loggedIn = {this.state.loggedIn}
+                    />
 
                     <Switch>
                         <Route path="/login">
