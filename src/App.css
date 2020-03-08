@@ -45,6 +45,7 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
 }
 
 #wrapper {
@@ -115,6 +116,14 @@ h3 {
     padding-left: 0 !important;
 }
 
+b {
+    color: #39086F;
+}
+
+i {
+    color: #39086F;
+}
+
 /*Custom*/
 .btn {
     margin-left: 2vh !important;
@@ -171,6 +180,17 @@ h3 {
     padding: 0 50px 0 50px !important;
 }
 
+.login {
+    background-color: #580B71;
+}
+
+.login-btn {
+    background-color: #FFB800;
+    border-radius: 20px;
+    padding: 10px;
+    width: 130px;
+}
+
 .headline-box {
     margin: calc(3vw + 3vh + 0.25vmin);
 }
@@ -199,3 +219,34 @@ h3 {
     border-radius: 10px;
     padding: 20px 40px 20px 40px;
 }
+
+.flex-raw {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+
+.sample-box {
+    margin-top: 25vh;
+    margin-bottom: 25vh;
+    position: center;
+
+}
+
+input {
+    max-width: 300px;
+
+}
+
+.instructions {
+    width: 200px;
+    text-align: center;
+    font-size: 9px;
+    color: darkgray;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
