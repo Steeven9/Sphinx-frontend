@@ -34,7 +34,7 @@ class Header extends React.Component {
                 <div className="navbar-fixed">
                         <nav className="navbar-fixed">
                             <div className="nav-wrapper">
-                                <a href="/home" className="brand-logo">
+                                <a href="/" className="brand-logo">
                                     <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
                                 </a>
 
