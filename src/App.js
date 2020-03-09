@@ -35,12 +35,20 @@ class App extends React.Component {
         }
     }
 
+    /**
+     * Used for redirections. It's a template for future redirections.
+     */
     toX = (x) => {
         this.setState({
             toX: true,
         });
     }
 
+    
+    /**
+     * Take cares of switching from one path to the other, adding the Header and the Footer.
+     * It only calls different components and deciding which ones to call, it has no pure html.
+     */
     render() {
         return (
             <Router>

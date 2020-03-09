@@ -10,6 +10,9 @@ class Devices extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="devices">
