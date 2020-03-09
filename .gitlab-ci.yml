@@ -28,6 +28,8 @@ yarn-build:
 
 docker-build:
     stage: deploy
+    image: docker    
+    tags: [dind]
     script:
         - docker build ./ -t steeven9/sa4-sphinx:frontend
         - docker push steeven9/sa4-sphinx:frontend
