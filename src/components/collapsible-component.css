@@ -1,0 +1,46 @@
+.row {
+    margin-bottom: 0 !important;
+}
+
+.MuiSlider-root {
+    color: #580B71 !important;
+}
+
+.collapsible-header {
+    align-items: center;
+}
+
+.collapsible-header p {
+    align-items: center;
+    margin: 0 !important
+}
+
+.device-name {
+    height: 19px;
+    left: 480px;
+    top: 363px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.device-location {
+    height: 16px;
+    left: 480px;
+    top: 383px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+}
+
+.device-parent {
+
+}
