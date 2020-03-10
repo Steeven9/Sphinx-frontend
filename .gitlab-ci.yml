@@ -28,16 +28,15 @@ yarn-build:
 
 docker-build:
     stage: deploy
-    image: docker:dind
+    image: docker:19.03.1
     variables:
         DOCKER_TLS_CERTDIR: "/certs"
-        DOCKER_DRIVER: overlay2
     services:
-        - docker:dind
+        - docker:19.03.1-dind
     tags: [dind]
     before_script:
         - docker info
         - docker login -u $DOCKER_USER -p $DOCKER_PSW       
     script:
-        - docker build ./ -t steeven9/sa4-sphinx:frontend
-        - docker push steeven9/sa4-sphinx:frontend
+        - docker build ./ -t $DOCKER_USER/sa4-sphinx:frontend
+        - docker push $DOCKER_USER/sa4-sphinx:frontend
