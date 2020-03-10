@@ -31,9 +31,13 @@ docker-build:
     image: docker
     variables:
         DOCKER_TLS_CERTDIR: "/certs"
+        DOCKER_DRIVER: overlay
     services:
-        - docker:19.03.1-dind
+        - docker:dind
     tags: [dind]
+    before_script:
+        - docker info
+        - docker login -u $DOCKER_USER -p $DOCKER_PSW       
     script:
         - docker build ./ -t steeven9/sa4-sphinx:frontend
         - docker push steeven9/sa4-sphinx:frontend
