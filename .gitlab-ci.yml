@@ -28,10 +28,10 @@ yarn-build:
 
 docker-build:
     stage: deploy
-    image: docker
+    image: docker:dind
     variables:
         DOCKER_TLS_CERTDIR: "/certs"
-        DOCKER_DRIVER: overlay
+        DOCKER_DRIVER: overlay2
     services:
         - docker:dind
     tags: [dind]
