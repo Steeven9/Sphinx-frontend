@@ -15,6 +15,7 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
 import Template from './components/Template';
+import RedirectionTest from './components/RedirectionTest';
 import Footer from './components/Footer';
 
 import {
@@ -31,16 +32,51 @@ class App extends React.Component {
 
         this.state = {
             loggedIn: false,
-            toX: false
+            toDashboard: false,
+            toLogin: false,
+            toHouse: false,
         }
     }
 
+    // /**
+    //  * Function used to cancel all redirections.
+    //  * Should get passed to every page to use on load in case of problems, so that previous redirections won't cause any.
+    //  * Note: I (Aron) don't think that this function will be used, but it's already here in case that something goes wrong.
+    //  */
+    // stopRedirections = () => {
+    //     this.setState({
+    //         toDashboard: false,
+    //         toLogin: false,
+    //         toDevices: false,
+    //         toRoom: false,
+    //         toHouse: false,
+    //     });
+    // }
+
     /**
-     * Used for redirections. It's a template for future redirections.
+     * Used for redirection to the Dashboard page.
      */
-    toX = (x) => {
+    redirectDashboard = () => {
         this.setState({
-            toX: true,
+            toDashboard: true,
+        });
+    }
+
+    /**
+     * Used for redirection to the Dashboard page.
+     */
+    redirectLogin = () => {
+        this.setState({
+            toLogin: true,
+        });
+    }
+
+    /**
+     * Used for redirection to the Dashboard page.
+     */
+    redirectHouse = () => {
+        this.setState({
+            toHouse: true,
         });
     }
 
@@ -52,9 +88,9 @@ class App extends React.Component {
     render() {
         return (
             <Router>
-                {
-                    this.state.toX ? <Redirect to='/' /> : <React.Fragment /> 
-                }
+                { this.state.toDashboard ? <Redirect to='/home' /> : <React.Fragment /> }
+                { this.state.toLogin ? <Redirect to='/login' /> : <React.Fragment /> }
+                { this.state.toHouse ? <Redirect to='/house' /> : <React.Fragment /> }
 
                 <div id="wrapper">
                     <Header 
@@ -63,15 +99,21 @@ class App extends React.Component {
 
                     <Switch>
                         <Route path="/login">
-                            <Login />
+                            <Login
+                                redirectDashboard = {this.redirectDashboard} 
+                            />
                         </Route>
 
                         <Route path="/signup">
-                            <Signup />
+                            <Signup
+                                redirectLogin = {this.redirectLogin} 
+                            />
                         </Route>
 
                         <Route path="/reset">
-                            <ResetPassword />
+                            <ResetPassword
+                                redirectLogin = {this.redirectLogin} 
+                            />
                         </Route>
 
                         <Route path="/home">
@@ -87,7 +129,9 @@ class App extends React.Component {
                         </Route>
 
                         <Route path="/addRoom">
-                            <AddRoom />
+                            <AddRoom
+                                redirectHouse = {this.redirectHouse} 
+                            />
                         </Route>
 
                         <Route path="/room">
@@ -104,6 +148,12 @@ class App extends React.Component {
 
                         <Route path="/template">
                             <Template />
+                        </Route>
+
+                        <Route path="/test">
+                            <RedirectionTest
+                                redirectDashboard = {this.redirectDashboard} 
+                            />
                         </Route>
 
                         <Route path="/">
