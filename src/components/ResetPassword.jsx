@@ -23,7 +23,7 @@ class ResetPassword extends React.Component {
                     </div>
                     <br/>
                     <div className=" instructions center">
-                        Type the email address registered to your account. If we find it in our records, you’ll receive the instructionsto restore your password.
+                        Type the email address registered to your account. If we find it in our records, you’ll receive the instructions to restore your password.
                     </div>
                     <br/> 
                     <div className='flex-column center'>
@@ -34,7 +34,7 @@ class ResetPassword extends React.Component {
                 <br/> <br/>
                 <div>
                     <div className="flex-raw">
-                        <a href="/login"><b>cancel</b></a>
+                        <a href="/login"><b>Cancel</b></a>
                         <form action="/login" method="POST">
                             <button className="login-btn">
                                <b>Reset</b> 

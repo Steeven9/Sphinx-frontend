@@ -30,7 +30,7 @@ class Login extends React.Component {
                 </div>
                 <br/>
                 <div className="center">
-                    <a href="/reset"><i>Reset password</i></a>
+                    <a href="/reset"><i>Forgot your password?</i></a>
                 </div>
                 <br/> <br/>
                 <div>
