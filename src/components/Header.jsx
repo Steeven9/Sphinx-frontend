@@ -33,32 +33,29 @@ class Header extends React.Component {
             <header id="page-header" className="header">
                 <div className="navbar-fixed">
                         <nav className="navbar-fixed">
-                            {
-                                this.state.loggedIn ? 
+                            <div className="nav-wrapper">
+                                <a href={this.state.loggedIn ? "/home" : "/"} className="brand-logo">
+                                    <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
+                                </a>
 
-                                <div className="nav-wrapper">
-                                    <a href="/home" className="brand-logo">
-                                        <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
-                                    </a>
+                                {
+                                    this.state.loggedIn ? 
+
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
                                         <li><a href="/rooms">My rooms</a></li>
                                         <li><a href="/devices">My devices</a></li>
                                         <li><a href="/template">Log out</a></li>
                                     </ul>
-                                </div>
                     
-                                :
+                                    :
 
-                                <div className="nav-wrapper">
-                                    <a href="/" className="brand-logo">
-                                        <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
-                                    </a>
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
                                         <li><a href="/signup">Create account</a></li>
                                         <li><a href="/login">Log in</a></li>
                                     </ul>
-                                </div>
-                            }
+                                }
+
+                            </div>
                         </nav>
                     </div>
             </header>
