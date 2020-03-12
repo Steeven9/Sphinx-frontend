@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 
-class Home extends React.Component {
+class Dashboard extends React.Component {
 
     constructor(props) {
         super(props);
@@ -15,7 +15,7 @@ class Home extends React.Component {
      */
     render() {
         return (
-            <div className="home">
+            <div className="dashboard">
                 html page code here
             </div>
         );
@@ -23,4 +23,4 @@ class Home extends React.Component {
 }
 
 
-export default Home;
+export default Dashboard;

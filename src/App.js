@@ -7,7 +7,7 @@ import Homepage from './components/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ResetPassword from './components/ResetPassword';
-import Home from './components/Home';
+import Dashboard from './components/Dashboard';
 import House from './components/House';
 import HandleRooms from './components/HandleRooms';
 import AddRoom from './components/AddRoom';
@@ -74,8 +74,8 @@ class App extends React.Component {
                             <ResetPassword />
                         </Route>
 
-                        <Route path="/home">
-                            <Home />
+                        <Route path="/dashboard">
+                            <Dashboard />
                         </Route>
 
                         <Route path="/house">
