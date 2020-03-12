@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -32,7 +33,7 @@ code {
     color: #FFFFFF;
 }
 
- /*Use this selector to give a custom width overriding the global style */
+/*Use this selector to give a custom width overriding the global style */
 .content-box {
     width: calc(70% + 10vmin) !important;
 }

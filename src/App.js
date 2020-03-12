@@ -17,6 +17,7 @@ import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
 import Template from './components/Template';
 import Footer from './components/Footer';
+import ControlledExpansionPanel from './components/ControlledExpansionPanel';
 
 import {
     BrowserRouter as Router,
@@ -46,7 +47,7 @@ class App extends React.Component {
         return (
             <Router>
                 {
-                    this.state.toX ? <Redirect to='/' /> : <React.Fragment /> 
+                    this.state.toX ? <Redirect to='/' /> : <React.Fragment />
                 }
 
                 <div id="wrapper">
@@ -97,6 +98,10 @@ class App extends React.Component {
 
                         <Route path="/template">
                             <Template />
+                        </Route>
+
+                        <Route path="/expand">
+                            <ControlledExpansionPanel />
                         </Route>
 
                         <Route path="/">

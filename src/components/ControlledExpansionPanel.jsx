@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function ControlledExpansionPanels() {
+export default function ControlledExpansionPanel() {
     const classes = useStyles();
     const [expanded, setExpanded] = React.useState(false);
 
@@ -37,7 +37,8 @@ export default function ControlledExpansionPanels() {
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
                 >
-                    <Typography className={classes.heading}>General settings</Typography>
+                    <div className="l1"><i className="material-icons">filter_drama</i> </div>
+                        <Typography className={classes.heading}>General settings</Typography>
                     <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -60,7 +61,7 @@ export default function ControlledExpansionPanels() {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                     <Typography>
-                        Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar
+                        Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius
                         diam eros in elit. Pellentesque convallis laoreet laoreet.
                     </Typography>
                 </ExpansionPanelDetails>
