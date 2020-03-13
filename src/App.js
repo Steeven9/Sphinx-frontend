@@ -2,13 +2,12 @@ import React from 'react';
 import './App.css';
 import 'materialize-css'; // It installs the JS asset only
 import 'materialize-css/dist/css/materialize.min.css';
-import LoggedInHeader from './components/LoggedInHeader';
-import LoggedOutHeader from './components/LoggedOutHeader';
+import Header from './components/Header';
 import Homepage from './components/Homepage';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import ResetPassword from './components/ResetPassword';
-import Home from './components/Home';
+import Dashboard from './components/Dashboard';
 import House from './components/House';
 import HandleRooms from './components/HandleRooms';
 import AddRoom from './components/AddRoom';
@@ -37,12 +36,20 @@ class App extends React.Component {
         }
     }
 
+    /**
+     * Used for redirections. It's a template for future redirections.
+     */
     toX = (x) => {
         this.setState({
             toX: true,
         });
     }
 
+    
+    /**
+     * Take cares of switching from one path to the other, adding the Header and the Footer.
+     * It only calls different components and deciding which ones to call, it has no pure html.
+     */
     render() {
         return (
             <Router>
@@ -51,9 +58,9 @@ class App extends React.Component {
                 }
 
                 <div id="wrapper">
-                    {
-                        this.state.loggedIn ? <LoggedInHeader /> : <LoggedOutHeader />
-                    }
+                    <Header 
+                        loggedIn = {this.state.loggedIn}
+                    />
 
                     <Switch>
                         <Route path="/login">
@@ -68,8 +75,8 @@ class App extends React.Component {
                             <ResetPassword />
                         </Route>
 
-                        <Route path="/home">
-                            <Home />
+                        <Route path="/dashboard">
+                            <Dashboard />
                         </Route>
 
                         <Route path="/house">

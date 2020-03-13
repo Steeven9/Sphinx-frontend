@@ -10,6 +10,9 @@ class Room extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="room">

@@ -10,6 +10,9 @@ class ResetPassword extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="resetPassword">

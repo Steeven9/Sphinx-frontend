@@ -10,6 +10,9 @@ class Login extends React.Component {
 		}
 	}
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div className="login">

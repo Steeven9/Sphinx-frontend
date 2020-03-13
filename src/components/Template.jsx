@@ -10,6 +10,9 @@ class Template extends React.Component {
 		}
 	}
 
+    /**
+     * Template
+     */
     render() {
         return (
             <main>

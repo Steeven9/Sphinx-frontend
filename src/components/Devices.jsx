@@ -51,6 +51,9 @@ class Devices extends React.Component {
         });
     }
 
+    /**
+     * TODO
+     */
     render() {
         return (
             <div id="wrapper" className="devices">
