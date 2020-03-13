@@ -7,16 +7,15 @@ import React, { Component } from "react";
 import Switch from "react-switch";
 import Slider from '@material-ui/core/Slider';
 
-import iconSwitch from "./img/icons/switch.svg";
 import iconSensorLight from "./img/icons/sensor-light.svg";
 import iconDimmerMemory from "./img/icons/dimmer-memory.svg";
-import iconTemperatureSensor from "./img/icons/sensor-temperature.svg";
 import iconLightLed from "./img/icons/led-bulb-intensity.svg"
 import iconBedSideLamp from "./img/icons/lamp-bed-side.svg"
 import iconReadingLamp from "./img/icons/lamp-reading.svg"
 import iconSmartPlug from "./img/icons/smart-plug.svg"
 import iconMicrowaveOven from "./img/icons/other-microwave-oven.svg"
-
+// import iconSwitch from "./img/icons/switch.svg";
+// import iconTemperatureSensor from "./img/icons/sensor-temperature.svg";
 
 class PowerSwitch extends Component {
     constructor() {
@@ -50,34 +49,15 @@ class Devices extends React.Component {
             var elems = document.querySelectorAll('.collapsible.expandable');
             M.Collapsible.init(elems, {accordion: false});
         });
-
-// function addEventPropagation() {
-        // let buttons1 = document.getElementsByClassName('MuiSlider-track');
-        // let buttons2 = document.getElementsByClassName('MuiSlider-rail');
-        // let buttons3 = document.getElementsByClassName('MuiSlider-thumb');
-        // let buttons4 = document.getElementsByClassName('react-switch-handle');
-        // let buttons5 = document.getElementsByClassName('btn-edit');
-
-        // let buttons4 = document.getElementsByClassName('react-switch-handle');
-        //
-        // for (let i = 1; i < buttons4.length; i++) {
-        //     buttons4[i].addEventListener('click', (e) => alert());
-        // }
-        //
-        // function addEventPropagation(i) {
-        //     i.addEventListener('click', (e) => alert());
-        // }
-
     }
-
 
     render() {
         return (
             <div id="wrapper" className="devices">
                 <main>
                     <article className="row">
-                        <div id="content" className="flex-container">
-                            <section className="content-box-collapsibe z-depth-2">
+                        <div id="content" className="">
+                            <section className="content-box-collapsible z-depth-2">
                                 <div className="headline-box row">
                                     <h3 className="col l8 left-align headline-title">My devices</h3>
                                     <a href="/#" className="col l1 btn waves-effect waves-light btn-primary-circular right">+</a>
@@ -310,137 +290,6 @@ class Devices extends React.Component {
 
                                     </ul>
                             </section>
-
-                                        {/*/!* Parent switch device *!/*/}
-                                        {/*<li className="row">*/}
-                                        {/*    <div id="" className="collapsible-header device-parent">*/}
-                                        {/*        <div className="icons-wrapper">*/}
-                                        {/*            <i className="material-icons l1">more_vert</i>*/}
-                                        {/*            <div className="icon-device">*/}
-                                        {/*                <img className="l1" src={iconSmartPlug} alt="Dimmer with memory"></img>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l4 device-control-switch">*/}
-                                        {/*            <p className="device-name">SmartPlug</p>*/}
-                                        {/*            <p className="device-location">Kitchen</p>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l5">*/}
-                                        {/*            <Slider className="no-slider" valueLabelDisplay="auto" defaultValue={0}/>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l1">*/}
-                                        {/*            <PowerSwitch />*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l1">*/}
-                                        {/*            <i className="material-icons btn-edit">edit</i>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*    /!* If device is parent render here its nested devices *!/*/}
-                                        {/*    <ul className="collapsible-body">*/}
-
-                                        {/*        /!* Child device *!/*/}
-                                        {/*        <li id="" className="row">*/}
-                                        {/*            <div className="collapsible-header device-child">*/}
-                                        {/*                <div className="icons-wrapper l1">*/}
-                                        {/*                    <i className="material-icons muted-icon">arrow_drop_up</i>*/}
-                                        {/*                    <div className="icon-device">*/}
-                                        {/*                        <img className="" src={iconMicrowaveOven} alt="Bed-side lamp"></img>*/}
-                                        {/*                    </div>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="col l4 device-control-switch">*/}
-                                        {/*                    <p className="device-name">Microwave oven</p>*/}
-                                        {/*                    <p className="device-location is-child">Kitchen</p>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="col l5">*/}
-                                        {/*                    <Slider className="no-slider" valueLabelDisplay="auto" defaultValue={0}/>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="col l1 no-switch">*/}
-                                        {/*                    <PowerSwitch class=""/>*/}
-                                        {/*                </div>*/}
-                                        {/*                <div className="col l1">*/}
-                                        {/*                    <i className="material-icons btn-edit">edit</i>*/}
-                                        {/*                </div>*/}
-                                        {/*            </div>*/}
-                                        {/*        </li>*/}
-                                        {/*    </ul>*/}
-                                        {/*</li>*/}
-
-                                        {/*/!* Independent device *!/*/}
-                                        {/*<li id="" className="row">*/}
-                                        {/*    <div className="collapsible-header">*/}
-                                        {/*        <div className="icons-wrapper l1">*/}
-                                        {/*            <i className="material-icons"></i>*/}
-                                        {/*            <div className="icon-device">*/}
-                                        {/*                <img className="" src={iconReadingLamp} alt="reading lamp"></img>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l4 device-control-switch">*/}
-                                        {/*            <p className="device-name">Reading lamp</p>*/}
-                                        {/*            <p className="device-location">Guest room</p>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l5">*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l1">*/}
-                                        {/*            <PowerSwitch />*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l1">*/}
-                                        {/*            <i className="material-icons btn-edit">edit</i>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</li>*/}
-
-                                        {/*/!* Sensor device *!/*/}
-                                        {/*<li className="row">*/}
-                                        {/*    <div className="collapsible-header">*/}
-                                        {/*        <div className="icons-wrapper l1">*/}
-                                        {/*            <i className="material-icons"></i>*/}
-                                        {/*            <div className="icon-device">*/}
-                                        {/*                <img className="" src={iconSensorLight} alt="switch"></img>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l4 device-control-switch">*/}
-                                        {/*            <p className="device-name">Light sensor</p>*/}
-                                        {/*            <p className="device-location">Living room</p>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l4 device-control-switch"></div>*/}
-                                        {/*        <div className="col l2">*/}
-                                        {/*            <div className="sensor-value display-active">2,000 lm</div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l1">*/}
-                                        {/*            <i className="material-icons btn-edit">edit</i>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</li>*/}
-
-                                        {/*/!* Sensor device (inactive) *!/*/}
-                                        {/*<li id="" className="row">*/}
-                                        {/*    <div className="collapsible-header">*/}
-                                        {/*        <div className="icons-wrapper l1">*/}
-                                        {/*            <i className="material-icons"></i>*/}
-                                        {/*            <div className="icon-device">*/}
-                                        {/*                <img className="" src={iconTemperatureSensor} alt="temperature sensor"></img>*/}
-                                        {/*            </div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l4 device-control-switch">*/}
-                                        {/*            <p className="device-name">Temperature sensor</p>*/}
-                                        {/*            <p className="device-location">Guest room</p>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l4 device-control-switch"></div>*/}
-                                        {/*        <div className="col l2">*/}
-                                        {/*            <div className="sensor-value display-inactive">---</div>*/}
-                                        {/*        </div>*/}
-                                        {/*        <div className="col l1">*/}
-                                        {/*            <i className="material-icons btn-edit">edit</i>*/}
-                                        {/*        </div>*/}
-                                        {/*    </div>*/}
-                                        {/*</li>*/}
-                                    {/*</ul>*/}
-                                    {/*</ul>*/}
-                                {/*<div className="center">*/}
-                                {/*    <a href="/#" className="waves-effect waves-light btn btn-secondary col l5">Cancel</a>*/}
-                                {/*    <a href="/#" className="waves-effect waves-light btn btn-secondary col l5">Secondary action</a>*/}
-                                {/*    <a href="/#" className="waves-effect waves-light btn btn-primary col l5">Main action</a>*/}
-                                {/*</div>*/}
-                            {/*</section>*/}
                         </div>
                     </article>
                 </main>

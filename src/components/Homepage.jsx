@@ -21,7 +21,7 @@ class Homepage extends React.Component {
                                 <img className="responsive-img col l5" src={imgSmartHouse} alt="SmartHut"/>
                                 <div className="col l6">
                                     <h1 className="text-homepage-headline">Smart control for your smart home</h1>
-                                    <a className="btn-homepage-headline waves-effect waves-light btn btn-primary col l6">Join now</a>
+                                    <a href="/#" className="btn-homepage-headline waves-effect waves-light btn btn-primary col l6">Join now</a>
                                 </div>
                             </section>
 
@@ -31,7 +31,7 @@ class Homepage extends React.Component {
 
                                 <p> Using <strong>SmartHut</strong> is as easy as creating rooms and then adding all your devices to them. You’ll get immediate control from out easy an intuitive web app.</p>
                                 <div className="center-align">
-                                    <a className="waves-effect waves-light btn btn-primary center-align">Join now</a>
+                                    <a href="/#" className="waves-effect waves-light btn btn-primary center-align">Join now</a>
                                 </div>
                             </section>
                         </article>
