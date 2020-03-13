@@ -77,7 +77,7 @@ class Devices extends React.Component {
                 <main>
                     <article className="row">
                         <div id="content" className="flex-container">
-                            <section className="content-box z-depth-2">
+                            <section className="content-box-collapsibe z-depth-2">
                                 <div className="headline-box row">
                                     <h3 className="col l8 left-align headline-title">My devices</h3>
                                     <a href="/#" className="col l1 btn waves-effect waves-light btn-primary-circular right">+</a>
