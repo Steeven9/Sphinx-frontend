@@ -78,8 +78,8 @@ class Devices extends React.Component {
                     <article className="row">
                         <div id="content" className="flex-container">
                             <section className="content-box z-depth-2">
-                                <div className="row">
-                                    <h3 className="col l8 left-align headline-box">My devices</h3>
+                                <div className="headline-box row">
+                                    <h3 className="col l8 left-align headline-title">My devices</h3>
                                     <a href="/#" className="col l1 btn waves-effect waves-light btn-primary-circular right">+</a>
                                 </div>
 
@@ -100,11 +100,11 @@ class Devices extends React.Component {
                                                     </div>
                                                 </div>
                                                 <div className="device-control col l6 m6 s12">
-                                                    <div className="col l8 m6 s6">
+                                                    <div className="col l8 m6 s8">
                                                         <Slider className="slider" valueLabelDisplay="auto" defaultValue={65}/>
                                                     </div>
-                                                    <div className="col l4">
-                                                        <div className="switch col l2 m8 s10 right-align">
+                                                    <div className="col l4 device-control-switch">
+                                                        <div className="switch col l2 m8 s11 right-align">
                                                             <PowerSwitch />
                                                         </div>
                                                         <div className="col l2 m1 s1 right-align">
@@ -120,7 +120,7 @@ class Devices extends React.Component {
                                                 <div id="" className="collapsible-header device-child">
                                                     <div className="col l6 m6 s12">
                                                         <div className="col l12 s1 icons-wrapper">
-                                                            <i className="material-icons l1 muted-icon">arrow_right</i>
+                                                            <i className="material-icons l1 muted-icon">arrow_drop_up</i>
                                                             <div className="icon-device l1">
                                                                 <img className="" src={iconBedSideLamp} alt="Bed-side lamp"></img>
                                                             </div>
@@ -131,11 +131,11 @@ class Devices extends React.Component {
                                                         </div>
                                                     </div>
                                                     <div className="device-control col l6 m6 s12">
-                                                        <div className="col l8 m6 s6">
+                                                        <div className="col l8 m6 s8">
                                                             <Slider className="no-slider" valueLabelDisplay="auto" defaultValue={65}/>
                                                         </div>
-                                                        <div className="col l4">
-                                                            <div className="switch col l2 m8 s10 right-align">
+                                                        <div className="col l4 device-control-switch">
+                                                            <div className="switch col l2 m8 s11 right-align">
                                                                 <PowerSwitch />
                                                             </div>
                                                             <div className="col l2 m1 s1 right-align">
@@ -149,7 +149,7 @@ class Devices extends React.Component {
                                                 <div id="" className="collapsible-header device-child">
                                                     <div className="col l6 m6 s12">
                                                         <div className="col l12 s1 icons-wrapper">
-                                                            <i className="material-icons l1 muted-icon">arrow_right</i>
+                                                            <i className="material-icons l1 muted-icon">arrow_drop_up</i>
                                                             <div className="icon-device l1">
                                                                 <img className="" src={iconLightLed} alt="LED bulb"></img>
                                                             </div>
@@ -160,11 +160,11 @@ class Devices extends React.Component {
                                                         </div>
                                                     </div>
                                                     <div className="device-control col l6 m6 s12">
-                                                        <div className="col l8 m6 s6">
-                                                            <Slider className="slider" valueLabelDisplay="auto" defaultValue={90}/>
+                                                        <div className="col l8 m6 s8">
+                                                            <Slider className="slider" valueLabelDisplay="auto" defaultValue={80}/>
                                                         </div>
-                                                        <div className="col l4">
-                                                            <div className="switch col l2 m8 s10 right-align">
+                                                        <div className="col l4 device-control-switch">
+                                                            <div className="switch col l2 m8 s11 right-align">
                                                                 <PowerSwitch />
                                                             </div>
                                                             <div className="col l2 m1 s1 right-align">
@@ -192,14 +192,14 @@ class Devices extends React.Component {
                                                     </div>
                                                 </div>
                                                 <div className="device-control col l6 m6 s12">
-                                                    <div className="col l8 m6 s6">
+                                                    <div className="col l8 m6 s8">
                                                         <div className="col l8 s8 display-info display-active">
                                                             <i className="col l2 s2 material-icons btn-reset">rotate_left</i>
                                                             <span>350 kWh</span>
                                                         </div>
                                                     </div>
-                                                    <div className="col l4">
-                                                        <div className="switch col l2 m8 s10 right-align">
+                                                    <div className="col l4 device-control-switch">
+                                                        <div className="switch col l2 m8 s11 right-align">
                                                             <PowerSwitch />
                                                         </div>
                                                         <div className="col l2 m1 s1 right-align">
@@ -215,7 +215,7 @@ class Devices extends React.Component {
                                                 <div id="" className="collapsible-header device-child">
                                                     <div className="col l6 m6 s12">
                                                         <div className="col l12 s1 icons-wrapper">
-                                                            <i className="material-icons l1 muted-icon">arrow_right</i>
+                                                            <i className="material-icons l1 muted-icon">arrow_drop_up</i>
                                                             <div className="icon-device l1">
                                                                 <img className="" src={iconMicrowaveOven} alt="Microwaveoven"></img>
                                                             </div>
@@ -226,13 +226,14 @@ class Devices extends React.Component {
                                                         </div>
                                                     </div>
                                                     <div className="device-control col l6 m6 s12">
-                                                        <div className="col l8 m6 s6">
+                                                        <div className="col l8 m6 s8">
                                                             <Slider className="no-slider" valueLabelDisplay="auto" defaultValue={65}/>
                                                         </div>
-                                                        <div className="col l4">
-                                                            <div className="no-switch col l2 m8 s10 right">
+                                                        <div className="col l4 device-control-switch">
+                                                            <div className="switch col l2 m8 s11 right-align">
+                                                                <PowerSwitch />
                                                             </div>
-                                                            <div className="col l2 m1 s1 right">
+                                                            <div className="col l2 m1 s1 right-align">
                                                                 <i className="material-icons btn-edit">edit</i>
                                                             </div>
                                                         </div>
@@ -257,11 +258,11 @@ class Devices extends React.Component {
                                                     </div>
                                                 </div>
                                                 <div className="device-control col l6 m6 s12">
-                                                    <div className="col l8 m6 s6">
+                                                    <div className="col l8 m6 s8">
                                                         <Slider className="no-slider" valueLabelDisplay="auto" defaultValue={0}/>
                                                     </div>
-                                                    <div className="col l4">
-                                                        <div className="switch col l2 m8 s10 right-align">
+                                                    <div className="col l4 device-control-switch">
+                                                        <div className="switch col l2 m8 s11 right-align">
                                                             <PowerSwitch />
                                                         </div>
                                                         <div className="col l2 m1 s1 right-align">
@@ -288,17 +289,17 @@ class Devices extends React.Component {
                                                     </div>
                                                 </div>
                                                 <div className="device-control col l6 m6 s12">
-                                                    <div className="col l8 m6 s6">
+                                                    <div className="col l8 m6 s8">
                                                         <div className="col l8 s8 display-info display-active">
                                                             <span>2'000 lm</span>
                                                         </div>
                                                     </div>
                                                     <div className="row l1">
-                                                        <div className="col">
+                                                        <div className="">
                                                             {/*<div className="no-switch col l2 m8 s1 right-align">*/}
                                                             {/*    <PowerSwitch />*/}
                                                             {/*</div>*/}
-                                                            <div className="col l2 m1 s12">
+                                                            <div className="col l2 m1 s1">
                                                                 <i className="material-icons btn-edit btn-edit-no-switch">edit</i>
                                                             </div>
                                                         </div>
@@ -319,7 +320,7 @@ class Devices extends React.Component {
                                         {/*                <img className="l1" src={iconSmartPlug} alt="Dimmer with memory"></img>*/}
                                         {/*            </div>*/}
                                         {/*        </div>*/}
-                                        {/*        <div className="col l4">*/}
+                                        {/*        <div className="col l4 device-control-switch">*/}
                                         {/*            <p className="device-name">SmartPlug</p>*/}
                                         {/*            <p className="device-location">Kitchen</p>*/}
                                         {/*        </div>*/}
@@ -340,12 +341,12 @@ class Devices extends React.Component {
                                         {/*        <li id="" className="row">*/}
                                         {/*            <div className="collapsible-header device-child">*/}
                                         {/*                <div className="icons-wrapper l1">*/}
-                                        {/*                    <i className="material-icons muted-icon">arrow_right</i>*/}
+                                        {/*                    <i className="material-icons muted-icon">arrow_drop_up</i>*/}
                                         {/*                    <div className="icon-device">*/}
                                         {/*                        <img className="" src={iconMicrowaveOven} alt="Bed-side lamp"></img>*/}
                                         {/*                    </div>*/}
                                         {/*                </div>*/}
-                                        {/*                <div className="col l4">*/}
+                                        {/*                <div className="col l4 device-control-switch">*/}
                                         {/*                    <p className="device-name">Microwave oven</p>*/}
                                         {/*                    <p className="device-location is-child">Kitchen</p>*/}
                                         {/*                </div>*/}
@@ -372,7 +373,7 @@ class Devices extends React.Component {
                                         {/*                <img className="" src={iconReadingLamp} alt="reading lamp"></img>*/}
                                         {/*            </div>*/}
                                         {/*        </div>*/}
-                                        {/*        <div className="col l4">*/}
+                                        {/*        <div className="col l4 device-control-switch">*/}
                                         {/*            <p className="device-name">Reading lamp</p>*/}
                                         {/*            <p className="device-location">Guest room</p>*/}
                                         {/*        </div>*/}
@@ -396,11 +397,11 @@ class Devices extends React.Component {
                                         {/*                <img className="" src={iconSensorLight} alt="switch"></img>*/}
                                         {/*            </div>*/}
                                         {/*        </div>*/}
-                                        {/*        <div className="col l4">*/}
+                                        {/*        <div className="col l4 device-control-switch">*/}
                                         {/*            <p className="device-name">Light sensor</p>*/}
                                         {/*            <p className="device-location">Living room</p>*/}
                                         {/*        </div>*/}
-                                        {/*        <div className="col l4"></div>*/}
+                                        {/*        <div className="col l4 device-control-switch"></div>*/}
                                         {/*        <div className="col l2">*/}
                                         {/*            <div className="sensor-value display-active">2,000 lm</div>*/}
                                         {/*        </div>*/}
@@ -419,11 +420,11 @@ class Devices extends React.Component {
                                         {/*                <img className="" src={iconTemperatureSensor} alt="temperature sensor"></img>*/}
                                         {/*            </div>*/}
                                         {/*        </div>*/}
-                                        {/*        <div className="col l4">*/}
+                                        {/*        <div className="col l4 device-control-switch">*/}
                                         {/*            <p className="device-name">Temperature sensor</p>*/}
                                         {/*            <p className="device-location">Guest room</p>*/}
                                         {/*        </div>*/}
-                                        {/*        <div className="col l4"></div>*/}
+                                        {/*        <div className="col l4 device-control-switch"></div>*/}
                                         {/*        <div className="col l2">*/}
                                         {/*            <div className="sensor-value display-inactive">---</div>*/}
                                         {/*        </div>*/}
