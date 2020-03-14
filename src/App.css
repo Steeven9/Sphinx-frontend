@@ -64,8 +64,7 @@ main {
 
 footer {
     background-color: #39086F !important;
-    position: absolute !important;
-    bottom: 0px !important;
+    margin-bottom: auto !important;
 }
 
 strong {
@@ -199,6 +198,7 @@ h3 {
     width: calc(60% + 10vmin);
     border-radius: 10px;
     padding: 20px 40px 20px 40px;
+
 }
 
 
@@ -218,4 +218,8 @@ h3 {
     flex-direction: row;
     justify-content: center;
     margin-bottom: 30px;
+  }
+
+  .content-box{
+    box-shadow: 0px 0px 5px;
   }
