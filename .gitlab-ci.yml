@@ -38,5 +38,5 @@ docker-build:
         - docker info
         - docker login -u $DOCKER_USER -p $DOCKER_PSW       
     script:
-        - docker build ./ -t $DOCKER_USER/sa4-sphinx:frontend
-        - docker push $DOCKER_USER/sa4-sphinx:frontend
+        - docker build ./ -t $DOCKER_USER/sa4-sphinx-frontend:latest
+        - docker push $DOCKER_USER/sa4-sphinx-frontend
