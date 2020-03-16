@@ -203,7 +203,7 @@ h3 {
     margin-right: 40px;
 }
 
-.row, .col {
+.row-collapsible, .col-collapsible {
     padding: 0 !important;
 }
 
