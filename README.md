@@ -8,7 +8,7 @@ To use it, first pull the image with\
 `docker pull steeven9/sa4-sphinx-frontend`
 
 then run it with\
-`docker run -p 8080:8080 steeven9/sa4-sphinx-frontend`
+`docker run -p 3000:80 steeven9/sa4-sphinx-frontend`
 
 ## Building the project
 If you want to build the frontend from scratch, compile it first with\
