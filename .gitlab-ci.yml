@@ -27,6 +27,7 @@ yarn-build:
         paths: [build/]
 
 docker-build:
+    only: [dev, master]
     stage: deploy
     image: docker
     variables:
