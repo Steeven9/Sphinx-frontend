@@ -76,7 +76,7 @@ nav {
     width: 100%;
     height: 80%;
     background-color: transparent !important;
-    background-image: url("./components/img/background.svg");
+    background-image: url("components/img/backgrounds/app/background.svg");
     background-repeat: no-repeat;
     background-size: cover;
     z-index: -1;
