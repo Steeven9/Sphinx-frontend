@@ -22,9 +22,9 @@ then build the static website\
 `yarn build`
 
 and finally put everything in a Docker container\
-`docker build ./ -t steeven9/sa4-sphinx-frontend:latest`
+`docker build ./ -t sa4-sphinx-frontend:latest`
 
 that you can run with\
-`docker run -p 3000:80 steeven9/sa4-sphinx-frontend`
+`docker run -p 3000:80 sa4-sphinx-frontend`
 
 **Note**: the frontend port can be changed when running the Docker container, via the `-p` parameter.
