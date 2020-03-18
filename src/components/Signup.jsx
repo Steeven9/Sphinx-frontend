@@ -15,7 +15,7 @@ class Signup extends React.Component {
      */
     render() {
         return (
-            <div class="singup">
+            <div class="signup">
                 html page code here
             </div>        
         );
