@@ -211,3 +211,40 @@ h3 {
 * {
     /*border: 1px dashed #ff9500;*/
 }
+
+
+
+/* modified */
+.dashboard{
+    display: flex;
+    justify-content: center;
+}
+
+.content-box3 {
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    background-color: #FFFFFF;
+    color: #2C2C2C !important;
+    width: calc(22% + 10vmin);
+    border-radius: 10px;
+    padding: 20px 40px 20px 40px;
+    box-shadow: 0px 0px 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important;
+}
+
+p{
+    text-align: center;
+    color: #580B71;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 30px;
+}   
+
+.content-box3 img{
+    height: 70%;
+    margin-top: 50px;
+}
