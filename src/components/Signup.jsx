@@ -15,40 +15,89 @@ class Signup extends React.Component {
      */
     render() {
         return (
-            <div className="login" >
-                <section className="content-box sample-box z-depth-2">
-                <div>
-                    <div>
-                        <h2 className="center"> Create account </h2>
-                    </div>
-                    <br/>
-                    <div className="flex-raw">
-                        <input type="text" placeholder="First name*" />
-                        <input type="text" placeholder="Last name*" />
-                    </div>
-                    <div className="flex-raw">
-                        <input type="email" placeholder="Email*"/>
-                        <input type="text" placeholder="Username*"/>    
-                    </div>
-                    <div className="flex-raw">
-                        <input type="password" placeholder="Password*"/>
-                        <input type="password" placeholder="Confirm password*"/>
-                    </div>
-                </div>
-                
-                <br/> <br/>
-                <div>
-                    <div className="flex-raw">
-                        <a href="/login"><b>Login</b></a>
-                        <form action="/create" method="POST">
-                            <button className="login-btn">
-                                <b>Create</b>
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                </section>
-            </div>
+            <div
+className="signup">
+
+
+<div
+class="content-box1">
+
+<h2
+class="title">Create account</h2>
+
+<div
+class="dates">
+
+<div
+class="dates-input"><input
+class="cred"
+type="text"
+name=""
+placeholder="First name"/></div>
+
+<div
+class="dates-input"><input
+class="cred"
+type="text"
+name=""
+placeholder="Laste name*"
+/></div>
+
+<div
+class="dates-input"><input
+class="cred"
+type="email"
+name=""
+placeholder="Email"
+/></div>
+
+<div
+class="dates-input"><input
+class="cred"
+type="text"
+name=""
+placeholder="Username"
+/></div>
+
+<div
+class="dates-input"><input
+class="cred"
+type="password"
+name=""
+placeholder="Password*"
+/></div>
+
+<div
+class="dates-input"><input
+class="cred"
+type="password"
+name=""
+placeholder="Confirm*"
+/></div>
+
+</div>
+
+<div
+class="dates">
+
+<div
+class="dates-input"><a href="/login"><button
+type="button"
+name="button"
+class="btn-secondary btn">Sing in</button></a></div>
+
+<div
+class="dates-input"><button
+type="button"
+name="button"
+class="btn-primary btn">Create account</button></div>
+
+</div>
+
+</div>
+
+
+</div>
         );
     }
 }

@@ -15,35 +15,44 @@ class ResetPassword extends React.Component {
      */
     render() {
         return (
-            <div className="login" >
-                <section className="content-box sample-box z-depth-2">
-                <div>
-                    <div>
-                        <h2 className="center">Restore password</h2>
-                    </div>
-                    <br/>
-                    <div className=" instructions center">
-                        Type the email address registered to your account. If we find it in our records, you’ll receive the instructions to restore your password.
-                    </div>
-                    <br/> 
-                    <div className='flex-column center'>
-                        <input type="text" placeholder="E-mail" />
-                    </div>
-                </div>
-                <br/>
-                <br/> <br/>
-                <div>
-                    <div className="flex-raw">
-                        <a href="/login"><b>Cancel</b></a>
-                        <form action="/login" method="POST">
-                            <button className="login-btn">
-                               <b>Reset</b> 
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                </section>
-            </div>
+            <div
+className="resetPassword">
+
+<div
+class="content-box1">
+
+<h2
+class="title">Restore Password</h2>
+
+<p>Type the email address registered to your account. If we find it in our records, you’ll receive the instructionsto
+ restore your password.</p>
+
+<div
+class="dates-input1"><input
+type="text"
+name=""
+placeholder="Email"/></div>
+
+<div
+class="buttons1">
+
+<div
+class="dates-input1"><a href="/login"><button
+type="button"
+name="button"
+class="btn-secondary btn">Cancel</button></a></div>
+
+<div
+class="dates-input1"><button
+type="button"
+name="button"
+class="btn-primary btn">Reset password</button></div>
+
+</div>
+
+</div>
+
+</div>
         );
     }
 }
