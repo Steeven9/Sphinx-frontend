@@ -22,7 +22,7 @@ class Template extends React.Component {
                             <div className="row">
                                 <h3 className="col center">Title</h3>
                                  {/*Remove the following button if needed */}
-                                <a className="btn waves-effect waves-light btn-primary-circular col right">+</a>
+                                <a href="/#" className="btn waves-effect waves-light btn-primary-circular col right">+</a>
                             </div>
 
                             <div>
@@ -33,9 +33,9 @@ class Template extends React.Component {
                             </div>
 
                             <div className="center">
-                                <a className="waves-effect waves-light btn btn-secondary col l5">Cancel</a>
-                                <a className="waves-effect waves-light btn btn-secondary col l5">Secondary action</a>
-                                <a className="waves-effect waves-light btn btn-primary col l5">Main action</a>
+                                <a href="/#" className="waves-effect waves-light btn btn-secondary col l5">Cancel</a>
+                                <a href="/#" className="waves-effect waves-light btn btn-secondary col l5">Secondary action</a>
+                                <a href="/#" className="waves-effect waves-light btn btn-primary col l5">Main action</a>
                             </div>
                         </section>
                     </div>
