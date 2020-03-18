@@ -1,7 +1,6 @@
 import React from 'react';
 import '../App.css';
-import '../LoginCreateReset.css'
-
+import './css/LoginCreateReset.css';
 class Signup extends React.Component {
 
     constructor(props) {
@@ -16,7 +15,7 @@ class Signup extends React.Component {
      */
     render() {
         return (
-            
+
             <div className="signup">
 
 

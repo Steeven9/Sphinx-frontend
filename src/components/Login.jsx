@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import '../LoginCreateReset.css'
+import './css/LoginCreateReset.css';
 
 class Login extends React.Component {
 
