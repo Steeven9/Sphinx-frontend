@@ -248,3 +248,101 @@ p{
     height: 70%;
     margin-top: 50px;
 }
+
+
+
+/* housepage */
+.legenda{
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.name1{
+    margin-left: 17%;
+}
+
+.floor1{
+    margin-left: 30%;
+}
+
+.device1{
+    margin-left: 9%;
+}
+
+.canvas1{
+    display: flex;
+    justify-content: center;    
+    
+}
+
+.add-btn{
+    position: absolute;
+    top: 18vh;
+    right: 16vw;
+    font-size: 20px !important;
+    font-family: Open Sans;
+}
+
+
+.canvas2{
+    height: 80%;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+}
+
+.line{
+    border: 2px solid rgb(209, 209, 209);
+    margin: 0px;
+}
+
+.room{
+    height: 90px;
+    display: flex;
+}
+
+.vertical-center{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.image{
+    margin-left: 45px;
+}
+
+.image img{
+    height: 40px;
+    width: 40px;
+}
+.room-name{
+    margin-left: 75px;
+    font-size: 22px;
+    width: 38%;
+}
+
+.flo-dev-number{
+    margin-right: 14%;
+    font-size: 22px;
+
+}
+
+.room-button1{
+    margin-left: -4%;
+    width: 35px;
+    height: 35px;
+}
+
+.room-button2{
+    margin-left: 5%;
+    width: 35px;
+    height: 35px;
+}
+  
+.line3{
+    border-top: 2px solid rgb(199, 199, 199);
+    margin: 0px;
+    background-color: inherit;
+}
