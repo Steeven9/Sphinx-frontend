@@ -15,36 +15,52 @@ class Login extends React.Component {
      */
     render() {
         return (
-            <div className="login" >
-                <section className="content-box sample-box z-depth-2">
-                <div>
-                    <div>
-                        <h2 className="center">Log in</h2>
-                    </div>
-                    <br/>
-                    <div className='flex-column center'>
-                        <input type="text" placeholder="Username" />
-                        <br/>
-                        <input type="password" placeholder="Password" />
-                    </div>
-                </div>
-                <br/>
-                <div className="center">
-                    <a href="/reset"><i>Forgot your password?</i></a>
-                </div>
-                <br/> <br/>
-                <div>
-                    <div className="flex-raw">
-                        <a href="/signup"><b>Create account</b></a>
-                        <form action="/login" method="POST">
-                            <button  className="login-btn">
-                               <b>Log in</b> 
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                </section>
-            </div>
+            <div
+className="login">
+
+
+<div
+class="content-box1">
+
+<h2
+class="title">Login</h2>
+
+<div
+class="dates-input1"><input
+type="text"
+name=""
+placeholder="Username"/></div>
+
+<div
+class="dates-input1"><input
+type="password"
+name=""
+placeholder="Password"
+/></div>
+
+<a
+href="/reset">forgot your password?</a>
+
+<div
+class="buttons1">
+
+<div
+class="dates-input1"><a href="/signup"><button
+type="button"
+name="button"
+class="btn-secondary btn">Create account</button></a></div>
+
+<div
+class="dates-input1"><button
+type="button"
+name="button"
+class="btn-primary btn">Login</button></div>
+
+</div>
+
+</div>
+
+</div>
         );
     }
 }
