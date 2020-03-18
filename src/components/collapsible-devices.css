@@ -1,0 +1,33 @@
+/* Styles specific to devices shown in collapsible panel */
+.device-name {
+    height: 19px;
+    left: 480px;
+    top: 363px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 19px;
+    color: #000000;
+}
+
+.device-location {
+    height: 16px;
+    left: 480px;
+    top: 383px;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 16px;
+    color: #000000;
+}
+
+.btn-reset {
+    margin-top: 3px;
+    margin-left: 5px !important;
+    margin-right: -35px !important;
+}
+
