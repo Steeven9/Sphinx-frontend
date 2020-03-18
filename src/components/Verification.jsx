@@ -12,10 +12,17 @@ class Verification extends React.Component {
         }
     }
 
-    sendCode = (event) => {
+    /**
+     * Sends the code given in the form to the backend to check it.
+     * Depending on the backend response, it will change the "success" and "toSend" variable values.
+     */
+    sendCode = () => {
         this.setState({ toSend: false });
     }
 
+    /**
+     * Every time that the text inside the input changes, this.state.code gets changed.
+     */
     changeCode = (event) => {
         this.setState({ code: event.target.value });
     }
