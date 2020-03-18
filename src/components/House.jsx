@@ -21,7 +21,7 @@ class House extends React.Component {
                 <div class="content-box">
                     <div class="canvas1">
                        <h2>My rooms</h2>
-                       <button class="btn-primary-circular add-btn">+ Add room</button>
+                       <button class="btn-primary-circular2 add-btn">+ Add room</button>
                     </div>
 
                     <div class="canvas2">
