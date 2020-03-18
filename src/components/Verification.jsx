@@ -27,6 +27,25 @@ class Verification extends React.Component {
     }
 
     /**
+     * Depending on the value of show, returns either the form to fill, or the result of the authentication.
+     */
+    showValidation = () => {
+        if (this.state.show === 0) {
+            return (<form onSubmit={this.sendCode}>
+                    <p>Insert Validation Code:</p> 
+                    <input type="text" name="validation-code" onChange={this.changeCode} />
+                    <input type="submit" className="waves-effect waves-light btn btn-primary col l5" />
+            </form>)
+        }
+        else if (this.state.show === 1) {
+            return (<p>The code {this.state.code} is invalid</p>)
+        }
+        else if (this.state.show === 2) {
+            return(<p>Account verified</p>)
+        }
+    }
+
+    /**
      * This page will feature a form that will be sent to the backend.
      * Depending on the backend response, it will feature different messages.
      */
@@ -41,25 +60,7 @@ class Verification extends React.Component {
                             </div>
 
                             <div className="center">
-                            { 
-                            this.state.show === 0 && (
-                                <form onSubmit={this.sendCode}>
-                                        <p>Insert Validation Code:</p> 
-                                        <input type="text" name="validation-code" onChange={this.changeCode} />
-                                        <input type="submit" className="waves-effect waves-light btn btn-primary col l5" />
-                                </form>
-                            )
-                            }
-                            {
-                            this.state.show === 1 && (
-                                <p>The code {this.state.code} is invalid</p>
-                            )
-                            }
-                            {
-                            this.state.show === 2 && (
-                                <p>Account verified</p>
-                            )
-                            }
+                                { this.showValidation() }
                             </div>
                         </section>
                     </div>
