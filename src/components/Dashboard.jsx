@@ -21,19 +21,11 @@ class Dashboard extends React.Component {
 
                 <div class="content-box3">
                     <img src={imgAllDevice} alt="not find"/>
-<<<<<<< HEAD
                     <p class="dash-text">see all devices</p>
                 </div>
                 <div class="content-box3">
                     <img src={imgAllRoom} alt="not find"/>
                     <p class="dash-text">see device by room</p>
-=======
-                    <p>see all devices</p>
-                </div>
-                <div class="content-box3">
-                    <img src={imgAllRoom} alt="not find"/>
-                    <p>see device by room</p>
->>>>>>> dashoboard
                 </div>
 
             </div>
