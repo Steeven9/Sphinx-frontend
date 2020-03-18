@@ -8,7 +8,7 @@ h2 {
     color: #2C2C2C !important;
 }
 
-.btn-primary-circular {
+.btn-primary-circular2 {
     background: #FFB800 !important;
     border-radius: 80px !important;
     font-family: Open Sans;
@@ -22,7 +22,7 @@ h2 {
     margin-top: 3vh;
     margin-bottom: 3vh;
     height: 45px !important;
-    line-height: 45px !important;
+
     padding: 0 15px 0 15px !important;
 }
 
@@ -91,7 +91,7 @@ h2 {
 .add-btn{
     position: absolute;
     top: 18vh;
-    right: 16vw;
+    right: 20vw;
     font-size: 20px !important;
     font-family: Open Sans;
 }
