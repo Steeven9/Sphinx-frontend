@@ -6,8 +6,7 @@ class Verification extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            toSend: true, // If true, the page will have a form. If false, it will check "success"
-            success: false, // If false, display error. If true, display a different message
+            show: 0, // If 0, the page will have a form. If 1, display error. If 2, display a different message
             code: ""
         }
     }
@@ -17,7 +16,7 @@ class Verification extends React.Component {
      * Depending on the backend response, it will change the "success" and "toSend" variable values.
      */
     sendCode = () => {
-        this.setState({ toSend: false });
+        this.setState({ show: 1 });
     }
 
     /**
@@ -42,22 +41,24 @@ class Verification extends React.Component {
                             </div>
 
                             <div className="center">
-                            { this.state.toSend ?
+                            { 
+                            this.state.show === 0 && (
                                 <form onSubmit={this.sendCode}>
                                         <p>Insert Validation Code:</p> 
                                         <input type="text" name="validation-code" onChange={this.changeCode} />
                                         <input type="submit" className="waves-effect waves-light btn btn-primary col l5" />
                                 </form>
-
-                                : 
-                                
-                                <div>
-                                    { this.state.success ? 
-                                        <p>Account verified</p>
-                                        :
-                                        <p>The code {this.state.code} is invalid</p>
-                                    }
-                                </div>
+                            )
+                            }
+                            {
+                            this.state.show === 1 && (
+                                <p>The code {this.state.code} is invalid</p>
+                            )
+                            }
+                            {
+                            this.state.show === 2 && (
+                                <p>Account verified</p>
+                            )
                             }
                             </div>
                         </section>
