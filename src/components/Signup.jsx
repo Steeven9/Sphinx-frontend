@@ -77,7 +77,7 @@ class Signup extends React.Component {
 
                     <div class="dates">
 
-                        <div class="dates-input"><a href="/login"><button type="button" name="button" class="btn-secondary btn">Sing in</button></a></div>
+                        <div class="dates-input"><a href="/login"><button type="button" name="button" class="btn-secondary btn">Sign in</button></a></div>
 
                         <div class="dates-input"><button type="button" disabled={!isEnabled} name="button" class="btn-primary btn">Create account</button></div>
 
