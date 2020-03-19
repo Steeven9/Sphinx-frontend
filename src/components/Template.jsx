@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import './css/App.css';
 
 class Template extends React.Component {
 
@@ -22,7 +22,7 @@ class Template extends React.Component {
                             <div className="row">
                                 <h3 className="col center">Title</h3>
                                  {/*Remove the following button if needed */}
-                                <a href="/#" className="btn waves-effect waves-light btn-primary-circular col right">+</a>
+                                <a href="/#"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                             </div>
 
                             <div>

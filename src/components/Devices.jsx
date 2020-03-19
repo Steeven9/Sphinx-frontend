@@ -1,141 +1,50 @@
 // import React from 'react';
-import '../App.css';
-import './collapsible-component.css';
+import './css/App.css';
+import './css/collapsible-component.css';
+import './css/collapsible-devices.css';
 import M from 'materialize-css';
-import React, { Component } from "react";
+import React, { Component, useState, useEffect, useReducer} from "react";
+import DevicesPanel from './devices/DevicesPanel'
+import DeviceReducer from "../../reducers/devicesReducer";
 
-import Switch from "react-switch";
-import Slider from '@material-ui/core/Slider';
 
-// Light devices SVG icons
-import iconDimmerState from "./img/icons/devices/dimmer-state.svg";
-import iconDimmerRegular from "./img/icons/devices/dimmer-regular.svg";
-import iconSmartPlug from "./img/icons/devices/smart-plug.svg"
-import iconSwitch from "./img/icons/devices/switch.svg";
-import iconRegularBulb from "./img/icons/devices/bulb-regular.svg";
-import iconFluorescentBulb from "./img/icons/devices/bulb-fluorescent.svg";
-import iconLedBulb from "./img/icons/devices/bulb-led.svg"
-import iconLedStrip from "./img/icons/devices/strip-led.svg"
-import iconBedSideLamp from "./img/icons/devices/lamp-bed-side.svg"
-import iconFluorescentLamp from "./img/icons/devices/lamp-fluorescent.svg"
-import iconHangingLamp from "./img/icons/devices/lamp-hanging.svg"
-import iconStandingLamp from "./img/icons/devices/lamp-standing.svg"
-import iconReadingLamp from "./img/icons/devices/lamp-reading.svg"
-import iconLightSensor from "./img/icons/devices/sensor-light.svg";
-import iconHumiditySensor from "./img/icons/devices/sensor-humidity.svg";
-import iconMotionSensor from "./img/icons/devices/sensor-motion.svg";
-import iconTemperatureSensor from "./img/icons/devices/sensor-temperature.svg";
-import iconMicrowaveOven from "./img/icons/devices/other-microwave-oven.svg"
+// let devices = {
+//     hasChildren: true,
+//     rowIcon: 'icon UI name',
+//     deviceName: 'Device name',
+//     roomName: 'Room name',
+//     deviceId: 'someID',
+//     deviceIcon: getDeviceIcon(deviceType),
+//     deviceType: deviceType,
+//     intensity: 0,
+//     isOn: false
+// };
 
-// Object ENUMS implementation for all available devices
-const deviceType = {
-    DIMMER: {
-        REGULAR: 'Regular dimmer',
-        STATE: 'Dimmer with state'
-    },
-    LIGHT: {
-        SMART: {
-            BED_SIDE_LAMP: 'Bed-side lamp',
-            BULB: 'Regular light bulb',
-            HANGING_LAMP: 'Hanging lamp',
-            LED: 'LED light bulb with intensity',
-            LED_STRIP: 'LED strip light',
-            STANDING_LAMP: 'Standing lamp',
-            READING_LAMP: 'Reading lamp'
-        },
-        REGULAR: {
-            FLUORESCENT_BULB: 'Fluorescent light bulb',
-            FLUORESCENT_LAMP: 'Fluorescent lamp'
-        },
-    },
-    OTHER: {
-        MICROWAVE_OVEN: 'Microwave oven'
-    },
-    SENSOR: {
-        HUMIDITY: 'Humidity sensor',
-        LIGHT: 'Light sensor',
-        MOTION: 'Motion sensor',
-        TEMPERATURE: 'Temperature sensor'
-    },
-    SMART_PLUG: 'Smart plug',
-    SWITCH: 'Switch'
-};
+function Devices () {
+    const [device, setDevice] = useState({});
 
-/**
- * Gets a SVG icon object for the corresponding device
- * @param {deviceType} type
- * @returns {icon} SVG imported icon
- * @author Erick Garro Elizondo
- */
-function getDeviceIcon(type) {
-    switch(type){
-        // Controllers
-        case deviceType.DIMMER.REGULAR:
-            return iconDimmerState;
-        case deviceType.DIMMER.STATE:
-            return iconDimmerRegular;
-        case deviceType.SMART_PLUG:
-            return iconSmartPlug;
-        case deviceType.SWITCH:
-            return iconSwitch;
-
-        // Smart lights (with intensity state)
-        case deviceType.LIGHT.SMART.BED_SIDE_LAMP:
-            return iconBedSideLamp;
-        case deviceType.LIGHT.SMART.BULB:
-            return iconRegularBulb;
-        case deviceType.LIGHT.SMART.HANGING_LAMP:
-            return iconHangingLamp;
-        case deviceType.LIGHT.SMART.LED:
-            return iconLedBulb;
-        case deviceType.LIGHT.SMART.LED_STRIP:
-            return iconLedStrip;
-        case deviceType.LIGHT.SMART.BED_SIDE_LAMP:
-            return iconBedSideLamp;
-        case deviceType.LIGHT.SMART.STANDING_LAMP:
-            return iconStandingLamp;
-        case deviceType.LIGHT.SMART.READING_LAMP:
-            return iconReadingLamp;
-
-        // Regular lights (w/o intensity)
-        case deviceType.LIGHT.REGULAR.FLUORESCENT_BULB:
-            return iconFluorescentBulb;
-        case deviceType.LIGHT.REGULAR.FLUORESCENT_LAMP:
-            return iconFluorescentLamp;
-
-        // Sensors
-        case deviceType.SENSOR.HUMIDITY:
-            return iconHumiditySensor;
-        case deviceType.SENSOR.LIGHT:
-            return iconLightSensor;
-        case deviceType.SENSOR.MOTION:
-            return iconMotionSensor;
-        case deviceType.SENSOR.TEMPERATURE:
-            return iconTemperatureSensor;
-    }
+    return(
+        <div id="wrapper" className="devices">
+            <main>
+                <article className="row row-collapsible row row-collapsible-custom">
+                    <div id="content" className="">
+                        <section className="content-box-collapsible z-depth-2">
+                            <div className="headline-box row row-collapsible row row-collapsible-custom">
+                                <h3 className="col col-collapsible l8 left-align headline-title">My devices</h3>
+                                <a href="/#" className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right">+</a>
+                            </div>
+                            <ul className="collapsible expandable expandable-component">
+                                <DevicesPanel />
+                            </ul>
+                        </section>
+                    </div>
+                </article>
+            </main>
+        </div>
+    )
 }
 
-class PowerSwitch extends Component {
-    constructor() {
-        super();
-        this.state = {checked: false};
-        this.handleChange = this.handleChange.bind(this);
-    }
-
-    handleChange(checked) {
-        this.setState({checked});
-    }
-
-    render() {
-        return (
-            <label>
-                <Switch onChange={this.handleChange} checked={this.state.checked} />
-            </label>
-        );
-    }
-}
-
-class Devices extends React.Component {
+class DeviceZ extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -302,7 +211,7 @@ class Devices extends React.Component {
                                                     </div>
                                                     <div className="device-info col col-collapsible l12 m6 s12 left-align">
                                                         <p className="device-name">Bed-side lamp</p>
-                                                        {/*<p className="device-location">Master bedroom</p>*/}
+                                                        <p className="device-location">Master bedroom</p>
                                                     </div>
                                                 </div>
                                             </div>

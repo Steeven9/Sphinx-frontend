@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './components/css/App.css';
 import 'materialize-css'; // It installs the JS asset only
 import 'materialize-css/dist/css/materialize.min.css';
 import Header from './components/Header';
@@ -12,11 +12,12 @@ import House from './components/House';
 import HandleRooms from './components/HandleRooms';
 import AddRoom from './components/AddRoom';
 import Room from './components/Room';
-import Devices from './components/Devices';
+import DevicesPanel from './components/devices/DevicesPanel';
 import AddDevice from './components/AddDevice';
-import Template from './components/Template';
 import Footer from './components/Footer';
 import ControlledExpansionPanel from './components/ControlledExpansionPanel';
+import Template from './components/Template';
+import AllDevicesTemplate from './components/AllDevicesTemplate';
 
 import {
     BrowserRouter as Router,
@@ -95,8 +96,8 @@ class App extends React.Component {
                             <Room />
                         </Route>
 
-                        <Route path="/devices">
-                            <Devices />
+                        <Route path="/devices/">
+                            <DevicesPanel />
                         </Route>
 
                         <Route path="/addDevice">
@@ -105,6 +106,10 @@ class App extends React.Component {
 
                         <Route path="/template">
                             <Template />
+                        </Route>
+
+                        <Route path="/allDevicesTemplate">
+                            <AllDevicesTemplate />
                         </Route>
 
                         <Route path="/expand">

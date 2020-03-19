@@ -1,6 +1,6 @@
 // import React from 'react';
-import '../App.css';
-import './collapsible-component.css';
+import './css/App.css';
+import './css/collapsible-component.css';
 import M from 'materialize-css';
 import React, { Component } from "react";
 
@@ -26,6 +26,7 @@ import iconHumiditySensor from "./img/icons/devices/sensor-humidity.svg";
 import iconMotionSensor from "./img/icons/devices/sensor-motion.svg";
 import iconTemperatureSensor from "./img/icons/devices/sensor-temperature.svg";
 import iconMicrowaveOven from "./img/icons/devices/other-microwave-oven.svg"
+import iconUnknownDevice from "./img/icons/devices/unknown-device.svg";
 
 // Object ENUMS implementation for all available devices
 const deviceType = {
@@ -90,8 +91,6 @@ function getDeviceIcon(type) {
             return iconLedBulb;
         case deviceType.LIGHT.SMART.LED_STRIP:
             return iconLedStrip;
-        case deviceType.LIGHT.SMART.BED_SIDE_LAMP:
-            return iconBedSideLamp;
         case deviceType.LIGHT.SMART.STANDING_LAMP:
             return iconStandingLamp;
         case deviceType.LIGHT.SMART.READING_LAMP:
@@ -112,6 +111,9 @@ function getDeviceIcon(type) {
             return iconMotionSensor;
         case deviceType.SENSOR.TEMPERATURE:
             return iconTemperatureSensor;
+
+        default:
+            return iconUnknownDevice;
     }
 }
 
@@ -302,7 +304,7 @@ class Devices extends React.Component {
                                                     </div>
                                                     <div className="device-info col col-collapsible l12 m6 s12 left-align">
                                                         <p className="device-name">Bed-side lamp</p>
-                                                        {/*<p className="device-location">Master bedroom</p>*/}
+                                                        <p className="device-location">Master bedroom</p>
                                                     </div>
                                                 </div>
                                             </div>
