@@ -27,7 +27,7 @@ class ResetPassword extends React.Component {
         return (
 
 
-            <div className="resetPassword">
+            <div className="main-img-background">
 
                 <div class="content-box1">
 

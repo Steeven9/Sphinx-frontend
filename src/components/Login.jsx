@@ -29,10 +29,10 @@ class Login extends React.Component {
         const { username, password } = this.state;
         const isEnabled = username.length > 0 && password.length > 0;
         return (
-            <div className="login">
+            <div className="main-img-background">
 
 
-                <div class="content-box1">
+                <div class="content-box1 ">
 
                     <h2 class="title">Login</h2>
                     

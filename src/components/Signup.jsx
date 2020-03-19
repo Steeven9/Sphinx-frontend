@@ -50,7 +50,7 @@ class Signup extends React.Component {
     
         return (
 
-            <div className="signup">
+            <div className="main-img-background">
 
 
                 <div class="content-box1">
