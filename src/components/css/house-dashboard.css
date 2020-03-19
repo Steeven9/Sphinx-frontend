@@ -74,12 +74,8 @@ h2 {
     margin-left: 19%;
 }
 
-.floor1{
-    margin-left: 29%;
-}
-
 .device1{
-    margin-left: 8%;
+    margin-left: 35%;
 }
 
 .canvas1{
@@ -133,19 +129,20 @@ h2 {
     width: 38%;
 }
 
-.flo-dev-number{
+.dev-number{
+    margin-left: 8%;
     margin-right: 14%;
     font-size: 22px;
 }
 
 .room-button1{
-    margin-left: -4%;
+    margin-left: -3%;
     width: 35px;
     height: 35px;
 }
 
 .room-button2{
-    margin-left: 5%;
+    margin-left: 7%;
     width: 35px;
     height: 35px;
 }
