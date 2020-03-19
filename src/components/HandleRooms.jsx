@@ -23,7 +23,22 @@ class HandleRooms extends React.Component {
                         <div class="Handle-dates"> 
                             <div class="Handle-input"><input style={{width: 300 + 'px'}} type="text" name="" placeholder="Room name"/></div>
                            <div class="Handle-input"><input style={{width: 300 + 'px'}} type="number" name="" placeholder="Floor"/></div>
-                           <div class="Handle-input"><input style={{width: 300 + 'px'}} type="text" name="" placeholder="Room type" /></div>
+                           <div class="Handle-input"> <select class="selector">
+                                                                <option>Room type</option>
+                                                                <option>Attic</option>
+                                                                <option>Backyard</option>
+                                                                <option>Basement</option>
+                                                                <option>Bathroom</option>
+                                                                <option>Bedroom</option>
+                                                                <option>Dining room</option>
+                                                                <option>Garage</option>
+                                                                <option>Generic room</option>
+                                                                <option>Hallway</option>
+                                                                <option>House front</option>
+                                                                <option>Living room</option>
+                                                                <option>Office</option>
+                                                            </select>
+                            </div>
                         </div>
                         <div class="Handle-dates">
                            <div class="Handle-input mod-width"><button type="button" name="button" class="Handle-btn-secondary btn">Cancel</button></div>
@@ -31,7 +46,7 @@ class HandleRooms extends React.Component {
                             <div class="Handle-input mod-width"><button type="button" name="button" class="Handle-btn-primary btn">Save Changes</button></div>
                         </div>
                     </div>
-            </div>  
+            </div> 
         );
     }
 }
