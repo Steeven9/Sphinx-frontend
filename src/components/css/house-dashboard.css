@@ -63,7 +63,7 @@ h2 {
 
 
 /* housepage */
-.legenda{
+.informations{
     display: flex;
     flex-direction: row;
     font-weight: bold;
@@ -71,15 +71,15 @@ h2 {
 }
 
 .name1{
-    margin-left: 17%;
+    margin-left: 19%;
 }
 
 .floor1{
-    margin-left: 30%;
+    margin-left: 29%;
 }
 
 .device1{
-    margin-left: 9%;
+    margin-left: 8%;
 }
 
 .canvas1{
@@ -95,7 +95,6 @@ h2 {
     font-size: 20px !important;
     font-family: Open Sans;
 }
-
 
 .canvas2{
     height: 80%;
@@ -137,7 +136,6 @@ h2 {
 .flo-dev-number{
     margin-right: 14%;
     font-size: 22px;
-
 }
 
 .room-button1{
