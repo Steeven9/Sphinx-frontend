@@ -32,43 +32,43 @@ class Login extends React.Component {
             <div className="main-img-background">
 
 
-                <div class="content-box1 ">
+                <div className="content-box1 ">
 
-                    <h2 class="title">Login</h2>
+                    <h2 className="title">Login</h2>
                     
                     <p>All fields are required</p>
 
                     <div
-                        class="dates-input1"><input
+                        className="dates-input1"><input
                             type="text"
-                            required="true"
+                            required={true}
                             name="username"
                             value={this.state.username}
                             onChange={this.handleUsernameChange}
                             placeholder="Username" /></div>
 
-                    <div class="dates-input1"><input
+                    <div className="dates-input1"><input
                             type="password"
                             name="password"
-                            required="true"
+                            required={true}
                             value={this.state.password}
                             onChange={this.handlePasswordChange}
                             placeholder="Password" /></div>
 
                     <a href="/reset">Forgot your password?</a>
 
-                    <div class="buttons1">
+                    <div className="buttons1">
 
-                        <div class="dates-input1"><a href="/signup"><button
+                        <div className="dates-input1"><a href="/signup"><button
                                 type="button"
                                 name="button"
-                                class="btn-secondary btn">Create account</button></a></div>
+                                className="btn-secondary btn">Create account</button></a></div>
 
-                        <div class="dates-input1"><button
+                        <div className="dates-input1"><button
                                 type="button"
                                 disabled= {!isEnabled}
                                 name="button"
-                                class="btn-primary btn">Login</button>
+                                className="btn-primary btn">Login</button>
                         </div>
 
                     </div>
