@@ -12,6 +12,7 @@ class Login extends React.Component {
         }
     }
 
+    // functions to handle state on input change
     handleUsernameChange = evt => {
         this.setState({ username: evt.target.value });
     };
