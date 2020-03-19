@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/App.css';
-import imgSmartHouse from './img/smart-home.svg';
+import imgSmartHouse from './img/logo/smart-home.svg';
 
 class Homepage extends React.Component {
 
