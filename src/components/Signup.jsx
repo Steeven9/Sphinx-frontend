@@ -4,11 +4,11 @@ import './css/LoginCreateReset.css';
 class Signup extends React.Component {
 
     constructor(props) {
-		super(props);
-		this.state = {
-			// placeholder
-		}
-	}
+        super(props);
+        this.state = {
+            // placeholder
+        }
+    }
 
     /**
      * TODO
@@ -25,7 +25,7 @@ class Signup extends React.Component {
 
                     <div class="dates">
 
-                        <div class="dates-input"><input class="cred" type="text"  name="" placeholder="First name"/></div>
+                        <div class="dates-input"><input class="cred" type="text" name="" placeholder="First name" /></div>
 
                         <div class="dates-input"><input class="cred" type="text" name="" placeholder="Laste name*" /></div>
 
@@ -41,7 +41,7 @@ class Signup extends React.Component {
 
                     <div class="dates">
 
-                        <div class="dates-input"><a href="/login"><button type="button" name="button"class="btn-secondary btn">Sing in</button></a></div>
+                        <div class="dates-input"><a href="/login"><button type="button" name="button" class="btn-secondary btn">Sing in</button></a></div>
 
                         <div class="dates-input"><button type="button" name="button" class="btn-primary btn">Create account</button></div>
 
