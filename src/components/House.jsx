@@ -25,13 +25,12 @@ class House extends React.Component {
                     </div>
 
                     <div class="canvas2">
-                        <div class="informations"><div class="name1">Name</div> <div class="floor1">Floor</div> <div class="device1">Devices</div></div>
+                        <div class="informations"><div class="name1">Name</div><div class="device1">Devices</div></div>
                         <hr class="line"/>
                         <div class="room">
                             <div class="image vertical-center"><img src={imgGarage} alt="device-logo"/></div>
                             <div class="room-name vertical-center"> name of the room</div>
-                            <div class="flo-dev-number vertical-center">2</div>
-                            <div class="flo-dev-number vertical-center">7</div>
+                            <div class="dev-number vertical-center">7</div>
                             <div class="room-button1 vertical-center"> <button><img src="" alt="im"/></button></div>
                             <div class="room-button2 vertical-center"> <button><img src="" alt="im"/></button></div>
 
