@@ -22,7 +22,7 @@ class HandleRooms extends React.Component {
                         <h2 class="title">Modify Room</h2>
                         <div class="Handle-dates"> 
                             <div class="Handle-input"><input style={{width: 300 + 'px'}} type="text" name="" placeholder="Room name"/></div>
-                           <div class="Handle-input"><input style={{width: 300 + 'px'}} type="number" name="" placeholder="floor"/></div>
+                           <div class="Handle-input"><input style={{width: 300 + 'px'}} type="number" name="" placeholder="Floor"/></div>
                            <div class="Handle-input"><input style={{width: 300 + 'px'}} type="text" name="" placeholder="Room type" /></div>
                         </div>
                         <div class="Handle-dates">

@@ -1,6 +1,5 @@
 import React from 'react';
 import '../App.css';
-import '../components/css/handleRoom.css';
 
 class AddDevice extends React.Component {
 
