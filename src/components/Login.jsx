@@ -7,14 +7,26 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // placeholder
+            username: '',
+            password: ''
         }
     }
 
-    /**
-     * TODO
+    handleUsernameChange = evt => {
+        this.setState({ username: evt.target.value });
+    };
+    
+    handlePasswordChange = evt => {
+        this.setState({ password: evt.target.value });
+    };
+
+     /**
+     * State: username, password
+     * isEnabled: boolean to enable button
      */
     render() {
+        const { username, password } = this.state;
+        const isEnabled = username.length > 0 && password.length > 0;
         return (
             <div className="login">
 
@@ -22,19 +34,25 @@ class Login extends React.Component {
                 <div class="content-box1">
 
                     <h2 class="title">Login</h2>
+                    
+                    <p>All fields are required</p>
 
                     <div
                         class="dates-input1"><input
                             type="text"
-                            name=""
+                            name="username"
+                            value={this.state.username}
+                            onChange={this.handleUsernameChange}
                             placeholder="Username" /></div>
 
                     <div class="dates-input1"><input
                             type="password"
-                            name=""
+                            name="password"
+                            value={this.state.password}
+                            onChange={this.handlePasswordChange}
                             placeholder="Password" /></div>
 
-                    <a href="/reset">forgot your password?</a>
+                    <a href="/reset">Forgot your password?</a>
 
                     <div class="buttons1">
 
@@ -45,6 +63,7 @@ class Login extends React.Component {
 
                         <div class="dates-input1"><button
                                 type="button"
+                                disabled= {!isEnabled}
                                 name="button"
                                 class="btn-primary btn">Login</button>
                         </div>
