@@ -41,6 +41,7 @@ class Login extends React.Component {
                     <div
                         class="dates-input1"><input
                             type="text"
+                            required="true"
                             name="username"
                             value={this.state.username}
                             onChange={this.handleUsernameChange}
@@ -49,6 +50,7 @@ class Login extends React.Component {
                     <div class="dates-input1"><input
                             type="password"
                             name="password"
+                            required="true"
                             value={this.state.password}
                             onChange={this.handlePasswordChange}
                             placeholder="Password" /></div>

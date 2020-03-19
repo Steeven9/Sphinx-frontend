@@ -33,10 +33,10 @@ class ResetPassword extends React.Component {
 
                     <h2 class="title">Restore Password</h2>
 
-                    <p>Type the email address registered to your account. If we find it in our records, you’ll receive the instructionsto
+                    <p>Type the email address registered to your account. If we find it in our records, you’ll receive the instructions to
                     restore your password.</p>
 
-                    <div class="dates-input1"><input type="text" name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
+                    <div class="dates-input1"><input type="email"  required="true" name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
 
                     <div class="buttons1">
 
