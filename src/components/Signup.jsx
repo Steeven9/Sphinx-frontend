@@ -12,9 +12,21 @@ class Signup extends React.Component {
             email: '',
             password: '',
             confirmPassword: '',
-
+            success: false
         }
     }
+
+    /**
+     * Sends all informations contained in this.state to the backend
+     */
+    sendDatas = evt => {
+        fetch('http://localhost:8080/user/' + this.state.username, {
+            method: 'POST',
+            body: JSON.stringify(this.state)
+        })
+        .then( (res) => console.log(res))
+        .then( (res) => this.setState({success: true}))
+    };
 
     handleUsernameChange = evt => {
         this.setState({ username: evt.target.value });
@@ -75,11 +87,13 @@ class Signup extends React.Component {
 
                     </div>
 
+                    { this.state.success && <p>Account created succesfully, check your emails.</p> }
+
                     <div className="dates">
 
                         <div className="dates-input"><a href="/login"><button type="button" name="button" className="btn-secondary btn">Sign in</button></a></div>
 
-                        <div className="dates-input"><button type="button" disabled={!isEnabled} name="button" className="btn-primary btn">Create</button></div>
+                        <div className="dates-input"><button type="button" disabled={!isEnabled} name="button" className="btn-primary btn" onClick={this.sendDatas}>Create</button></div>
 
                     </div>
 

@@ -7,16 +7,34 @@ class Verification extends React.Component {
         super(props);
         this.state = {
             show: 0, // If 0, the page will have a form. If 1, display error. If 2, display a different message
+            username: "",
             code: ""
         }
     }
 
     /**
-     * Sends the code given in the form to the backend to check it.
+     * Sends the code and the username given in the form to the backend to check it.
      * Depending on the backend response, it will change the "success" and "toSend" variable values.
      */
-    sendCode = () => {
-        this.setState({ show: 1 });
+    sendDatas = () => {
+        fetch('http://localhost:8080/auth/verify', {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(this.state)
+        })
+        .then( (res) => console.log(res))
+        .then((res) => this.setState({ show: 2 }))
+        .catch((error) => this.setState({ show: 1 }))
+    }
+
+    /**
+     * Every time that the text inside the input changes, this.state.username gets changed.
+     */
+    changeCode = (event) => {
+        this.setState({ username: event.target.value });
     }
 
     /**
@@ -31,17 +49,19 @@ class Verification extends React.Component {
      */
     showValidation = () => {
         if (this.state.show === 0) {
-            return (<form onSubmit={this.sendCode}>
-                    <p>Insert Validation Code:</p> 
-                    <input type="text" name="validation-code" onChange={this.changeCode} />
-                    <input type="submit" className="waves-effect waves-light btn btn-primary col l5" />
+            return (<form onSubmit={this.sendDatas}>
+                <div className="dates">
+                    <div className="dates-input"><input type="text" name="username" onChange={this.changeUsername} placeholder="Username" required /></div>
+                    <div className="dates-input"><input type="text" name="validation-code" onChange={this.changeCode} placeholder="Validation Code" required /></div>
+                    <p><input type="submit" className="waves-effect waves-light btn btn-primary col l5" /></p>
+                </div>
             </form>)
         }
         else if (this.state.show === 1) {
             return (<p>The code {this.state.code} is invalid</p>)
         }
         else if (this.state.show === 2) {
-            return(<p>Account verified</p>)
+            return (<p>Account verified</p>)
         }
     }
 
@@ -60,7 +80,7 @@ class Verification extends React.Component {
                             </div>
 
                             <div className="center">
-                                { this.showValidation() }
+                                {this.showValidation()}
                             </div>
                         </section>
                     </div>

@@ -7,9 +7,22 @@ class ResetPassword extends React.Component {
     constructor(props) {
 		super(props);
 		this.state = {
+            success: false,
 			email: '',
 		}
     }
+
+    /**
+     * Sends all informations contained in this.state to the backend
+     */
+    sendDatas = evt => {
+        fetch('http://localhost:8080/auth/reset', {
+            method: 'POST',
+            body: JSON.stringify(this.state)
+        })
+        .then( (res) => console.log(res))
+        .then((res) => this.setState({ success: true }))
+    };
     
     handleEmailChange = evt => {
         this.setState({ email: evt.target.value });
@@ -38,11 +51,13 @@ class ResetPassword extends React.Component {
 
                     <div className="dates-input1"><input type="email"  required={true} name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
 
+                    { this.state.success && <p>Password resetted succesfully, check your emails.</p> }
+
                     <div className="buttons1">
 
                         <div className="dates-input1"><a href="/login"><button type="button" name="button" className="btn-secondary btn">Cancel</button></a></div>
 
-                        <div className="dates-input1"><button type="button" name="button" disabled={!isEnabled} className="btn-primary btn">Reset</button></div>
+                        <div className="dates-input1"><button type="button" name="button" disabled={!isEnabled} className="btn-primary btn" onClick={this.sendDatas}>Reset</button></div>
 
                     </div>
 

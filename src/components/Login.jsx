@@ -12,6 +12,17 @@ class Login extends React.Component {
         }
     }
 
+    /**
+     * Sends all informations contained in this.state to the backend
+     */
+    sendDatas = evt => {
+        fetch('http://localhost:8080/auth/login', {
+            method: 'POST',
+            body: JSON.stringify(this.state)
+        })
+        .then( (res) => console.log(res))
+    };
+
     // functions to handle state on input change
     handleUsernameChange = evt => {
         this.setState({ username: evt.target.value });
@@ -68,7 +79,8 @@ class Login extends React.Component {
                                 type="button"
                                 disabled= {!isEnabled}
                                 name="button"
-                                className="btn-primary btn">Login</button>
+                                className="btn-primary btn"
+                                onClick={this.sendDatas}>Login</button>
                         </div>
 
                     </div>
