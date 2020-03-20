@@ -4,6 +4,54 @@ import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 
 const DevicesPanel = () => {
+    const myDevices = [
+        {
+            id: 0,
+            icon: "DimmableLight",
+            deviceType: "DimmableLight",
+            name: "LED light",
+            room: "Master bedroom",
+            slider: 75
+        },
+        {
+            id: 1,
+            icon: "Light",
+            deviceType: "Light",
+            room: "Master bedroom",
+            name: "Light bulb",
+            switched: '3'
+        },
+        {
+            id: 2,
+            icon: "DimmableSwitch",
+            deviceType: "DimmableSwitch",
+            room: "Kitchen",
+            name: "Dimmable switch",
+            switches: '0'
+        },
+        {
+            id: 3,
+            icon: "Switch",
+            deviceType: "Switch",
+            name: "Switch",
+            room: "Master bedroom",
+            switches: '1'
+        },
+        {
+            id: 4,
+            icon: "TempSensor",
+            deviceType: "TempSensor",
+            room: "Living room",
+            name: "Temperature sensor"
+        },
+        {
+            id: 5,
+            icon: "SmartPlug",
+            deviceType: "SmartPlug",
+            room: "Garage",
+            name: "Smart plug"
+        }];
+
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
     useEffect(() => {
@@ -15,7 +63,7 @@ const DevicesPanel = () => {
     }, []);
 
     useEffect(() => {
-        localStorage.setItem('devices', JSON.stringify(devices))
+        localStorage.setItem('devices', JSON.stringify(myDevices))
     }, [devices]);
 
     return(

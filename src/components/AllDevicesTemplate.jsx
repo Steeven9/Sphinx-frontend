@@ -1,4 +1,3 @@
-// import React from 'react';
 import './css/App.css';
 import './css/collapsible-component.css';
 import M from 'materialize-css';
@@ -64,52 +63,38 @@ const deviceType = {
 
 /**
  * Gets a SVG icon object for the corresponding device
- * @param {deviceType} type
+ * @param {string} deviceType
  * @returns {icon} SVG imported icon
  * @author Erick Garro Elizondo
  */
-function getDeviceIcon(type) {
-    switch(type){
+function getDeviceIcon(deviceType) {
+    switch(deviceType){
         // Controllers
-        case deviceType.DIMMER.REGULAR:
+        case 'DimmableSwitch':
             return iconDimmerState;
-        case deviceType.DIMMER.STATE:
+        case 'StatelessDimmableSwitch':
             return iconDimmerRegular;
-        case deviceType.SMART_PLUG:
+        case 'SmartPlug':
             return iconSmartPlug;
-        case deviceType.SWITCH:
+        case 'Switch':
             return iconSwitch;
 
         // Smart lights (with intensity state)
-        case deviceType.LIGHT.SMART.BED_SIDE_LAMP:
-            return iconBedSideLamp;
-        case deviceType.LIGHT.SMART.BULB:
+        case 'Light':
             return iconRegularBulb;
-        case deviceType.LIGHT.SMART.HANGING_LAMP:
-            return iconHangingLamp;
-        case deviceType.LIGHT.SMART.LED:
-            return iconLedBulb;
-        case deviceType.LIGHT.SMART.LED_STRIP:
-            return iconLedStrip;
-        case deviceType.LIGHT.SMART.STANDING_LAMP:
-            return iconStandingLamp;
-        case deviceType.LIGHT.SMART.READING_LAMP:
-            return iconReadingLamp;
 
         // Regular lights (w/o intensity)
-        case deviceType.LIGHT.REGULAR.FLUORESCENT_BULB:
+        case 'DimmableLight':
             return iconFluorescentBulb;
-        case deviceType.LIGHT.REGULAR.FLUORESCENT_LAMP:
-            return iconFluorescentLamp;
 
         // Sensors
-        case deviceType.SENSOR.HUMIDITY:
+        case 'HumiditySensor':
             return iconHumiditySensor;
-        case deviceType.SENSOR.LIGHT:
+        case 'LightSensor':
             return iconLightSensor;
-        case deviceType.SENSOR.MOTION:
+        case 'MotionSensor':
             return iconMotionSensor;
-        case deviceType.SENSOR.TEMPERATURE:
+        case 'TempSensor':
             return iconTemperatureSensor;
 
         default:
