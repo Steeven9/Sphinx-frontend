@@ -16,8 +16,7 @@ yarn-install:
 yarn-test:
     stage: test
     script:
-        - pwd # cannot have an empty job
-        #- yarn test
+        - yarn test
 
 yarn-build:
     stage: build
