@@ -6,39 +6,35 @@ import imgGarage from './img/icons/rooms/icon-garage.svg';
 class House extends React.Component {
 
     constructor(props) {
-		super(props);
-		this.state = {
-			// placeholder
-		}
-	}
+        super(props);
+        this.state = {
+            // placeholder
+        }
+    }
 
     /**
-     * TODO
+     * Renders the list of rooms
      */
     render() {
         return (
             <div className="house">
-                <div class="content-box">
-                    <div class="canvas1">
-                       <h2>My rooms</h2>
-                       <button class="btn-primary-circular2 add-btn">Add room</button>
+                <div className="content-box">
+                    <div className="canvas1">
+                        <h2>My rooms</h2>
+                        <a href="/addRoom" className="add-btn waves-effect waves-light btn-primary-circular">+</a>
                     </div>
 
-                    <div class="canvas2">
-                        <div class="informations"><div class="name1">Name</div><div class="device1">Devices</div></div>
-                        <hr class="line"/>
-                        <div class="room">
-                            <div class="image vertical-center"><img src={imgGarage} alt="device-logo"/></div>
-                            <div class="room-name vertical-center"> name of the room</div>
-                            <div class="dev-number vertical-center">7</div>
-                            <div class="room-button1 vertical-center"> <button><img src="" alt="im"/></button></div>
-                            <div class="room-button2 vertical-center"> <button><img src="" alt="im"/></button></div>
-
+                    <div className="canvas2">
+                        <div className="informations"><div className="name1">Name</div><div className="device1">Devices</div></div>
+                        <hr className="line" />
+                        <div className="room">
+                            <div className="image vertical-center"><img src={imgGarage} alt="device-logo" /></div>
+                            <div className="room-name vertical-center"> name of the room</div>
+                            <div className="dev-number vertical-center">7</div>
+                            <div className="room-button1 vertical-center"><i className="material-icons btn-edit">edit</i></div>
+                            <div className="room-button2 vertical-center"><i className="material-icons btn-visibility">visibility</i></div>
                         </div>
-
-                        
-
-                        <hr class="line"/>
+                        <hr className="line" />
                     </div>
                 </div>
             </div>
