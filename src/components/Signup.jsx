@@ -22,7 +22,14 @@ class Signup extends React.Component {
     sendDatas = evt => {
         fetch('http://localhost:8080/user/' + this.state.username, {
             method: 'POST',
-            body: JSON.stringify(this.state)
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: 
+            {
+                username: this.state.username, 
+                email: this.state.username, 
+                fullname: this.state.firstname + " " + this.state.lastname,
+                password: this.state.password
+            }
         })
         .then( (res) => console.log(res))
         .then( (res) => this.setState({success: true}))

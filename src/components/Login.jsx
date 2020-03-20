@@ -16,11 +16,17 @@ class Login extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
+        // this.props.setLogin();
+        // this.props.redirectDashboard();
         fetch('http://localhost:8080/auth/login', {
             method: 'POST',
-            body: JSON.stringify(this.state)
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            body: this.state
         })
         .then( (res) => console.log(res))
+        .then( (res) => this.props.setSession(this.state.username, res.session_token))
+        .then( () => this.props.setLogin())
+        .then( () => this.props.redirectDashboard())
     };
 
     // functions to handle state on input change

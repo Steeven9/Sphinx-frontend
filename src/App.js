@@ -36,6 +36,9 @@ class App extends React.Component {
             toDashboard: false,
             toLogin: false,
             toHouse: false,
+
+            username: "",
+            session_token: ""
         }
     }
 
@@ -81,6 +84,23 @@ class App extends React.Component {
         });
     }
 
+    /**
+     * Used to set usernme and session token
+     */
+    setSession = (user, token) => {
+        this.setState({
+            username: user,
+            session_token: token
+        });
+    }
+
+    /**
+     * Changes loggedIn boolean
+     */
+    setLogin = () => {
+        this.loggedIn ? this.setState({ loggedIn: false }) : this.setState({ loggedIn: true })
+    }
+
     
     /**
      * Take cares of switching from one path to the other, adding the Header and the Footer.
@@ -89,7 +109,7 @@ class App extends React.Component {
     render() {
         return (
             <Router>
-                { this.state.toDashboard ? <Redirect to='/home' /> : <React.Fragment /> }
+                { this.state.toDashboard ? <Redirect to='/dashboard' /> : <React.Fragment /> }
                 { this.state.toLogin ? <Redirect to='/login' /> : <React.Fragment /> }
                 { this.state.toHouse ? <Redirect to='/house' /> : <React.Fragment /> }
 
@@ -102,6 +122,8 @@ class App extends React.Component {
                         <Route path="/login">
                             <Login
                                 redirectDashboard = {this.redirectDashboard} 
+                                setSession = {this.setSession}
+                                setLogin = {this.setLogin}
                             />
                         </Route>
 
@@ -122,33 +144,53 @@ class App extends React.Component {
                         </Route>
 
                         <Route path="/dashboard">
-                            <Dashboard />
+                            <Dashboard 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
+                            />
                         </Route>
 
                         <Route path="/house">
-                            <House />
+                            <House 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
+                            />
                         </Route>
 
                         <Route path="/handleRooms">
-                            <HandleRooms />
+                            <HandleRooms 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
+                            />
                         </Route>
 
                         <Route path="/addRoom">
                             <AddRoom
                                 redirectHouse = {this.redirectHouse} 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
                             />
                         </Route>
 
                         <Route path="/room">
-                            <Room />
+                            <Room 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
+                            />
                         </Route>
 
                         <Route path="/devices">
-                            <Devices />
+                            <Devices 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
+                            />
                         </Route>
 
                         <Route path="/addDevice">
-                            <AddDevice />
+                            <AddDevice 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
+                            />
                         </Route>
 
                         <Route path="/template">
@@ -158,6 +200,8 @@ class App extends React.Component {
                         <Route path="/test">
                             <RedirectionTest
                                 redirectDashboard = {this.redirectDashboard} 
+                                username = {this.state.username}
+                                session_token = {this.state.session_token}
                             />
                         </Route>
 

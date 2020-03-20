@@ -16,9 +16,8 @@ class ResetPassword extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
-        fetch('http://localhost:8080/auth/reset', {
+        fetch('http://localhost:8080/auth/reset/' + this.state.email, {
             method: 'POST',
-            body: JSON.stringify(this.state)
         })
         .then( (res) => console.log(res))
         .then((res) => this.setState({ success: true }))

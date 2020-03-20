@@ -23,7 +23,7 @@ class Verification extends React.Component {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(this.state)
+            body: { username: this.state.username, verificationToken: this.state.code }
         })
         .then( (res) => console.log(res))
         .then((res) => this.setState({ show: 2 }))
