@@ -13,19 +13,19 @@ class Dashboard extends React.Component {
     }
 
     /**
-     * TODO
+     * Renders the main dashboard
      */
     render() {
         return (
             <div className="dashboard">
 
-                <div class="content-box3">
-                    <img src={imgAllDevice} alt="not find"/>
-                    <p class="dash-text">See all devices</p>
+                <div className="content-box3" onClick={ () => {window.location.href = '/devices';} }>
+                    <img src={imgAllDevice} alt="All devices" />
+                    <a href="/devices" className="dash-text">See all devices</a>
                 </div>
-                <div class="content-box3">
-                    <img src={imgAllRoom} alt="not find"/>
-                    <p class="dash-text">See device by room</p>
+                <div className="content-box3" onClick={ () => {window.location.href = '/house';} }>
+                    <img src={imgAllRoom} alt="All rooms" />
+                    <a href="/house" className="dash-text">See device by room</a>
                 </div>
 
             </div>
