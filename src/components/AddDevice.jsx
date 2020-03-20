@@ -15,8 +15,8 @@ class AddDevice extends React.Component {
      */
     render() {
         return (
-            <div className="addDevice">
-                html page code here
+            <div className="AddDevice">
+                html page code here 
             </div>
         );
     }
