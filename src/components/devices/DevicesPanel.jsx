@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer} from 'react'
 import DevicesContext from '../context/devices-context'
-import devicesReducer from '../../reducers/devicesReducer'
+import devicesReducer from '../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
@@ -13,7 +13,8 @@ const DevicesPanel = () => {
             deviceType: "DimmableLight",
             name: "LED light",
             room: "Master bedroom",
-            slider: 75
+            slider: 75,
+            state: true
         },
         {
             id: 1,
@@ -21,7 +22,8 @@ const DevicesPanel = () => {
             deviceType: "Light",
             room: "Master bedroom",
             name: "Light bulb",
-            switched: '3'
+            switched: '3',
+            state: true
         },
         {
             id: 2,
@@ -30,7 +32,8 @@ const DevicesPanel = () => {
             room: "Kitchen",
             name: "Dimmable switch",
             slider: 100,
-            switches: '0'
+            switches: '0',
+            state: true
         },
         {
             id: 3,
@@ -38,7 +41,8 @@ const DevicesPanel = () => {
             deviceType: "Switch",
             name: "Switch",
             room: "Master bedroom",
-            switches: '1'
+            switches: '1',
+            state: true
         },
         {
             id: 4,
@@ -53,7 +57,8 @@ const DevicesPanel = () => {
             icon: "SmartPlug",
             deviceType: "SmartPlug",
             room: "Garage",
-            name: "Smart plug"
+            name: "Smart plug",
+            state: true
         },
         {
             id: 6,

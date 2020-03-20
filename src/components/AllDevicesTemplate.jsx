@@ -8,99 +8,25 @@ import Slider from '@material-ui/core/Slider';
 
 // Light devices SVG icons
 import iconDimmerState from "./img/icons/devices/dimmer-state.svg";
-import iconDimmerRegular from "./img/icons/devices/dimmer-regular.svg";
+// import iconDimmerRegular from "./img/icons/devices/dimmer-regular.svg";
 import iconSmartPlug from "./img/icons/devices/smart-plug.svg"
 import iconSwitch from "./img/icons/devices/switch.svg";
-import iconRegularBulb from "./img/icons/devices/bulb-regular.svg";
-import iconFluorescentBulb from "./img/icons/devices/bulb-fluorescent.svg";
+// import iconRegularBulb from "./img/icons/devices/bulb-regular.svg";
+// import iconFluorescentBulb from "./img/icons/devices/bulb-fluorescent.svg";
 import iconLedBulb from "./img/icons/devices/bulb-led.svg"
-import iconLedStrip from "./img/icons/devices/strip-led.svg"
+// import iconLedStrip from "./img/icons/devices/strip-led.svg"
 import iconBedSideLamp from "./img/icons/devices/lamp-bed-side.svg"
-import iconFluorescentLamp from "./img/icons/devices/lamp-fluorescent.svg"
-import iconHangingLamp from "./img/icons/devices/lamp-hanging.svg"
-import iconStandingLamp from "./img/icons/devices/lamp-standing.svg"
+// import iconFluorescentLamp from "./img/icons/devices/lamp-fluorescent.svg"
+// import iconHangingLamp from "./img/icons/devices/lamp-hanging.svg"
+// import iconStandingLamp from "./img/icons/devices/lamp-standing.svg"
 import iconReadingLamp from "./img/icons/devices/lamp-reading.svg"
 import iconLightSensor from "./img/icons/devices/sensor-light.svg";
-import iconHumiditySensor from "./img/icons/devices/sensor-humidity.svg";
-import iconMotionSensor from "./img/icons/devices/sensor-motion.svg";
-import iconTemperatureSensor from "./img/icons/devices/sensor-temperature.svg";
+// import iconHumiditySensor from "./img/icons/devices/sensor-humidity.svg";
+// import iconMotionSensor from "./img/icons/devices/sensor-motion.svg";
+// import iconTemperatureSensor from "./img/icons/devices/sensor-temperature.svg";
 import iconMicrowaveOven from "./img/icons/devices/other-microwave-oven.svg"
-import iconUnknownDevice from "./img/icons/devices/unknown-device.svg";
+// import iconUnknownDevice from "./img/icons/devices/unknown-device.svg";
 
-// Object ENUMS implementation for all available devices
-const deviceType = {
-    DIMMER: {
-        REGULAR: 'Regular dimmer',
-        STATE: 'Dimmer with state'
-    },
-    LIGHT: {
-        SMART: {
-            BED_SIDE_LAMP: 'Bed-side lamp',
-            BULB: 'Regular light bulb',
-            HANGING_LAMP: 'Hanging lamp',
-            LED: 'LED light bulb with intensity',
-            LED_STRIP: 'LED strip light',
-            STANDING_LAMP: 'Standing lamp',
-            READING_LAMP: 'Reading lamp'
-        },
-        REGULAR: {
-            FLUORESCENT_BULB: 'Fluorescent light bulb',
-            FLUORESCENT_LAMP: 'Fluorescent lamp'
-        },
-    },
-    OTHER: {
-        MICROWAVE_OVEN: 'Microwave oven'
-    },
-    SENSOR: {
-        HUMIDITY: 'Humidity sensor',
-        LIGHT: 'Light sensor',
-        MOTION: 'Motion sensor',
-        TEMPERATURE: 'Temperature sensor'
-    },
-    SMART_PLUG: 'Smart plug',
-    SWITCH: 'Switch'
-};
-
-/**
- * Gets a SVG icon object for the corresponding device
- * @param {string} deviceType
- * @returns {icon} SVG imported icon
- * @author Erick Garro Elizondo
- */
-function getDeviceIcon(deviceType) {
-    switch(deviceType){
-        // Controllers
-        case 'DimmableSwitch':
-            return iconDimmerState;
-        case 'StatelessDimmableSwitch':
-            return iconDimmerRegular;
-        case 'SmartPlug':
-            return iconSmartPlug;
-        case 'Switch':
-            return iconSwitch;
-
-        // Smart lights (with intensity state)
-        case 'Light':
-            return iconRegularBulb;
-
-        // Regular lights (w/o intensity)
-        case 'DimmableLight':
-            return iconFluorescentBulb;
-
-        // Sensors
-        case 'HumiditySensor':
-            return iconHumiditySensor;
-        case 'LightSensor':
-            return iconLightSensor;
-        case 'MotionSensor':
-            return iconMotionSensor;
-        case 'TempSensor':
-            return iconTemperatureSensor;
-
-        default:
-            return iconUnknownDevice;
-    }
-}
 
 class PowerSwitch extends Component {
     constructor() {

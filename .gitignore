@@ -581,7 +581,3 @@ dist
 # .idea/modules
 # *.iml
 # *.ipr
-
-# Dust views.js
-public/js/views.js
-*.js

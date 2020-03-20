@@ -18,7 +18,6 @@ import iconUnknownDevice from "../img/icons/devices/unknown-device.svg"
 
 const Device = ({device}) => {
     const {dispatch} = useContext(DevicesContext);
-    // const deviceBehaviour = getDeviceBehaviour(device);
     const switches = device.switches;
 
     return (
@@ -28,7 +27,7 @@ const Device = ({device}) => {
                     <div className="col col-collapsible l12 s1 icons-wrapper">
                         <i className="material-icons l1">{getRowIcon(device)}</i>
                         <div className="icon-device l1">
-                            <img className="" src={getDeviceIcon(device.deviceType)} alt="(device.name)"></img>
+                            <img className="" src={getDeviceIcon(device.deviceType)} alt="(device.name)"/>
                         </div>
                         <div className="device-info col col-collapsible l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>
@@ -50,19 +49,7 @@ const Device = ({device}) => {
 };
 
 function getPowerSwitch(device) {
-    // <PowerSwitch />
     switch (device.deviceType) {
-        case 'SmartPlug':
-            return(
-                <div className="col col-collapsible l4 device-control-switch">
-                    <div className="switch col col-collapsible l2 m8 s11 right-align">
-                        <PowerSwitch />
-                    </div>
-                    <div className="col col-collapsible l2 m1 s1 right-align">
-                        <i className="material-icons btn-edit">edit</i>
-                    </div>
-                </div>
-            );
         case 'HumiditySensor':
         case 'LightSensor':
         case 'TempSensor':
@@ -80,14 +67,16 @@ function getPowerSwitch(device) {
             return (
                 <div className="col col-collapsible l4 device-control-switch">
                     <div className="switch col col-collapsible l2 m8 s11 right-align">
-                        <PowerSwitch />
+                        <PowerSwitch
+                            onChange={()=>{}}
+                            checked={device.state}
+                        />
                     </div>
                     <div className="col col-collapsible l2 m1 s1 right-align">
                         <i className="material-icons btn-edit">edit</i>
                     </div>
                 </div>
             );
-
     }
 }
 
@@ -166,9 +155,5 @@ function getRowIcon(device) {
         return 'more_vert';
     }
 }
-
-// function getDeviceBehaviour(device) {
-//     if (device)
-// }
 
 export {Device as default}
