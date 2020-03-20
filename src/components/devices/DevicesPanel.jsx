@@ -2,6 +2,8 @@ import React, {useEffect, useReducer} from 'react'
 import DevicesContext from '../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
+import '../css/collapsible-component.css';
+import '../css/collapsible-devices.css';
 
 const DevicesPanel = () => {
     const myDevices = [
@@ -27,6 +29,7 @@ const DevicesPanel = () => {
             deviceType: "DimmableSwitch",
             room: "Kitchen",
             name: "Dimmable switch",
+            slider: 100,
             switches: '0'
         },
         {
@@ -42,7 +45,8 @@ const DevicesPanel = () => {
             icon: "TempSensor",
             deviceType: "TempSensor",
             room: "Living room",
-            name: "Temperature sensor"
+            name: "Temperature sensor",
+            label: "2'000 lm"
         },
         {
             id: 5,
@@ -50,6 +54,13 @@ const DevicesPanel = () => {
             deviceType: "SmartPlug",
             room: "Garage",
             name: "Smart plug"
+        },
+        {
+            id: 6,
+            icon: "MotionSensor",
+            deviceType: "MotionSensor",
+            room: "Backyard",
+            name: "Motion sensor"
         }];
 
     const [devices, dispatch] = useReducer(devicesReducer, []);

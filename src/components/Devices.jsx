@@ -21,8 +21,6 @@ import DeviceReducer from "../../reducers/devicesReducer";
 // };
 
 function Devices () {
-    const [device, setDevice] = useState({});
-
     return(
         <div id="wrapper" className="devices">
             <main>

@@ -38,26 +38,81 @@ const Device = ({device}) => {
                         </div>
                     </div>
                 </div>
-                <div className="device-control col col-collapsible l6 m6 s12">
-                    <div className="col col-collapsible l8 m6 s8">
-                        {(device.slider) &&
-                            <Slider className="slider" valueLabelDisplay="auto" defaultValue={device.slider || 0}/>
-
-                        }
-                    </div>
-                    <div className="col col-collapsible l4 device-control-switch">
-                        <div className="switch col col-collapsible l2 m8 s11 right-align">
-                            <PowerSwitch />
-                        </div>
-                        <div className="col col-collapsible l2 m1 s1 right-align">
-                            <i className="material-icons btn-edit">edit</i>
-                        </div>
-                    </div>
+            <div className="device-control col col-collapsible l6 m6 s12">
+                <div className="col col-collapsible l8 m6 s8">
+                    {getSliderOrDisplay(device)}
+                </div>
+                    {getPowerSwitch(device)}
                 </div>
             </div>
         </li>
     )
 };
+
+function getPowerSwitch(device) {
+    // <PowerSwitch />
+    switch (device.deviceType) {
+        case 'SmartPlug':
+            return(
+                <div className="col col-collapsible l4 device-control-switch">
+                    <div className="switch col col-collapsible l2 m8 s11 right-align">
+                        <PowerSwitch />
+                    </div>
+                    <div className="col col-collapsible l2 m1 s1 right-align">
+                        <i className="material-icons btn-edit">edit</i>
+                    </div>
+                </div>
+            );
+        case 'HumiditySensor':
+        case 'LightSensor':
+        case 'TempSensor':
+        case 'MotionSensor':
+            return(
+                <div className="row row-collapsible l1">
+                    <div className="">
+                        <div className="col col-collapsible l2 m1 s1">
+                            <i className="material-icons btn-edit btn-edit-no-switch">edit</i>
+                        </div>
+                    </div>
+                </div>
+            );
+        default:
+            return (
+                <div className="col col-collapsible l4 device-control-switch">
+                    <div className="switch col col-collapsible l2 m8 s11 right-align">
+                        <PowerSwitch />
+                    </div>
+                    <div className="col col-collapsible l2 m1 s1 right-align">
+                        <i className="material-icons btn-edit">edit</i>
+                    </div>
+                </div>
+            );
+
+    }
+}
+
+function getSliderOrDisplay(device) {
+    switch (device.deviceType) {
+        case 'DimmableLight':
+        case 'DimmableSwitch':
+        case 'StatelessDimmableSwitch':
+            return (<Slider className="slider" valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
+        case 'SmartPlug':
+            return (<div className="col col-collapsible l8 s8 display-info display-active">
+                <i className="col col-collapsible l2 s2 material-icons btn-reset">rotate_left</i>
+                <span>350 kWh</span>
+            </div>);
+        case 'HumiditySensor':
+        case 'LightSensor':
+        case 'TempSensor':
+        case 'MotionSensor':
+            return (<div className={"col col-collapsible l8 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
+                <span>{device.label || "---"}</span>
+            </div>);
+        default:
+            return(<></>)
+    }
+}
 
 /**
  * Gets a SVG icon object for the corresponding device

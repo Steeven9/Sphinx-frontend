@@ -33,7 +33,7 @@ code {
     color: #FFFFFF;
 }
 
-/*Use this selector to give a custom width overriding the global style */
+
 .content-box {
     width: calc(70% + 10vmin) !important;
 }
