@@ -21,7 +21,7 @@ class Template extends React.Component {
                         <section className="content-box z-depth-2">
                             <div className="row">
                                 <h3 className="col center">Title</h3>
-                                 {/*Remove the following button if needed */}
+                                 
                                 <a href="/#" className="btn waves-effect waves-light btn-primary-circular col right">+</a>
                             </div>
 

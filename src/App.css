@@ -38,9 +38,12 @@
 }
 
 /* Custom styles */
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,800&display=swap');
+
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen',
+    font-family: 'Open Sans', 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -76,7 +79,7 @@ nav {
     width: 100%;
     height: 80%;
     background-color: transparent !important;
-    background-image: url("./components/img/background.svg");
+    background-image: url("./components/img/backgrounds/app/background.svg");
     background-repeat: no-repeat;
     background-size: cover;
     z-index: -1;
@@ -115,7 +118,15 @@ h3 {
     padding-left: 0 !important;
 }
 
-/*Custom*/
+.content-box {
+    margin: 10vh auto !important;
+    background-color: #FFFFFF !important;
+    color: #2C2C2C !important;
+    width: calc(60% + 10vmin) !important;
+    border-radius: 10px !important;
+    padding: 20px 40px 20px 40px !important;
+}
+
 .btn {
     margin-left: 2vh !important;
     margin-right: 2vh !important;
@@ -124,7 +135,23 @@ h3 {
 .btn-primary {
     background: #FFB800 !important;
     border-radius: 23px !important;
-    font-family: Open Sans;
+    font-family: 'Open Sans';
+    font-style: normal !important;
+    font-weight: bold !important;
+    font-size: 14px !important;
+    /* identical to box height */
+    text-align: center !important;
+    text-transform: none !important;
+    color: #580B71 !important;
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    padding: 0 50px 0 50px !important;
+}
+
+.btn-secondary {
+    background: white !important;
+    border-radius: 23px !important;
+    font-family: 'Open Sans';
     font-style: normal !important;
     font-weight: bold !important;
     font-size: 14px !important;
@@ -139,8 +166,10 @@ h3 {
 
 .btn-primary-circular {
     background: #FFB800 !important;
-    border-radius: 80px !important;
-    font-family: Open Sans;
+    border-radius: 160px !important;
+    width: 50px !important;
+    height: 50px !important;
+    font-family: "Open Sans";
     font-style: normal !important;
     font-weight: 600 !important;
     font-size: 30px !important;
@@ -148,31 +177,14 @@ h3 {
     text-align: center !important;
     text-transform: none !important;
     color: #580B71 !important;
-    margin-top: 3vh;
-    margin-bottom: 3vh;
-    height: 45px !important;
-    line-height: 45px !important;
+    margin: 1vh 0 0 0 !important;
+    line-height: 50px !important;
     padding: 0 15px 0 15px !important;
+    align-self: center;
 }
 
-.btn-secondary {
-    background: white !important;
-    border-radius: 23px !important;
-    font-family: Open Sans;
-    font-style: normal !important;
-    font-weight: bold !important;
-    font-size: 14px !important;
-    /* identical to box height */
-    text-align: center !important;
-    text-transform: none !important;
-    color: #580B71 !important;
-    margin-top: 3vh;
-    margin-bottom: 3vh;
-    padding: 0 50px 0 50px !important;
-}
-
-.headline-box {
-    margin: calc(3vw + 3vh + 0.25vmin);
+.headline-title {
+    align-items: center !important;
 }
 
 .text-homepage-headline{
@@ -191,12 +203,12 @@ h3 {
     margin-right: 40px;
 }
 
-.content-box {
-    margin: 10vh auto;
-    background-color: #FFFFFF;
-    color: #2C2C2C !important;
-    width: calc(60% + 10vmin);
-    border-radius: 10px;
-    padding: 20px 40px 20px 40px;
+.row-collapsible, .col-collapsible {
+    padding: 0 !important;
+}
+
+/* Comment or uncomment to outline all DOM objects for design purposes */
+* {
+    /*border: 1px dashed #ff9500;*/
 }
 
