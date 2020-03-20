@@ -17,7 +17,7 @@ class Footer extends React.Component {
         return (
             <footer className="page-footer">
                 <div className="footer-copyright">
-                    <span>&copy;2020 Sphinx Software</span>
+                    <span>&copy; 2020 Sphinx Software</span>
                 </div>
             </footer>
         );
