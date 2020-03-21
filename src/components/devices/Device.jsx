@@ -17,18 +17,6 @@ import iconMotionSensor from "../img/icons/devices/sensor-motion.svg";
 import iconTemperatureSensor from "../img/icons/devices/sensor-temperature.svg";
 import iconUnknownDevice from "../img/icons/devices/unknown-device.svg"
 
-// function getDeviceHeaderClass(device) {
-//     if (device.parent) {
-//         return <div deviceid=device.id className="collapsible-header device-parent">
-//     }
-//             if (device.parent) {
-//                 return (
-//                 <div deviceid={device.id} className="collapsible-header device-parent">
-//                 )
-//             if (device.child) {
-//         return (<div deviceid={device.id} className="collapsible-header device-child">);
-//     return (<div deviceid={device.id} className="collapsible-header">);
-// }
 
 function getDeviceHeader(device) {
     if (device.switches !== undefined) {
@@ -42,30 +30,27 @@ function getDeviceHeader(device) {
 const Device = ({device}) => {
     const {dispatch} = useContext(DevicesContext);
     return (
-        // (device.child ? <ul className="collapsible-body"> ? <li className="row row-collapsible row row-collapsible-custom">)
+        // (device.child && <li className="row row-collapsible row row-collapsible-custom">)
         <div id={device.id} className={getDeviceHeader(device)}>
-                <div className="col col-collapsible l6 m6 s12">
-                    <div className="col col-collapsible l12 s1 icons-wrapper">
-                        <i className="material-icons l1">{getRowIcon(device)}</i>
-                        <div className="icon-device l1">
-                            <img className="" src={getDeviceIcon(device.deviceType)} alt="(device.name)"/>
-                        </div>
-                        <div className="device-info col col-collapsible l12 m6 s12 left-align">
-                            <p className="device-name">{device.name}</p>
-                            {device.room &&
-                            <p className="device-location">{device.room}</p>
-                            }
-                        </div>
+            <div className="col col-collapsible l6 m6 s12">
+                <div className="col col-collapsible l12 s1 icons-wrapper">
+                    <i className={"material-icons l1" + (device.child && " muted-icon")} >{getRowIcon(device)}</i>
+                    <div className="icon-device l1">
+                        <img className="" src={getDeviceIcon(device.deviceType)} alt={device.name}/>
                     </div>
-                </div>
-                <div className="device-control col col-collapsible l6 m6 s12">
-                    <div className="col col-collapsible l8 m6 s8">
-                        {getSliderOrDisplay(device)}
+                    <div className="device-info col col-collapsible l12 m6 s12 left-align">
+                        <p className="device-name">{device.name}</p>
+                        {!device.child && <p className="device-location">{device.room}</p>}
                     </div>
-                    {getPowerSwitch(device)}
                 </div>
             </div>
-            // {/*(device.child : '<ul>' : '<li>')*/}
+            <div className="device-control col col-collapsible l6 m6 s12">
+                <div className="col col-collapsible l8 m6 s8">
+                    {getSliderOrDisplay(device)}
+                </div>
+                {getPowerSwitch(device)}
+            </div>
+        </div>
     )
 };
 

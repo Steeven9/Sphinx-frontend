@@ -94,6 +94,14 @@ const DevicesPanel = () => {
         localStorage.setItem('devices', JSON.stringify(myDevices))
     }, [myDevices]);
 
+    devices.sort(function(a, b) {
+        var keyA = a.name,
+            keyB = b.name;
+        if (keyA < keyB) return -1;
+        if (keyA > keyB) return 1;
+        return 0;
+    });
+
     return(
         <DevicesContext.Provider value={{devices, dispatch}}>
             <div id="wrapper" className="devices">
