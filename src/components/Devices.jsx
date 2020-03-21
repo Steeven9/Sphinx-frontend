@@ -5,20 +5,7 @@ import './css/collapsible-devices.css';
 import M from 'materialize-css';
 import React, { Component, useState, useEffect, useReducer} from "react";
 import DevicesPanel from './devices/DevicesPanel'
-import DeviceReducer from "../../reducers/devicesReducer";
 
-
-// let devices = {
-//     hasChildren: true,
-//     rowIcon: 'icon UI name',
-//     deviceName: 'Device name',
-//     roomName: 'Room name',
-//     deviceId: 'someID',
-//     deviceIcon: getDeviceIcon(deviceType),
-//     deviceType: deviceType,
-//     intensity: 0,
-//     isOn: false
-// };
 
 function Devices () {
     return(
@@ -29,7 +16,7 @@ function Devices () {
                         <section className="content-box-collapsible z-depth-2">
                             <div className="headline-box row row-collapsible row row-collapsible-custom">
                                 <h3 className="col col-collapsible l8 left-align headline-title">My devices</h3>
-                                <a href="/#" className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right">+</a>
+                                <a href="/addDevices" className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right">+</a>
                             </div>
                             <ul className="collapsible expandable expandable-component">
                                 <DevicesPanel />

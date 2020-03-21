@@ -3,7 +3,12 @@ const devicesReducer = (state, action) => {
     switch (action.type) {
         case 'POPULATE_DEVICES':
             return action.devices;
-        case 'UPDATE_DEVICE':
+        case 'CHANGE_INTENSITY':
+            return [
+                ...state,
+                { id: action.id, body: action.body }
+            ];
+        case 'TOGGLE_SWITCH':
             return [
                 ...state,
                 { id: action.id, body: action.body }

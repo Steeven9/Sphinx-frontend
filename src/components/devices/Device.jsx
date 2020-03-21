@@ -1,5 +1,6 @@
 import React, {useContext} from 'react'
-import DevicesContext from '../context/devices-context'
+import DevicesContext from '../../context/devices-context'
+// import PowerSwitch from "react-switch";
 import PowerSwitch from './PowerSwitch'
 import Slider from '@material-ui/core/Slider'
 
@@ -16,13 +17,33 @@ import iconMotionSensor from "../img/icons/devices/sensor-motion.svg";
 import iconTemperatureSensor from "../img/icons/devices/sensor-temperature.svg";
 import iconUnknownDevice from "../img/icons/devices/unknown-device.svg"
 
+// function getDeviceHeaderClass(device) {
+//     if (device.parent) {
+//         return <div deviceid=device.id className="collapsible-header device-parent">
+//     }
+//             if (device.parent) {
+//                 return (
+//                 <div deviceid={device.id} className="collapsible-header device-parent">
+//                 )
+//             if (device.child) {
+//         return (<div deviceid={device.id} className="collapsible-header device-child">);
+//     return (<div deviceid={device.id} className="collapsible-header">);
+// }
+
+function getDeviceHeader(device) {
+    if (device.switches !== undefined) {
+        return  "collapsible-header device-parent";
+    } else if (device.child === true) {
+        return  "collapsible-header device-child";
+    }
+    return "collapsible-header"
+}
+
 const Device = ({device}) => {
     const {dispatch} = useContext(DevicesContext);
-    const switches = device.switches;
-
     return (
-        <li className="row row-collapsible row row-collapsible-custom">
-            <div id={device.id} className={"collapsible-header" + (switches ? " device-parent" : "")}>
+        // (device.child ? <ul className="collapsible-body"> ? <li className="row row-collapsible row row-collapsible-custom">)
+        <div id={device.id} className={getDeviceHeader(device)}>
                 <div className="col col-collapsible l6 m6 s12">
                     <div className="col col-collapsible l12 s1 icons-wrapper">
                         <i className="material-icons l1">{getRowIcon(device)}</i>
@@ -32,19 +53,19 @@ const Device = ({device}) => {
                         <div className="device-info col col-collapsible l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>
                             {device.room &&
-                                <p className="device-location">{device.room}</p>
+                            <p className="device-location">{device.room}</p>
                             }
                         </div>
                     </div>
                 </div>
-            <div className="device-control col col-collapsible l6 m6 s12">
-                <div className="col col-collapsible l8 m6 s8">
-                    {getSliderOrDisplay(device)}
-                </div>
+                <div className="device-control col col-collapsible l6 m6 s12">
+                    <div className="col col-collapsible l8 m6 s8">
+                        {getSliderOrDisplay(device)}
+                    </div>
                     {getPowerSwitch(device)}
                 </div>
             </div>
-        </li>
+            // {/*(device.child : '<ul>' : '<li>')*/}
     )
 };
 
@@ -67,10 +88,9 @@ function getPowerSwitch(device) {
             return (
                 <div className="col col-collapsible l4 device-control-switch">
                     <div className="switch col col-collapsible l2 m8 s11 right-align">
-                        <PowerSwitch
-                            onChange={()=>{}}
-                            checked={device.state}
-                        />
+                        <div>
+                            <PowerSwitch checked={device.on} />
+                        </div>
                     </div>
                     <div className="col col-collapsible l2 m1 s1 right-align">
                         <i className="material-icons btn-edit">edit</i>
@@ -144,15 +164,19 @@ function getDeviceIcon(deviceType) {
     }
 }
 
+
+
 /**
  * Gets a SVG icon object for the corresponding device
  * @param {object} device
- * @returns {icon} SVG imported icon
+ * @returns {string} SVG imported icon
  * @author Erick Garro Elizondo
  */
 function getRowIcon(device) {
-    if (device.switches) {
+    if (device.parent) {
         return 'more_vert';
+    } else if (device.child) {
+        return 'arrow_drop_up';
     }
 }
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer} from 'react'
-import DevicesContext from '../context/devices-context'
-import devicesReducer from '../reducers/devicesReducer'
+import DevicesContext from '../../context/devices-context'
+import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
@@ -13,36 +13,37 @@ const DevicesPanel = () => {
             deviceType: "DimmableLight",
             name: "LED light",
             room: "Master bedroom",
+            switched: 2,
             slider: 75,
-            state: true
+            on: true
         },
         {
             id: 1,
             icon: "Light",
             deviceType: "Light",
-            room: "Master bedroom",
+            room: "Kitchen",
             name: "Light bulb",
-            switched: '3',
-            state: true
+            switched: 3,
+            on: true
         },
         {
             id: 2,
             icon: "DimmableSwitch",
             deviceType: "DimmableSwitch",
-            room: "Kitchen",
+            room: "Master bedroom",
             name: "Dimmable switch",
             slider: 100,
-            switches: '0',
-            state: true
+            switches: 0,
+            on: false
         },
         {
             id: 3,
             icon: "Switch",
             deviceType: "Switch",
             name: "Switch",
-            room: "Master bedroom",
-            switches: '1',
-            state: true
+            room: "Kitchen",
+            switches: 1,
+            on: true
         },
         {
             id: 4,
@@ -58,7 +59,7 @@ const DevicesPanel = () => {
             deviceType: "SmartPlug",
             room: "Garage",
             name: "Smart plug",
-            state: true
+            on: false
         },
         {
             id: 6,
@@ -66,7 +67,18 @@ const DevicesPanel = () => {
             deviceType: "MotionSensor",
             room: "Backyard",
             name: "Motion sensor"
-        }];
+        },
+        {
+            id: 7,
+            icon: "DimmableLight",
+            deviceType: "DimmableLight",
+            name: "Smart LED light",
+            room: "Master bedroom",
+            switched: 2,
+            slider: 30,
+            on: true
+        }
+    ];
 
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
@@ -80,7 +92,7 @@ const DevicesPanel = () => {
 
     useEffect(() => {
         localStorage.setItem('devices', JSON.stringify(myDevices))
-    }, [devices]);
+    }, [myDevices]);
 
     return(
         <DevicesContext.Provider value={{devices, dispatch}}>
@@ -91,7 +103,7 @@ const DevicesPanel = () => {
                             <section className="content-box-collapsible z-depth-2">
                                 <div className="headline-box row row-collapsible row row-collapsible-custom">
                                     <h3 className="col col-collapsible l8 left-align headline-title">My devices</h3>
-                                    <a href="/#"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                    <a href="/addDevice"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <ul className="collapsible expandable expandable-component">
                                     <DeviceList />
@@ -103,7 +115,6 @@ const DevicesPanel = () => {
             </div>
         </DevicesContext.Provider>
     )
-
 };
 
 export {DevicesPanel as default}
