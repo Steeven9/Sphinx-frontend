@@ -12,7 +12,7 @@ class Signup extends React.Component {
             email: '',
             password: '',
             confirmPassword: '',
-            success: 2 //if 2, nothing, if 1 display success, if 0 display error
+            success: -1 //if -1 nothing, if 1 display success, if 0 display error
         }
     }
 

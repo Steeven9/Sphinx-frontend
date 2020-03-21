@@ -8,7 +8,8 @@ class Login extends React.Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            error: false
         }
     }
 
@@ -16,18 +17,35 @@ class Login extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
-        // this.props.setLogin();
-        // this.props.redirectDashboard();
+        evt.preventDefault();
         fetch('http://localhost:8080/auth/login', {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: this.state
+            body: {username: this.state.username, password: this.state.password}
         })
-        .then( (res) => console.log(res))
-        .then( (res) => this.props.setSession(this.state.username, res.session_token))
-        .then( () => this.props.setLogin())
-        .then( () => this.props.redirectDashboard())
+        // .then( (res) => console.log(res))
+        .then( (res) => {
+            if (res.status === 200) {
+                this.props.setSession(this.state.username, res.session_token);
+                this.props.setLogin();
+                this.props.redirectDashboard();
+            }
+            else {
+                this.setState({error: true});
+            }
+        })
     };
+
+    /**
+     * Display an error message if this.state.error === true
+     */
+    showError = () => {
+        if (this.state.error) {
+            return(
+                <p>Couldn't log in.</p>
+            )
+        }
+    }
 
     // functions to handle state on input change
     handleUsernameChange = evt => {
@@ -71,6 +89,8 @@ class Login extends React.Component {
                             value={this.state.password}
                             onChange={this.handlePasswordChange}
                             placeholder="Password" /></div>
+
+                    { this.showError() }
 
                     <a href="/reset">Forgot your password?</a>
 
