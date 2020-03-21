@@ -12,7 +12,7 @@ class Signup extends React.Component {
             email: '',
             password: '',
             confirmPassword: '',
-            success: false
+            success: 2 //if 2, nothing, if 1 display success, if 0 display error
         }
     }
 
@@ -20,6 +20,7 @@ class Signup extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
+        evt.preventDefault();
         fetch('http://localhost:8080/user/' + this.state.username, {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
@@ -31,10 +32,23 @@ class Signup extends React.Component {
                 password: this.state.password
             }
         })
-        .then( (res) => console.log(res))
-        .then( (res) => this.setState({success: true}))
+        // .then( (res) => console.log(res))
+        .then( (res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
     };
 
+    /**
+     * Adds a new line in the page depending on the value of this.state.success
+     */
+    displayResult = () => {
+        if (this.state.success === 1) {
+            return (<p>Account created successfully, please check your emails.</p>)
+        }
+        else if (this.state.success === 0) {
+            return (<p>The Account couldn't be created. Try checking your informations.</p>)
+        }
+    }
+
+    //Functions that handle changes in the inputs
     handleUsernameChange = evt => {
         this.setState({ username: evt.target.value });
     };
@@ -94,7 +108,7 @@ class Signup extends React.Component {
 
                     </div>
 
-                    { this.state.success && <p>Account created succesfully, check your emails.</p> }
+                    { this.displayResult() }
 
                     <div className="dates">
 
