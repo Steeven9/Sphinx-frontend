@@ -585,3 +585,7 @@ dist
 # Dust views.js
 public/js/views.js
 *.js
+
+# Packages
+yarn.lock
+package-lock.json

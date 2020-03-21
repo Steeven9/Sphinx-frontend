@@ -1,5 +1,7 @@
 import React from 'react';
 import '../App.css';
+import imgAllDevice from './img/icons/dashboard/icon-all-devices.svg';
+import imgAllRoom from './img/icons/dashboard/icon-all-rooms.svg';
 
 class Dashboard extends React.Component {
 
@@ -11,12 +13,21 @@ class Dashboard extends React.Component {
     }
 
     /**
-     * TODO
+     * Renders the main dashboard
      */
     render() {
         return (
             <div className="dashboard">
-                html page code here
+
+                <div className="content-box3" onClick={ () => {window.location.href = '/devices';} }>
+                    <img src={imgAllDevice} alt="All devices" />
+                    <a href="/devices" className="dash-text">See all devices</a>
+                </div>
+                <div className="content-box3" onClick={ () => {window.location.href = '/house';} }>
+                    <img src={imgAllRoom} alt="All rooms" />
+                    <a href="/house" className="dash-text">See device by room</a>
+                </div>
+
             </div>
         );
     }
