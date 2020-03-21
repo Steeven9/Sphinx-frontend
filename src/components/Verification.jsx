@@ -6,7 +6,7 @@ class Verification extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will have a form. If 1, display error. If 2, display a different message
+            show: 0, // If 0, the page will have a form. If 1, display "account verified". If 2, display "incorrect code". If 3, display error message
             username: "",
             code: ""
         }
@@ -16,7 +16,8 @@ class Verification extends React.Component {
      * Sends the code and the username given in the form to the backend to check it.
      * Depending on the backend response, it will change the "success" and "toSend" variable values.
      */
-    sendDatas = () => {
+    sendDatas = (event) => {
+        event.preventDefault();
         fetch('http://localhost:8080/auth/verify', {
             method: 'POST',
             headers: {
@@ -25,9 +26,8 @@ class Verification extends React.Component {
             },
             body: { username: this.state.username, verificationToken: this.state.code }
         })
-        .then( (res) => console.log(res))
-        .then((res) => this.setState({ show: 2 }))
-        .catch((error) => this.setState({ show: 1 }))
+        .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 2 }) )
+        .catch( (error) => this.setState({ show: 3 }) )
     }
 
     /**
@@ -58,10 +58,13 @@ class Verification extends React.Component {
             </form>)
         }
         else if (this.state.show === 1) {
-            return (<p>The code {this.state.code} is invalid</p>)
+            return (<p>Account verified</p>)
         }
         else if (this.state.show === 2) {
-            return (<p>Account verified</p>)
+            return (<p>The code {this.state.code} is invalid</p>)
+        }
+        else if (this.state.show === 3) {
+            return (<p>An error has occurred. Please try again.</p>)
         }
     }
 
