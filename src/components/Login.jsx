@@ -37,6 +37,15 @@ class Login extends React.Component {
     };
 
     /**
+     * Function only used for testing without the backend
+     */
+    sendDatasTest = evt => {
+        evt.preventDefault();
+        this.props.setSession(this.state.username, "a test token");
+        this.props.redirectDashboard();
+    }
+
+    /**
      * Display an error message if this.state.error === true
      */
     showError = () => {
@@ -107,6 +116,7 @@ class Login extends React.Component {
                                 name="button"
                                 className="btn-primary btn"
                                 onClick={this.sendDatas}>Login</button>
+                                {/* onClick={this.sendDatasTest}>Login</button> */}
                         </div>
 
                     </div>

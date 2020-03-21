@@ -92,6 +92,7 @@ class App extends React.Component {
             username: user,
             session_token: token
         });
+        this.setLogin();
     }
 
     /**
@@ -123,7 +124,6 @@ class App extends React.Component {
                             <Login
                                 redirectDashboard = {this.redirectDashboard} 
                                 setSession = {this.setSession}
-                                setLogin = {this.setLogin}
                             />
                         </Route>
 
