@@ -11,6 +11,9 @@ class AddDevice extends React.Component {
         }
     }
 
+    /**
+     * Checks localStorage values and updates the state accordingly
+     */
     componentDidMount() {
         let username;
         if (localStorage.getItem("username") === null) {

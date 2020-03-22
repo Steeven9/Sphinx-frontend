@@ -12,7 +12,10 @@ class House extends React.Component {
             session_token: props.session_token
         }
     }
-
+    
+    /**
+     * Checks localStorage values and updates the state accordingly
+     */
     componentDidMount() {
         let username;
         if (localStorage.getItem("username") === null) {

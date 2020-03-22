@@ -12,7 +12,10 @@ class Dashboard extends React.Component {
             session_token: props.session_token
         }
     }
-
+    
+    /**
+     * Checks localStorage values and updates the state accordingly
+     */
     componentDidMount() {
         let username;
         if (localStorage.getItem("username") === null) {
@@ -32,34 +35,6 @@ class Dashboard extends React.Component {
 
         this.setState({ username: username, session_token: session_token})
     }
-
-    // access = () => {
-    //     if (this.state.username === "") {
-    //         return (
-    //             <div id="content" className="container">
-    //                 <section className="content-box z-depth-2">
-    //                     <div>
-    //                         <p><b>Access Denied</b></p>
-    //                     </div>
-    //                 </section>
-    //             </div>
-    //         )
-    //     }
-    //     else {
-    //         return (
-    //             <div className="dashboard">
-    //                 <div className="content-box3" onClick={() => { window.location.href = '/devices'; }}>
-    //                     <img src={imgAllDevice} alt="All devices" />
-    //                     <a href="/devices" className="dash-text">See all devices</a>
-    //                 </div>
-    //                 <div className="content-box3" onClick={() => { window.location.href = '/house'; }}>
-    //                     <img src={imgAllRoom} alt="All rooms" />
-    //                     <a href="/house" className="dash-text">See device by room</a>
-    //                 </div>
-    //             </div>
-    //         )
-    //     }
-    // }
 
     /**
      * Renders the main dashboard

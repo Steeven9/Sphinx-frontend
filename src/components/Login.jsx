@@ -62,7 +62,6 @@ class Login extends React.Component {
     handleUsernameChange = evt => {
         this.setState({ username: evt.target.value });
     };
-    
     handlePasswordChange = evt => {
         this.setState({ password: evt.target.value });
     };

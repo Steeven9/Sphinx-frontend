@@ -51,7 +51,6 @@ class ResetPassword extends React.Component {
         const { email } = this.state;
         const isEnabled = email.length > 1;
 
-
         return (
             <article>
                 <div id="content" className="container">

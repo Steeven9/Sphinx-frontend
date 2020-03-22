@@ -24,10 +24,13 @@ class Header extends React.Component {
     //     };
     // }
     
+    /**
+     * Checks localStorage "loggedIn" value and updates the state accordingly
+     */
     componentDidMount() {
-        let loggedIn = localStorage.getItem("loggedIn") === "true";
-        console.log(loggedIn);
-        this.setState({ loggedIn: loggedIn })
+        let newLoggedIn = localStorage.getItem("loggedIn") === "true";
+        // console.log(newLoggedIn);
+        this.setState({ loggedIn: newLoggedIn })
     }
 
     /**

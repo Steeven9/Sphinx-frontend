@@ -33,7 +33,7 @@ class Verification extends React.Component {
     /**
      * Every time that the text inside the input changes, this.state.username gets changed.
      */
-    changeCode = (event) => {
+    changeUsername = (event) => {
         this.setState({ username: event.target.value });
     }
 

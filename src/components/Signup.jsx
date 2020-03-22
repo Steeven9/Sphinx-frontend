@@ -52,23 +52,18 @@ class Signup extends React.Component {
     handleUsernameChange = evt => {
         this.setState({ username: evt.target.value });
     };
-    
     handleFirstnameChange = evt => {
         this.setState({ firstname: evt.target.value });
     };
-    
     handleLastnameChange = evt => {
         this.setState({ lastname: evt.target.value });
     };
-
     handleEmailChange = evt => {
         this.setState({ email: evt.target.value });
     };
-
     handlePasswordChange = evt => {
         this.setState({ password: evt.target.value });
     };
-    
     handleConfirmPasswordChange = evt => {
         this.setState({ confirmPassword: evt.target.value });
     };

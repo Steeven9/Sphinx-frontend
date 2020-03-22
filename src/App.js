@@ -44,6 +44,9 @@ class App extends React.Component {
         }
     }
 
+    /**
+     * Checks localStorage values and updates the state accordingly
+     */
     componentDidMount() {
         let newUsername;
         if (localStorage.getItem("username") === null) {
@@ -68,7 +71,8 @@ class App extends React.Component {
 
     /**
      * Function used to cancel all redirections.
-     * Should get passed to every page to use on load in case of problems, so that previous redirections won't cause any.
+     * Should get called to every redirection Function.
+     * It might be useless, but it sure doesn't do any harm.
      */
     stopRedirections = () => {
         this.setState({
@@ -81,7 +85,7 @@ class App extends React.Component {
     }
 
     /**
-     * Used for redirections
+     * Functions for redirections
      */
     redirectHomepage = () => {
         this.stopRedirections();
@@ -127,7 +131,7 @@ class App extends React.Component {
      * Used to set usernme and session token
      */
     logOut = () => {
-        console.log(this.loggedIn)
+        // console.log(this.loggedIn)
         this.setState({
             username: "",
             session_token: "",
@@ -141,6 +145,9 @@ class App extends React.Component {
         window.location.href = '/';
     }
 
+    /**
+     * It returns the "Access Denied" page
+     */
     accessDenied = () => {
         return (
             <div id="content" className="container">
