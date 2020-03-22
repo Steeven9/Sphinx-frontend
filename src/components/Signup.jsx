@@ -24,13 +24,13 @@ class Signup extends React.Component {
         fetch('http://localhost:8080/user/' + this.state.username, {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: 
+            body: JSON.stringify(
             {
                 username: this.state.username, 
                 email: this.state.username, 
                 fullname: this.state.firstname + " " + this.state.lastname,
                 password: this.state.password
-            }
+            })
         })
         // .then( (res) => console.log(res))
         .then( (res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))

@@ -30,12 +30,6 @@ class Header extends React.Component {
         this.setState({ loggedIn: loggedIn })
     }
 
-    // componentDidUpdate() {
-    //     let loggedIn = sessionStorage.getItem("loggedIn") === "true";
-    //     console.log(loggedIn);
-    //     this.setState({ loggedIn: loggedIn })
-    // }
-
     /**
      * Renders the header depending on the variable loggedIn.
      * The logged in header has a clickable logo that links to the home and clickable buttons that link to the rooms, the devices and to the log out;

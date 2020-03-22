@@ -21,7 +21,7 @@ class Login extends React.Component {
         fetch('http://localhost:8080/auth/login', {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: {username: this.state.username, password: this.state.password}
+            body: JSON.stringify({username: this.state.username, password: this.state.password})
         })
         // .then( (res) => console.log(res))
         .then( (res) => {
@@ -115,8 +115,8 @@ class Login extends React.Component {
                                 disabled= {!isEnabled}
                                 name="button"
                                 className="btn-primary btn"
-                                // onClick={this.sendDatas}>Login</button>
-                                onClick={this.sendDatasTest}>Login</button>
+                                onClick={this.sendDatas}>Login</button>
+                                {/* onClick={this.sendDatasTest}>Login</button> */}
                         </div>
 
                     </div>
