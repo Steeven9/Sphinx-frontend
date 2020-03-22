@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer} from 'react'
+import React, {useEffect, useReducer} from 'react'
 import DevicesContext from '../../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'

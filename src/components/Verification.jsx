@@ -1,5 +1,5 @@
 import React from 'react';
-import './css/App.css';
+import '../App.css';
 
 class Verification extends React.Component {
 

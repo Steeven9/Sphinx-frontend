@@ -1,4 +1,4 @@
-import './css/App.css';
+import '../App.css';
 import './css/collapsible-component.css';
 import M from 'materialize-css';
 import React, { Component } from "react";
@@ -150,7 +150,7 @@ class Devices extends React.Component {
                                                         <img className="" src={iconSwitch} alt="OriginalSwitch"></img>
                                                     </div>
                                                     <div className="device-info col col-collapsible l12 m6 s12 left-align">
-                                                        <p className="device-name">OriginalSwitch</p>
+                                                        {/*<p className="device-name">OriginalSwitch</p>*/}
                                                         <p className="device-location">Kitchen</p>
                                                     </div>
                                                 </div>
