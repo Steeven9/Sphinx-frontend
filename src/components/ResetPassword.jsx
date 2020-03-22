@@ -53,32 +53,28 @@ class ResetPassword extends React.Component {
 
 
         return (
+            <article>
+                <div id="content" className="container">
+                    <div className="content-box1 content-box z-depth-2">
+                        <h2 className="title">Restore Password</h2>
 
+                        <p>Type the email address registered to your account. If we find it in our records, you’ll receive the instructions to
+                        restore your password.</p>
 
-            <div className="main-img-background">
+                        <div className="dates-input1"><input type="email"  required={true} name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
 
-                <div className="content-box1">
+                        { this.displayResult() }
 
-                    <h2 className="title">Restore Password</h2>
+                        <div className="buttons1">
 
-                    <p>Type the email address registered to your account. If we find it in our records, you’ll receive the instructions to
-                    restore your password.</p>
+                            <div className="dates-input1"><a href="/login"><button type="button" name="button" className="btn-secondary btn">Cancel</button></a></div>
 
-                    <div className="dates-input1"><input type="email"  required={true} name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
+                            <div className="dates-input1"><button type="button" name="button" disabled={!isEnabled} className="btn-primary btn" onClick={this.sendDatas}>Reset</button></div>
 
-                    { this.displayResult() }
-
-                    <div className="buttons1">
-
-                        <div className="dates-input1"><a href="/login"><button type="button" name="button" className="btn-secondary btn">Cancel</button></a></div>
-
-                        <div className="dates-input1"><button type="button" name="button" disabled={!isEnabled} className="btn-primary btn" onClick={this.sendDatas}>Reset</button></div>
-
+                        </div>
                     </div>
-
                 </div>
-
-            </div>
+            </article>
         );
     }
 }

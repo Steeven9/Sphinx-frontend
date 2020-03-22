@@ -1,6 +1,5 @@
 import React from 'react';
 import '../App.css';
-import Homepage from './Homepage';
 
 class LogOut extends React.Component {
 
@@ -20,7 +19,8 @@ class LogOut extends React.Component {
      */
     render() {
         return (
-            <Homepage />
+            <>
+            </>
         );
     }
 }

@@ -74,21 +74,19 @@ class Verification extends React.Component {
      */
     render() {
         return (
-            <main>
-                <article>
-                    <div id="content" className="container">
-                        <section className="content-box z-depth-2">
-                            <div className="row">
-                                <h3 className="col center">Verify Account</h3>
-                            </div>
+            <article>
+                <div id="content" className="container">
+                    <section className="content-box z-depth-2">
+                        <div className="row">
+                            <h3 className="col center">Verify Account</h3>
+                        </div>
 
-                            <div className="center">
-                                {this.showValidation()}
-                            </div>
-                        </section>
-                    </div>
-                </article>
-            </main>
+                        <div className="center">
+                            {this.showValidation()}
+                        </div>
+                    </section>
+                </div>
+            </article>
         );
     }
 }

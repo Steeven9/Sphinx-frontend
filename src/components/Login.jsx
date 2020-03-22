@@ -42,7 +42,9 @@ class Login extends React.Component {
     sendDatasTest = evt => {
         evt.preventDefault();
         this.props.setSession(this.state.username, "a test token");
-        this.props.redirectDashboard();
+        if (this.state.username !== "") {
+            window.location.href = '/dashboard';
+        }
     }
 
     /**
@@ -73,57 +75,55 @@ class Login extends React.Component {
         const { username, password } = this.state;
         const isEnabled = username.length > 0 && password.length > 0;
         return (
-            <div className="main-img-background">
+            <article>
+                <div id="content" className="container">
+                    <div className="content-box1 content-box z-depth-2">
 
+                        <h2 className="title">Login</h2>
+                        
+                        <p>All fields are required</p>
 
-                <div className="content-box1 ">
+                        <div
+                            className="dates-input1"><input
+                                type="text"
+                                required={true}
+                                name="username"
+                                value={this.state.username}
+                                onChange={this.handleUsernameChange}
+                                placeholder="Username" /></div>
 
-                    <h2 className="title">Login</h2>
-                    
-                    <p>All fields are required</p>
+                        <div className="dates-input1"><input
+                                type="password"
+                                name="password"
+                                required={true}
+                                value={this.state.password}
+                                onChange={this.handlePasswordChange}
+                                placeholder="Password" /></div>
 
-                    <div
-                        className="dates-input1"><input
-                            type="text"
-                            required={true}
-                            name="username"
-                            value={this.state.username}
-                            onChange={this.handleUsernameChange}
-                            placeholder="Username" /></div>
+                        { this.showError() }
 
-                    <div className="dates-input1"><input
-                            type="password"
-                            name="password"
-                            required={true}
-                            value={this.state.password}
-                            onChange={this.handlePasswordChange}
-                            placeholder="Password" /></div>
+                        <a href="/reset">Forgot your password?</a>
 
-                    { this.showError() }
+                        <div className="buttons1">
 
-                    <a href="/reset">Forgot your password?</a>
+                            <div className="dates-input1"><a href="/signup"><button
+                                    type="button"
+                                    name="button"
+                                    className="btn-secondary btn">Create account</button></a></div>
 
-                    <div className="buttons1">
-
-                        <div className="dates-input1"><a href="/signup"><button
-                                type="button"
-                                name="button"
-                                className="btn-secondary btn">Create account</button></a></div>
-
-                        <div className="dates-input1"><button
-                                type="button"
-                                disabled= {!isEnabled}
-                                name="button"
-                                className="btn-primary btn"
-                                onClick={this.sendDatas}>Login</button>
-                                {/* onClick={this.sendDatasTest}>Login</button> */}
+                            <div className="dates-input1"><button
+                                    type="button"
+                                    disabled= {!isEnabled}
+                                    name="button"
+                                    className="btn-primary btn"
+                                    // onClick={this.sendDatas}>Login</button>
+                                    onClick={this.sendDatasTest}>Login</button>
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
 
-            </div>
+            </article>
         );
     }
 }

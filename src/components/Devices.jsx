@@ -13,19 +13,19 @@ class Devices extends React.Component {
 
     componentDidMount() {
         let username;
-        if (sessionStorage.getItem("username") === null) {
+        if (localStorage.getItem("username") === null) {
             username = "";
         }
         else {
-            username = sessionStorage.getItem("username");
+            username = localStorage.getItem("username");
         }
 
         let session_token;
-        if (sessionStorage.getItem("session_token") === null) {
+        if (localStorage.getItem("session_token") === null) {
             session_token = "";
         }
         else {
-            session_token = sessionStorage.getItem("session_token");
+            session_token = localStorage.getItem("session_token");
         }
 
         this.setState({ username: username, session_token: session_token})

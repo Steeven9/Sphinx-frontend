@@ -25,7 +25,7 @@ class Header extends React.Component {
     // }
     
     componentDidMount() {
-        let loggedIn = sessionStorage.getItem("loggedIn") === "true";
+        let loggedIn = localStorage.getItem("loggedIn") === "true";
         console.log(loggedIn);
         this.setState({ loggedIn: loggedIn })
     }
