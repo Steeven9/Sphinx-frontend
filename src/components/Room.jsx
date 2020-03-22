@@ -10,29 +10,6 @@ class Room extends React.Component {
             session_token: props.session_token
         }
     }
-    
-    /**
-     * Checks localStorage values and updates the state accordingly
-     */
-    componentDidMount() {
-        let username;
-        if (localStorage.getItem("username") === null) {
-            username = "";
-        }
-        else {
-            username = localStorage.getItem("username");
-        }
-
-        let session_token;
-        if (localStorage.getItem("session_token") === null) {
-            session_token = "";
-        }
-        else {
-            session_token = localStorage.getItem("session_token");
-        }
-
-        this.setState({ username: username, session_token: session_token})
-    }
 
     /**
      * TODO

@@ -49,19 +49,26 @@ class Verification extends React.Component {
      */
     showValidation = () => {
         if (this.state.show === 0) {
-            return (<form onSubmit={this.sendDatas}>
-                <div className="dates">
-                    <div className="dates-input"><input type="text" name="username" onChange={this.changeUsername} placeholder="Username" required /></div>
-                    <div className="dates-input"><input type="text" name="validation-code" onChange={this.changeCode} placeholder="Validation Code" required /></div>
-                    <p><input type="submit" className="waves-effect waves-light btn btn-primary col l5" /></p>
+            return (<>
+                <h2 className="title">Verify Account</h2>
+
+                <p>Insert your Username and the Validation Code that has been sent to your email address.</p>
+
+                <div className="dates-input1"><input type="text" name="username" onChange={this.changeUsername} placeholder="Username" required /></div>
+                <div className="dates-input1"><input type="text" name="validation-code" onChange={this.changeCode} placeholder="Validation Code" required /></div>
+
+                <div className="buttons1">
+
+                    <div className="dates-input1"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Validate</button></div>
+
                 </div>
-            </form>)
+            </>)
         }
         else if (this.state.show === 1) {
             return (<p>Account verified</p>)
         }
         else if (this.state.show === 2) {
-            return (<p>The code {this.state.code} is invalid</p>)
+            return (<p>The code {this.state.code} is invalid, or the username doesn't exist.</p>)
         }
         else if (this.state.show === 3) {
             return (<p>An error has occurred. Please try again.</p>)
@@ -76,15 +83,9 @@ class Verification extends React.Component {
         return (
             <article>
                 <div id="content" className="container">
-                    <section className="content-box z-depth-2">
-                        <div className="row">
-                            <h3 className="col center">Verify Account</h3>
-                        </div>
-
-                        <div className="center">
-                            {this.showValidation()}
-                        </div>
-                    </section>
+                    <div className="content-box1 content-box z-depth-2">
+                        {this.showValidation()}
+                    </div>
                 </div>
             </article>
         );
