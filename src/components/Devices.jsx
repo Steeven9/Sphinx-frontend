@@ -129,10 +129,10 @@ class DeviceZ extends React.Component {
                                                 <div className="col col-collapsible l12 s1 icons-wrapper">
                                                     <i className="material-icons l1">more_vert</i>
                                                     <div className="icon-device l1">
-                                                        <img className="" src={iconSwitch} alt="Switch"></img>
+                                                        <img className="" src={iconSwitch} alt="OriginalSwitch"></img>
                                                     </div>
                                                     <div className="device-info col col-collapsible l12 m6 s12 left-align">
-                                                        <p className="device-name">Switch</p>
+                                                        <p className="device-name">OriginalSwitch</p>
                                                         <p className="device-location">Kitchen</p>
                                                     </div>
                                                 </div>

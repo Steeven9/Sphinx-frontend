@@ -1,24 +1,24 @@
-import React, {Component} from "react";
-import Switch from "react-switch";
+import React, {useState, useEffect, useContext} from 'react'
 
-class PowerSwitch extends Component {
-    constructor() {
-        super();
-        this.state = {checked: false};
-        this.handleChange = this.handleChange.bind(this);
-    }
+import DevicesContext from '../../context/devices-context'
 
-    handleChange(checked) {
-        this.setState({checked});
-    }
+const PowerSwitch = (device) => {
+    const [on, setPower] = useState(device.device.on);
+    const toggle = (e) => {
+        setPower(!on)
+    };
 
-    render() {
-        return (
+    useEffect(() => {
+       console.log('useEffectRan runs from PowerSwitch')}, [on]);
+
+    return(
+        <div className="">
             <label>
-                <Switch onChange={this.handleChange} checked={this.state.checked} />
+                <input type='checkbox' value='on' onChange={(e) => toggle(e)} defaultChecked={on} />
+                <span className='lever'></span>
             </label>
-        );
-    }
-}
+        </div>
+    )
+};
 
 export {PowerSwitch as default}

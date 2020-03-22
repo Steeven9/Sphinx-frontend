@@ -1,9 +1,10 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {useState, useEffect, useReducer} from 'react'
 import DevicesContext from '../../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
+
 
 const DevicesPanel = () => {
     const myDevices = [
@@ -15,7 +16,7 @@ const DevicesPanel = () => {
             room: "Master bedroom",
             switched: 2,
             slider: 75,
-            on: true
+            on: false
         },
         {
             id: 1,
@@ -59,7 +60,8 @@ const DevicesPanel = () => {
             deviceType: "SmartPlug",
             room: "Garage",
             name: "Smart plug",
-            on: false
+            label: 350,
+            on: true
         },
         {
             id: 6,
@@ -76,23 +78,46 @@ const DevicesPanel = () => {
             room: "Master bedroom",
             switched: 2,
             slider: 30,
-            on: true
+            on: false
+        },
+        {
+            id: 7,
+            icon: "iconDimmerRegular",
+            deviceType: "StatelessDimmableSwitch",
+            name: "Regular dimmer",
+            room: "Guest's room",
+            switches: 8,
+            slider: 0,
+            on: false
+        },
+        {
+            id: 8,
+            icon: "DimmableLight",
+            deviceType: "DimmableLight",
+            name: "Smart LED light 2",
+            room: "Guest's room",
+            switched: 7,
+            slider: 60,
+            on: false
         }
     ];
 
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
     useEffect(() => {
-        const devices = JSON.parse(localStorage.getItem('devices'));
-
-        if(devices) {
-            dispatch({type: 'POPULATE_DEVICES', devices: devices})
-        }
+        localStorage.setItem('devices', JSON.stringify(myDevices));
+        console.log('Devices stored in localStorage');
     }, []);
 
+
     useEffect(() => {
-        localStorage.setItem('devices', JSON.stringify(myDevices))
-    }, [myDevices]);
+        const devices = JSON.parse(localStorage.getItem('devices'));
+        console.log('Devices retrieved from localStorage');
+        if(devices) {
+            dispatch({type: 'POPULATE_DEVICES', devices: devices});
+            console.log('Populated devices');
+        }
+    }, []);
 
     devices.sort(function(a, b) {
         var keyA = a.name,

@@ -16,7 +16,6 @@ import Room from './components/Room';
 import DevicesPanel from './components/devices/DevicesPanel';
 import AddDevice from './components/AddDevice';
 import Footer from './components/Footer';
-import ControlledExpansionPanel from './components/ControlledExpansionPanel';
 import Template from './components/Template';
 import AllDevicesTemplate from './components/AllDevicesTemplate';
 
@@ -115,10 +114,6 @@ class App extends React.Component {
 
                         <Route path="/allDevicesTemplate">
                             <AllDevicesTemplate />
-                        </Route>
-
-                        <Route path="/expand">
-                            <ControlledExpansionPanel />
                         </Route>
 
                         <Route path="/">

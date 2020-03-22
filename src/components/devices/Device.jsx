@@ -1,7 +1,8 @@
-import React, {useContext} from 'react'
+import React, {useState, useContext} from 'react'
 import DevicesContext from '../../context/devices-context'
-// import PowerSwitch from "react-switch";
+// import Switch from "react-switch";
 import PowerSwitch from './PowerSwitch'
+import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
 
 // Light devices SVG icons
@@ -29,6 +30,8 @@ function getDeviceHeader(device) {
 
 const Device = ({device}) => {
     const {dispatch} = useContext(DevicesContext);
+    const [sliders, setSliders] = useState([]);
+
     return (
         // (device.child && <li className="row row-collapsible row row-collapsible-custom">)
         <div id={device.id} className={getDeviceHeader(device)}>
@@ -74,7 +77,7 @@ function getPowerSwitch(device) {
                 <div className="col col-collapsible l4 device-control-switch">
                     <div className="switch col col-collapsible l2 m8 s11 right-align">
                         <div>
-                            <PowerSwitch checked={device.on} />
+                            <PowerSwitch device={device} />
                         </div>
                     </div>
                     <div className="col col-collapsible l2 m1 s1 right-align">
@@ -92,10 +95,7 @@ function getSliderOrDisplay(device) {
         case 'StatelessDimmableSwitch':
             return (<Slider className="slider" valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
         case 'SmartPlug':
-            return (<div className="col col-collapsible l8 s8 display-info display-active">
-                <i className="col col-collapsible l2 s2 material-icons btn-reset">rotate_left</i>
-                <span>350 kWh</span>
-            </div>);
+            return (<SmartPlug device={device} />)
         case 'HumiditySensor':
         case 'LightSensor':
         case 'TempSensor':
