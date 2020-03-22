@@ -18,6 +18,7 @@ class Header extends React.Component {
      * returns the new state, that goes directly into the state of this class
      */
     static getDerivedStateFromProps(props, state) {
+        console.log(props.loggedIn)
 		return {
             loggedIn: props.loggedIn
         };

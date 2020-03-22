@@ -127,6 +127,7 @@ class App extends React.Component {
      * Used to set usernme and session token
      */
     logOut = () => {
+        console.log(this.loggedIn)
         this.setState({
             username: "",
             session_token: "",
