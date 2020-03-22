@@ -60,7 +60,7 @@ const DevicesPanel = () => {
             deviceType: "SmartPlug",
             room: "Garage",
             name: "Smart plug",
-            label: 350,
+            label: "350 kWh",
             on: true
         },
         {
@@ -130,7 +130,7 @@ const DevicesPanel = () => {
     return(
         <DevicesContext.Provider value={{devices, dispatch}}>
             <div id="wrapper" className="devices">
-                <main>
+                <main> {/* delete this */}
                     <article className="row row-collapsible row row-collapsible-custom">
                         <div id="content" className="">
                             <section className="content-box-collapsible z-depth-2">
