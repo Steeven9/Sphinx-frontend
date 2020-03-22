@@ -11,24 +11,30 @@ class Header extends React.Component {
 		}
     }
     
-    /**
-     * React function for changing the state whenever receiving the loggedIn variable from App.js
-     * @param {*} props - all parameters received from App.js
-     * @param {*} state - this state
-     * returns the new state, that goes directly into the state of this class
-     */
-    static getDerivedStateFromProps(props, state) {
-        console.log(props.loggedIn)
-		return {
-            loggedIn: props.loggedIn
-        };
-    }
+    // /**
+    //  * React function for changing the state whenever receiving the loggedIn variable from App.js
+    //  * @param {*} props - all parameters received from App.js
+    //  * @param {*} state - this state
+    //  * returns the new state, that goes directly into the state of this class
+    //  */
+    // static getDerivedStateFromProps(props, state) {
+    //     console.log(props.loggedIn)
+	// 	return {
+    //         loggedIn: props.loggedIn
+    //     };
+    // }
     
     componentDidMount() {
         let loggedIn = sessionStorage.getItem("loggedIn") === "true";
         console.log(loggedIn);
         this.setState({ loggedIn: loggedIn })
     }
+
+    // componentDidUpdate() {
+    //     let loggedIn = sessionStorage.getItem("loggedIn") === "true";
+    //     console.log(loggedIn);
+    //     this.setState({ loggedIn: loggedIn })
+    // }
 
     /**
      * Renders the header depending on the variable loggedIn.
@@ -49,8 +55,8 @@ class Header extends React.Component {
                                     this.state.loggedIn ? 
 
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                        <li><a href="/rooms">My rooms</a></li>
                                         <li><a href="/devices">My devices</a></li>
+                                        <li><a href="/house">My rooms</a></li>
                                         <li><a href="/logout">Log out</a></li>
                                     </ul>
                     
