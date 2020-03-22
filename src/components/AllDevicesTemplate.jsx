@@ -3,7 +3,6 @@ import './css/collapsible-component.css';
 import M from 'materialize-css';
 import React, { Component } from "react";
 
-import OriginalSwitch from "react-switch";
 import Slider from '@material-ui/core/Slider';
 
 // Light devices SVG icons
@@ -42,7 +41,7 @@ class PowerSwitch extends Component {
     render() {
         return (
             <label>
-                <OriginalSwitch onChange={this.handleChange} checked={this.state.checked} />
+                {/*<OriginalSwitch onChange={this.handleChange} checked={this.state.checked} />*/}
             </label>
         );
     }
@@ -99,7 +98,7 @@ class Devices extends React.Component {
                                                 </div>
                                                 <div className="col col-collapsible l4 device-control-switch">
                                                     <div className="switch col col-collapsible l2 m8 s11 right-align">
-                                                        <PowerSwitch />
+                                                        {/*<PowerSwitch />*/}
                                                     </div>
                                                     <div className="col col-collapsible l2 m1 s1 right-align">
                                                         <i className="material-icons btn-edit">edit</i>

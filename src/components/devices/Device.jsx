@@ -1,6 +1,5 @@
 import React, {useState, useContext} from 'react'
 import DevicesContext from '../../context/devices-context'
-// import Switch from "react-switch";
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
