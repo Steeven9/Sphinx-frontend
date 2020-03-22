@@ -15,6 +15,7 @@ import AddRoom from './components/AddRoom';
 import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
+import LogOut from './components/LogOut';
 import Template from './components/Template';
 import RedirectionTest from './components/RedirectionTest';
 import Footer from './components/Footer';
@@ -33,6 +34,7 @@ class App extends React.Component {
 
         this.state = {
             loggedIn: false,
+            toHomepage: false,
             toDashboard: false,
             toLogin: false,
             toHouse: false,
@@ -42,43 +44,65 @@ class App extends React.Component {
         }
     }
 
-    // /**
-    //  * Function used to cancel all redirections.
-    //  * Should get passed to every page to use on load in case of problems, so that previous redirections won't cause any.
-    //  * Note: I (Aron) don't think that this function will be used, but it's already here in case that something goes wrong.
-    //  */
-    // stopRedirections = () => {
-    //     this.setState({
-    //         toDashboard: false,
-    //         toLogin: false,
-    //         toDevices: false,
-    //         toRoom: false,
-    //         toHouse: false,
-    //     });
+    // componentDidMount() {
+    //     let username;
+    //     if (sessionStorage.getItem("username") === null) {
+    //         username = "";
+    //     }
+    //     else {
+    //         username = sessionStorage.getItem("username");
+    //     }
+
+    //     let session_token;
+    //     if (sessionStorage.getItem("session_token") === null) {
+    //         session_token = "";
+    //     }
+    //     else {
+    //         session_token = sessionStorage.getItem("session_token");
+    //     }
+
+    //     let loggedIn = sessionStorage.getItem("loggedIn") === true;
+
+    //     this.setState({ username: username, session_token: session_token, loggedIn: loggedIn })
     // }
 
     /**
-     * Used for redirection to the Dashboard page.
+     * Function used to cancel all redirections.
+     * Should get passed to every page to use on load in case of problems, so that previous redirections won't cause any.
      */
+    stopRedirections = () => {
+        this.setState({
+            toDashboard: false,
+            toLogin: false,
+            toDevices: false,
+            toRoom: false,
+            toHouse: false,
+        });
+    }
+
+    /**
+     * Used for redirections
+     */
+    redirectHomepage = () => {
+        this.stopRedirections();
+        this.setState({
+            toHomepage: true,
+        });
+    }
     redirectDashboard = () => {
+        this.stopRedirections();
         this.setState({
             toDashboard: true,
         });
     }
-
-    /**
-     * Used for redirection to the Dashboard page.
-     */
     redirectLogin = () => {
+        this.stopRedirections();
         this.setState({
             toLogin: true,
         });
     }
-
-    /**
-     * Used for redirection to the Dashboard page.
-     */
     redirectHouse = () => {
+        this.stopRedirections();
         this.setState({
             toHouse: true,
         });
@@ -90,16 +114,30 @@ class App extends React.Component {
     setSession = (user, token) => {
         this.setState({
             username: user,
-            session_token: token
+            session_token: token,
+            loggedIn: true
         });
-        this.setLogin();
+
+        sessionStorage.setItem("username", user);
+        sessionStorage.setItem("session_token", token);
+        sessionStorage.setItem("loggedIn", "true");
     }
 
     /**
-     * Changes loggedIn boolean
+     * Used to set usernme and session token
      */
-    setLogin = () => {
-        this.loggedIn ? this.setState({ loggedIn: false }) : this.setState({ loggedIn: true })
+    logOut = () => {
+        this.setState({
+            username: "",
+            session_token: "",
+            loggedIn: false
+        });
+
+        sessionStorage.setItem("username", "");
+        sessionStorage.setItem("session_token", "");
+        sessionStorage.setItem("loggedIn", "false");
+
+        this.redirectHomepage();
     }
 
     
@@ -110,6 +148,7 @@ class App extends React.Component {
     render() {
         return (
             <Router>
+                { this.state.toHomepage ? <Redirect to='/' /> : <React.Fragment /> }
                 { this.state.toDashboard ? <Redirect to='/dashboard' /> : <React.Fragment /> }
                 { this.state.toLogin ? <Redirect to='/login' /> : <React.Fragment /> }
                 { this.state.toHouse ? <Redirect to='/house' /> : <React.Fragment /> }
@@ -117,6 +156,7 @@ class App extends React.Component {
                 <div id="wrapper">
                     <Header 
                         loggedIn = {this.state.loggedIn}
+                        redirectDashboard = {this.redirectDashboard} 
                     />
 
                     <Switch>
@@ -192,6 +232,11 @@ class App extends React.Component {
                                 session_token = {this.state.session_token}
                             />
                         </Route>
+
+                        <LogOut 
+                            logOut = {this.logOut} 
+                            redirectHomepage = {this.redirectHomepage}
+                        />
 
                         <Route path="/template">
                             <Template />

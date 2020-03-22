@@ -13,6 +13,26 @@ class Dashboard extends React.Component {
         }
     }
 
+    componentDidMount() {
+        let username;
+        if (sessionStorage.getItem("username") === null) {
+            username = "";
+        }
+        else {
+            username = sessionStorage.getItem("username");
+        }
+
+        let session_token;
+        if (sessionStorage.getItem("session_token") === null) {
+            session_token = "";
+        }
+        else {
+            session_token = sessionStorage.getItem("session_token");
+        }
+
+        this.setState({ username: username, session_token: session_token})
+    }
+
     access = () => {
         if (this.state.username === "") {
             return (
@@ -48,6 +68,7 @@ class Dashboard extends React.Component {
         return (
             <div className="dashboardContainer">
 
+                <p>Welcome, {this.state.username}</p>
                 {this.access()}
 
             </div>

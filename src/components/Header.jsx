@@ -21,7 +21,13 @@ class Header extends React.Component {
 		return {
             loggedIn: props.loggedIn
         };
-	}
+    }
+    
+    componentDidMount() {
+        let loggedIn = sessionStorage.getItem("loggedIn") === "true";
+        console.log(loggedIn);
+        this.setState({ loggedIn: loggedIn })
+    }
 
     /**
      * Renders the header depending on the variable loggedIn.
@@ -44,7 +50,7 @@ class Header extends React.Component {
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
                                         <li><a href="/rooms">My rooms</a></li>
                                         <li><a href="/devices">My devices</a></li>
-                                        <li><a href="/template">Log out</a></li>
+                                        <li><a href="/logout">Log out</a></li>
                                     </ul>
                     
                                     :
