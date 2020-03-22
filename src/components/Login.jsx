@@ -115,8 +115,8 @@ class Login extends React.Component {
                                     disabled= {!isEnabled}
                                     name="button"
                                     className="btn-primary btn"
-                                    // onClick={this.sendDatas}>Login</button>
-                                    onClick={this.sendDatasTest}>Login</button>
+                                    onClick={this.sendDatas}>Login</button>
+                                    {/* onClick={this.sendDatasTest}>Login</button> */}
                             </div>
                         </div>
                     </div>
