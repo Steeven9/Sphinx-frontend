@@ -1,22 +1,46 @@
 import React from 'react';
 import '../App.css';
+import * as qs from 'query-string';
 
 class Verification extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will have a form. If 1, display error. If 2, display a different message
+            show: 0, // If 0, the page will send the code to the backend. If 1, display "account verified". If 2, display "incorrect code". If 3, display error message
+            username: "",
             code: ""
         }
     }
 
     /**
-     * Sends the code given in the form to the backend to check it.
+     * Sends the code and the username given in the form to the backend to check it.
      * Depending on the backend response, it will change the "success" and "toSend" variable values.
      */
-    sendCode = () => {
-        this.setState({ show: 1 });
+    componentDidMount() {
+        const parsed = qs.parse(window.location.search);
+
+        if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) { 
+            this.setState({ show: 2 });
+            return;
+        }
+        fetch('http://localhost:8080/auth/verify/' + parsed.email, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: parsed.code
+        })
+        .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 2 }) )
+        .catch( (error) => this.setState({ show: 3 }) )
+    }
+
+    /**
+     * Every time that the text inside the input changes, this.state.username gets changed.
+     */
+    changeUsername = (event) => {
+        this.setState({ username: event.target.value });
     }
 
     /**
@@ -30,18 +54,14 @@ class Verification extends React.Component {
      * Depending on the value of show, returns either the form to fill, or the result of the authentication.
      */
     showValidation = () => {
-        if (this.state.show === 0) {
-            return (<form onSubmit={this.sendCode}>
-                    <p>Insert Validation Code:</p> 
-                    <input type="text" name="validation-code" onChange={this.changeCode} />
-                    <input type="submit" className="waves-effect waves-light btn btn-primary col l5" />
-            </form>)
-        }
-        else if (this.state.show === 1) {
-            return (<p>The code {this.state.code} is invalid</p>)
+        if (this.state.show === 1) {
+            return (<p>Account verified. <a href="/login">Click here</a> to log in</p>)
         }
         else if (this.state.show === 2) {
-            return(<p>Account verified</p>)
+            return (<p>The code is invalid, or the username doesn't exist.</p>)
+        }
+        else if (this.state.show === 3) {
+            return (<p>An error has occurred. Please try again.</p>)
         }
     }
 
@@ -51,21 +71,13 @@ class Verification extends React.Component {
      */
     render() {
         return (
-            <main>
-                <article>
-                    <div id="content" className="container">
-                        <section className="content-box z-depth-2">
-                            <div className="row">
-                                <h3 className="col center">Verify Account</h3>
-                            </div>
-
-                            <div className="center">
-                                { this.showValidation() }
-                            </div>
-                        </section>
+            <article>
+                <div id="content" className="container">
+                    <div className="content-box1 content-box z-depth-2">
+                        {this.showValidation()}
                     </div>
-                </article>
-            </main>
+                </div>
+            </article>
         );
     }
 }

@@ -8,12 +8,13 @@ class HandleRooms extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // placeholder
+            username: props.username,
+            session_token: props.session_token
         }
     }
 
     /**
-     * TODO
+     * Renders the room handler
      */
     render() {
         return (
