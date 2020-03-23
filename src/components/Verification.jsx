@@ -17,10 +17,13 @@ class Verification extends React.Component {
      * Sends the code and the username given in the form to the backend to check it.
      * Depending on the backend response, it will change the "success" and "toSend" variable values.
      */
-    sendDatas = (event) => {
-        event.preventDefault();
+    componentDidMount() {
         const parsed = qs.parse(window.location.search);
 
+        if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) { 
+            this.setState({ show: 2 });
+            return;
+        }
         fetch('http://localhost:8080/auth/verify/' + parsed.email, {
             method: 'POST',
             headers: {
@@ -51,10 +54,7 @@ class Verification extends React.Component {
      * Depending on the value of show, returns either the form to fill, or the result of the authentication.
      */
     showValidation = () => {
-        if (this.state.show === 0) {
-            this.sendDatas();
-        }
-        else if (this.state.show === 1) {
+        if (this.state.show === 1) {
             return (<p>Account verified. <a href="/login">Click here</a> to log in</p>)
         }
         else if (this.state.show === 2) {
