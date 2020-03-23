@@ -66,6 +66,26 @@ class App extends React.Component {
 
         let newLoggedIn = localStorage.getItem("loggedIn") === "true";
 
+        if (newLoggedIn) {
+            fetch('http://localhost:8080/auth/validate/' + newUsername, {
+                method: 'POST',
+                headers: {
+                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                },
+                body: newSession_token
+            })
+            .then( (res) => res.status === 200 ? 
+                this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }) 
+                : 
+                this.logOut()
+            )
+            .catch( error => this.logOut())
+        }
+        else {
+            this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
+        }
+        
+
         this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
     }
 
