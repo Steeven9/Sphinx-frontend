@@ -17,8 +17,7 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
-// import Template from './components/Template';
-// import RedirectionTest from './components/RedirectionTest';
+import Error404 from './components/Error404';
 import Footer from './components/Footer';
 
 import {
@@ -287,20 +286,16 @@ class App extends React.Component {
                                 : this.accessDenied()}
                             </Route>
 
-                            {/* <Route path="/template">
-                                <Template />
-                            </Route> */}
+                            <Route path="/changepassword">
+                                <ChangePassword/>
+                            </Route>
 
-                            {/* <Route path="/test">
-                                <RedirectionTest
-                                    redirectDashboard = {this.redirectDashboard} 
-                                    username = {this.state.username}
-                                    session_token = {this.state.session_token}
-                                />
-                            </Route> */}
-
-                            <Route path="/">
+                            <Route exact path="/">
                                 <Homepage />
+                            </Route>
+
+                            <Route path="*">
+                                <Error404 />
                             </Route>
 
                         </Switch>
