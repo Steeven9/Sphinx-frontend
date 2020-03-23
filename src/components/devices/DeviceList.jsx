@@ -24,7 +24,8 @@ const DeviceList = () => {
     }
 
     return expandedDevices.map((device) => (
-        <Device key={id++} device={device} />
+            // <Device key={id++} device={device} />
+            <Device key={id++} device={device} />
     ))
 };
 

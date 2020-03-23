@@ -290,3 +290,8 @@
     margin-right: 1vh;
     visibility: hidden !important;
 }
+
+form.device-form {
+    display: contents  !important;
+    margin-top: 0 !important;
+}

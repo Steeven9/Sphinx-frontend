@@ -200,6 +200,34 @@ class Devices extends React.Component {
                                                     </div>
                                                 </div>
                                             </div>
+                                            {/* Child device */}
+                                            <div id="" className="collapsible-header device-child">
+                                                <div className="col col-collapsible l6 m6 s12">
+                                                    <div className="col col-collapsible l12 s1 icons-wrapper">
+                                                        <i className="material-icons l1 muted-icon">arrow_drop_up</i>
+                                                        <div className="icon-device l1">
+                                                            <img className="" src={iconMicrowaveOven} alt="Microwaveoven"></img>
+                                                        </div>
+                                                        <div className="device-info col col-collapsible l12 m6 s12 left-align">
+                                                            <p className="device-name">Microwave oven</p>
+                                                            <p className="device-location is-child">Kitchen</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="device-control col col-collapsible l6 m6 s12">
+                                                    <div className="col col-collapsible l8 m6 s8">
+                                                        <Slider className="no-slider" valueLabelDisplay="auto" defaultValue={65}/>
+                                                    </div>
+                                                    <div className="col col-collapsible l4 device-control-switch">
+                                                        <div className="switch col col-collapsible l2 m8 s11 right-align">
+                                                            <PowerSwitch />
+                                                        </div>
+                                                        <div className="col col-collapsible l2 m1 s1 right-align">
+                                                            <i className="material-icons btn-edit">edit</i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </ul>
                                     </li>
 

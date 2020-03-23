@@ -3,6 +3,7 @@ import DevicesContext from '../../context/devices-context'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
+// import Slider from './Slider'
 
 // Light devices SVG icons
 import iconDimmerState from "../img/icons/devices/dimmer-state.svg";
@@ -29,29 +30,33 @@ function getDeviceHeader(device) {
 
 const Device = ({device}) => {
     const {dispatch} = useContext(DevicesContext);
-    const [sliders, setSliders] = useState([]);
 
+    function updateDevice(device) {
+        console.log('Updating device state')
+    }
+    
     return (
-        // (device.child && <li className="row row-collapsible row row-collapsible-custom">)
         <div id={device.id} className={getDeviceHeader(device)}>
-            <div className="col col-collapsible l6 m6 s12">
-                <div className="col col-collapsible l12 s1 icons-wrapper">
-                    <i className={"material-icons l1" + (device.child && " muted-icon")} >{getRowIcon(device)}</i>
-                    <div className="icon-device l1">
-                        <img className="" src={getDeviceIcon(device.deviceType)} alt={device.name}/>
-                    </div>
-                    <div className="device-info col col-collapsible l12 m6 s12 left-align">
-                        <p className="device-name">{device.name}</p>
-                        {!device.child && <p className="device-location">{device.room}</p>}
+            <form id="devicesForm" className="device-form">
+                <div className="col col-collapsible l6 m6 s12">
+                    <div className="col col-collapsible l12 s1 icons-wrapper">
+                        <i className={"material-icons l1" + (device.child ? " muted-icon" : "")} >{getRowIcon(device)}</i>
+                        <div className="icon-device l1">
+                            <img className="" src={getDeviceIcon(device.deviceType)} alt={device.name}/>
+                        </div>
+                        <div className="device-info col col-collapsible l12 m6 s12 left-align">
+                            <p className="device-name">{device.name}</p>
+                            {!device.child && <p className="device-location">{device.room}</p>}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="device-control col col-collapsible l6 m6 s12">
-                <div className="col col-collapsible l8 m6 s8">
-                    {getSliderOrDisplay(device)}
+                <div className="device-control col col-collapsible l6 m6 s12">
+                    <div className="col col-collapsible l8 m6 s8">
+                        {getSliderOrDisplay(device)}
+                    </div>
+                    {getPowerSwitch(device)}
                 </div>
-                {getPowerSwitch(device)}
-            </div>
+            </form>
         </div>
     )
 };
@@ -92,7 +97,7 @@ function getSliderOrDisplay(device) {
         case 2: //DimmableLight
         case 4: //DimmableSwitch
         case 5: //StatelessDimmableSwitch
-            return (<Slider className="slider" valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
+            return (<Slider className="slider" onChange={(e, val)=>console.log('slider: ' + val)} valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
         case 6: //SmartPlug
             return (<SmartPlug device={device} />)
         case 7: //HumiditySensor

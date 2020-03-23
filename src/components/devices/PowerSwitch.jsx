@@ -1,22 +1,25 @@
-import React, {useState, useEffect, useContext, useReducer} from 'react'
+import React, {useState, useContext} from 'react'
 import DevicesContext from '../../context/devices-context'
-import devicesReducer from "../../reducers/devicesReducer";
+
 
 const PowerSwitch = (device) => {
+    const {dispatch} = useContext(DevicesContext);
     const [on, setPower] = useState(device.device.on);
+
     const toggle = (e) => {
-        setPower(!on);
-        // devicesDispatch({type: 'TOGGLE_SWITCH', devices: devices});
-        console.log('Switch toggled');
+        let dev = JSON.parse(JSON.stringify(device));
+        setPower(e.target.checked);
+        dev.on = e.target.checked;
+        dispatch({type: 'MODIFY_DEVICE', device: dev});
     };
 
-    useEffect(() => {
-       console.log('Toggle switch rendered')}, [on]);
+    // useEffect(() => {
+    //    console.log('Toggle switch rendered')}, [on]);
 
     return(
         <div className="">
             <label>
-                <input type='checkbox' value='on' onChange={(e) => toggle(e)} defaultChecked={on} />
+                <input type='checkbox' value={on} onChange={toggle} defaultChecked={on} />
                 <span className='lever'></span>
             </label>
         </div>

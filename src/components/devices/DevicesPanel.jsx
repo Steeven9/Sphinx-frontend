@@ -1,12 +1,12 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {useState, useEffect, useReducer} from 'react'
 import DevicesContext from '../../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
 
-
 const DevicesPanel = () => {
+    // Temporary mock devices to populate the localStorge
     const myDevices = [
         {
             id: 0,
@@ -34,7 +34,7 @@ const DevicesPanel = () => {
             room: "Master bedroom",
             name: "Dimmable switch",
             slider: 100,
-            switches: 0,
+            switches: [0, 7],
             on: false
         },
         {
@@ -43,7 +43,7 @@ const DevicesPanel = () => {
             deviceType: 3,
             name: "Switch",
             room: "Kitchen",
-            switches: 1,
+            switches: [1],
             on: true
         },
         {
@@ -60,7 +60,7 @@ const DevicesPanel = () => {
             deviceType: 6,
             room: "Garage",
             name: "Smart plug",
-            label: 350,
+            label: '350 kWh',
             on: true
         },
         {
@@ -81,54 +81,61 @@ const DevicesPanel = () => {
             on: false
         },
         {
-            id: 7,
+            id: 8,
             icon: "iconDimmerRegular",
             deviceType: 5,
             name: "Regular dimmer",
             room: "Guest's room",
-            switches: 8,
+            switches: [9],
             slider: 0,
             on: false
         },
         {
-            id: 8,
+            id: 9,
             icon: "DimmableLight",
             deviceType: 2,
             name: "Smart LED light 2",
             room: "Guest's room",
-            switched: 7,
+            switched: 8,
             slider: 60,
             on: false
         }
     ];
 
-    const [devices, devicesDispatch] = useReducer(devicesReducer, []);
+    const [devices, dispatch] = useReducer(devicesReducer, []);
 
+    // Stores devices in localStorage
     useEffect(() => {
         localStorage.setItem('devices', JSON.stringify(myDevices));
         console.log('Devices stored in localStorage');
     }, []);
 
 
+    // Retrieves devices from localStorage and dispatches the render action
     useEffect(() => {
         const devices = JSON.parse(localStorage.getItem('devices'));
         console.log('Devices retrieved from localStorage');
         if(devices) {
-            devicesDispatch({type: 'POPULATE_DEVICES', devices: devices});
+            dispatch({type: 'POPULATE_DEVICES', devices: devices});
             console.log('Populated devices');
         }
+
     }, []);
 
-    devices.sort(function(a, b) {
-        var keyA = a.name,
-            keyB = b.name;
-        if (keyA < keyB) return -1;
-        if (keyA > keyB) return 1;
-        return 0;
-    });
+    try{
+        devices.sort(function(a, b) {
+            var keyA = a.name,
+                keyB = b.name;
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+    } catch(e){
+        throw e;
+    }
 
     return(
-        <DevicesContext.Provider value={{devices, devicesDispatch}}>
+        <DevicesContext.Provider value={{devices, dispatch}}>
             <div id="wrapper" className="devices">
                 <main>
                     <article className="row row-collapsible row row-collapsible-custom">
@@ -139,7 +146,9 @@ const DevicesPanel = () => {
                                     <a href="/addDevice"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <ul className="collapsible expandable expandable-component">
-                                    <DeviceList />
+                                    <li className="row row-collapsible row row-collapsible-custom">
+                                        <DeviceList />
+                                    </li>
                                 </ul>
                             </section>
                         </div>
