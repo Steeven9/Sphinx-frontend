@@ -6,9 +6,9 @@ class Verification extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will send the code to the backend. If 1, display "account verified". If 2, display "incorrect code". If 3, display error message
-            username: "",
-            code: ""
+            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, display "password mismatch". If 3, display error message
+            password: "",
+            confirmPassword: ""
         }
     }
 
@@ -18,30 +18,34 @@ class Verification extends React.Component {
      */
     sendDatas = (event) => {
         event.preventDefault();
-        fetch('http://localhost:8080/auth/verify/' + this.props.location.query.email, {
+        if (this.state.password != this.state.confirmPassword) { 
+            this.setState({ show: 2 });
+            return;
+        }
+        fetch('http://localhost:8080/auth/change/' + this.props.location.query.code, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            body: this.props.location.query.code
+            body: this.state.password
         })
-        .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 2 }) )
+        .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 3 }) )
         .catch( (error) => this.setState({ show: 3 }) )
     }
 
     /**
      * Every time that the text inside the input changes, this.state.username gets changed.
      */
-    changeUsername = (event) => {
-        this.setState({ username: event.target.value });
+    changePassword = (event) => {
+        this.setState({ password: event.target.value });
     }
 
     /**
      * Every time that the text inside the input changes, this.state.code gets changed.
      */
-    changeCode = (event) => {
-        this.setState({ code: event.target.value });
+    changeConfirmPassword = (event) => {
+        this.setState({ confirmPassword: event.target.value });
     }
 
     /**
@@ -49,13 +53,26 @@ class Verification extends React.Component {
      */
     showValidation = () => {
         if (this.state.show === 0) {
-            this.sendDatas();
+            return (<>
+                <h2 className="title">Change password</h2>
+
+                <p>Insert your new password.</p>
+
+                <div className="dates-input1"><input type="password" name="password" onChange={this.changePassword} placeholder="Password" required /></div>
+                <div className="dates-input1"><input type="password" name="confirmPassword" onChange={this.changeConfirmPassword} placeholder="Repeat password" required /></div>
+
+                <div className="buttons1">
+
+                    <div className="dates-input1"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Change</button></div>
+
+                </div>
+            </>)
         }
         else if (this.state.show === 1) {
-            return (<p>Account verified. <a href="/login">Click here</a> to log in</p>)
+            return (<p>Password changed successfully. <a href="/login">Click here</a> to login</p>)
         }
         else if (this.state.show === 2) {
-            return (<p>The code is invalid, or the username doesn't exist.</p>)
+            return (<p>The passwords don't match.</p>)
         }
         else if (this.state.show === 3) {
             return (<p>An error has occurred. Please try again.</p>)
