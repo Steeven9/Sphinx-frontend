@@ -13,9 +13,6 @@ const PowerSwitch = (device) => {
         dispatch({type: 'MODIFY_DEVICE', device: dev});
     };
 
-    // useEffect(() => {
-    //    console.log('Toggle switch rendered')}, [on]);
-
     return(
         <div className="">
             <label>

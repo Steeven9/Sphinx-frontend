@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useContext} from 'react'
-import DevicesContext from '../../context/devices-context'
+import React, {useState, useEffect} from 'react'
+
 
 const SmartPlug = (device) => {
     const [consumption, setConsumption] = useState(device.device.label);

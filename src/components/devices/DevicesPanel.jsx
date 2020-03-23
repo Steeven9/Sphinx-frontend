@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useReducer} from 'react'
+import React, {useEffect, useReducer} from 'react'
 import DevicesContext from '../../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
@@ -108,7 +108,7 @@ const DevicesPanel = () => {
     useEffect(() => {
         localStorage.setItem('devices', JSON.stringify(myDevices));
         console.log('Devices stored in localStorage');
-    }, []);
+    }, [myDevices]);
 
 
     // Retrieves devices from localStorage and dispatches the render action

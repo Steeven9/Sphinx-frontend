@@ -30,11 +30,16 @@ function getDeviceHeader(device) {
 
 const Device = ({device}) => {
     const {dispatch} = useContext(DevicesContext);
+    const [intensity, setIntensity] = useState(device.slider);
 
-    function updateDevice(device) {
-        console.log('Updating device state')
-    }
-    
+    const changeIntensity = (e, val) => {
+        let dev = JSON.parse(JSON.stringify(device));
+        console.log('intensity ' + val)
+        setIntensity(val);
+        dev.slider = intensity;
+        dispatch({type: 'MODIFY_DEVICE', device: intensity});
+    };
+
     return (
         <div id={device.id} className={getDeviceHeader(device)}>
             <form id="devicesForm" className="device-form">
@@ -52,9 +57,11 @@ const Device = ({device}) => {
                 </div>
                 <div className="device-control col col-collapsible l6 m6 s12">
                     <div className="col col-collapsible l8 m6 s8">
-                        {getSliderOrDisplay(device)}
+                        {getSliderOrDisplay(device, changeIntensity)}
                     </div>
-                    {getPowerSwitch(device)}
+                    <div>
+                        {getPowerSwitch(device)}
+                    </div>
                 </div>
             </form>
         </div>
@@ -92,12 +99,16 @@ function getPowerSwitch(device) {
     }
 }
 
-function getSliderOrDisplay(device) {
+function getSlider(device, handleChange) {
+    return (<Slider className="slider" onChangeCommitted={(e, val) =>  handleChange(e, val)} valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
+}
+
+function getSliderOrDisplay(device, changeIntensity) {
     switch (device.deviceType) {
         case 2: //DimmableLight
         case 4: //DimmableSwitch
         case 5: //StatelessDimmableSwitch
-            return (<Slider className="slider" onChange={(e, val)=>console.log('slider: ' + val)} valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
+            return getSlider(device, changeIntensity);
         case 6: //SmartPlug
             return (<SmartPlug device={device} />)
         case 7: //HumiditySensor
