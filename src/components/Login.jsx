@@ -18,10 +18,10 @@ class Login extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        fetch('http://localhost:8080/auth/login', {
+        fetch('http://localhost:8080/auth/login/' + this.state.username, {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify({username: this.state.username, password: this.state.password})
+            body: this.state.password
         })
         // .then( (res) => console.log(res))
         .then( (res) => {
@@ -89,7 +89,7 @@ class Login extends React.Component {
                                 name="username"
                                 value={this.state.username}
                                 onChange={this.handleUsernameChange}
-                                placeholder="Username" /></div>
+                                placeholder="Username or email" /></div>
 
                         <div className="dates-input1"><input
                                 type="password"
@@ -116,7 +116,6 @@ class Login extends React.Component {
                                     name="button"
                                     className="btn-primary btn"
                                     onClick={this.sendDatas}>Login</button>
-                                    {/* onClick={this.sendDatasTest}>Login</button> */}
                             </div>
                         </div>
                     </div>

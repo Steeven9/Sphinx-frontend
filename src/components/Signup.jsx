@@ -74,7 +74,7 @@ class Signup extends React.Component {
      */
     render() {
         const { firstname, lastname, username, email, password, confirmPassword } = this.state;
-        const isEnabled = ((email.length > 0 && password.length > 0) && (username.length > 0 && firstname.length > 0)) && (lastname.length > 0 && confirmPassword.length > 0);
+        const isEnabled = (email.length > 0 && password.length > 0 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password);
     
         return (
             <article>

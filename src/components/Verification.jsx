@@ -18,13 +18,13 @@ class Verification extends React.Component {
      */
     sendDatas = (event) => {
         event.preventDefault();
-        fetch('http://localhost:8080/auth/verify', {
+        fetch('http://localhost:8080/auth/verify/' + this.props.location.query.email, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username: this.state.username, verificationToken: this.state.code })
+            body: this.props.location.query.code
         })
         .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 2 }) )
         .catch( (error) => this.setState({ show: 3 }) )
@@ -49,26 +49,13 @@ class Verification extends React.Component {
      */
     showValidation = () => {
         if (this.state.show === 0) {
-            return (<>
-                <h2 className="title">Verify Account</h2>
-
-                <p>Insert your Username and the Validation Code that has been sent to your email address.</p>
-
-                <div className="dates-input1"><input type="text" name="username" onChange={this.changeUsername} placeholder="Username" required /></div>
-                <div className="dates-input1"><input type="text" name="validation-code" onChange={this.changeCode} placeholder="Validation Code" required /></div>
-
-                <div className="buttons1">
-
-                    <div className="dates-input1"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Validate</button></div>
-
-                </div>
-            </>)
+            this.sendDatas();
         }
         else if (this.state.show === 1) {
-            return (<p>Account verified</p>)
+            return (<p>Account verified. <a href="/login">Click here</a> to log in</p>)
         }
         else if (this.state.show === 2) {
-            return (<p>The code {this.state.code} is invalid, or the username doesn't exist.</p>)
+            return (<p>The code is invalid, or the username doesn't exist.</p>)
         }
         else if (this.state.show === 3) {
             return (<p>An error has occurred. Please try again.</p>)
