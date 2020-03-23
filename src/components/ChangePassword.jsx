@@ -2,7 +2,7 @@ import React from 'react';
 import '../App.css';
 import * as qs from 'query-string';
 
-class Verification extends React.Component {
+class ChangePassword extends React.Component {
 
     constructor(props) {
         super(props);
@@ -58,7 +58,7 @@ class Verification extends React.Component {
     /**
      * Depending on the value of show, returns either the form to fill, or the result of the authentication.
      */
-    showValidation = () => {
+    showChange = () => {
         if (this.state.show === 0) {
             return (<>
                 <h2 className="title">Change password</h2>
@@ -95,7 +95,7 @@ class Verification extends React.Component {
             <article>
                 <div id="content" className="container">
                     <div className="content-box1 content-box z-depth-2">
-                        {this.showValidation()}
+                        {this.showChange()}
                     </div>
                 </div>
             </article>
@@ -103,4 +103,4 @@ class Verification extends React.Component {
     }
 }
 
-export default Verification;
+export default ChangePassword;

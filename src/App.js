@@ -8,6 +8,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import ResetPassword from './components/ResetPassword';
 import Verification from './components/Verification';
+import ChangePassword from './components/ChangePassword';
 import Dashboard from './components/Dashboard';
 import House from './components/House';
 import HandleRooms from './components/HandleRooms';
@@ -16,7 +17,6 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
-import ChangePassword from './components/ChangePassword';
 // import Template from './components/Template';
 // import RedirectionTest from './components/RedirectionTest';
 import Footer from './components/Footer';
@@ -210,6 +210,10 @@ class App extends React.Component {
                                 <Verification />
                             </Route>
 
+                            <Route path="/changepassword">
+                                <ChangePassword />
+                            </Route>
+
                             <Route path="/dashboard">
                                 {this.state.loggedIn ? 
                                     <Dashboard 
@@ -281,10 +285,6 @@ class App extends React.Component {
                                         redirectHomepage = {this.redirectHomepage}
                                     />
                                 : this.accessDenied()}
-                            </Route>
-
-                            <Route path="/changepassword">
-                                <ChangePassword/>
                             </Route>
 
                             {/* <Route path="/template">
