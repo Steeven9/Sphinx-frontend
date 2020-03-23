@@ -1,5 +1,9 @@
-FROM nginx
+FROM node
 
-COPY build /usr/share/nginx/html
+ENV PORT 80
 
-VOLUME /var/log/nginx/log
+COPY build build
+
+RUN npm install -g serve
+
+CMD serve -s build -l ${PORT}
