@@ -84,9 +84,6 @@ class App extends React.Component {
         else {
             this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
         }
-        
-
-        this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
     }
 
     /**

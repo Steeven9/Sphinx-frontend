@@ -21,7 +21,7 @@ class ChangePassword extends React.Component {
         event.preventDefault();
         const parsed = qs.parse(window.location.search);
 
-        if (!Object.keys(parsed).includes("code")) { 
+        if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) { 
             this.setState({ show: 3 });
             return;
         }
@@ -29,7 +29,7 @@ class ChangePassword extends React.Component {
             this.setState({ show: 2 });
             return;
         }
-        fetch('http://localhost:8080/auth/change/' + parsed.code, {
+        fetch('http://localhost:8080/auth/reset/' + parsed.email + '/' + parsed.code, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
