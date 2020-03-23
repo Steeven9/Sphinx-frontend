@@ -58,10 +58,10 @@ const Device = ({device}) => {
 
 function getPowerSwitch(device) {
     switch (device.deviceType) {
-        case 'HumiditySensor':
-        case 'LightSensor':
-        case 'TempSensor':
-        case 'MotionSensor':
+        case 7: //HumiditySensor
+        case 8: //LightSensor
+        case 9: //TempSensor
+        case 10: //MotionSensor
             return(
                 <div className="row row-collapsible l1">
                     <div className="">
@@ -89,16 +89,16 @@ function getPowerSwitch(device) {
 
 function getSliderOrDisplay(device) {
     switch (device.deviceType) {
-        case 'DimmableLight':
-        case 'DimmableSwitch':
-        case 'StatelessDimmableSwitch':
+        case 2: //DimmableLight
+        case 4: //DimmableSwitch
+        case 5: //StatelessDimmableSwitch
             return (<Slider className="slider" valueLabelDisplay="auto" defaultValue={device.slider || 0}/>)
-        case 'SmartPlug':
+        case 6: //SmartPlug
             return (<SmartPlug device={device} />)
-        case 'HumiditySensor':
-        case 'LightSensor':
-        case 'TempSensor':
-        case 'MotionSensor':
+        case 7: //HumiditySensor
+        case 8: //LightSensor
+        case 9: //TempSensor
+        case 10: //MotionSensor
             return (<div className={"col col-collapsible l8 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
                 <span>{device.label || "---"}</span>
             </div>);
@@ -115,40 +115,39 @@ function getSliderOrDisplay(device) {
  */
 function getDeviceIcon(deviceType) {
     switch(deviceType){
-        // Controllers
-        case 'DimmableSwitch':
-            return iconDimmerState;
-        case 'StatelessDimmableSwitch':
-            return iconDimmerRegular;
-        case 'SmartPlug':
-            return iconSmartPlug;
-        case 'Switch':
-            return iconSwitch;
 
-        // Smart lights (with intensity state)
-        case 'Light':
+        //// Regular lights (w/o intensity)
+        case 1: //Ligth
             return iconRegularBulb;
 
-        // Regular lights (w/o intensity)
-        case 'DimmableLight':
+        //// Smart lights (with intensity state)
+        case 2: //DimmableLight
             return iconLedBulb;
 
-        // Sensors
-        case 'HumiditySensor':
+        //// Light controllers
+        case 3: //Switch
+            return iconSwitch;
+        case 4: //DimmableSwitch
+            return iconDimmerState;
+        case 5: //StatelessDimmableSwitch
+            return iconDimmerRegular;
+        case 6: //SmartPlug
+            return iconSmartPlug;
+
+        //// Sensors
+        case 7: //HumiditySensor
             return iconHumiditySensor;
-        case 'LightSensor':
+        case 8: //LightSensor
             return iconLightSensor;
-        case 'MotionSensor':
-            return iconMotionSensor;
-        case 'TempSensor':
+        case 9: //TempSensor
             return iconTemperatureSensor;
+        case 10: //MotionSensor
+            return iconMotionSensor;
 
         default:
             return iconUnknownDevice;
     }
 }
-
-
 
 /**
  * Gets a SVG icon object for the corresponding device

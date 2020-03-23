@@ -4,10 +4,6 @@ const devicesReducer = (state, action) => {
         case 'POPULATE_DEVICES':
             return action.devices;
         case 'CHANGE_INTENSITY':
-            return [
-                ...state,
-                { id: action.id, body: action.body }
-            ];
         case 'TOGGLE_SWITCH':
             return [
                 ...state,

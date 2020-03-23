@@ -58,71 +58,74 @@ class App extends React.Component {
                     this.state.toX ? <Redirect to='/' /> : <React.Fragment />
                 }
 
-                <div id="wrapper">
-                    <Header 
-                        loggedIn = {this.state.loggedIn}
-                    />
+                <main>
+                    <div id="wrapper">
+                        <Header
+                            loggedIn = {this.state.loggedIn}
+                        />
 
-                    <Switch>
-                        <Route path="/login">
-                            <Login />
-                        </Route>
+                        <Switch>
+                            <Route path="/login">
+                                <Login />
+                            </Route>
 
-                        <Route path="/signup">
-                            <Signup />
-                        </Route>
+                            <Route path="/signup">
+                                <Signup />
+                            </Route>
 
-                        <Route path="/reset">
-                            <ResetPassword />
-                        </Route>
+                            <Route path="/reset">
+                                <ResetPassword />
+                            </Route>
 
-                        <Route path="/verify">
-                            <Verification />
-                        </Route>
+                            <Route path="/verify">
+                                <Verification />
+                            </Route>
 
-                        <Route path="/dashboard">
-                            <Dashboard />
-                        </Route>
+                            <Route path="/dashboard">
+                                <Dashboard />
+                            </Route>
 
-                        <Route path="/house">
-                            <House />
-                        </Route>
+                            <Route path="/house">
+                                <House />
+                            </Route>
 
-                        <Route path="/handleRooms">
-                            <HandleRooms />
-                        </Route>
+                            <Route path="/handleRooms">
+                                <HandleRooms />
+                            </Route>
 
-                        <Route path="/addRoom">
-                            <AddRoom />
-                        </Route>
+                            <Route path="/addRoom">
+                                <AddRoom />
+                            </Route>
 
-                        <Route path="/room">
-                            <Room />
-                        </Route>
+                            <Route path="/room">
+                                <Room />
+                            </Route>
 
-                        <Route path="/devices/">
-                            <DevicesPanel />
-                        </Route>
+                            <Route path="/devices/">
+                                <DevicesPanel />
+                            </Route>
 
-                        <Route path="/addDevice">
-                            <AddDevice />
-                        </Route>
+                            <Route path="/addDevice">
+                                <AddDevice />
+                            </Route>
 
-                        <Route path="/template">
-                            <Template />
-                        </Route>
+                            <Route path="/template">
+                                <Template />
+                            </Route>
 
-                        <Route path="/allDevicesTemplate">
-                            <AllDevicesTemplate />
-                        </Route>
+                            <Route path="/allDevicesTemplate">
+                                <AllDevicesTemplate />
+                            </Route>
 
-                        <Route path="/">
-                            <Homepage />
-                        </Route>
-                    </Switch>
+                            <Route path="/">
+                                <Homepage />
+                            </Route>
+                        </Switch>
 
-                    <Footer />
-                </div>
+                        <Footer />
+                    </div>
+
+                </main>
             </Router>
         );
     }

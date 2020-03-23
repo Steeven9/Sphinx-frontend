@@ -11,7 +11,7 @@ const DevicesPanel = () => {
         {
             id: 0,
             icon: "DimmableLight",
-            deviceType: "DimmableLight",
+            deviceType: 2,
             name: "LED light",
             room: "Master bedroom",
             switched: 2,
@@ -21,7 +21,7 @@ const DevicesPanel = () => {
         {
             id: 1,
             icon: "Light",
-            deviceType: "Light",
+            deviceType: 1,
             room: "Kitchen",
             name: "Light bulb",
             switched: 3,
@@ -30,7 +30,7 @@ const DevicesPanel = () => {
         {
             id: 2,
             icon: "DimmableSwitch",
-            deviceType: "DimmableSwitch",
+            deviceType: 4,
             room: "Master bedroom",
             name: "Dimmable switch",
             slider: 100,
@@ -40,7 +40,7 @@ const DevicesPanel = () => {
         {
             id: 3,
             icon: "Switch",
-            deviceType: "Switch",
+            deviceType: 3,
             name: "Switch",
             room: "Kitchen",
             switches: 1,
@@ -49,7 +49,7 @@ const DevicesPanel = () => {
         {
             id: 4,
             icon: "TempSensor",
-            deviceType: "TempSensor",
+            deviceType: 9,
             room: "Living room",
             name: "Temperature sensor",
             label: "2'000 lm"
@@ -57,23 +57,23 @@ const DevicesPanel = () => {
         {
             id: 5,
             icon: "SmartPlug",
-            deviceType: "SmartPlug",
+            deviceType: 6,
             room: "Garage",
             name: "Smart plug",
-            label: "350 kWh",
+            label: 350,
             on: true
         },
         {
             id: 6,
             icon: "MotionSensor",
-            deviceType: "MotionSensor",
+            deviceType: 10,
             room: "Backyard",
             name: "Motion sensor"
         },
         {
             id: 7,
             icon: "DimmableLight",
-            deviceType: "DimmableLight",
+            deviceType: 2,
             name: "Smart LED light",
             room: "Master bedroom",
             switched: 2,
@@ -83,7 +83,7 @@ const DevicesPanel = () => {
         {
             id: 7,
             icon: "iconDimmerRegular",
-            deviceType: "StatelessDimmableSwitch",
+            deviceType: 5,
             name: "Regular dimmer",
             room: "Guest's room",
             switches: 8,
@@ -93,7 +93,7 @@ const DevicesPanel = () => {
         {
             id: 8,
             icon: "DimmableLight",
-            deviceType: "DimmableLight",
+            deviceType: 2,
             name: "Smart LED light 2",
             room: "Guest's room",
             switched: 7,
@@ -102,7 +102,7 @@ const DevicesPanel = () => {
         }
     ];
 
-    const [devices, dispatch] = useReducer(devicesReducer, []);
+    const [devices, devicesDispatch] = useReducer(devicesReducer, []);
 
     useEffect(() => {
         localStorage.setItem('devices', JSON.stringify(myDevices));
@@ -114,7 +114,7 @@ const DevicesPanel = () => {
         const devices = JSON.parse(localStorage.getItem('devices'));
         console.log('Devices retrieved from localStorage');
         if(devices) {
-            dispatch({type: 'POPULATE_DEVICES', devices: devices});
+            devicesDispatch({type: 'POPULATE_DEVICES', devices: devices});
             console.log('Populated devices');
         }
     }, []);
@@ -128,9 +128,9 @@ const DevicesPanel = () => {
     });
 
     return(
-        <DevicesContext.Provider value={{devices, dispatch}}>
+        <DevicesContext.Provider value={{devices, devicesDispatch}}>
             <div id="wrapper" className="devices">
-                <main> {/* delete this */}
+                <main>
                     <article className="row row-collapsible row row-collapsible-custom">
                         <div id="content" className="">
                             <section className="content-box-collapsible z-depth-2">

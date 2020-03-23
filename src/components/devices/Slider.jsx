@@ -5,8 +5,8 @@ const Slider = (props) => {
     const [intensity, setIntensity] = useState(props.on);
 
     return(
-        <div className="">
-        </div>
+        <>
+        </>
     )
 };
 

@@ -18,8 +18,4 @@ const SmartPlug = (device) => {
             </div>)
 };
 
-// SmartPlug.defaultProps = {
-//     consumption: 0
-// };
-
 export {SmartPlug as default}
