@@ -79,7 +79,8 @@ class App extends React.Component {
                 : 
                 this.logOut()
             )
-            .catch( error => this.logOut())
+            // .catch( error => this.logOut())
+            .catch( error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
             this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
@@ -244,6 +245,7 @@ class App extends React.Component {
                                     <House 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -298,7 +300,6 @@ class App extends React.Component {
                                 {this.state.loggedIn ? 
                                     <LogOut
                                         logOut = {this.logOut} 
-                                        redirectHomepage = {this.redirectHomepage}
                                     />
                                 : this.accessDenied()}
                             </Route>
