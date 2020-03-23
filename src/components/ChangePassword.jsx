@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import * as qs from 'query-string';
 
 class Verification extends React.Component {
 
@@ -18,11 +19,17 @@ class Verification extends React.Component {
      */
     sendDatas = (event) => {
         event.preventDefault();
-        if (this.state.password != this.state.confirmPassword) { 
+        const parsed = qs.parse(window.location.search);
+
+        if (!Object.keys(parsed).includes("code")) { 
+            this.setState({ show: 3 });
+            return;
+        }
+        if (this.state.password !== this.state.confirmPassword) { 
             this.setState({ show: 2 });
             return;
         }
-        fetch('http://localhost:8080/auth/change/' + this.props.location.query.code, {
+        fetch('http://localhost:8080/auth/change/' + parsed.code, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',

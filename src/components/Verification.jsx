@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import * as qs from 'query-string';
 
 class Verification extends React.Component {
 
@@ -18,13 +19,15 @@ class Verification extends React.Component {
      */
     sendDatas = (event) => {
         event.preventDefault();
-        fetch('http://localhost:8080/auth/verify/' + this.props.location.query.email, {
+        const parsed = qs.parse(window.location.search);
+
+        fetch('http://localhost:8080/auth/verify/' + parsed.email, {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
             },
-            body: this.props.location.query.code
+            body: parsed.code
         })
         .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 2 }) )
         .catch( (error) => this.setState({ show: 3 }) )

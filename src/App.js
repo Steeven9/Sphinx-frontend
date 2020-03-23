@@ -16,6 +16,7 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
+import ChangePassword from './components/ChangePassword';
 // import Template from './components/Template';
 // import RedirectionTest from './components/RedirectionTest';
 import Footer from './components/Footer';
@@ -280,6 +281,10 @@ class App extends React.Component {
                                         redirectHomepage = {this.redirectHomepage}
                                     />
                                 : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/changepassword">
+                                <ChangePassword/>
                             </Route>
 
                             {/* <Route path="/template">
