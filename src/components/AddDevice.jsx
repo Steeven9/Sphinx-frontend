@@ -27,23 +27,32 @@ class AddDevice extends React.Component {
             this.setState({success: false, error: false, uncomplete: true})
         }
         else {
-            fetch('http://localhost:8080/rooms', {
+            fetch('http://localhost:8080/devices', {
                 method: 'POST',
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: {name: this.state.deviceName, icon: "???", deviceType: parseInt(this.state.type)}
+                headers: { 
+                    'user': this.state.username,
+                    'session-token': this.state.session_token,
+                    'Accept': 'application/json', 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({
+                    name: this.state.deviceName, 
+                    icon: this.findPathDevice(this.state.type), 
+                    deviceType: parseInt(this.state.type),
+                })
             })
             .then( (res) => {
                 if (res.status === 203) {
                     this.setState({success: true, error: false, uncomplete: false})
                 }
                 else if (res.status === 401) {
-                    this.props.logOut()
+                    this.props.logOut(1)
                 }
                 else {
                     this.setState({success: false, error: true, uncomplete: false});
                 }
             })
-            .catch( error => this.props.logOut())
+            .catch( error => this.props.logOut(2))
         }
     };
 
@@ -57,14 +66,14 @@ class AddDevice extends React.Component {
     handleRoomChange = evt => {
         this.setState({ room: evt.target.value })
     }
-    handlePairingChange = evt => {
-        this.setState({ pairing: evt.target.value })
-    }
+    // handlePairingChange = evt => {
+    //     this.setState({ pairing: evt.target.value })
+    // }
 
     /**
      * Display a message if a room has been successfully created, and if not an error message
      */
-    roomCreated = () => {
+    deviceCreated = () => {
         if (this.state.success) {
             return(<p><i>Device created succesfully</i></p>)
         }
@@ -85,35 +94,36 @@ class AddDevice extends React.Component {
                 <div className="content-box">
                     <h2 className="title">Add device</h2>
                     <div className="dates">
-                        <div className="Handle-input"> 
-                                <select className="selector" onChange={this.handleTypeChange}>
-                                    <option value="0">Device type</option>
-                                    <option value="1">Light</option>
-                                    <option value="2">Dimmable Light</option>
-                                    <option value="3">Switch</option>
-                                    <option value="4">Dimmer</option>
-                                    <option value="5">Dimmer (no-memory)</option>
-                                    <option value="6">Smart plug</option>
-                                    <option value="7">Humidity sensor</option>
-                                    <option value="8">Light sensor</option>
-                                    <option value="9">Temperature sensor</option>
-                                    <option value="10">Motion sensor</option>
-                                </select>
-                            </div>
                         <div className="dates-input">
                             <input style={{ width: 300 + 'px' }} type="text" name="" placeholder="Device Name" onChange={this.handleDeviceNameChange} required/>
                         </div>
                         <div className="Handle-input"> 
-                            <select className="selector" onChange={this.handleRoomChange}>
-                                <option value="0">Room</option>
+                            <select className="selector" onChange={this.handleTypeChange}>
+                                <option value="0">Device type</option>
+                                <option value="1">Light</option>
+                                <option value="2">Dimmable Light</option>
+                                <option value="3">Switch</option>
+                                <option value="4">Dimmer</option>
+                                <option value="5">Dimmer (no-memory)</option>
+                                <option value="6">Smart plug</option>
+                                <option value="7">Humidity sensor</option>
+                                <option value="8">Light sensor</option>
+                                <option value="9">Temperature sensor</option>
+                                <option value="10">Motion sensor</option>
                             </select>
                         </div>
                         <div className="Handle-input"> 
+                            <select className="selector" onChange={this.handleRoomChange}>
+                                <option value="0">Room</option>
+                                <option value="1">Torture Room</option>
+                            </select>
+                        </div>
+                        {/* <div className="Handle-input"> 
                             <select className="selector" onChange={this.handlePairingChange}>
                                 <option value="0">No pairing</option>
                             </select>
-                        </div>
-                        {this.state.deviceCreated}
+                        </div> */}
+                        {this.deviceCreated()}
                     </div>
                     <div className="dates">
                         <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button></div>

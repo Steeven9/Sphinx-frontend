@@ -4,7 +4,7 @@ import '../App.css';
 class LogOut extends React.Component {
     
     componentDidMount() {
-        this.props.logOut();
+        this.props.logOut(0);
     }
 
     /**

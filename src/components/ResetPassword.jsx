@@ -20,7 +20,6 @@ class ResetPassword extends React.Component {
         fetch('http://localhost:8080/auth/reset/' + this.state.email, {
             method: 'POST',
         })
-        // .then( (res) => console.log(res))
         .then( (res) => res.status === 204 ? this.setState({success: 1}) : this.setState({success: 0}))
     };
     

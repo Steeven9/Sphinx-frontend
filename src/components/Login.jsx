@@ -23,12 +23,9 @@ class Login extends React.Component {
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: this.state.password
         })
-        // .then( (res) => console.log(res))
         .then( (res) => {
             if (res.status === 200) {
-                this.props.setSession(this.state.username, res.session_token);
-                this.props.setLogin();
-                this.props.redirectDashboard();
+                this.props.logIn(this.state.username, res.session_token);
             }
             else {
                 this.setState({error: true});
@@ -41,7 +38,7 @@ class Login extends React.Component {
      */
     sendDatasTest = evt => {
         evt.preventDefault();
-        this.props.setSession(this.state.username, "a test token");
+        this.props.logIn(this.state.username, "a test token");
         if (this.state.username !== "") {
             window.location.href = '/dashboard';
         }
@@ -115,7 +112,7 @@ class Login extends React.Component {
                                     disabled= {!isEnabled}
                                     name="button"
                                     className="btn-primary btn"
-                                    onClick={this.sendDatasTest}>Login</button>
+                                    onClick={this.sendDatas}>Login</button>
                             </div>
                         </div>
                     </div>

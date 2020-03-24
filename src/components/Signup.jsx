@@ -32,7 +32,6 @@ class Signup extends React.Component {
                 password: this.state.password
             })
         })
-        // .then( (res) => console.log(res))
         .then( (res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
     };
 

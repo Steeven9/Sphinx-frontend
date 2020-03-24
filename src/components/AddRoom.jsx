@@ -27,21 +27,30 @@ class AddRoom extends React.Component {
         else {
             fetch('http://localhost:8080/rooms', {
                 method: 'POST',
-                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: {name: this.state.roomName, icon: "???", background: "???"}
+                headers: { 
+                    'user': this.state.username,
+                    'session-token': this.state.session_token,
+                    'Accept': 'application/json', 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({
+                    name: this.state.deviceName, 
+                    icon: this.props.findPathRoom(this.state.type, 0), 
+                    background: this.props.findPathRoom(this.state.type, 1),
+                })
             })
             .then( (res) => {
                 if (res.status === 203) {
                     this.setState({success: true, error: false, uncomplete: false})
                 }
                 else if (res.status === 401) {
-                    this.props.logOut()
+                    this.props.logOut(1)
                 }
                 else {
                     this.setState({success: false, error: true, uncomplete: false});
                 }
             })
-            .catch( error => this.props.logOut())
+            .catch( error => this.props.logOut(2))
         }
     };
 

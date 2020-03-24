@@ -75,20 +75,20 @@ class App extends React.Component {
         let newLoggedIn = localStorage.getItem("loggedIn") === "true";
 
         if (newLoggedIn) {
-            fetch('http://localhost:8080/auth/validate/' + newUsername, {
+            fetch('http://localhost:8080/auth/validate/', {
                 method: 'POST',
                 headers: {
-                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                   'user': newUsername,
+                   'session-token': newSession_token
                 },
-                body: newSession_token
             })
             .then( (res) => res.status === 200 ? 
                 this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }) 
                 : 
-                this.logOut()
+                this.logOut(0)
             )
-            // .catch( error => this.logOut())
-            .catch( error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
+            .catch( error => this.logOut(0))
+            // .catch( error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
             this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
@@ -163,7 +163,7 @@ class App extends React.Component {
     /**
      * Used to set usernme and session token
      */
-    setSession = (user, token) => {
+    logIn = (user, token) => {
         this.setState({
             username: user,
             session_token: token,
@@ -173,13 +173,15 @@ class App extends React.Component {
         localStorage.setItem("username", user);
         localStorage.setItem("session_token", token);
         localStorage.setItem("loggedIn", "true");
+
+        this.props.redirectDashboard();
     }
 
     /**
-     * Used to set usernme and session token
+     * Used to log out.
+     * exitCode: if 0, normal log out. If 1, expired session token, if 2, unexpected error
      */
-    logOut = () => {
-        // console.log(this.loggedIn)
+    logOut = (exitCode) => {
         this.setState({
             username: "",
             session_token: "",
@@ -189,6 +191,13 @@ class App extends React.Component {
         localStorage.setItem("username", "");
         localStorage.setItem("session_token", "");
         localStorage.setItem("loggedIn", "false");
+
+        if (exitCode === 1) {
+            alert("Session expired. Please log in again.")
+        }
+        else if (exitCode === 2) {
+            alert("Unexpected error, logging out...")
+        }
 
         window.location.href = '/';
     }
@@ -206,6 +215,21 @@ class App extends React.Component {
                 </section>
             </div>
         )
+    }
+
+    /**
+     * Return Device icon path
+     */
+    findPathDevice = (type) => {
+        //
+    }
+
+    /**
+     * Return Room icon/background path
+     * @param flag: if false icon, if true background
+     */
+    findPathRoom = (type, flag) => {
+        //
     }
 
     
@@ -237,7 +261,7 @@ class App extends React.Component {
                                 {this.state.loggedIn ? this.accessDenied() :
                                     <Login
                                         redirectDashboard = {this.redirectDashboard} 
-                                        setSession = {this.setSession}
+                                        logIn = {this.logIn}
                                     />
                                 }
                             </Route>
@@ -292,6 +316,7 @@ class App extends React.Component {
                                         roomToEdit = {this.roomToEdit}
                                         logOut = {this.logOut} 
                                         redirectHouse = {this.redirectHouse} 
+                                        findPathRoom = {this.findPathRoom}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -303,6 +328,7 @@ class App extends React.Component {
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
+                                        findPathRoom = {this.findPathRoom}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -347,6 +373,7 @@ class App extends React.Component {
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
                                         redirectDevices = {this.redirectDevices} 
+                                        findPathDevice = {this.findPathDevice}
                                     />
                                 : this.accessDenied()}
                             </Route>
