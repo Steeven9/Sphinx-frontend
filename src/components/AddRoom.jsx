@@ -31,7 +31,7 @@ class AddRoom extends React.Component {
                 body: {name: this.state.roomName, icon: "???", background: "???"}
             })
             .then( (res) => {
-                if (res.status === 200 || res.status === 203) {
+                if (res.status === 203) {
                     this.setState({success: true, error: false, uncomplete: false})
                 }
                 else if (res.status === 401) {

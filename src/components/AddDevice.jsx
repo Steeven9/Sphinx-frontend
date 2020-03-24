@@ -30,7 +30,7 @@ class AddDevice extends React.Component {
             fetch('http://localhost:8080/rooms', {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: {name: this.state.deviceName, icon: "???", deviceType: this.state.type}
+                body: {name: this.state.deviceName, icon: "???", deviceType: parseInt(this.state.type)}
             })
             .then( (res) => {
                 if (res.status === 203) {
