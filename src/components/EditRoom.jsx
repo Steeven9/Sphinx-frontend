@@ -18,7 +18,7 @@ class EditRoom extends React.Component {
      * Sends back to House
      */
     goToHouse = () => {
-        window.location.href = '/devices'
+        window.location.href = '/house'
     }
 
     /**
