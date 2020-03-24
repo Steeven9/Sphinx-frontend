@@ -12,7 +12,7 @@ class AddRoom extends React.Component {
             error: false,
             uncomplete: false,
             roomName: "",
-            type: ""
+            type: "0"
         }
     }
 
@@ -21,7 +21,7 @@ class AddRoom extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.type === "" || this.state.type === "select") {
+        if (this.state.type === "0") {
             this.setState({success: false, error: false, uncomplete: true})
         }
         else {
@@ -34,7 +34,7 @@ class AddRoom extends React.Component {
                 if (res.status === 200 || res.status === 203) {
                     this.setState({success: true, error: false, uncomplete: false})
                 }
-                else if (res.status === 400) {
+                else if (res.status === 401) {
                     this.props.logOut()
                 }
                 else {
@@ -87,8 +87,8 @@ class AddRoom extends React.Component {
                         <div className="dates-input"><input style={{ width: 300 + 'px' }} type="text" name="roomName" placeholder="Room Name"
                                 onChange={this.handleRoomNameChange} required/></div>
                         <div className="Handle-input"> 
-                            <select className="selector" onChange={this.handleTypeChange}  required>
-                                <option value="select">Select Room Type</option>
+                            <select className="selector" onChange={this.handleTypeChange}>
+                                <option value="0">Select Room Type</option>
                                 <option value="attic">Attic</option>
                                 <option value="backyard">Backyard</option>
                                 <option value="basement">Basement</option>
