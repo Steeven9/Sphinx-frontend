@@ -271,7 +271,7 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/editRoom">
-                                {this.state.loggedIn ? 
+                                {this.state.loggedIn || this.state.roomToEdit !== "" ? 
                                     <EditRoom 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
@@ -314,7 +314,7 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/editDevice">
-                                {this.state.loggedIn ? 
+                                {this.state.loggedIn || this.state.deviceToEdit !== "" ? 
                                     <EditDevice 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
