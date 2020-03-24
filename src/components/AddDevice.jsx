@@ -23,7 +23,7 @@ class AddDevice extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.type === "0" || this.state.room === "0" || this.state.pairing === "0") {
+        if (this.state.type === "0" || this.state.room === "0") {
             this.setState({success: false, error: false, uncomplete: true})
         }
         else {
