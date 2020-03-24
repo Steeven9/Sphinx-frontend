@@ -69,13 +69,6 @@ class AddRoom extends React.Component {
     }
 
     /**
-     * Sends to House page
-     */
-    goToHouse = () => {
-        window.location.href = '/house'
-    }
-
-    /**
      * Renders AddRoom page
      */
     render() {
@@ -106,7 +99,7 @@ class AddRoom extends React.Component {
                         {this.state.roomCreated}
                     </div>
                     <div className="dates">
-                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.goToHouse}>Cancel</button></div>
+                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button></div>
                         <div className="dates-input"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save room</button></div>
                     </div>
                 </div>

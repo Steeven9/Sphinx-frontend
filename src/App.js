@@ -39,6 +39,7 @@ class App extends React.Component {
             toDashboard: false,
             toLogin: false,
             toHouse: false,
+            toDevices: false,
             toEditRoom: false,
             toEditDevice: false,
 
@@ -133,6 +134,12 @@ class App extends React.Component {
         this.stopRedirections();
         this.setState({
             toHouse: true,
+        });
+    }
+    redirectDevices = () => {
+        this.stopRedirections();
+        this.setState({
+            toDevices: true,
         });
     }
     redirectEditRoom = (room) => {
@@ -278,6 +285,7 @@ class App extends React.Component {
                                         session_token = {this.state.session_token}
                                         roomToEdit = {this.roomToEdit}
                                         logOut = {this.logOut} 
+                                        redirectHouse = {this.redirectHouse} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -321,6 +329,7 @@ class App extends React.Component {
                                         session_token = {this.state.session_token}
                                         deviceToEdit = {this.deviceToEdit}
                                         logOut = {this.logOut} 
+                                        redirectDevices = {this.redirectDevices} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -331,6 +340,7 @@ class App extends React.Component {
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
+                                        redirectDevices = {this.redirectDevices} 
                                     />
                                 : this.accessDenied()}
                             </Route>

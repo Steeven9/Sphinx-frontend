@@ -15,13 +15,6 @@ class EditRoom extends React.Component {
     }
 
     /**
-     * Sends back to House
-     */
-    goToHouse = () => {
-        window.location.href = '/house'
-    }
-
-    /**
      * Renders the room handler
      */
     render() {
@@ -49,7 +42,7 @@ class EditRoom extends React.Component {
                         </div>
                     </div>
                     <div className="Handle-dates">
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.goToHouse}>Cancel</button></div>
+                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn">Delete Room</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-primary btn">Save Changes</button></div>
                     </div>

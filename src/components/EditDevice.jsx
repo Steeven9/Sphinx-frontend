@@ -15,13 +15,6 @@ class EditDevice extends React.Component {
     }
 
     /**
-     * Sends back to Devices
-     */
-    goToDevices = () => {
-        window.location.href = '/devices'
-    }
-
-    /**
      * Renders the room handler
      */
     render() {
@@ -33,7 +26,7 @@ class EditDevice extends React.Component {
                         <div className="Handle-input"><input style={{ width: 300 + 'px' }} type="text" name="" placeholder="New Name" required/></div>
                     </div>
                     <div className="Handle-dates">
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.goToDevices}>Cancel</button></div>
+                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn">Delete Device</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-primary btn">Save New Name</button></div>
                     </div>

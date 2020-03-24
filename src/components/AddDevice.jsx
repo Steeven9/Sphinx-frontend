@@ -77,13 +77,6 @@ class AddDevice extends React.Component {
     }
 
     /**
-     * Sends to House page
-     */
-    goToDevices = () => {
-        window.location.href = '/devices'
-    }
-
-    /**
      * Renders AddDevice page
      */
     render() {
@@ -123,7 +116,7 @@ class AddDevice extends React.Component {
                         {this.state.deviceCreated}
                     </div>
                     <div className="dates">
-                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.goToDevices}>Cancel</button></div>
+                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button></div>
                         <div className="dates-input"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save device</button></div>
                     </div>
                 </div>
