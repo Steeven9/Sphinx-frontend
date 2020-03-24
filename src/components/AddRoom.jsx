@@ -96,12 +96,13 @@ class AddRoom extends React.Component {
                                 <option value="basement">Basement</option>
                                 <option value="bathroom">Bathroom</option>
                                 <option value="bedroom">Bedroom</option>
-                                <option value="dining">Dining room</option>
+                                <option value="dining-room">Dining room</option>
                                 <option value="garage">Garage</option>
-                                <option value="generic">Generic room</option>
+                                <option value="generic-room">Generic room</option>
                                 <option value="hallway">Hallway</option>
-                                <option value="housefront">House front</option>
-                                <option value="living">Living room</option>
+                                <option value="house-front">House front</option>
+                                <option value="kitchen">House front</option>
+                                <option value="living-room">Living room</option>
                                 <option value="office">Office</option>
                             </select>
                         </div>

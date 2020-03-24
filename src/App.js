@@ -221,7 +221,20 @@ class App extends React.Component {
      * Return Device icon path
      */
     findPathDevice = (type) => {
-        //
+        let path = './img/icons/devices/'
+        if (type === "1") path += 'bulb-regular'
+        else if (type === "2") path += 'bulb-led'
+        else if (type === "3") path += 'switch'
+        else if (type === "4") path += 'dimmer-state'
+        else if (type === "5") path += 'dimmer-regular'
+        else if (type === "6") path += 'smart-plug'
+        else if (type === "7") path += 'sensor-humidity'
+        else if (type === "8") path += 'sensor-light'
+        else if (type === "9") path += 'sensor-temperature'
+        else if (type === "10") path += 'sensor-motion'
+        else path += 'unknwon-device'
+        path += '.svg'
+        return path;
     }
 
     /**
@@ -229,7 +242,16 @@ class App extends React.Component {
      * @param flag: if false icon, if true background
      */
     findPathRoom = (type, flag) => {
-        //
+        let path = './img/'
+        if (flag) {
+            path += 'backgrounds/rooms/background'
+        }
+        else {
+            path += 'icons/rooms/icon-'
+        }
+        path += type
+        path += '.svg'
+        return path;
     }
 
     
