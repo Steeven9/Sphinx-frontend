@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import '../components/css/editRoom.css';
+import '../components/css/editPages.css';
 
 
 class EditRoom extends React.Component {
