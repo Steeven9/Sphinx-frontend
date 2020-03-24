@@ -255,6 +255,7 @@ class App extends React.Component {
                                     <HandleRooms 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -265,6 +266,7 @@ class App extends React.Component {
                                         redirectHouse = {this.redirectHouse} 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -274,6 +276,7 @@ class App extends React.Component {
                                     <Room 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -283,6 +286,7 @@ class App extends React.Component {
                                     <Devices 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -292,6 +296,7 @@ class App extends React.Component {
                                     <AddDevice 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut}
                                     />
                                 : this.accessDenied()}
                             </Route>

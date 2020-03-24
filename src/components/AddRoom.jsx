@@ -7,8 +7,71 @@ class AddRoom extends React.Component {
         super(props);
         this.state = {
             username: props.username,
-            session_token: props.session_token
+            session_token: props.session_token,
+            success: false,
+            error: false,
+            uncomplete: false,
+            roomName: "",
+            type: ""
         }
+    }
+
+    /**
+     * Sends informations contained in this.state to the backend
+     */
+    sendDatas = evt => {
+        evt.preventDefault();
+        if (this.state.type === "" || this.state.type === "select") {
+            this.setState({success: false, error: false, uncomplete: true})
+        }
+        else {
+            fetch('http://localhost:8080/rooms', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: {name: this.state.roomName, icon: "???", background: "???"}
+            })
+            .then( (res) => {
+                if (res.status === 200 || res.status === 203) {
+                    this.setState({success: true, error: false, uncomplete: false})
+                }
+                else if (res.status === 400) {
+                    this.props.logOut()
+                }
+                else {
+                    this.setState({success: false, error: true, uncomplete: false});
+                }
+            })
+        }
+    };
+
+    // function to handle state on input change
+    handleRoomNameChange = evt => {
+        this.setState({ roomName: evt.target.value });
+    };
+    handleTypeChange = evt => {
+        this.setState({ type: evt.target.value })
+    }
+
+    /**
+     * Display a message if a room has been successfully created, and if not an error message
+     */
+    roomCreated = () => {
+        if (this.state.success) {
+            return(<p><i>Room created succesfully</i></p>)
+        }
+        else if (this.state.error) {
+            return(<p>An error has occurred, please try again</p>)
+        }
+        else if (this.state.uncomplete) {
+            return(<p>Please insert a room type</p>)
+        }
+    }
+
+    /**
+     * Sends to House page
+     */
+    goToHouse = () => {
+        window.location.href = '/house'
     }
 
     /**
@@ -20,28 +83,30 @@ class AddRoom extends React.Component {
                 <div className="content-box">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
-                        <div className="dates-input"><input style={{ width: 300 + 'px' }} type="text" name="" placeholder="Room Name" /></div>
+                        <div className="dates-input"><input style={{ width: 300 + 'px' }} type="text" name="roomName" placeholder="Room Name"
+                                onChange={this.handleRoomNameChange} required/></div>
                         <div className="Handle-input"> 
-                            <select className="selector">
-                                <option value="">Room type</option>
-                                <option value="">Attic</option>
-                                <option value="">Backyard</option>
-                                <option value="">Basement</option>
-                                <option value="">Bathroom</option>
-                                <option value="">Bedroom</option>
-                                <option value="">Dining room</option>
-                                <option value="">Garage</option>
-                                <option value="">Generic room</option>
-                                <option value="">Hallway</option>
-                                <option value="">House front</option>
-                                <option value="">Living room</option>
-                                <option value="">Office</option>
+                            <select className="selector" onChange={this.handleTypeChange}  required>
+                                <option value="select">Select Room Type</option>
+                                <option value="attic">Attic</option>
+                                <option value="backyard">Backyard</option>
+                                <option value="basement">Basement</option>
+                                <option value="bathroom">Bathroom</option>
+                                <option value="bedroom">Bedroom</option>
+                                <option value="dining">Dining room</option>
+                                <option value="garage">Garage</option>
+                                <option value="generic">Generic room</option>
+                                <option value="hallway">Hallway</option>
+                                <option value="housefront">House front</option>
+                                <option value="living">Living room</option>
+                                <option value="office">Office</option>
                             </select>
                         </div>
+                        {this.state.roomCreated}
                     </div>
                     <div className="dates">
-                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn">Cancel</button></div>
-                        <div className="dates-input"><button type="button" name="button" className="btn-primary btn">Save room</button></div>
+                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.goToHouse}>Cancel</button></div>
+                        <div className="dates-input"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save room</button></div>
                     </div>
                 </div>
             </div>
