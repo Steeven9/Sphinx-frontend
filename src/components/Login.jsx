@@ -116,7 +116,10 @@ class Login extends React.Component {
                                     disabled= {!isEnabled}
                                     name="button"
                                     className="btn-primary btn"
-                                    onClick={this.sendDatas}>Login</button>
+                                // Uncomment th efollowing line to enter production mode
+                                    // onClick={this.sendDatas}>Login</button>
+                                // Uncomment the following line to enter testing mode
+                                    onClick={this.sendDatasTest}>Login</button>
                             </div>
                         </div>
                     </div>

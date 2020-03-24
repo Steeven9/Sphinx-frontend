@@ -1,5 +1,4 @@
 const devicesReducer = (state, action) => {
-
     switch (action.type) {
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
@@ -7,12 +6,23 @@ const devicesReducer = (state, action) => {
 
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
-            console.log(action.devices);
-            return action.devices;
+
+            //// Uncomment the following 6 lines to sync coupled sliders
+            //  state.forEach((d) => {
+            //     if (d.switched === action.device.id) {
+            //         d.slider = action.device.slider;
+            //         console.log(d.name + " " + d.slider)
+            //     }
+            // });
+
+            localStorage.setItem('devices', JSON.stringify(state));
+            return [...state];
 
         case 'SYNC_DEVICES':
             console.log('Dispatch: SYNC_DEVICE');
-            return action.devices;
+            // console.log(state)
+            // console.log(action.devices)
+            return state;
 
         default:
             console.log('Dispatch: DEFAULT');

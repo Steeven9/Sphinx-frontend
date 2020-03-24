@@ -1,115 +1,22 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {useEffect, useReducer, useState} from 'react'
 import DevicesContext from '../../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
 
-const DevicesPanel = () => {
-    // Temporary mock devices to populate the localStorge
-    const myDevices = [
-        {
-            id: 0,
-            icon: "DimmableLight",
-            deviceType: 2,
-            name: "LED light",
-            room: "Master bedroom",
-            switched: 2,
-            slider: 75,
-            on: false
-        },
-        {
-            id: 1,
-            icon: "Light",
-            deviceType: 1,
-            room: "Kitchen",
-            name: "Light bulb",
-            switched: 3,
-            on: true
-        },
-        {
-            id: 2,
-            icon: "DimmableSwitch",
-            deviceType: 4,
-            room: "Master bedroom",
-            name: "Dimmable switch",
-            slider: 100,
-            switches: [0, 7],
-            on: false
-        },
-        {
-            id: 3,
-            icon: "Switch",
-            deviceType: 3,
-            name: "Switch",
-            room: "Kitchen",
-            switches: [1],
-            on: true
-        },
-        {
-            id: 4,
-            icon: "TempSensor",
-            deviceType: 9,
-            room: "Living room",
-            name: "Temperature sensor",
-            label: "2'000 lm"
-        },
-        {
-            id: 5,
-            icon: "SmartPlug",
-            deviceType: 6,
-            room: "Garage",
-            name: "Smart plug",
-            label: '350 kWh',
-            on: true
-        },
-        {
-            id: 6,
-            icon: "MotionSensor",
-            deviceType: 10,
-            room: "Backyard",
-            name: "Motion sensor"
-        },
-        {
-            id: 7,
-            icon: "DimmableLight",
-            deviceType: 2,
-            name: "Smart LED light",
-            room: "Master bedroom",
-            switched: 2,
-            slider: 30,
-            on: false
-        },
-        {
-            id: 8,
-            icon: "iconDimmerRegular",
-            deviceType: 5,
-            name: "Regular dimmer",
-            room: "Guest's room",
-            switches: [9],
-            slider: 0,
-            on: false
-        },
-        {
-            id: 9,
-            icon: "DimmableLight",
-            deviceType: 2,
-            name: "Smart LED light 2",
-            room: "Guest's room",
-            switched: 8,
-            slider: 60,
-            on: false
-        }
-    ];
 
+const DevicesPanel = () => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
+    const [state, setState] = useState(devices);
 
     // Stores devices in localStorage
     useEffect(() => {
-        localStorage.setItem('devices', JSON.stringify(myDevices));
-        console.log('Devices stored in localStorage');
-    }, [myDevices]);
-
+        if (localStorage.devices === undefined) {
+            localStorage.setItem('devices', JSON.stringify(myDevices));
+            console.log('Devices stored in localStorage');
+        }
+    }, []);
 
     // Retrieves devices from localStorage and dispatches the render action
     useEffect(() => {
@@ -121,6 +28,10 @@ const DevicesPanel = () => {
         }
 
     }, []);
+
+    useEffect(() => {
+        console.log('devices was updated')
+    }, [devices]);
 
     try{
         devices.sort(function(a, b) {
@@ -158,5 +69,101 @@ const DevicesPanel = () => {
         </DevicesContext.Provider>
     )
 };
+
+// Temporary mock devices to populate the localStorge
+const myDevices = [
+    {
+        id: 0,
+        icon: "DimmableLight",
+        deviceType: 2,
+        name: "LED light",
+        room: "Master bedroom",
+        switched: 2,
+        slider: 75,
+        on: false
+    },
+    {
+        id: 1,
+        icon: "Light",
+        deviceType: 1,
+        room: "Kitchen",
+        name: "Light bulb",
+        switched: 3,
+        on: true
+    },
+    {
+        id: 2,
+        icon: "DimmableSwitch",
+        deviceType: 4,
+        room: "Master bedroom",
+        name: "Dimmable switch",
+        slider: 100,
+        switches: [0, 7],
+        on: false
+    },
+    {
+        id: 3,
+        icon: "Switch",
+        deviceType: 3,
+        name: "Switch",
+        room: "Kitchen",
+        switches: [1],
+        on: true
+    },
+    {
+        id: 4,
+        icon: "TempSensor",
+        deviceType: 9,
+        room: "Living room",
+        name: "Temperature sensor",
+        label: "2'000 lm"
+    },
+    {
+        id: 5,
+        icon: "SmartPlug",
+        deviceType: 6,
+        room: "Garage",
+        name: "Smart plug",
+        label: '350 kWh',
+        on: true
+    },
+    {
+        id: 6,
+        icon: "MotionSensor",
+        deviceType: 10,
+        room: "Backyard",
+        name: "Motion sensor"
+    },
+    {
+        id: 7,
+        icon: "DimmableLight",
+        deviceType: 2,
+        name: "Smart LED light",
+        room: "Master bedroom",
+        switched: 2,
+        slider: 30,
+        on: false
+    },
+    {
+        id: 8,
+        icon: "iconDimmerRegular",
+        deviceType: 5,
+        name: "Regular dimmer",
+        room: "Guest's room",
+        switches: [9],
+        slider: 0,
+        on: false
+    },
+    {
+        id: 9,
+        icon: "DimmableLight",
+        deviceType: 2,
+        name: "Smart LED light 2",
+        room: "Guest's room",
+        switched: 8,
+        slider: 60,
+        on: false
+    }
+];
 
 export {DevicesPanel as default}

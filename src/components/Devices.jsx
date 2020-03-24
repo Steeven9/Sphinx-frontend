@@ -1,5 +1,7 @@
 import React from 'react';
 import '../App.css';
+import DevicesPanel from './devices/DevicesPanel';
+
 
 class Devices extends React.Component {
 
@@ -11,17 +13,11 @@ class Devices extends React.Component {
         }
     }
 
-    /**
-     * TODO
-     */
     render() {
         return (
-            <div className="devices">
-                html page code here
-            </div>
+            <DevicesPanel />
         );
     }
 }
-
 
 export default Devices;

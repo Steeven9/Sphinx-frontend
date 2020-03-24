@@ -15,17 +15,32 @@ const Device = ({device}) => {
     useEffect(() => {
     }, [intensity]);
 
-    const handleChange = (e, val) => {
+    const handleCommittedChange = (e, val) => {
         device.slider = val;
-        dispatch({type: 'MODIFY_DEVICE', devices: devices});
+        devices.forEach((d) => {
+        if (d.id === device.id) {
+            d.slider = val;
+        }});
+        dispatch({type: 'MODIFY_DEVICE', device: device});
     };
 
+    const handleInstantChange = (e, val) => {
+        // device.slider = val;
+        // devices.forEach((d) => {
+        //     if (d.switched === device.id) {
+        //         d.slider = val;
+        //         console.log(d.name + " " + d.slider)
+        //     }
+        // });
+        // console.log(val);
+        //
+        // dispatch({type: 'SYNC_DEVICES', devices: devices});
+    };
 
     function getSlider() {
-        return (<Slider name={"slider"} className="slider" onChangeCommitted={
-            (e, val) =>  {
-                handleChange(e, val);
-            }
+        return (<Slider name={"slider"} className="slider"
+                        onChange={(e, val) =>  {handleInstantChange(e, val)}}
+                        onChangeCommitted={(e, val) =>  {handleCommittedChange(e, val)}
         } valueLabelDisplay="auto" defaultValue={intensity} />)
     }
 
@@ -52,7 +67,7 @@ const Device = ({device}) => {
             case 10: //MotionSensor
                 return (
                     <div className={"col col-collapsible l8 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
-                        <span>{device.label || "---"}</span>
+                        <span>{device.label || "- - - - - -"}</span>
                     </div>
                 );
             default:
@@ -104,7 +119,7 @@ const Device = ({device}) => {
                     </div>
                     <div className="device-control col col-collapsible l6 m6 s12">
                         <div className="col col-collapsible l8 m6 s8">
-                            {getSliderOrDisplayOrSmartPlug(device, intensity, setIntensity, handleChange)}
+                            {getSliderOrDisplayOrSmartPlug(device, intensity, setIntensity, handleCommittedChange)}
                         </div>
                         <div>
                             {getPowerSwitch(device)}

@@ -14,15 +14,12 @@ import House from './components/House';
 import EditRoom from './components/EditRoom';
 import AddRoom from './components/AddRoom';
 import Room from './components/Room';
-import DevicesPanel from './components/devices/DevicesPanel';
 import Devices from './components/Devices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
 import Error404 from './components/Error404';
-import Footer from './components/Footer';
-import Template from './components/Template';
-import AllDevicesTemplate from './components/AllDevicesTemplate';
+
 
 import {
     BrowserRouter as Router,
@@ -88,7 +85,10 @@ class App extends React.Component {
                 : 
                 this.logOut()
             )
-            .catch( error => this.logOut())
+                // Uncomment th efollowing line to enter production mode
+                // .catch( error => this.logOut())
+                // Uncomment the following line to enter testing mode
+                .catch(error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
             this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })

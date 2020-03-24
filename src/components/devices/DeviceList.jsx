@@ -4,6 +4,7 @@ import DevicesContext from '../../context/devices-context'
 
 const DeviceList = () => {
     const {devices} = useContext(DevicesContext);
+
     let expandedDevices = [];
     let children = JSON.parse(JSON.stringify(devices));
     let id = 0;
@@ -22,9 +23,7 @@ const DeviceList = () => {
             }
         }
     }
-
     return expandedDevices.map((device) => (
-            // <Device key={id++} device={device} />
             <Device key={id++} device={device} />
     ))
 };
