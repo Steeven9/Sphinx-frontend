@@ -11,10 +11,11 @@ import Verification from './components/Verification';
 import ChangePassword from './components/ChangePassword';
 import Dashboard from './components/Dashboard';
 import House from './components/House';
-import HandleRooms from './components/HandleRooms';
+import EditRoom from './components/EditRoom';
 import AddRoom from './components/AddRoom';
 import Room from './components/Room';
 import Devices from './components/Devices';
+import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
 import Error404 from './components/Error404';
@@ -38,6 +39,11 @@ class App extends React.Component {
             toDashboard: false,
             toLogin: false,
             toHouse: false,
+            toEditRoom: false,
+            toEditDevice: false,
+
+            roomToEdit: "",
+            deviceToEdit: "",
 
             username: "",
             session_token: ""
@@ -126,6 +132,20 @@ class App extends React.Component {
         this.stopRedirections();
         this.setState({
             toHouse: true,
+        });
+    }
+    redirectEditRoom = (room) => {
+        this.stopRedirections();
+        this.setState({
+            roomToEdit: room,
+            toEditRoom: true,
+        });
+    }
+    redirectEditDevice = (device) => {
+        this.stopRedirections();
+        this.setState({
+            deviceToEdit: device,
+            toEditDevice: true,
         });
     }
 
@@ -244,15 +264,19 @@ class App extends React.Component {
                                     <House 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut} 
+                                        redirectEditRoom = {this.redirectEditRoom} 
                                     />
                                 : this.accessDenied()}
                             </Route>
 
-                            <Route path="/handleRooms">
+                            <Route path="/editRoom">
                                 {this.state.loggedIn ? 
-                                    <HandleRooms 
+                                    <EditRoom 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        roomToEdit = {this.roomToEdit}
+                                        logOut = {this.logOut} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -263,6 +287,7 @@ class App extends React.Component {
                                         redirectHouse = {this.redirectHouse} 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -272,6 +297,7 @@ class App extends React.Component {
                                     <Room 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -281,6 +307,19 @@ class App extends React.Component {
                                     <Devices 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut} 
+                                        redirectEditDevice = {this.redirectEditDevice} 
+                                    />
+                                : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/editDevice">
+                                {this.state.loggedIn ? 
+                                    <EditDevice 
+                                        username = {this.state.username}
+                                        session_token = {this.state.session_token}
+                                        deviceToEdit = {this.deviceToEdit}
+                                        logOut = {this.logOut} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -290,6 +329,7 @@ class App extends React.Component {
                                     <AddDevice 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        logOut = {this.logOut} 
                                     />
                                 : this.accessDenied()}
                             </Route>
