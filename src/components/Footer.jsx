@@ -3,13 +3,6 @@ import '../App.css';
 
 class Footer extends React.Component {
 
-    constructor(props) {
-		super(props);
-		this.state = {
-			// placeholder
-		}
-	}
-
     /**
      * Returns the Footer for all pages. It has no special components.
      */

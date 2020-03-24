@@ -9,7 +9,8 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // placeholder
+            username: props.username,
+            session_token: props.session_token
         }
     }
 
@@ -19,16 +20,14 @@ class Dashboard extends React.Component {
     render() {
         return (
             <div className="dashboard">
-
-                <div className="content-box3" onClick={ () => {window.location.href = '/devices';} }>
+                <div className="content-box3" onClick={() => { window.location.href = '/devices'; }}>
                     <img src={imgAllDevice} alt="All devices" />
                     <a href="/devices" className="dash-text">See all devices</a>
                 </div>
-                <div className="content-box3" onClick={ () => {window.location.href = '/house';} }>
+                <div className="content-box3" onClick={() => { window.location.href = '/house'; }}>
                     <img src={imgAllRoom} alt="All rooms" />
                     <a href="/house" className="dash-text">See device by room</a>
                 </div>
-
             </div>
         );
     }

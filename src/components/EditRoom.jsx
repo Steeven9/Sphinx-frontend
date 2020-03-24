@@ -1,29 +1,38 @@
 import React from 'react';
 import '../App.css';
-import '../components/css/handleRoom.css';
+import '../components/css/editPages.css';
 
 
-class HandleRooms extends React.Component {
+class EditRoom extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            // placeholder
+            username: props.username,
+            session_token: props.session_token,
+            room_name: props.roomToEdit
         }
     }
 
     /**
-     * TODO
+     * Sends back to House
+     */
+    goToHouse = () => {
+        window.location.href = '/house'
+    }
+
+    /**
+     * Renders the room handler
      */
     render() {
         return (
-            <div className="handleRooms">
+            <div className="editRoom">
                 <div className="Handle-content-box2">
-                    <h2 className="title">Modify Room</h2>
+                    <h2 className="title">Edit Room: {this.state.room_name}</h2>
                     <div className="Handle-dates">
-                        <div className="Handle-input"><input style={{ width: 300 + 'px' }} type="text" name="" placeholder="Room name" /></div>
+                        <div className="Handle-input"><input style={{ width: 300 + 'px' }} type="text" name="" placeholder="New Name" /></div>
                         <div className="Handle-input"> <select className="selector">
-                            <option>Room type</option>
+                            <option>New room type</option>
                             <option>Attic</option>
                             <option>Backyard</option>
                             <option>Basement</option>
@@ -40,7 +49,7 @@ class HandleRooms extends React.Component {
                         </div>
                     </div>
                     <div className="Handle-dates">
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn">Cancel</button></div>
+                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.goToHouse}>Cancel</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn">Delete Room</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-primary btn">Save Changes</button></div>
                     </div>
@@ -51,4 +60,4 @@ class HandleRooms extends React.Component {
 }
 
 
-export default HandleRooms;
+export default EditRoom;

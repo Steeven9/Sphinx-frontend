@@ -6,12 +6,13 @@ class AddRoom extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // placeholder
+            username: props.username,
+            session_token: props.session_token
         }
     }
 
     /**
-     * TODO
+     * Renders AddRoom page
      */
     render() {
         return (         

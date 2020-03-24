@@ -9,6 +9,7 @@
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
     "materialize-css": "^1.0.0-rc.2",
+    "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",

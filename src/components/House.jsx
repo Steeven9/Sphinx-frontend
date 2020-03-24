@@ -1,6 +1,6 @@
 import React from 'react';
 import '../App.css';
-import '../components/css/house-dashboard.css';
+import '../components/css/house.css';
 import imgGarage from './img/icons/rooms/icon-garage.svg';
 
 
@@ -9,7 +9,8 @@ class House extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // placeholder
+            username: props.username,
+            session_token: props.session_token
         }
     }
 
