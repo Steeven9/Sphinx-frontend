@@ -12,7 +12,7 @@ const Slider = (props) => {
 };
 
 Slider.defaultProps = {
-    intensity: 0
+    intensity: props.slider
 };
 
 export {Slider as default}

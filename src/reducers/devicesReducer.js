@@ -4,19 +4,16 @@ const devicesReducer = (state, action) => {
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
+
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
-            // return state.filter((device) => {
-            //     if (device.deviceId === state.deviceId) {
-            //         device.slider = action.slider;
-            //         device.on = action.on
-            //     }
-            // });
-            console.log ('action ' + JSON.stringify(action));
-            return state.filter((device) =>
-                device.id !== action.key
-            );
-            // return state;
+            console.log(action.devices);
+            return action.devices;
+
+        case 'SYNC_DEVICES':
+            console.log('Dispatch: SYNC_DEVICE');
+            return action.devices;
+
         default:
             console.log('Dispatch: DEFAULT');
             return state;
