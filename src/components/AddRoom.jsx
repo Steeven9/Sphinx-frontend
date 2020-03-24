@@ -34,7 +34,7 @@ class AddRoom extends React.Component {
                     'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify({
-                    name: this.state.deviceName, 
+                    name: this.state.roomName, 
                     icon: this.props.findPathRoom(this.state.type, 0), 
                     background: this.props.findPathRoom(this.state.type, 1),
                 })

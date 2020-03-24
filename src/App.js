@@ -43,9 +43,10 @@ class App extends React.Component {
             toDevices: false,
             toEditRoom: false,
             toEditDevice: false,
+            toRoom: false,
 
-            roomToEdit: "",
-            deviceToEdit: "",
+            roomTo: "",
+            deviceTo: "test",
 
             username: "",
             session_token: ""
@@ -109,6 +110,10 @@ class App extends React.Component {
             toDevices: false,
             toEditRoom: false,
             toEditDevice: false,
+            toRoom: false,
+
+            roomTo: "",
+            deviceTo: ""
         });
     }
 
@@ -148,15 +153,22 @@ class App extends React.Component {
     redirectEditRoom = (room) => {
         this.stopRedirections();
         this.setState({
-            roomToEdit: room,
+            roomTo: room,
             toEditRoom: true,
         });
     }
     redirectEditDevice = (device) => {
         this.stopRedirections();
         this.setState({
-            deviceToEdit: device,
+            deviceTo: device,
             toEditDevice: true,
+        });
+    }
+    redirectRoom = (room) => {
+        this.stopRedirections();
+        this.setState({
+            roomTo: room,
+            toRoom: true,
         });
     }
 
@@ -244,7 +256,7 @@ class App extends React.Component {
     findPathRoom = (type, flag) => {
         let path = './img/'
         if (flag) {
-            path += 'backgrounds/rooms/background'
+            path += 'backgrounds/rooms/background-'
         }
         else {
             path += 'icons/rooms/icon-'
@@ -269,6 +281,7 @@ class App extends React.Component {
                 { this.state.toDevices ? <Redirect to='/devices' /> : <React.Fragment /> }
                 { this.state.toEditRoom ? <Redirect to='/editRoom' /> : <React.Fragment /> }
                 { this.state.toEditDevice ? <Redirect to='/editDevice' /> : <React.Fragment /> }
+                { this.state.toRoom ? <Redirect to='/room' /> : <React.Fragment /> }
 
                 <div id="wrapper">
                     <Header 
@@ -326,16 +339,17 @@ class App extends React.Component {
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
                                         redirectEditRoom = {this.redirectEditRoom} 
+                                        redirectRoom = {this.redirectRoom} 
                                     />
                                 : this.accessDenied()}
                             </Route>
 
                             <Route path="/editRoom">
-                                {this.state.loggedIn && (this.state.roomToEdit !== "") ? 
+                                {this.state.loggedIn && (this.state.roomTo !== "") ? 
                                     <EditRoom 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        roomToEdit = {this.roomToEdit}
+                                        roomTo = {this.roomTo}
                                         logOut = {this.logOut} 
                                         redirectHouse = {this.redirectHouse} 
                                         findPathRoom = {this.findPathRoom}
@@ -361,6 +375,7 @@ class App extends React.Component {
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
+                                        roomTo = {this.roomTo}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -377,11 +392,11 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/editDevice">
-                                {this.state.loggedIn && (this.state.deviceToEdit !== "") ? 
+                                {this.state.loggedIn && (this.state.deviceTo !== "") ? 
                                     <EditDevice 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        deviceToEdit = {this.deviceToEdit}
+                                        deviceTo = {this.deviceTo}
                                         logOut = {this.logOut} 
                                         redirectDevices = {this.redirectDevices} 
                                     />

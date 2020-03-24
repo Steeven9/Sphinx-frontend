@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+// import Select from 'react-select';
 
 class AddDevice extends React.Component {
 
@@ -14,8 +15,43 @@ class AddDevice extends React.Component {
             deviceName: "",
             type: "0",
             room: "0",
-            pairing: "0"
+            pairing: "0",
+            selectRooms: <></>
         }
+    }
+
+    componentDidMount() {
+        fetch('http://localhost:8080/rooms', {
+                method: 'GET',
+                headers: { 
+                    'user': this.state.username,
+                    'session-token': this.state.session_token,
+                },
+            })
+            .then( (res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1)
+                }
+                else if (res.status === 200) {
+                    this.mapRooms(res.rooms)
+                }
+                else {
+                    this.setState({room: "-1"})
+                    this.setState({selectRooms: <select className="selector" onChange={this.handleRoomChange}><option value="-1">No Room Available - Error Occurred</option></select>, room: "-1"})
+                }
+            })
+            .catch( error => this.props.logOut(2))
+    }
+
+    /**
+     * Map received array rooms into the Selector
+     */
+    mapRooms = (rooms) => {
+        if (rooms === []) {
+            this.setState({selectRooms: <select className="selector" onChange={this.handleRoomChange}><option value="0">No Room Available</option></select>, room: "0"})
+        }
+        let toSet = <select className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option value={room.id}>{room.name}</option>)}</select>
+        this.setState({selectRooms: toSet})
     }
 
     /**
@@ -23,7 +59,7 @@ class AddDevice extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.type === "0" || this.state.room === "0") {
+        if (this.state.type === "0") {
             this.setState({success: false, error: false, uncomplete: true})
         }
         else {
@@ -39,6 +75,7 @@ class AddDevice extends React.Component {
                     name: this.state.deviceName, 
                     icon: this.findPathDevice(this.state.type), 
                     deviceType: parseInt(this.state.type),
+                    // pairing: this.state.room //ID, if "0" then no room
                 })
             })
             .then( (res) => {
@@ -113,10 +150,7 @@ class AddDevice extends React.Component {
                             </select>
                         </div>
                         <div className="Handle-input"> 
-                            <select className="selector" onChange={this.handleRoomChange}>
-                                <option value="0">Room</option>
-                                <option value="1">Torture Room</option>
-                            </select>
+                                {this.state.selectRooms}
                         </div>
                         {/* <div className="Handle-input"> 
                             <select className="selector" onChange={this.handlePairingChange}>
