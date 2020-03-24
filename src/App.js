@@ -35,6 +35,7 @@ class App extends React.Component {
 
         this.state = {
             loggedIn: false,
+
             toHomepage: false,
             toDashboard: false,
             toLogin: false,
@@ -101,11 +102,13 @@ class App extends React.Component {
      */
     stopRedirections = () => {
         this.setState({
+            toHomepage: false,
             toDashboard: false,
             toLogin: false,
-            toDevices: false,
-            toRoom: false,
             toHouse: false,
+            toDevices: false,
+            toEditRoom: false,
+            toEditDevice: false,
         });
     }
 
@@ -217,6 +220,9 @@ class App extends React.Component {
                 { this.state.toDashboard ? <Redirect to='/dashboard' /> : <React.Fragment /> }
                 { this.state.toLogin ? <Redirect to='/login' /> : <React.Fragment /> }
                 { this.state.toHouse ? <Redirect to='/house' /> : <React.Fragment /> }
+                { this.state.toDevices ? <Redirect to='/devices' /> : <React.Fragment /> }
+                { this.state.toEditRoom ? <Redirect to='/editRoom' /> : <React.Fragment /> }
+                { this.state.toEditDevice ? <Redirect to='/editDevice' /> : <React.Fragment /> }
 
                 <div id="wrapper">
                     <Header 
