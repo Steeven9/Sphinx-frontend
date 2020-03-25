@@ -5,7 +5,10 @@ import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
 
-
+/**
+ * Generates a panel with a DevicePanel
+ * @returns {DevicePanel}
+ */
 const DevicesPanel = () => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
@@ -69,7 +72,7 @@ const DevicesPanel = () => {
     )
 };
 
-// Temporary mock devices to populate the localStorge
+// Temporary mock devices to populate the localStorage
 const myDevices = [
     {
         id: 0,

@@ -2,6 +2,11 @@ import React, {useState, useContext} from 'react'
 import DevicesContext from "../../context/devices-context";
 
 
+/**
+ * Creates a SmartPlug that shows the energy consumption that can be reset
+ * @param device
+ * @returns {SmartPlug}
+ */
 const SmartPlug = (device) => {
     const [consumption, setConsumption] = useState(device.device.label);
     const {dispatch} = useContext(DevicesContext);
@@ -13,12 +18,6 @@ const SmartPlug = (device) => {
         device.device.label = 0;
         dispatch({type: 'MODIFY_DEVICE', device: device});
     };
-
-    // useEffect(() => {
-    //     console.log('Resetting SmartPlug');
-    //     device.device.label = 0;
-    //     dispatch({type: 'MODIFY_DEVICE', device: device});
-    // }, [consumption]);
 
     return ((device.device.on) ?
         <div className="col col-collapsible l8 s8 display-info display-active">

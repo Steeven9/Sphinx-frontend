@@ -3,6 +3,9 @@ import '../App.css';
 import DevicesPanel from './devices/DevicesPanel';
 
 
+/**
+ * Placeholder page for the whole devices dashboard components pages
+ */
 class Devices extends React.Component {
 
     constructor(props) {

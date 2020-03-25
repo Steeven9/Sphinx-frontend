@@ -2,6 +2,11 @@ import React, {useContext} from 'react'
 import Device from './Device'
 import DevicesContext from '../../context/devices-context'
 
+
+/**
+ * Generates a list of nested devices
+ * @returns {DeviceList}
+ */
 const DeviceList = () => {
     const {devices} = useContext(DevicesContext);
 

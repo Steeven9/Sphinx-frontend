@@ -6,7 +6,12 @@ import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
 
-
+/**
+ * Device factory that can create any type of device
+ * @param device object
+ * @returns { An individual device's HTML composed of several React components }
+ * @constructor
+ */
 const Device = ({device}) => {
     const {devices, dispatch} = useContext(DevicesContext);
     const [intensity, setIntensity] = useState(device.slider);
@@ -24,26 +29,11 @@ const Device = ({device}) => {
         dispatch({type: 'MODIFY_DEVICE', device: device});
     };
 
-    const handleInstantChange = (e, val) => {
-        // device.slider = val;
-        // devices.forEach((d) => {
-        //     if (d.switched === device.id) {
-        //         d.slider = val;
-        //         console.log(d.name + " " + d.slider)
-        //     }
-        // });
-        // console.log(val);
-        //
-        // dispatch({type: 'SYNC_DEVICES', devices: devices});
-    };
-
-    function getSlider() {
-        return (<Slider name={"slider"} className="slider"
-                        onChange={(e, val) =>  {handleInstantChange(e, val)}}
-                        onChangeCommitted={(e, val) =>  {handleCommittedChange(e, val)}
-        } valueLabelDisplay="auto" defaultValue={intensity} />)
-    }
-
+    /**
+     * Assigns classes to parent or child device's header
+     * @param device
+     * @returns {string}
+     */
     function getDeviceHeader(device) {
         if (device.switches !== undefined) {
             return  "collapsible-header device-parent";
@@ -53,6 +43,11 @@ const Device = ({device}) => {
         return "collapsible-header"
     }
 
+    /**
+     * Depending on device type, returns either an intensity slider, a SmartPlug's display or a Sensor's display
+     * @param device
+     * @returns {Slider|SmartPlug display|Sensor display}
+     */
     function getSliderOrDisplayOrSmartPlug(device) {
         switch (device.deviceType) {
             case 2: //DimmableLight
@@ -75,6 +70,21 @@ const Device = ({device}) => {
         }
     }
 
+    /**
+     * Generates a slider to control the intensity of a light or of a dimmer.
+     * @returns {Slider}
+     */
+    function getSlider() {
+        return (<Slider name={"slider"} className="slider"
+                        onChangeCommitted={(e, val) =>  {handleCommittedChange(e, val)}
+                        } valueLabelDisplay="auto" defaultValue={intensity} />)
+    }
+
+    /**
+     * Generates a power switch to turn a device on or off
+     * @param device
+     * @returns {PowerSwitch}
+     */
     function getPowerSwitch(device) {
         switch (device.deviceType) {
             case 7: //HumiditySensor

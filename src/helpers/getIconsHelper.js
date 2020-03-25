@@ -13,10 +13,9 @@
  */
 
 /**
- * Gets a SVG icon object for the corresponding device
+ * Gets a SVG icon'a relative URL for the corresponding device type
  * @param {string} deviceType
  * @returns {icon} SVG imported icon
- * @author Erick Garro Elizondo
  */
 export function getDeviceIcon(deviceType) {
     switch(deviceType){
@@ -55,10 +54,9 @@ export function getDeviceIcon(deviceType) {
 }
 
 /**
- * Gets a SVG icon object for the corresponding device
+ * Gets a Material-UI icon name for parent or child devices
  * @param {object} device
  * @returns {string} SVG imported icon
- * @author Erick Garro Elizondo
  */
 export function getRowIcon(device) {
     if (device.parent) {
