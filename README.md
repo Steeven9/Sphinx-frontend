@@ -10,7 +10,7 @@ To use it, first pull the image with\
 `docker pull steeven9/sa4-sphinx-frontend`
 
 then run it with\
-`docker run -p 3000:80 steeven9/sa4-sphinx-frontend`
+`docker run -it -p 3000:80 steeven9/sa4-sphinx-frontend`
 
 **Note**: the frontend port can be changed when running the Docker container, via the `-p` parameter.
 
@@ -25,6 +25,6 @@ and finally put everything in a Docker container\
 `docker build ./ -t sa4-sphinx-frontend:latest`
 
 that you can run with\
-`docker run -p 3000:80 sa4-sphinx-frontend`
+`docker run -it -p 3000:80 sa4-sphinx-frontend`
 
 **Note**: the frontend port can be changed when running the Docker container, via the `-p` parameter.
