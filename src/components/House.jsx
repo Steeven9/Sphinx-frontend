@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.css';
 import '../components/css/house.css';
 
+
 class House extends React.Component {
 
     constructor(props) {

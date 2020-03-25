@@ -52,6 +52,7 @@ class Header extends React.Component {
                                     this.state.loggedIn ? 
 
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
+                                        <li><a href="/dashboard">Dashboard</a></li>
                                         <li><a href="/devices">My devices</a></li>
                                         <li><a href="/house">My rooms</a></li>
                                         <li><a href="/logout">Log out</a></li>

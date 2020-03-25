@@ -1,6 +1,11 @@
 import React from 'react';
 import '../App.css';
+import DevicesPanel from './devices/DevicesPanel';
 
+
+/**
+ * Placeholder page for the whole devices dashboard components pages
+ */
 class Devices extends React.Component {
 
     constructor(props) {
@@ -11,17 +16,11 @@ class Devices extends React.Component {
         }
     }
 
-    /**
-     * TODO
-     */
     render() {
         return (
-            <div className="devices">
-                html page code here
-            </div>
+            <DevicesPanel />
         );
     }
 }
-
 
 export default Devices;

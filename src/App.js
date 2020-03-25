@@ -19,7 +19,7 @@ import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
 import Error404 from './components/Error404';
-import Footer from './components/Footer';
+
 
 import {
     BrowserRouter as Router,
@@ -27,6 +27,7 @@ import {
     Route,
     Redirect,
 } from "react-router-dom";
+import Footer from "./components/Footer";
 
 class App extends React.Component {
 
@@ -88,8 +89,10 @@ class App extends React.Component {
                 : 
                 this.logOut(0)
             )
-            .catch( error => this.logOut(0))
-            // .catch( error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
+                // Uncomment the following line to enter production mode
+                .catch( error => this.logOut())
+                // Uncomment the following line to enter testing mode
+                // .catch(error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
             this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
@@ -126,18 +129,21 @@ class App extends React.Component {
             toHomepage: true,
         });
     }
+
     redirectDashboard = () => {
         this.stopRedirections();
         this.setState({
             toDashboard: true,
         });
     }
+
     redirectLogin = () => {
         this.stopRedirections();
         this.setState({
             toLogin: true,
         });
     }
+
     redirectHouse = () => {
         this.stopRedirections();
         this.setState({
@@ -157,6 +163,7 @@ class App extends React.Component {
             toEditRoom: true,
         });
     }
+
     redirectEditDevice = (device) => {
         this.stopRedirections();
         this.setState({
@@ -434,6 +441,7 @@ class App extends React.Component {
                             <Route path="*">
                                 <Error404 />
                             </Route>
+
 
                         </Switch>
                     </main>

@@ -12,14 +12,18 @@ class Homepage extends React.Component {
         return (
             <div id="wrapper" className="homepage img-homepage-headline main-img-background">
                 <div id="content" className="container">
-                    <article>
-                        <section className="row headline-box">
-                            <img className="responsive-img col l5" src={imgSmartHouse} alt="SmartHut"/>
-                            <div className="col l6">
-                                <h1 className="text-homepage-headline">Smart control for your smart home</h1>
-                                <a href="/signup"className="btn-homepage-headline waves-effect waves-light btn btn-primary col l6">Join now</a>
-                            </div>
-                        </section>
+                    <main>
+                        <article>
+                            <section className="row headline-box">
+                                <img className="responsive-img col l5" src={imgSmartHouse} alt="SmartHut"/>
+                                <div className="col l6">
+                                    <h1 className="text-homepage-headline">Smart control for your smart home</h1>
+                                    <a href="/signup" className="btn-homepage-headline waves-effect waves-light btn btn-primary col l6">Join now</a>
+                                </div>
+                            </section>
+                            <section className="content-box z-depth-2">
+                                <h2> How does it work?</h2>
+                                <p><strong>SmartHut</strong> is your one-stop management system for all your smart lights and sensors in your home, independently on their manufacturer.</p>
 
                         <section className="content-box z-depth-2">
                             <h2> How does it work?</h2>

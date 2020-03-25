@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -9,13 +10,13 @@ code {
     /*position: absolute;*/
     width: 100%;
     height: 100%;
-    background-image: url("components/img/backgrounds/app/background.svg") !important;
+    background-image: url("../img/backgrounds/app/background.svg") !important;
     background-repeat: no-repeat;
     background-size: cover;
     color: #FFF;
 }
 
-/* 
+/*
 .main-img img {
     width: 50%;
 }
@@ -26,7 +27,6 @@ code {
     right: 12.85%;
     top: 23.41%;
     bottom: 58.71%;
-    font-family: Open Sans;
     font-style: normal;
     font-weight: 800;
     font-size: 6vh;
@@ -34,7 +34,7 @@ code {
     color: #FFFFFF;
 }
 
- /*Use this selector to give a custom width overriding the global style */
+
 .content-box {
     width: calc(70% + 10vmin) !important;
 }
