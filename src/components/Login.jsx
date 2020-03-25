@@ -25,13 +25,21 @@ class Login extends React.Component {
             body: this.state.password
         })
         .then( (res) => {
+            console.log(res);
             if (res.status === 200) {
-                this.props.logIn(this.state.username, res.session_token);
+                return res.text();                
             }
             else {
-                this.setState({error: true});
+                return null;
             }
         })
+        .then( (data) => {
+            if (data === null) {
+                this.setState({error: true});
+            } else {
+                this.props.logIn(this.state.username, data);
+            }            
+        });
     };
 
     /**

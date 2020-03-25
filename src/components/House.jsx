@@ -15,7 +15,7 @@ class House extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/rooms', {
+        fetch('http://localhost:8080/rooms/', {
                 method: 'GET',
                 headers: { 
                     'user': this.state.username,

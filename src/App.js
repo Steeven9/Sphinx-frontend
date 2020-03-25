@@ -193,7 +193,7 @@ class App extends React.Component {
         localStorage.setItem("session_token", token);
         localStorage.setItem("loggedIn", "true");
 
-        this.redirectDashboard();
+        window.location.href = "/dashboard";
     }
 
     /**
