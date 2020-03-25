@@ -1,29 +1,24 @@
 image: node
 
+# Cache node dependencies across all branches and jobs
+cache:
+    key: one-key-to-rule-them-all
+    paths:
+        - node_modules/
+
 stages:
-    - install
-    - test
     - build
     - deploy
-
-yarn-install:
-    stage: install
-    script:
-        - yarn install
-    artifacts:
-        paths: [node_modules/]
-
-yarn-test:
-    stage: test
-    script:
-        - yarn test
 
 yarn-build:
     stage: build
     script:
+        - yarn install
+        - yarn test
         - yarn build
     artifacts:
-        paths: [build/]
+        paths: 
+            - build/
 
 docker-build:
     only: [dev, master]
