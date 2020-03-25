@@ -120,7 +120,7 @@ class EditRoom extends React.Component {
                             </select>
                         </div>
                     </div>
-                    {this.state.uncomplete ? <p><b>Please fill all the datas</b></p> : <></>}
+                    {this.state.uncomplete ? <p><b>Please fill all the data</b></p> : <></>}
                     <div className="Handle-dates">
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button></div>
                         <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button></div>
