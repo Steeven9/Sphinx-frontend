@@ -121,9 +121,9 @@ class Login extends React.Component {
                                     name="button"
                                     className="btn-primary btn"
                                 // Uncomment the following line to enter production mode
-                                    onClick={this.sendDatas}>Login</button>
-                                {/*// Uncomment the following line to enter testing mode*/}
-                                {/*onClick={this.sendDatasTest}>Login</button>*/}
+                                    // onClick={this.sendDatas}>Login</button>
+                                // Uncomment the following line to enter testing mode
+                                onClick={this.sendDatasTest}>Login</button>
                             </div>
                         </div>
                     </div>

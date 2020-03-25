@@ -14,7 +14,7 @@ import House from './components/House';
 import EditRoom from './components/EditRoom';
 import AddRoom from './components/AddRoom';
 import Room from './components/Room';
-import Devices from './components/Devices';
+import OmegaDevices from './components/OmegaDevices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
@@ -371,7 +371,7 @@ class App extends React.Component {
 
                             <Route path="/devices">
                                 {this.state.loggedIn ? 
-                                    <Devices 
+                                    <OmegaDevices 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
