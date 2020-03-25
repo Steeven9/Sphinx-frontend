@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useContext} from 'react'
 import DevicesContext from "../../context/devices-context";
 
 
@@ -8,14 +8,17 @@ const SmartPlug = (device) => {
 
     const resetSmartPlug = (e) => {
         e.preventDefault();
-        setConsumption('0 kWh')
-    };
-
-    useEffect(() => {
+        setConsumption('0 kWh');
         console.log('Resetting SmartPlug');
         device.device.label = 0;
         dispatch({type: 'MODIFY_DEVICE', device: device});
-    }, [consumption]);
+    };
+
+    // useEffect(() => {
+    //     console.log('Resetting SmartPlug');
+    //     device.device.label = 0;
+    //     dispatch({type: 'MODIFY_DEVICE', device: device});
+    // }, [consumption]);
 
     return ((device.device.on) ?
         <div className="col col-collapsible l8 s8 display-info display-active">

@@ -1,22 +1,26 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useState, useContext} from 'react'
 import DevicesContext from '../../context/devices-context'
 
 
-const PowerSwitch = (device) => {
-    const [on, setPower] = useState(device.device.on);
+const PowerSwitch = (dev) => {
+    let device = dev.device;
+    const [on, setPower] = useState(device.on);
     const {dispatch} = useContext(DevicesContext);
 
     const toggle = (e) => {
         console.log('toggle')
         setPower(e.target.checked);
-        device.device.on = e.target.checked;
+        device.on = e.target.checked;
+        console.log('Turning ' + device.name + ' ' + device.on ? 'on' : 'off' );
+        // device.on = device.on;
+        dispatch({type: 'MODIFY_DEVICE', device: device});
     };
 
-    useEffect(() => {
-        console.log('Turning ' + device.device.name + ' ' + device.device.on ? 'on' : 'off' );
-        // device.device.on = device.device.on;
-        dispatch({type: 'MODIFY_DEVICE', device: device});
-    }, [on]);
+    // useEffect(() => {
+    //     console.log('Turning ' + device.name + ' ' + device.on ? 'on' : 'off' );
+    //     // device.on = device.on;
+    //     dispatch({type: 'MODIFY_DEVICE', device: device});
+    // }, [on]);
 
     return(
         <div className="">
