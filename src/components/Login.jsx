@@ -25,7 +25,6 @@ class Login extends React.Component {
             body: this.state.password
         })
         .then( (res) => {
-            console.log(res);
             if (res.status === 200) {
                 return res.text();                
             }

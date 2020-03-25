@@ -7,8 +7,6 @@ class AddDevice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: props.username,
-            session_token: props.session_token,
             success: false,
             error: false,
             uncomplete: false,
@@ -21,11 +19,11 @@ class AddDevice extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:8080/rooms', {
+        fetch('http://localhost:8080/rooms/', {
                 method: 'GET',
                 headers: { 
-                    'user': this.state.username,
-                    'session-token': this.state.session_token,
+                    'user': this.props.username,
+                    'session-token': this.props.session_token,
                 },
             })
             .then( (res) => {
@@ -66,8 +64,8 @@ class AddDevice extends React.Component {
             fetch('http://localhost:8080/devices', {
                 method: 'POST',
                 headers: { 
-                    'user': this.state.username,
-                    'session-token': this.state.session_token,
+                    'user': this.props.username,
+                    'session-token': this.props.session_token,
                     'Accept': 'application/json', 
                     'Content-Type': 'application/json' 
                 },

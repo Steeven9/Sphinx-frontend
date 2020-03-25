@@ -8,35 +8,34 @@ class House extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: props.username,
-            session_token: props.session_token,
             rooms: <p><b>No Rooms available</b></p>
         }
     }
 
     componentDidMount() {
         fetch('http://localhost:8080/rooms/', {
-                method: 'GET',
-                headers: { 
-                    'user': this.state.username,
-                    'session-token': this.state.session_token,
-                },
-            })
-            .then( (res) => {
-                if (res.status === 401) {
-                    this.props.logOut(1)
-                }
-                else if (res.status === 200) {
-                    this.mapRooms(res.rooms)
-                }
-                else {
-                    this.setState({rooms: <p><b>An error has occurred.</b></p>})
-                }
-            })
-            .catch( error => this.props.logOut(2))
-            // .catch( error => this.mapRooms([{name: "A", icon: './img/icons/rooms/icon-kitchen.svg', devices: [{yes: "yes"}], id: "test"}, 
-            //         {name: "A", icon: './img/icons/rooms/icon-kitchen.svg', devices: [{yes: "yes"}], id: "test"}]))
-            // .catch( error => { this.mapRooms([])})
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then( (res) => {
+            if (res.status === 401) {
+                this.props.logOut(1);
+            } else if (res.status === 200) {
+                return res.text();                
+            } else {
+                return null;
+            }
+        })
+        .then( (data) => {
+            if (data === null) {
+                this.setState({ rooms: <p><b>An error has occurred.</b></p> });
+            } else {
+                this.mapRooms(JSON.parse(data));
+            }
+        });
     }
 
     /**
@@ -45,11 +44,11 @@ class House extends React.Component {
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
-            this.setState({rooms: <p><b>No Rooms available</b></p>})
+            this.setState({ rooms: <p><b>No Rooms available</b></p> });
         }
         else {
-            let toSet =  rooms.map((room) => <div className="room"><div className="image vertical-center"><img src={room.icon} alt="device-logo" /></div><div className="room-name vertical-center">{room.name}</div><div className="dev-number vertical-center">{room.devices.length}</div><div className="room-button1 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToEditRoom(room.id)}>edit</i></div><div className="room-button2 vertical-center"><i className="material-icons btn-edit"onClick={() => this.goToRoom(room.id)}>visibility-outlined</i></div></div>)
-            this.setState({rooms: toSet})
+            let toSet = rooms.map((room) => <div className="room"><div className="image vertical-center"><img src={room.icon} alt="device-logo" /></div><div className="room-name vertical-center">{room.name}</div><div className="dev-number vertical-center">{room.devices.length}</div><div className="room-button1 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToEditRoom(room.id)}>edit</i></div><div className="room-button2 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToRoom(room.id)}>visibility-outlined</i></div></div>)
+            this.setState({ rooms: toSet })
         }
     }
 
@@ -76,7 +75,7 @@ class House extends React.Component {
                     <div className="canvas2">
                         <div className="informations"><div className="name1">Name</div></div>
                         <hr className="line" />
-                            {this.state.rooms}
+                        {this.state.rooms}
                         <hr className="line" />
                     </div>
                 </div>

@@ -35,7 +35,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            loggedIn: false,
+            loggedIn: true,
 
             toHomepage: false,
             toDashboard: false,
@@ -47,7 +47,7 @@ class App extends React.Component {
             toRoom: false,
 
             roomTo: "",
-            deviceTo: "test",
+            deviceTo: "",
 
             username: "",
             session_token: ""
@@ -58,25 +58,11 @@ class App extends React.Component {
      * Checks localStorage values and updates the state accordingly
      */
     componentDidMount() {
-        let newUsername;
-        if (localStorage.getItem("username") === null) {
-            newUsername = "";
-        }
-        else {
-            newUsername = localStorage.getItem("username");
-        }
+        let newUsername = localStorage.getItem("username");
+        let newSession_token = localStorage.getItem("session_token");
+        let newLoggedIn = localStorage.getItem("loggedIn");
 
-        let newSession_token;
-        if (localStorage.getItem("session_token") === null) {
-            newSession_token = "";
-        }
-        else {
-            newSession_token = localStorage.getItem("session_token");
-        }
-
-        let newLoggedIn = localStorage.getItem("loggedIn") === "true";
-
-        if (newLoggedIn) {
+        if (newLoggedIn === "true") {
             fetch('http://localhost:8080/auth/validate/', {
                 method: 'POST',
                 headers: {
@@ -89,13 +75,9 @@ class App extends React.Component {
                 : 
                 this.logOut(0)
             )
-                // Uncomment the following line to enter production mode
-                .catch( error => this.logOut())
-                // Uncomment the following line to enter testing mode
-                // .catch(error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
-            this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
+            this.setState({ username: "", session_token: "", loggedIn: false })
         }
     }
 
@@ -180,7 +162,7 @@ class App extends React.Component {
     }
 
     /**
-     * Used to set usernme and session token
+     * Used to set username and session token
      */
     logIn = (user, token) => {
         this.setState({
@@ -367,9 +349,9 @@ class App extends React.Component {
                             <Route path="/addRoom">
                                 {this.state.loggedIn ? 
                                     <AddRoom
-                                        redirectHouse = {this.redirectHouse} 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        redirectHouse = {this.redirectHouse}                                        
                                         logOut = {this.logOut} 
                                         findPathRoom = {this.findPathRoom}
                                     />
