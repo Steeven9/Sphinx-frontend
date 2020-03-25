@@ -3,6 +3,7 @@ import '../App.css';
 import '../components/css/house.css';
 import imgGarage from './img/icons/rooms/icon-garage.svg';
 
+
 class House extends React.Component {
 
     constructor(props) {

@@ -3,6 +3,7 @@ import '../App.css';
 import imgAllDevice from './img/icons/dashboard/icon-all-devices.svg';
 import imgAllRoom from './img/icons/dashboard/icon-all-rooms.svg';
 
+
 class Dashboard extends React.Component {
 
     constructor(props) {

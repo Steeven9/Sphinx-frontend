@@ -1,6 +1,8 @@
 import React from 'react';
 import '../App.css';
 import './css/loginPages.css';
+
+
 class Signup extends React.Component {
 
     constructor(props) {

@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.css';
 import './css/loginPages.css';
 
+
 class Login extends React.Component {
 
     constructor(props) {
@@ -79,7 +80,7 @@ class Login extends React.Component {
                     <div className="content-box1 content-box z-depth-2">
 
                         <h2 className="title">Login</h2>
-                        
+
                         <p>All fields are required</p>
 
                         <div
@@ -115,7 +116,10 @@ class Login extends React.Component {
                                     disabled= {!isEnabled}
                                     name="button"
                                     className="btn-primary btn"
+                                // Uncomment the following line to enter production mode
                                     onClick={this.sendDatas}>Login</button>
+                                {/*// Uncomment the following line to enter testing mode*/}
+                                {/*onClick={this.sendDatasTest}>Login</button>*/}
                             </div>
                         </div>
                     </div>
