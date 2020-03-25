@@ -86,10 +86,10 @@ class App extends React.Component {
                 : 
                 this.logOut()
             )
-                // Uncomment th efollowing line to enter production mode
-                // .catch( error => this.logOut())
+                // Uncomment the following line to enter production mode
+                .catch( error => this.logOut())
                 // Uncomment the following line to enter testing mode
-                .catch(error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
+                // .catch(error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
             this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
