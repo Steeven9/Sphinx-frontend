@@ -27,6 +27,7 @@ import {
     Route,
     Redirect,
 } from "react-router-dom";
+import Footer from "./components/Footer";
 
 class App extends React.Component {
 
@@ -363,8 +364,11 @@ class App extends React.Component {
                                 <Error404 />
                             </Route>
 
+
                         </Switch>
                     </main>
+
+                    <Footer />
                 </div>
             </Router>
         );
