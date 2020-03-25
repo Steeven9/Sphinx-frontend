@@ -29,7 +29,7 @@ class Signup extends React.Component {
             body: JSON.stringify(
             {
                 username: this.state.username, 
-                email: this.state.username, 
+                email: this.state.email, 
                 fullname: this.state.firstname + " " + this.state.lastname,
                 password: this.state.password
             })
@@ -87,17 +87,17 @@ class Signup extends React.Component {
 
                         <div className="dates">
 
-                            <div className="dates-input"><input className="cred" required={true} name="firstname" value={this.state.firstname} onChange={this.handleFirstnameChange} type="text" placeholder="First name" /></div>
+                            <div className="dates-input"><input className="cred" required name="firstname" value={this.state.firstname} onChange={this.handleFirstnameChange} type="text" placeholder="First name" /></div>
 
-                            <div className="dates-input"><input className="cred" required={true} name="lastname" value={this.state.lastname} onChange={this.handleLastnameChange} type="text" placeholder="Last name" /></div>
+                            <div className="dates-input"><input className="cred" required name="lastname" value={this.state.lastname} onChange={this.handleLastnameChange} type="text" placeholder="Last name" /></div>
 
-                            <div className="dates-input"><input className="cred" required={true} name="email" value={this.state.email} onChange={this.handleEmailChange} type="email" placeholder="Email" /></div>
+                            <div className="dates-input"><input className="cred" required name="email" value={this.state.email} onChange={this.handleEmailChange} type="email" placeholder="Email" /></div>
 
-                            <div className="dates-input"><input className="cred" required={true} name="username" value={this.state.username} onChange={this.handleUsernameChange} type="text" placeholder="Username" /></div>
+                            <div className="dates-input"><input className="cred" required name="username" value={this.state.username} onChange={this.handleUsernameChange} type="text" placeholder="Username" /></div>
 
-                            <div className="dates-input"><input className="cred" required={true} name="password" value={this.state.password} onChange={this.handlePasswordChange} type="password" placeholder="Password" /></div>
+                            <div className="dates-input"><input className="cred" required name="password" value={this.state.password} onChange={this.handlePasswordChange} type="password" placeholder="Password" /></div>
 
-                            <div className="dates-input"><input className="cred" required={true} name="confirmPassword" value={this.state.confirmPassword} onChange={this.handleConfirmPasswordChange} type="password" placeholder="Confirm Password" /></div>
+                            <div className="dates-input"><input className="cred" required name="confirmPassword" value={this.state.confirmPassword} onChange={this.handleConfirmPasswordChange} type="password" placeholder="Confirm Password" /></div>
 
                         </div>
 

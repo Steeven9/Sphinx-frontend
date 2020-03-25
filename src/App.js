@@ -322,7 +322,7 @@ class App extends React.Component {
                                 />
                             </Route>
 
-                            <Route path="/verify">
+                            <Route path="/verification">
                                 <Verification />
                             </Route>
 
