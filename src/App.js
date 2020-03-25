@@ -33,6 +33,15 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
+        let username = "";
+        let session_token = "";
+
+        try {
+            username = localStorage.getItem('username');
+            session_token = localStorage.getItem('session_token');
+        } catch(e) {
+            console.log(e);
+        }
 
         this.state = {
             loggedIn: true,
@@ -49,8 +58,8 @@ class App extends React.Component {
             roomTo: "",
             deviceTo: "",
 
-            username: "",
-            session_token: ""
+            username: username,
+            session_token: session_token
         }
     }
 
@@ -66,15 +75,15 @@ class App extends React.Component {
             fetch('http://localhost:8080/auth/validate/', {
                 method: 'POST',
                 headers: {
-                   'user': newUsername,
-                   'session-token': newSession_token
+                    'user': newUsername,
+                    'session-token': newSession_token
                 },
             })
-            .then( (res) => res.status === 200 ? 
-                this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }) 
-                : 
-                this.logOut(0)
-            )
+                .then( (res) => res.status === 200 ?
+                    this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
+                    :
+                    this.logOut(0)
+                )
         }
         else {
             this.setState({ username: "", session_token: "", loggedIn: false })
@@ -255,7 +264,7 @@ class App extends React.Component {
         return path;
     }
 
-    
+
     /**
      * Take cares of switching from one path to the other, adding the Header and the Footer.
      * It only calls different components and deciding which ones to call, it has no pure html.
@@ -273,9 +282,9 @@ class App extends React.Component {
                 { this.state.toRoom ? <Redirect to='/room' /> : <React.Fragment /> }
 
                 <div id="wrapper">
-                    <Header 
+                    <Header
                         loggedIn = {this.state.loggedIn}
-                        redirectDashboard = {this.redirectDashboard} 
+                        redirectDashboard = {this.redirectDashboard}
                     />
 
                     <main>
@@ -284,7 +293,7 @@ class App extends React.Component {
                             <Route path="/login">
                                 {this.state.loggedIn ? this.accessDenied() :
                                     <Login
-                                        redirectDashboard = {this.redirectDashboard} 
+                                        redirectDashboard = {this.redirectDashboard}
                                         logIn = {this.logIn}
                                     />
                                 }
@@ -293,14 +302,14 @@ class App extends React.Component {
                             <Route path="/signup">
                                 {this.state.loggedIn ? this.accessDenied() :
                                     <Signup
-                                        redirectLogin = {this.redirectLogin} 
+                                        redirectLogin = {this.redirectLogin}
                                     />
                                 }
                             </Route>
 
                             <Route path="/reset">
                                 <ResetPassword
-                                    redirectLogin = {this.redirectLogin} 
+                                    redirectLogin = {this.redirectLogin}
                                 />
                             </Route>
 
@@ -313,103 +322,103 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/dashboard">
-                                {this.state.loggedIn ? 
-                                    <Dashboard 
+                                {this.state.loggedIn ?
+                                    <Dashboard
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/house">
-                                {this.state.loggedIn ? 
-                                    <House 
+                                {this.state.loggedIn ?
+                                    <House
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        logOut = {this.logOut} 
-                                        redirectEditRoom = {this.redirectEditRoom} 
-                                        redirectRoom = {this.redirectRoom} 
+                                        logOut = {this.logOut}
+                                        redirectEditRoom = {this.redirectEditRoom}
+                                        redirectRoom = {this.redirectRoom}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/editRoom">
-                                {this.state.loggedIn && (this.state.roomTo !== "") ? 
-                                    <EditRoom 
+                                {this.state.loggedIn && (this.state.roomTo !== "") ?
+                                    <EditRoom
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         roomTo = {this.roomTo}
-                                        logOut = {this.logOut} 
-                                        redirectHouse = {this.redirectHouse} 
+                                        logOut = {this.logOut}
+                                        redirectHouse = {this.redirectHouse}
                                         findPathRoom = {this.findPathRoom}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/addRoom">
-                                {this.state.loggedIn ? 
+                                {this.state.loggedIn ?
                                     <AddRoom
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        redirectHouse = {this.redirectHouse}                                        
-                                        logOut = {this.logOut} 
+                                        redirectHouse = {this.redirectHouse}
+                                        logOut = {this.logOut}
                                         findPathRoom = {this.findPathRoom}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/room">
-                                {this.state.loggedIn ? 
-                                    <Room 
+                                {this.state.loggedIn ?
+                                    <Room
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        logOut = {this.logOut} 
+                                        logOut = {this.logOut}
                                         roomTo = {this.roomTo}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/devices">
-                                {this.state.loggedIn ? 
-                                    <Devices 
+                                {this.state.loggedIn ?
+                                    <Devices
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        logOut = {this.logOut} 
-                                        redirectEditDevice = {this.redirectEditDevice} 
+                                        logOut = {this.logOut}
+                                        redirectEditDevice = {this.redirectEditDevice}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/editDevice">
-                                {this.state.loggedIn && (this.state.deviceTo !== "") ? 
-                                    <EditDevice 
+                                {this.state.loggedIn && (this.state.deviceTo !== "") ?
+                                    <EditDevice
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         deviceTo = {this.deviceTo}
-                                        logOut = {this.logOut} 
-                                        redirectDevices = {this.redirectDevices} 
+                                        logOut = {this.logOut}
+                                        redirectDevices = {this.redirectDevices}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/addDevice">
-                                {this.state.loggedIn ? 
-                                    <AddDevice 
+                                {this.state.loggedIn ?
+                                    <AddDevice
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        logOut = {this.logOut} 
-                                        redirectDevices = {this.redirectDevices} 
+                                        logOut = {this.logOut}
+                                        redirectDevices = {this.redirectDevices}
                                         findPathDevice = {this.findPathDevice}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/logout">
-                                {this.state.loggedIn ? 
+                                {this.state.loggedIn ?
                                     <LogOut
-                                        logOut = {this.logOut} 
+                                        logOut = {this.logOut}
                                     />
-                                : this.accessDenied()}
+                                    : this.accessDenied()}
                             </Route>
 
                             <Route path="/changepassword">
