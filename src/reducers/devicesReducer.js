@@ -1,3 +1,10 @@
+/**
+ * This reducer controles the actions triggered by the events
+ * handled by the device components and its children
+ * @param state
+ * @param action
+ * @returns {state[]}
+ */
 const devicesReducer = (state, action) => {
     switch (action.type) {
         case 'POPULATE_DEVICES':
@@ -7,7 +14,10 @@ const devicesReducer = (state, action) => {
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
 
-            // Uncomment the following lines to sync nested devices
+            /**
+             * Uncomment the following IF statements to sync the state
+             * of nested devices while not using a database
+             */
             if (action.device.on !== undefined) {
                 state.forEach((d) => {
                     if (d.switched === action.device.id) {
@@ -31,8 +41,7 @@ const devicesReducer = (state, action) => {
 
         case 'SYNC_DEVICES':
             console.log('Dispatch: SYNC_DEVICE');
-            // console.log(state)
-            // console.log(action.devices)
+            // To be coded if needed
             return state;
 
         default:
