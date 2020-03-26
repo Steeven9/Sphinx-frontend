@@ -54,7 +54,8 @@ class AddDevice extends React.Component {
         if (rooms.length === 0) {
             this.setState({ selectRooms: <select className="selector" disabled onChange={this.handleRoomChange}><option value="0">No Room Available</option></select>, room: "0" })
         } else {
-            let toSet = <select className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option value={room.id}>{room.name}</option>)}</select>
+            let i = 0;
+            let toSet = <select className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
             this.setState({ selectRooms: toSet })
         }
     }
@@ -118,7 +119,7 @@ class AddDevice extends React.Component {
      */
     deviceCreated = () => {
         if (this.state.success) {
-            return (<p><i>Device created succesfully</i></p>)
+            return (<p><i>Device created successfully</i></p>)
         }
         else if (this.state.error) {
             return (<p>An error has occurred, please try again</p>)

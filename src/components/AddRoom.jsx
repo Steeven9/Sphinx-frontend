@@ -66,7 +66,7 @@ class AddRoom extends React.Component {
      */
     roomCreated = () => {
         if (this.state.success) {
-            return(<p><i>Room created succesfully</i></p>)
+            window.location.href = '/house';
         }
         else if (this.state.error) {
             return(<p>An error has occurred, please try again</p>)
