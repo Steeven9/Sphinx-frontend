@@ -14,7 +14,7 @@ const DevicesPanel = () => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
     // Stores devices in localStorage
-    useEffect(async () => {
+    useEffect( () => {
         // if (localStorage.devices === undefined) {
         //     localStorage.setItem('devices', JSON.stringify(myDevices));
         //     console.log('Devices stored in localStorage');
@@ -100,99 +100,99 @@ const DevicesPanel = () => {
 };
 
 // Temporary mock devices to populate the localStorage
-const myDevices = [
-    {
-        id: 0,
-        icon: "DimmableLight",
-        type: 2,
-        name: "LED light",
-        room: "Master bedroom",
-        switched: 2,
-        slider: 75,
-        on: false
-    },
-    {
-        id: 1,
-        icon: "Light",
-        type: 1,
-        room: "Kitchen",
-        name: "Light bulb",
-        switched: 3,
-        on: true
-    },
-    {
-        id: 2,
-        icon: "DimmableSwitch",
-        type: 4,
-        room: "Master bedroom",
-        name: "Dimmable switch",
-        slider: 100,
-        switches: [0, 7],
-        on: false
-    },
-    {
-        id: 3,
-        icon: "Switch",
-        type: 3,
-        name: "Switch",
-        room: "Kitchen",
-        switches: [1],
-        on: true
-    },
-    {
-        id: 4,
-        icon: "TempSensor",
-        type: 9,
-        room: "Living room",
-        name: "Temperature sensor",
-        label: "2'000 lm"
-    },
-    {
-        id: 5,
-        icon: "SmartPlug",
-        type: 6,
-        room: "Garage",
-        name: "Smart plug",
-        label: '350 kWh',
-        on: true
-    },
-    {
-        id: 6,
-        icon: "MotionSensor",
-        type: 10,
-        room: "Backyard",
-        name: "Motion sensor"
-    },
-    {
-        id: 7,
-        icon: "DimmableLight",
-        type: 2,
-        name: "Smart LED light",
-        room: "Master bedroom",
-        switched: 2,
-        slider: 30,
-        on: false
-    },
-    {
-        id: 8,
-        icon: "iconDimmerRegular",
-        type: 5,
-        name: "Regular dimmer",
-        room: "Guest's room",
-        switches: [9],
-        slider: 0,
-        on: false
-    },
-    {
-        id: 9,
-        icon: "DimmableLight",
-        type: 2,
-        name: "Smart LED light 2",
-        room: "Guest's room",
-        switched: 8,
-        slider: 60,
-        on: false
-    }
-];
+// const myDevices = [
+//     {
+//         id: 0,
+//         icon: "DimmableLight",
+//         type: 2,
+//         name: "LED light",
+//         room: "Master bedroom",
+//         switched: 2,
+//         slider: 75,
+//         on: false
+//     },
+//     {
+//         id: 1,
+//         icon: "Light",
+//         type: 1,
+//         room: "Kitchen",
+//         name: "Light bulb",
+//         switched: 3,
+//         on: true
+//     },
+//     {
+//         id: 2,
+//         icon: "DimmableSwitch",
+//         type: 4,
+//         room: "Master bedroom",
+//         name: "Dimmable switch",
+//         slider: 100,
+//         switches: [0, 7],
+//         on: false
+//     },
+//     {
+//         id: 3,
+//         icon: "Switch",
+//         type: 3,
+//         name: "Switch",
+//         room: "Kitchen",
+//         switches: [1],
+//         on: true
+//     },
+//     {
+//         id: 4,
+//         icon: "TempSensor",
+//         type: 9,
+//         room: "Living room",
+//         name: "Temperature sensor",
+//         label: "2'000 lm"
+//     },
+//     {
+//         id: 5,
+//         icon: "SmartPlug",
+//         type: 6,
+//         room: "Garage",
+//         name: "Smart plug",
+//         label: '350 kWh',
+//         on: true
+//     },
+//     {
+//         id: 6,
+//         icon: "MotionSensor",
+//         type: 10,
+//         room: "Backyard",
+//         name: "Motion sensor"
+//     },
+//     {
+//         id: 7,
+//         icon: "DimmableLight",
+//         type: 2,
+//         name: "Smart LED light",
+//         room: "Master bedroom",
+//         switched: 2,
+//         slider: 30,
+//         on: false
+//     },
+//     {
+//         id: 8,
+//         icon: "iconDimmerRegular",
+//         type: 5,
+//         name: "Regular dimmer",
+//         room: "Guest's room",
+//         switches: [9],
+//         slider: 0,
+//         on: false
+//     },
+//     {
+//         id: 9,
+//         icon: "DimmableLight",
+//         type: 2,
+//         name: "Smart LED light 2",
+//         room: "Guest's room",
+//         switched: 8,
+//         slider: 60,
+//         on: false
+//     }
+// ];
 
 export {DevicesPanel as default}
