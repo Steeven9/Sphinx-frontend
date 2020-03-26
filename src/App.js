@@ -35,16 +35,19 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            loggedIn: false,
+            loggedIn: true,
+
             toHomepage: false,
             toDashboard: false,
             toLogin: false,
             toHouse: false,
+            toDevices: false,
             toEditRoom: false,
             toEditDevice: false,
+            toRoom: false,
 
-            roomToEdit: "",
-            deviceToEdit: "",
+            roomTo: "",
+            deviceTo: "",
 
             username: "",
             session_token: ""
@@ -55,44 +58,26 @@ class App extends React.Component {
      * Checks localStorage values and updates the state accordingly
      */
     componentDidMount() {
-        let newUsername;
-        if (localStorage.getItem("username") === null) {
-            newUsername = "";
-        }
-        else {
-            newUsername = localStorage.getItem("username");
-        }
+        let newUsername = localStorage.getItem("username");
+        let newSession_token = localStorage.getItem("session_token");
+        let newLoggedIn = localStorage.getItem("loggedIn");
 
-        let newSession_token;
-        if (localStorage.getItem("session_token") === null) {
-            newSession_token = "";
-        }
-        else {
-            newSession_token = localStorage.getItem("session_token");
-        }
-
-        let newLoggedIn = localStorage.getItem("loggedIn") === "true";
-
-        if (newLoggedIn) {
-            fetch('http://localhost:8080/auth/validate/' + newUsername, {
+        if (newLoggedIn === "true") {
+            fetch('http://localhost:8080/auth/validate/', {
                 method: 'POST',
                 headers: {
-                    "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+                   'user': newUsername,
+                   'session-token': newSession_token
                 },
-                body: newSession_token
             })
             .then( (res) => res.status === 200 ? 
                 this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }) 
                 : 
-                this.logOut()
+                this.logOut(0)
             )
-                // Uncomment the following line to enter production mode
-                .catch( error => this.logOut())
-                // Uncomment the following line to enter testing mode
-                // .catch(error => this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn }))
         }
         else {
-            this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
+            this.setState({ username: "", session_token: "", loggedIn: false })
         }
     }
 
@@ -103,11 +88,17 @@ class App extends React.Component {
      */
     stopRedirections = () => {
         this.setState({
+            toHomepage: false,
             toDashboard: false,
             toLogin: false,
-            toDevices: false,
-            toRoom: false,
             toHouse: false,
+            toDevices: false,
+            toEditRoom: false,
+            toEditDevice: false,
+            toRoom: false,
+
+            roomTo: "",
+            deviceTo: ""
         });
     }
 
@@ -141,11 +132,16 @@ class App extends React.Component {
             toHouse: true,
         });
     }
-
+    redirectDevices = () => {
+        this.stopRedirections();
+        this.setState({
+            toDevices: true,
+        });
+    }
     redirectEditRoom = (room) => {
         this.stopRedirections();
         this.setState({
-            roomToEdit: room,
+            roomTo: room,
             toEditRoom: true,
         });
     }
@@ -153,15 +149,22 @@ class App extends React.Component {
     redirectEditDevice = (device) => {
         this.stopRedirections();
         this.setState({
-            deviceToEdit: device,
+            deviceTo: device,
             toEditDevice: true,
+        });
+    }
+    redirectRoom = (room) => {
+        this.stopRedirections();
+        this.setState({
+            roomTo: room,
+            toRoom: true,
         });
     }
 
     /**
-     * Used to set usernme and session token
+     * Used to set username and session token
      */
-    setSession = (user, token) => {
+    logIn = (user, token) => {
         this.setState({
             username: user,
             session_token: token,
@@ -171,13 +174,15 @@ class App extends React.Component {
         localStorage.setItem("username", user);
         localStorage.setItem("session_token", token);
         localStorage.setItem("loggedIn", "true");
+
+        window.location.href = "/dashboard";
     }
 
     /**
-     * Used to set usernme and session token
+     * Used to log out.
+     * exitCode: if 0, normal log out. If 1, expired session token, if 2, unexpected error
      */
-    logOut = () => {
-        // console.log(this.loggedIn)
+    logOut = (exitCode) => {
         this.setState({
             username: "",
             session_token: "",
@@ -187,6 +192,13 @@ class App extends React.Component {
         localStorage.setItem("username", "");
         localStorage.setItem("session_token", "");
         localStorage.setItem("loggedIn", "false");
+
+        if (exitCode === 1) {
+            alert("Session expired. Please log in again.")
+        }
+        else if (exitCode === 2) {
+            alert("Unexpected error, logging out...")
+        }
 
         window.location.href = '/';
     }
@@ -206,6 +218,43 @@ class App extends React.Component {
         )
     }
 
+    /**
+     * Return Device icon path
+     */
+    findPathDevice = (type) => {
+        let path = './img/icons/devices/'
+        if (type === "1") path += 'bulb-regular'
+        else if (type === "2") path += 'bulb-led'
+        else if (type === "3") path += 'switch'
+        else if (type === "4") path += 'dimmer-state'
+        else if (type === "5") path += 'dimmer-regular'
+        else if (type === "6") path += 'smart-plug'
+        else if (type === "7") path += 'sensor-humidity'
+        else if (type === "8") path += 'sensor-light'
+        else if (type === "9") path += 'sensor-temperature'
+        else if (type === "10") path += 'sensor-motion'
+        else path += 'unknwon-device'
+        path += '.svg'
+        return path;
+    }
+
+    /**
+     * Return Room icon/background path
+     * @param flag: if false icon, if true background
+     */
+    findPathRoom = (type, flag) => {
+        let path = './img/'
+        if (flag) {
+            path += 'backgrounds/rooms/background-'
+        }
+        else {
+            path += 'icons/rooms/icon-'
+        }
+        path += type
+        path += '.svg'
+        return path;
+    }
+
     
     /**
      * Take cares of switching from one path to the other, adding the Header and the Footer.
@@ -218,6 +267,10 @@ class App extends React.Component {
                 { this.state.toDashboard ? <Redirect to='/dashboard' /> : <React.Fragment /> }
                 { this.state.toLogin ? <Redirect to='/login' /> : <React.Fragment /> }
                 { this.state.toHouse ? <Redirect to='/house' /> : <React.Fragment /> }
+                { this.state.toDevices ? <Redirect to='/devices' /> : <React.Fragment /> }
+                { this.state.toEditRoom ? <Redirect to='/editRoom' /> : <React.Fragment /> }
+                { this.state.toEditDevice ? <Redirect to='/editDevice' /> : <React.Fragment /> }
+                { this.state.toRoom ? <Redirect to='/room' /> : <React.Fragment /> }
 
                 <div id="wrapper">
                     <Header 
@@ -232,7 +285,7 @@ class App extends React.Component {
                                 {this.state.loggedIn ? this.accessDenied() :
                                     <Login
                                         redirectDashboard = {this.redirectDashboard} 
-                                        setSession = {this.setSession}
+                                        logIn = {this.logIn}
                                     />
                                 }
                             </Route>
@@ -251,7 +304,7 @@ class App extends React.Component {
                                 />
                             </Route>
 
-                            <Route path="/verify">
+                            <Route path="/verification">
                                 <Verification />
                             </Route>
 
@@ -275,17 +328,20 @@ class App extends React.Component {
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
                                         redirectEditRoom = {this.redirectEditRoom} 
+                                        redirectRoom = {this.redirectRoom} 
                                     />
                                 : this.accessDenied()}
                             </Route>
 
                             <Route path="/editRoom">
-                                {this.state.loggedIn && (this.state.roomToEdit !== "") ? 
+                                {this.state.loggedIn && (this.state.roomTo !== "") ? 
                                     <EditRoom 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        roomToEdit = {this.roomToEdit}
+                                        roomTo = {this.roomTo}
                                         logOut = {this.logOut} 
+                                        redirectHouse = {this.redirectHouse} 
+                                        findPathRoom = {this.findPathRoom}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -293,10 +349,11 @@ class App extends React.Component {
                             <Route path="/addRoom">
                                 {this.state.loggedIn ? 
                                     <AddRoom
-                                        redirectHouse = {this.redirectHouse} 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
+                                        redirectHouse = {this.redirectHouse}                                        
                                         logOut = {this.logOut} 
+                                        findPathRoom = {this.findPathRoom}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -307,6 +364,7 @@ class App extends React.Component {
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
+                                        roomTo = {this.roomTo}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -323,12 +381,13 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/editDevice">
-                                {this.state.loggedIn && (this.state.deviceToEdit !== "") ? 
+                                {this.state.loggedIn && (this.state.deviceTo !== "") ? 
                                     <EditDevice 
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
-                                        deviceToEdit = {this.deviceToEdit}
+                                        deviceTo = {this.deviceTo}
                                         logOut = {this.logOut} 
+                                        redirectDevices = {this.redirectDevices} 
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -339,6 +398,8 @@ class App extends React.Component {
                                         username = {this.state.username}
                                         session_token = {this.state.session_token}
                                         logOut = {this.logOut} 
+                                        redirectDevices = {this.redirectDevices} 
+                                        findPathDevice = {this.findPathDevice}
                                     />
                                 : this.accessDenied()}
                             </Route>
@@ -347,7 +408,6 @@ class App extends React.Component {
                                 {this.state.loggedIn ? 
                                     <LogOut
                                         logOut = {this.logOut} 
-                                        redirectHomepage = {this.redirectHomepage}
                                     />
                                 : this.accessDenied()}
                             </Route>
