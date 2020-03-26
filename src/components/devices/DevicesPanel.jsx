@@ -20,7 +20,7 @@ const DevicesPanel = () => {
         //     console.log('Devices stored in localStorage');
         // }
 
-        fetch('http://localhost:8080/rooms/', {
+        fetch('http://localhost:8080/devices/', {
             method: 'GET',
             headers: {
                 'user': localStorage.getItem('username'),
@@ -39,7 +39,12 @@ const DevicesPanel = () => {
             .then( (data) => {
                 let response = JSON.parse(data);
 
-                    dispatch({type: 'POPULATE_DEVICES', devices: [{}]});
+                    if (data === null) {
+                    response = [{name: 'You have no devices yet. Please add a new one.'}]
+                    }
+
+                    dispatch({type: 'POPULATE_DEVICES', devices: response});
+
                     console.log('Populated devices');
                     console.log(response);
             })
@@ -51,10 +56,10 @@ const DevicesPanel = () => {
     // useEffect(() => {
     //     // const devices = JSON.parse(localStorage.getItem('devices'));
     //     // console.log('Devices retrieved from localStorage');
-    //     // if(devices) {
-    //     //     dispatch({type: 'POPULATE_DEVICES', devices: devices});
-    //     //     console.log('Populated devices');
-    //     // }
+    //     if(devices) {
+    //         dispatch({type: 'POPULATE_DEVICES', devices: devices});
+    //         console.log('Populated devices');
+    //     }
     //
     // }, []);
 

@@ -63,7 +63,7 @@ const devicesReducer = (state, action) => {
             })
                 .then(res => {
                     if (res.status === 204){
-                        fetch('http://localhost:8080/rooms/', {
+                        fetch('http://localhost:8080/devices/', {
                             method: 'GET',
                             headers: {
                                 'user': localStorage.getItem('username'),
