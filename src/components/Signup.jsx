@@ -42,10 +42,10 @@ class Signup extends React.Component {
      */
     displayResult = () => {
         if (this.state.success === 1) {
-            return (<p>Account created successfully, please check your emails.</p>)
+            return (<p>Account created successfully, please check your inbox.</p>)
         }
         else if (this.state.success === 0) {
-            return (<p>The Account couldn't be created. Try checking your informations.</p>)
+            return (<p>The account couldn't be created. Try checking your information.</p>)
         }
     }
 
@@ -103,11 +103,11 @@ class Signup extends React.Component {
 
                         { this.displayResult() }
 
-                        <div className="dates">
+                        <div className="center">
 
-                            <div className="dates-input"><a href="/login"><button type="button" name="button" className="btn-secondary btn">Sign in</button></a></div>
+                            <button type="button" name="button" className="btn-secondary btn" onClick={() => window.location.href="/login"}>Sign in</button>
 
-                            <div className="dates-input"><button type="button" disabled={!isEnabled} name="button" className="btn-primary btn" onClick={this.sendDatas}>Create</button></div>
+                            <button type="button" disabled={!isEnabled} name="button" className="btn-primary btn" onClick={this.sendDatas}>Create</button>
 
                         </div>
                     </div>

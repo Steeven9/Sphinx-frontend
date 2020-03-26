@@ -26,7 +26,7 @@ class Dashboard extends React.Component {
                 </div>
                 <div className="content-box3" onClick={() => { window.location.href = '/house'; }}>
                     <img src={imgAllRoom} alt="All rooms" />
-                    <a href="/house" className="dash-text">See device by room</a>
+                    <a href="/house" className="dash-text">See devices by room</a>
                 </div>
             </div>
         );

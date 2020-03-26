@@ -84,9 +84,9 @@ class AddRoom extends React.Component {
                 <div className="content-box">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
-                        <div className="dates-input"><input style={{ width: 300 + 'px' }} type="text" name="roomName" placeholder="Room Name"
-                                onChange={this.handleRoomNameChange} required/></div>
-                        <div className="Handle-input"> 
+                        <span className="textFields"><input type="text" name="roomName" placeholder="Room Name"
+                                onChange={this.handleRoomNameChange} required/></span>
+                        <span className="textFields"> 
                             <select className="selector" onChange={this.handleTypeChange}>
                                 <option value="0">Select Room Type</option>
                                 <option value="attic">Attic</option>
@@ -103,12 +103,12 @@ class AddRoom extends React.Component {
                                 <option value="living-room">Living room</option>
                                 <option value="office">Office</option>
                             </select>
-                        </div>
+                        </span>
                         {this.roomCreated()}
                     </div>
-                    <div className="dates">
-                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button></div>
-                        <div className="dates-input"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save room</button></div>
+                    <div className="center">
+                        <button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button>
+                        <button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save room</button>
                     </div>
                 </div>
             </div>

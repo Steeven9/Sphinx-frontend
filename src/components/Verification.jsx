@@ -58,7 +58,7 @@ class Verification extends React.Component {
             return (<p>Account verified. <a href="/login">Click here</a> to log in</p>)
         }
         else if (this.state.show === 2) {
-            return (<p>The code is invalid, or the username doesn't exist.</p>)
+            return (<p>The code is invalid, the username doesn't exist, or the account has already been verified.</p>)
         }
         else if (this.state.show === 3) {
             return (<p>An error has occurred. Please try again.</p>)

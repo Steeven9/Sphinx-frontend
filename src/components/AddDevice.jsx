@@ -39,7 +39,7 @@ class AddDevice extends React.Component {
             let response = JSON.parse(data);
             if (response === null) {
                 this.setState({ room: "-1" })
-                this.setState({ selectRooms: <select className="selector" onChange={this.handleRoomChange}><option value="-1">No Room Available - Error Occurred</option></select>, room: "-1" })
+                this.setState({ selectRooms: <select className="selector" onChange={this.handleRoomChange}><option value="-1">Error Occurred</option></select>, room: "-1" })
             } else {
                 this.mapRooms(response);
             }
@@ -137,10 +137,10 @@ class AddDevice extends React.Component {
                 <div className="content-box">
                     <h2 className="title">Add device</h2>
                     <div className="dates">
-                        <div className="dates-input">
-                            <input style={{ width: 300 + 'px' }} type="text" name="" placeholder="Device Name" onChange={this.handleDeviceNameChange} required />
+                        <div className="textFields">
+                            <input type="text" name="" placeholder="Device Name" onChange={this.handleDeviceNameChange} required />
                         </div>
-                        <div className="Handle-input">
+                        <div className="textFields">
                             <select className="selector" onChange={this.handleTypeChange}>
                                 <option value="0">Device type</option>
                                 <option value="1">Light</option>
@@ -155,19 +155,19 @@ class AddDevice extends React.Component {
                                 <option value="10">Motion sensor</option>
                             </select>
                         </div>
-                        <div className="Handle-input">
+                        <div className="textFields">
                             {this.state.selectRooms}
                         </div>
-                        {/* <div className="Handle-input"> 
+                        {/* <div className="textFields"> 
                             <select className="selector" onChange={this.handlePairingChange}>
                                 <option value="0">No pairing</option>
                             </select>
                         </div> */}
                         {this.deviceCreated()}
                     </div>
-                    <div className="dates">
-                        <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button></div>
-                        <div className="dates-input"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save device</button></div>
+                    <div className="center">
+                        <button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button>
+                        <button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save device</button>
                     </div>
                 </div>
             </div>
