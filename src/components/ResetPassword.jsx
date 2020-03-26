@@ -36,7 +36,7 @@ class ResetPassword extends React.Component {
      */
     displayResult = () => {
         if (this.state.success === 1) {
-            return (<p>Password reset completed, please check your emails.</p>)
+            return (<p>Password reset completed, please check your inbox.</p>)
         }
         else if (this.state.success === 0) {
             return (<p>Couldn't reset password, please check your email address and try again.</p>)
@@ -60,15 +60,15 @@ class ResetPassword extends React.Component {
                         <p>Type the email address registered to your account. If we find it in our records, you’ll receive the instructions to
                         restore your password.</p>
 
-                        <div className="dates-input1"><input type="email"  required={true} name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
+                        <div className="dates-input1"><input type="email" required name="email" value={this.state.email} onChange={this.handleEmailChange} placeholder="Email"/></div>
 
                         { this.displayResult() }
 
-                        <div className="buttons1">
+                        <div className="center">
 
-                            <div className="dates-input1"><a href="/login"><button type="button" name="button" className="btn-secondary btn">Cancel</button></a></div>
+                            <button type="button" name="button" className="btn-secondary btn" onClick={() => window.location.href = "/login"}>Cancel</button>
 
-                            <div className="dates-input1"><button type="button" name="button" disabled={!isEnabled} className="btn-primary btn" onClick={this.sendDatas}>Reset</button></div>
+                            <button type="button" name="button" disabled={!isEnabled} className="btn-primary btn" onClick={this.sendDatas}>Reset</button>
 
                         </div>
                     </div>

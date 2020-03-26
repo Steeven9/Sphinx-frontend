@@ -35,6 +35,7 @@ class AddRoom extends React.Component {
                     name: this.state.roomName, 
                     icon: this.props.findPathRoom(this.state.type, 0), 
                     background: this.props.findPathRoom(this.state.type, 1),
+                    devices: []
                 })
             })
             .then( (res) => {
@@ -99,7 +100,7 @@ class AddRoom extends React.Component {
                                 <option value="generic-room">Generic room</option>
                                 <option value="hallway">Hallway</option>
                                 <option value="house-front">House front</option>
-                                <option value="kitchen">House front</option>
+                                <option value="kitchen">Kitchen</option>
                                 <option value="living-room">Living room</option>
                                 <option value="office">Office</option>
                             </select>

@@ -37,7 +37,7 @@ class ChangePassword extends React.Component {
             },
             body: this.state.password
         })
-        .then( (res) => res.status === 200 ? this.setState({ show: 1 }) : this.setState({ show: 3 }) )
+        .then( (res) => res.status === 204 ? this.setState({ show: 1 }) : this.setState({ show: 3 }) )
         .catch( (error) => this.setState({ show: 3 }) )
     }
 

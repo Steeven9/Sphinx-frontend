@@ -92,14 +92,14 @@ class EditDevice extends React.Component {
             <div className="editRoom">
                 <div className="Handle-content-box2">
                     <h2 className="title">Edit Device</h2>
-                    <div className="Handle-dates">
-                        <div className="Handle-input"><input style={{ width: 300 + 'px' }} type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
+                    <div className="textFields">
+                        <div className="textFields"><input type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
                     </div>
                     {this.state.uncomplete ? <p><b>Please fill the name</b></p> : <></>}
-                    <div className="Handle-dates">
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button></div>
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteDevice}>Delete Device</button></div>
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save New Name</button></div>
+                    <div className="center">
+                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteDevice}>Delete Device</button>
+                        <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save</button>
                     </div>
                 </div>
             </div>

@@ -77,7 +77,7 @@ class House extends React.Component {
                     </div>
 
                     <div className="canvas2">
-                        <div className="informations"><div className="name1">Name</div></div>
+                        <div className="informations"><div className="name1">Name</div><div className="name1">Devices</div></div>
                         <hr className="line" />
                         {this.state.rooms}
                         <hr className="line" />
