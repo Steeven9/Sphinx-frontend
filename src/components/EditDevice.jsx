@@ -1,6 +1,7 @@
 import React from 'react';
 import '../App.css';
 import '../components/css/editPages.css';
+import * as qs from 'query-string'
 
 
 class EditDevice extends React.Component {
@@ -10,10 +11,15 @@ class EditDevice extends React.Component {
         this.state = {
             username: props.username,
             session_token: props.session_token,
-            device_id: props.deviceTo,
+            device_id: "",
             deviceName: "",
-            uncomplete: false,
+            incomplete: false,
         }
+    }
+
+    componentDidMount() {
+        const parsed = qs.parse(window.location.search);
+        this.setState({device_id: parsed.id})
     }
 
     /**
@@ -22,7 +28,7 @@ class EditDevice extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.deviceName === "") {
-            this.setState({uncomplete: true})
+            this.setState({incomplete: true})
         }
         else {
             fetch('http://localhost:8080/devices/' + this.state.device_id, {
@@ -39,14 +45,14 @@ class EditDevice extends React.Component {
             })
             .then( (res) => {
                 if (res.status === 204) {
-                    alert("Deivce succesfully edited")
+                    console.log("Device successfully edited")
                     this.props.redirectDevices()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else {
-                    alert("Unexpected error")
+                    console.log("Unexpected error")
                 }
             })
             .catch( error => this.props.logOut(2))
@@ -66,14 +72,14 @@ class EditDevice extends React.Component {
         })
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
-                alert("Device succesfully removed")
+                console.log("Device succesfully removed")
                 this.props.redirectDevices()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
             }
             else {
-                alert("Unexpected error")
+                console.log("Unexpected error")
             }
         })
         .catch( error => this.props.logOut(2))
@@ -95,7 +101,7 @@ class EditDevice extends React.Component {
                     <div className="textFields">
                         <div className="textFields"><input type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
                     </div>
-                    {this.state.uncomplete ? <p><b>Please fill the name</b></p> : <></>}
+                    {this.state.incomplete ? <p><b>Please fill the name</b></p> : <></>}
                     <div className="center">
                         <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteDevice}>Delete Device</button>

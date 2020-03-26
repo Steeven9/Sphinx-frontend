@@ -5,6 +5,7 @@ import DeviceList from './DeviceList'
 import '../css/collapsible-component.css';
 import '../css/collapsible-devices.css';
 
+
 /**
  * Generates a panel with a DevicePanel
  * @returns {DevicePanel}
@@ -13,23 +14,49 @@ const DevicesPanel = () => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
     // Stores devices in localStorage
-    useEffect(() => {
-        if (localStorage.devices === undefined) {
-            localStorage.setItem('devices', JSON.stringify(myDevices));
-            console.log('Devices stored in localStorage');
-        }
+    useEffect(async () => {
+        // if (localStorage.devices === undefined) {
+        //     localStorage.setItem('devices', JSON.stringify(myDevices));
+        //     console.log('Devices stored in localStorage');
+        // }
+
+        fetch('http://localhost:8080/rooms/', {
+            method: 'GET',
+            headers: {
+                'user': localStorage.getItem('username'),
+                'session-token': localStorage.getItem('session_token')
+            },
+        })
+            .then( (res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1);
+                } else if (res.status === 200) {
+                    return res.text();
+                } else {
+                    return null;
+                }
+            })
+            .then( (data) => {
+                let response = JSON.parse(data);
+
+                    dispatch({type: 'POPULATE_DEVICES', devices: [{}]});
+                    console.log('Populated devices');
+                    console.log(response);
+            })
+            .catch(e => console.log(e));
+
     }, []);
 
-    // Retrieves devices from localStorage and dispatches the render action
-    useEffect(() => {
-        const devices = JSON.parse(localStorage.getItem('devices'));
-        console.log('Devices retrieved from localStorage');
-        if(devices) {
-            dispatch({type: 'POPULATE_DEVICES', devices: devices});
-            console.log('Populated devices');
-        }
-
-    }, []);
+    // // Retrieves devices from localStorage and dispatches the render action
+    // useEffect(() => {
+    //     // const devices = JSON.parse(localStorage.getItem('devices'));
+    //     // console.log('Devices retrieved from localStorage');
+    //     // if(devices) {
+    //     //     dispatch({type: 'POPULATE_DEVICES', devices: devices});
+    //     //     console.log('Populated devices');
+    //     // }
+    //
+    // }, []);
 
     useEffect(() => {
         console.log('Devices were updated')
@@ -77,7 +104,7 @@ const myDevices = [
     {
         id: 0,
         icon: "DimmableLight",
-        deviceType: 2,
+        type: 2,
         name: "LED light",
         room: "Master bedroom",
         switched: 2,
@@ -87,7 +114,7 @@ const myDevices = [
     {
         id: 1,
         icon: "Light",
-        deviceType: 1,
+        type: 1,
         room: "Kitchen",
         name: "Light bulb",
         switched: 3,
@@ -96,7 +123,7 @@ const myDevices = [
     {
         id: 2,
         icon: "DimmableSwitch",
-        deviceType: 4,
+        type: 4,
         room: "Master bedroom",
         name: "Dimmable switch",
         slider: 100,
@@ -106,7 +133,7 @@ const myDevices = [
     {
         id: 3,
         icon: "Switch",
-        deviceType: 3,
+        type: 3,
         name: "Switch",
         room: "Kitchen",
         switches: [1],
@@ -115,7 +142,7 @@ const myDevices = [
     {
         id: 4,
         icon: "TempSensor",
-        deviceType: 9,
+        type: 9,
         room: "Living room",
         name: "Temperature sensor",
         label: "2'000 lm"
@@ -123,7 +150,7 @@ const myDevices = [
     {
         id: 5,
         icon: "SmartPlug",
-        deviceType: 6,
+        type: 6,
         room: "Garage",
         name: "Smart plug",
         label: '350 kWh',
@@ -132,14 +159,14 @@ const myDevices = [
     {
         id: 6,
         icon: "MotionSensor",
-        deviceType: 10,
+        type: 10,
         room: "Backyard",
         name: "Motion sensor"
     },
     {
         id: 7,
         icon: "DimmableLight",
-        deviceType: 2,
+        type: 2,
         name: "Smart LED light",
         room: "Master bedroom",
         switched: 2,
@@ -149,7 +176,7 @@ const myDevices = [
     {
         id: 8,
         icon: "iconDimmerRegular",
-        deviceType: 5,
+        type: 5,
         name: "Regular dimmer",
         room: "Guest's room",
         switches: [9],
@@ -159,7 +186,7 @@ const myDevices = [
     {
         id: 9,
         icon: "DimmableLight",
-        deviceType: 2,
+        type: 2,
         name: "Smart LED light 2",
         room: "Guest's room",
         switched: 8,

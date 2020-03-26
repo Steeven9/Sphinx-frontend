@@ -13,7 +13,7 @@ class EditRoom extends React.Component {
             room_id: props.roomTo,
             roomName: "",
             type: "0",
-            uncomplete: false,
+            incomplete: false,
         }
     }
 
@@ -23,7 +23,7 @@ class EditRoom extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.type === "0" || this.state.roomName === "") {
-            this.setState({uncomplete: true})
+            this.setState({incomplete: true})
         }
         else {
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
@@ -42,14 +42,14 @@ class EditRoom extends React.Component {
             })
             .then( (res) => {
                 if (res.status === 204) {
-                    alert("Room succesfully edited")
+                    console.log("Room succesfully edited")
                     this.props.redirectHouse()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else {
-                    alert("Unexpected error")
+                    console.log("Unexpected error")
                 }
             })
             .catch( error => this.props.logOut(2))
@@ -69,14 +69,14 @@ class EditRoom extends React.Component {
         })
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
-                alert("Room succesfully removed")
+                console.log("Room succesfully removed")
                 this.props.redirectHouse()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
             }
             else {
-                alert("Unexpected error")
+                console.log("Unexpected error")
             }
         })
         .catch( error => this.props.logOut(2))
@@ -120,7 +120,7 @@ class EditRoom extends React.Component {
                             </select>
                         </div>
                     </div>
-                    {this.state.uncomplete ? <p><b>Please fill all the data</b></p> : <></>}
+                    {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
                     <div className="center">
                         <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button>

@@ -8,7 +8,7 @@ class AddRoom extends React.Component {
         this.state = {
             success: false,
             error: false,
-            uncomplete: false,
+            incomplete: false,
             roomName: "",
             type: "0"
         }
@@ -20,7 +20,7 @@ class AddRoom extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.type === "0" || this.state.roomName.length === 0) {
-            this.setState({success: false, error: false, uncomplete: true})
+            this.setState({success: false, error: false, incomplete: true})
         }
         else {
             fetch('http://localhost:8080/rooms/', {
@@ -40,13 +40,13 @@ class AddRoom extends React.Component {
             })
             .then( (res) => {
                 if (res.status === 203) {
-                    this.setState({success: true, error: false, uncomplete: false})
+                    this.setState({success: true, error: false, incomplete: false})
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else {
-                    this.setState({success: false, error: true, uncomplete: false});
+                    this.setState({success: false, error: true, incomplete: false});
                 }
             })
             .catch( error => this.props.logOut(2))
@@ -71,7 +71,7 @@ class AddRoom extends React.Component {
         else if (this.state.error) {
             return(<p>An error has occurred, please try again</p>)
         }
-        else if (this.state.uncomplete) {
+        else if (this.state.incomplete) {
             return(<p>Please complete all fields</p>)
         }
     }

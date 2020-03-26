@@ -9,7 +9,7 @@ class AddDevice extends React.Component {
         this.state = {
             success: false,
             error: false,
-            uncomplete: false,
+            incomplete: false,
             deviceName: "",
             type: "0",
             room: "0",
@@ -66,7 +66,7 @@ class AddDevice extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.type === "0" || this.state.room === "0") {
-            this.setState({ success: false, error: false, uncomplete: true })
+            this.setState({ success: false, error: false, incomplete: true })
         }
         else {
             let deviceName = this.state.deviceName.length === 0 ? "Device" : this.state.deviceName
@@ -87,13 +87,13 @@ class AddDevice extends React.Component {
             })
             .then((res) => {
                 if (res.status === 203) {
-                    this.setState({ success: true, error: false, uncomplete: false })
+                    this.setState({ success: true, error: false, incomplete: false })
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else {
-                    this.setState({ success: false, error: true, uncomplete: false });
+                    this.setState({ success: false, error: true, incomplete: false });
                 }
             })
             .catch(error => console.log(error))
@@ -124,7 +124,7 @@ class AddDevice extends React.Component {
         else if (this.state.error) {
             return (<p>An error has occurred, please try again</p>)
         }
-        else if (this.state.uncomplete) {
+        else if (this.state.incomplete) {
             return (<p>Please insert all informations</p>)
         }
     }
