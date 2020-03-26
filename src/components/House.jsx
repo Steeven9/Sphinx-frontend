@@ -20,22 +20,26 @@ class House extends React.Component {
                 'session-token': this.props.session_token,
             },
         })
-        .then( (res) => {
-            if (res.status === 401) {
-                this.props.logOut(1);
-            } else if (res.status === 200) {
-                return res.text();                
-            } else {
-                return null;
-            }
-        })
-        .then( (data) => {
-            if (data === null) {
-                this.setState({ rooms: <p><b>An error has occurred.</b></p> });
-            } else {
-                this.mapRooms(JSON.parse(data));
-            }
-        });
+            .then( (res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1);
+                } else if (res.status === 200) {
+                    return res.text();
+                } else {
+                    return null;
+                }
+            })
+            .then( (data) => {
+                let response = JSON.parse(data);
+
+                if (response === null) {
+                    this.setState({ rooms: <p><b>An error has occurred.</b></p> });
+                } else if (response.length === 0){
+                    this.setState({ rooms: <p><b>You still have not create any rooms. Please select the + button to add one.</b></p> });
+                } else {
+                    this.mapRooms(response);
+                }
+            });
     }
 
     /**
@@ -73,7 +77,7 @@ class House extends React.Component {
                     </div>
 
                     <div className="canvas2">
-                        <div className="informations"><div className="name1">Name</div></div>
+                        <div className="informations"><div className="name1">Name</div><div className="name1">Devices</div></div>
                         <hr className="line" />
                         {this.state.rooms}
                         <hr className="line" />

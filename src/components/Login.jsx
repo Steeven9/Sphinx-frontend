@@ -108,23 +108,17 @@ class Login extends React.Component {
 
                         <a href="/reset">Forgot your password?</a>
 
-                        <div className="buttons1">
-
-                            <div className="dates-input1"><a href="/signup"><button
-                                    type="button"
+                        <div className="center">
+                            <button type="button"
                                     name="button"
-                                    className="btn-secondary btn">Create account</button></a></div>
+                                    className="btn-secondary btn"
+                                    onClick={() => window.location.href="/signup"}>Create account</button>
 
-                            <div className="dates-input1"><button
-                                    type="button"
+                            <button type="button"
                                     disabled= {!isEnabled}
                                     name="button"
                                     className="btn-primary btn"
-                                // Uncomment the following line to enter production mode
                                     onClick={this.sendDatas}>Login</button>
-                                {/* // Uncomment the following line to enter testing mode */}
-                                {/* // onClick={this.sendDatasTest}>Login</button> */}
-                            </div>
                         </div>
                     </div>
                 </div>

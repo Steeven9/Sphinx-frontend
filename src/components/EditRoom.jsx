@@ -13,7 +13,7 @@ class EditRoom extends React.Component {
             room_id: props.roomTo,
             roomName: "",
             type: "0",
-            uncomplete: false,
+            incomplete: false,
         }
     }
 
@@ -23,7 +23,7 @@ class EditRoom extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.type === "0" || this.state.roomName === "") {
-            this.setState({uncomplete: true})
+            this.setState({incomplete: true})
         }
         else {
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
@@ -42,14 +42,14 @@ class EditRoom extends React.Component {
             })
             .then( (res) => {
                 if (res.status === 204) {
-                    alert("Room succesfully edited")
+                    console.log("Room succesfully edited")
                     this.props.redirectHouse()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else {
-                    alert("Unexpected error")
+                    console.log("Unexpected error")
                 }
             })
             .catch( error => this.props.logOut(2))
@@ -69,14 +69,14 @@ class EditRoom extends React.Component {
         })
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
-                alert("Room succesfully removed")
+                console.log("Room succesfully removed")
                 this.props.redirectHouse()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
             }
             else {
-                alert("Unexpected error")
+                console.log("Unexpected error")
             }
         })
         .catch( error => this.props.logOut(2))
@@ -98,10 +98,10 @@ class EditRoom extends React.Component {
             <div className="editRoom">
                 <div className="Handle-content-box2">
                     <h2 className="title">Edit Room</h2>
-                    <div className="Handle-dates">
-                        <div className="Handle-input"><input style={{ width: 300 + 'px' }} type="text" name="" placeholder="New Name" 
+                    <div className="textFields">
+                        <div className="textFields"><input type="text" name="" placeholder="New Name" 
                             onChange={this.handleRoomNameChange} required/></div>
-                        <div className="Handle-input"> 
+                        <div className="textFields"> 
                             <select className="selector" onChange={this.handleTypeChange}>
                                 <option value="0">Select Room Type</option>
                                 <option value="attic">Attic</option>
@@ -114,17 +114,17 @@ class EditRoom extends React.Component {
                                 <option value="generic-room">Generic room</option>
                                 <option value="hallway">Hallway</option>
                                 <option value="house-front">House front</option>
-                                <option value="kitchen">House front</option>
+                                <option value="kitchen">Kitchen</option>
                                 <option value="living-room">Living room</option>
                                 <option value="office">Office</option>
                             </select>
                         </div>
                     </div>
-                    {this.state.uncomplete ? <p><b>Please fill all the data</b></p> : <></>}
-                    <div className="Handle-dates">
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button></div>
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button></div>
-                        <div className="Handle-input mod-width"><button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save Changes</button></div>
+                    {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
+                    <div className="center">
+                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button>
+                        <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save Changes</button>
                     </div>
                 </div>
             </div>

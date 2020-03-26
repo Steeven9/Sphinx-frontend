@@ -134,6 +134,7 @@ h3 {
 .btn {
     margin-left: 2vh !important;
     margin-right: 2vh !important;
+    white-space: nowrap;
 }
 
 .btn-primary {
@@ -210,9 +211,6 @@ h3 {
     padding: 0 !important;
 }
 
-
-/* Comment or uncomment to outline all DOM objects for design purposes */
-* {
-    /*border: 1px dashed #ff9500;*/
+.textFields {
+    max-width: 100%;
 }
-

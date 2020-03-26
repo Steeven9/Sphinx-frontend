@@ -14,7 +14,7 @@
 
 /**
  * Gets a SVG icon'a relative URL for the corresponding device type
- * @param {string} deviceType
+ * @param {int} deviceType
  * @returns {icon} SVG imported icon
  */
 export function getDeviceIcon(deviceType) {

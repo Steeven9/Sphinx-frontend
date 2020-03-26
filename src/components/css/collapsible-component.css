@@ -20,7 +20,7 @@
     .content-box {
         background-color: #FFFFFF;
         color: #2C2C2C !important;
-        width: 100vh !important;
+        /* width: 100vh !important; */
         padding: 10px 0px 10px 0px;
     }
 
@@ -91,7 +91,7 @@
         flex-wrap: wrap;
     }
 
-    .collapsible-body {;
+    .collapsible-body {
         padding: 0 !important;
     }
 
@@ -203,7 +203,7 @@
     flex-wrap: wrap;
 }
 
-.collapsible-body {;
+.collapsible-body {
     padding: 0 !important;
 }
 

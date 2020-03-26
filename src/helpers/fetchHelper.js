@@ -9,7 +9,7 @@
 export async function doFetchRequest(method, url, headers, body) {
     try {
         if (checkMethodAndBody(method, body)) {
-            return await fetch(url, {
+            let result = await fetch(url, {
                 method: method,
                 headers: headers,
                 body: body
@@ -37,7 +37,7 @@ export async function doJSONRequest(method, url, headers, body) {
             headers["Content-Type"] = "application/json";
 
             let result = await doFetchRequest(method, url, headers, JSON.stringify(body));
-            return result.json();
+            return JSON.parse(JSON.stringify(result.devices));
         } else {
             console.log(Error);
             throw Error;
