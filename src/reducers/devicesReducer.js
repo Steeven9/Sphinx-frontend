@@ -62,7 +62,7 @@ const devicesReducer = (state, action) => {
                 body: JSON.stringify(body)
             })
                 .then(res => {
-                    if (res.status == 204){
+                    if (res.status === 204){
                         fetch('http://localhost:8080/rooms/', {
                             method: 'GET',
                             headers: {
