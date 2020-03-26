@@ -18,8 +18,8 @@ class AddRoom extends React.Component {
      * Sends informations contained in this.state to the backend
      */
     sendDatas = evt => {
-        //evt.preventDefault();
-        if (this.state.type === "0") {
+        evt.preventDefault();
+        if (this.state.type === "0" || this.state.roomName.length === 0) {
             this.setState({success: false, error: false, uncomplete: true})
         }
         else {
@@ -71,7 +71,7 @@ class AddRoom extends React.Component {
             return(<p>An error has occurred, please try again</p>)
         }
         else if (this.state.uncomplete) {
-            return(<p>Please insert a room type</p>)
+            return(<p>Please complete all fields</p>)
         }
     }
 
@@ -104,7 +104,7 @@ class AddRoom extends React.Component {
                                 <option value="office">Office</option>
                             </select>
                         </div>
-                        {this.state.roomCreated}
+                        {this.roomCreated()}
                     </div>
                     <div className="dates">
                         <div className="dates-input"><button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button></div>
