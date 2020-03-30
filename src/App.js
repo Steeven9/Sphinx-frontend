@@ -25,7 +25,6 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Redirect,
 } from "react-router-dom";
 import Footer from "./components/Footer";
 
@@ -214,15 +213,6 @@ class App extends React.Component {
                                 <ChangePassword />
                             </Route>
 
-                            <Route path="/dashboard">
-                                {this.state.loggedIn ?
-                                    <Dashboard
-                                        username={this.state.username}
-                                        session_token={this.state.session_token}
-                                    />
-                                    : this.accessDenied()}
-                            </Route>
-
                             <Route path="/house">
                                 {this.state.loggedIn ?
                                     <House
@@ -309,7 +299,14 @@ class App extends React.Component {
                             </Route>
 
                             <Route exact path="/">
-                                <Homepage />
+                                {this.state.loggedIn ?
+                                    <Dashboard
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                    />
+                                    : 
+                                    <Homepage />
+                                }
                             </Route>
 
                             <Route path="*">

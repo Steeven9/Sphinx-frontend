@@ -15,7 +15,7 @@ class Room extends React.Component {
 
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
-        this.setState({device_id: parsed.id})
+        this.setState({room_id: parsed.id})
     }
 
     /**
