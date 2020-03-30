@@ -51,17 +51,19 @@ class House extends React.Component {
             this.setState({ rooms: <p><b>No Rooms available</b></p> });
         }
         else {
-            let toSet = rooms.map((room) => <div className="room"><div className="image vertical-center"><img src={room.icon} alt="device-logo" /></div><div className="room-name vertical-center">{room.name}</div><div className="dev-number vertical-center">{room.devices.length}</div><div className="room-button1 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToEditRoom(room.id)}>edit</i></div><div className="room-button2 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToRoom(room.id)}>visibility-outlined</i></div></div>)
+            let toSet = rooms.map((room) => <div className="room"><div className="image vertical-center"><img src={room.icon} alt="device-logo" /></div><div className="room-name vertical-center">{room.name}</div><div className="dev-number vertical-center">{room.devices.length}</div><div className="room-button1 vertical-center"><i className="material-icons btn-edit" onClick={() => this.redirectToEditRoom(room.id)}>edit</i></div><div className="room-button2 vertical-center"><i className="material-icons btn-edit" onClick={() => this.redirectToRoom(room.id)}>visibility-outlined</i></div></div>)
             this.setState({ rooms: toSet })
         }
     }
-
-    goToRoom = (roomID) => {
-        this.props.redirectRoom(roomID)
+    
+    //Redirection to /room
+    redirectToRoom = (roomID) => {
+        window.location.href = '/room?id=' + roomID
     }
-
-    goToEditRoom = (roomID) => {
-        this.props.redirectEditRoom(roomID)
+    
+    //Redirection to /editRoom
+    redirectToEditRoom = (roomID) => {
+        window.location.href = '/editRoom?id=' + roomID
     }
 
     /**

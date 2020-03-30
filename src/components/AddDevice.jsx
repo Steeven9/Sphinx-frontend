@@ -129,6 +129,11 @@ class AddDevice extends React.Component {
         }
     }
 
+    //Redirection to /devices
+    redirectToDevices = () => {
+        window.location.href = '/devices'
+    }
+
     /**
      * Renders AddDevice page
      */
@@ -167,7 +172,7 @@ class AddDevice extends React.Component {
                         {this.deviceCreated()}
                     </div>
                     <div className="center">
-                        <button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button>
+                        <button type="button" name="button" className="btn-secondary btn" onClick={this.redirectToDevices}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save device</button>
                     </div>
                 </div>

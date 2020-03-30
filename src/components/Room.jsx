@@ -1,5 +1,6 @@
 import React from 'react';
 import '../App.css';
+import * as qs from 'query-string';
 
 class Room extends React.Component {
 
@@ -7,8 +8,14 @@ class Room extends React.Component {
         super(props);
         this.state = {
             username: props.username,
-            session_token: props.session_token
+            session_token: props.session_token,
+            room_id: "",
         }
+    }
+
+    componentDidMount() {
+        const parsed = qs.parse(window.location.search);
+        this.setState({device_id: parsed.id})
     }
 
     /**

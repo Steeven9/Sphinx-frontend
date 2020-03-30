@@ -75,6 +75,11 @@ class AddRoom extends React.Component {
             return(<p>Please complete all fields</p>)
         }
     }
+    
+    //Redirection to /house
+    redirectToHouse = () => {
+        window.location.href = '/house'
+    }
 
     /**
      * Renders AddRoom page
@@ -108,7 +113,7 @@ class AddRoom extends React.Component {
                         {this.roomCreated()}
                     </div>
                     <div className="center">
-                        <button type="button" name="button" className="btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button>
+                        <button type="button" name="button" className="btn-secondary btn" onClick={this.redirectToHouse}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save room</button>
                     </div>
                 </div>

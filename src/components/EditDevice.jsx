@@ -1,7 +1,7 @@
 import React from 'react';
 import '../App.css';
 import '../components/css/editPages.css';
-import * as qs from 'query-string'
+import * as qs from 'query-string';
 
 
 class EditDevice extends React.Component {
@@ -46,7 +46,7 @@ class EditDevice extends React.Component {
             .then( (res) => {
                 if (res.status === 204) {
                     console.log("Device successfully edited")
-                    this.props.redirectDevices()
+                    this.redirectToDevices()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
@@ -73,7 +73,7 @@ class EditDevice extends React.Component {
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
                 console.log("Device succesfully removed")
-                this.props.redirectDevices()
+                this.redirectToDevices()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
@@ -89,6 +89,11 @@ class EditDevice extends React.Component {
     handleDeviceNameChange = evt => {
         this.setState({ deviceName: evt.target.value });
     };
+    
+    //Redirection to /devices
+    redirectToDevices = () => {
+        window.location.href = '/devices'
+    }
 
     /**
      * Renders the device handler
@@ -103,7 +108,7 @@ class EditDevice extends React.Component {
                     </div>
                     {this.state.incomplete ? <p><b>Please fill the name</b></p> : <></>}
                     <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectDevices}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.redirectToDevices}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteDevice}>Delete Device</button>
                         <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save</button>
                     </div>
