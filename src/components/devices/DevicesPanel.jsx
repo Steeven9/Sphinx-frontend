@@ -13,13 +13,8 @@ import '../css/collapsible-devices.css';
 const DevicesPanel = () => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
-    // Stores devices in localStorage
+    // Fetches devices on page load
     useEffect( () => {
-        // if (localStorage.devices === undefined) {
-        //     localStorage.setItem('devices', JSON.stringify(myDevices));
-        //     console.log('Devices stored in localStorage');
-        // }
-
         fetch('http://localhost:8080/devices/', {
             method: 'GET',
             headers: {
@@ -52,25 +47,14 @@ const DevicesPanel = () => {
 
     }, []);
 
-    // // Retrieves devices from localStorage and dispatches the render action
-    // useEffect(() => {
-    //     // const devices = JSON.parse(localStorage.getItem('devices'));
-    //     // console.log('Devices retrieved from localStorage');
-    //     if(devices) {
-    //         dispatch({type: 'POPULATE_DEVICES', devices: devices});
-    //         console.log('Populated devices');
-    //     }
-    //
-    // }, []);
-
     useEffect(() => {
         console.log('Devices were updated')
     }, [devices]);
 
     try{
         devices.sort(function(a, b) {
-            var keyA = a.name,
-                keyB = b.name;
+            let keyA = a.name;
+            let keyB = b.name;
             if (keyA < keyB) return -1;
             if (keyA > keyB) return 1;
             return 0;
@@ -104,13 +88,13 @@ const DevicesPanel = () => {
     )
 };
 
-// Temporary mock devices to populate the localStorage
+// // Temporary mock devices to populate the localStorage
 // const myDevices = [
 //     {
 //         id: 0,
-//         icon: "DimmableLight",
+//         icon: "bulb-led.svg",
 //         type: 2,
-//         name: "LED light",
+//         name: "LED light 1",
 //         room: "Master bedroom",
 //         switched: 2,
 //         slider: 75,
@@ -118,26 +102,26 @@ const DevicesPanel = () => {
 //     },
 //     {
 //         id: 1,
-//         icon: "Light",
+//         icon: "bulb-fluorescent.svg",
 //         type: 1,
 //         room: "Kitchen",
-//         name: "Light bulb",
+//         name: "Fluorescent bulb 1",
 //         switched: 3,
 //         on: true
 //     },
 //     {
 //         id: 2,
-//         icon: "DimmableSwitch",
+//         icon: "dimmer-state.svg",
 //         type: 4,
 //         room: "Master bedroom",
-//         name: "Dimmable switch",
+//         name: "Dimmer (memory)",
 //         slider: 100,
 //         switches: [0, 7],
 //         on: false
 //     },
 //     {
 //         id: 3,
-//         icon: "Switch",
+//         icon: "switch.svg",
 //         type: 3,
 //         name: "Switch",
 //         room: "Kitchen",
@@ -146,7 +130,7 @@ const DevicesPanel = () => {
 //     },
 //     {
 //         id: 4,
-//         icon: "TempSensor",
+//         icon: "sensor-temperature.svg",
 //         type: 9,
 //         room: "Living room",
 //         name: "Temperature sensor",
@@ -154,50 +138,71 @@ const DevicesPanel = () => {
 //     },
 //     {
 //         id: 5,
-//         icon: "SmartPlug",
+//         icon: "smart-plug.svg",
 //         type: 6,
 //         room: "Garage",
-//         name: "Smart plug",
+//         name: "SmartPlug",
 //         label: '350 kWh',
 //         on: true
 //     },
 //     {
 //         id: 6,
-//         icon: "MotionSensor",
+//         icon: "sensor-motion.svg",
 //         type: 10,
 //         room: "Backyard",
 //         name: "Motion sensor"
 //     },
 //     {
 //         id: 7,
-//         icon: "DimmableLight",
+//         icon: "bulb-led.svg",
 //         type: 2,
-//         name: "Smart LED light",
+//         name: "LED light 2",
+//         slider: 10,
 //         room: "Master bedroom",
 //         switched: 2,
-//         slider: 30,
 //         on: false
 //     },
 //     {
 //         id: 8,
-//         icon: "iconDimmerRegular",
+//         icon: "dimmer-regular",
 //         type: 5,
-//         name: "Regular dimmer",
-//         room: "Guest's room",
+//         name: "Dimmer (regular)",
+//         room: "Guest room",
 //         switches: [9],
 //         slider: 0,
 //         on: false
 //     },
 //     {
 //         id: 9,
-//         icon: "DimmableLight",
+//         icon: "bulb-led.svg",
 //         type: 2,
-//         name: "Smart LED light 2",
-//         room: "Guest's room",
+//         name: "LED light 3",
+//         room: "Guest room",
 //         switched: 8,
 //         slider: 60,
 //         on: false
+//     },
+//     {
+//         id: 10,
+//         icon: "bulb-led.svg",
+//         type: 2,
+//         name: "LED light 4",
+//         room: "Guest bedroom",
+//         switched: 8,
+//         slider: 75,
+//         on: false
+//     },
+//     {
+//         id: 0,
+//         icon: "bulb-led.svg",
+//         type: 2,
+//         name: "LED light 5",
+//         room: "Kitchen",
+//         switched: 3,
+//         slider: 15,
+//         on: false
 //     }
 // ];
+
 
 export {DevicesPanel as default}

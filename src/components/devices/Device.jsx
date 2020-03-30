@@ -15,23 +15,50 @@ import Slider from '@material-ui/core/Slider'
 const Device = ({ device }) => {
     const { devices, dispatch } = useContext(DevicesContext);
     const [intensity, setIntensity] = useState(device.slider);
+    const [disabled, setDisabled] = useState(device.disable);
 
-    // Extracts next value from the state
+    /**
+     * Disables slider for stateless dimmers. As a secondary, needed effect, the call to this
+     * effect is also needed to extract the next value from the state via de dependencies call.
+     */
     useEffect(() => {
-    }, [intensity]);
+        setIntensity(device.slider)
+        if (device.type === 5) {
+            if(!device.on) {
+                device.disabled = true;
+                setDisabled(true)
+            } else {
+                device.disabled = false;
+                setDisabled(false)
+            }
+        }
+    }, [device, devices]);
 
-    const handleCommittedChange = (e, val) => {
+    /**
+     * Syncronizes and re-renders devices state for view purposes dispatching the action to the devices reducer
+     * @param e {event}
+     * @param val {int}
+     */
+    const handleChange = (e, val) => {
+        setIntensity(val);
         device.slider = val;
         devices.forEach((d) => {
             if (d.id === device.id) {
                 d.slider = val;
-            }
-        });
-        dispatch({ type: 'MODIFY_DEVICE', device: device });
+            }});
+
+        dispatch({type: 'SYNC_DEVICES', device: device});
     };
 
-    const redirectToEdit = (id) => {
-        window.location.href = '/editDevice?id=' + id
+    /**
+     * Updates only the affected device's state into the back-end
+     * @param e {event}
+     * @param val {int}
+     */
+    const handleChangeCommitted = (e, val) => {
+        setIntensity(val);
+        device.slider = val;
+        dispatch({type: 'MODIFY_DEVICES', device: device});
     };
 
     /**
@@ -49,8 +76,16 @@ const Device = ({ device }) => {
     }
 
     /**
+     * Calls the edit device page with the corresponding device ID
+     * @param id {int}
+     */
+    function redirectToEdit(id) {
+        window.location.href = '/editDevice?id=' + id
+    }
+
+    /**
      * Depending on device type, returns either an intensity slider, a SmartPlug's display or a Sensor's display
-     * @param device
+     * @param device {Device}
      * @returns {Slider|SmartPlug display|Sensor display}
      */
     function getSliderOrDisplayOrSmartPlug(device) {
@@ -80,14 +115,18 @@ const Device = ({ device }) => {
      * @returns {Slider}
      */
     function getSlider() {
-        return (<Slider name={"slider"} className="slider"
-            onChangeCommitted={(e, val) => { handleCommittedChange(e, val) }
-            } valueLabelDisplay="auto" defaultValue={intensity} />)
+        return (<Slider name={"slider"}
+                        className="slider"
+                        onChange={(e, val) =>  {handleChange(e, val)}}
+                        onChangeCommitted={(e, val) =>  {handleChangeCommitted(e, val)}}
+                        valueLabelDisplay="auto"
+                        value={intensity}
+                        disabled={disabled} />)
     }
 
     /**
      * Generates a power switch to turn a device on or off
-     * @param device
+     * @param device {Device}
      * @returns {PowerSwitch}
      */
     function getPowerSwitch(device) {
@@ -134,7 +173,7 @@ const Device = ({ device }) => {
                 </div>
                 <div className="device-control col col-collapsible l6 m6 s12">
                     <div className="col col-collapsible l8 m6 s8">
-                        {getSliderOrDisplayOrSmartPlug(device, intensity, setIntensity, handleCommittedChange)}
+                        {getSliderOrDisplayOrSmartPlug(device)}
                     </div>
                     <div>
                         {getPowerSwitch(device)}
