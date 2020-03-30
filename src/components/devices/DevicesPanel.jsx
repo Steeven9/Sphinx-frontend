@@ -2,20 +2,25 @@ import React, {useEffect, useReducer} from 'react'
 import DevicesContext from '../../context/devices-context'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
-import '../css/collapsible-component.css';
-import '../css/collapsible-devices.css';
+import '../../css/collapsible-component.css';
+import '../../css/collapsible-devices.css';
 
 
 /**
  * Generates a panel with a DevicePanel
  * @returns {DevicePanel}
  */
-const DevicesPanel = () => {
+const DevicesPanel = (props) => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
 
+
     // Fetches devices on page load
-    useEffect( () => {
-        fetch('http://localhost:8080/devices/', {
+    useEffect( (props) => {
+        const params = (new URL(document.location)).searchParams;
+        const devicesFetchUrl = 'http://localhost:8080/devices/';
+        const roomDevicesUrl = 'http://localhost:8080/rooms/' + params.get('id');
+        const fetchUrl = props.roomTo !== undefined ? roomDevicesUrl : devicesFetchUrl;
+        fetch(fetchUrl, {
             method: 'GET',
             headers: {
                 'user': localStorage.getItem('username'),
@@ -32,16 +37,12 @@ const DevicesPanel = () => {
                 }
             })
             .then( (data) => {
-                let response = JSON.parse(data);
+                let devices = sortDevices(JSON.parse(data));
 
                     if (data === null) {
-                    response = [{name: 'You have no devices yet. Please add a new one.'}]
+                        devices = [{name: 'You have no devices yet. Please add a new one.'}]
                     }
-
-                    dispatch({type: 'POPULATE_DEVICES', devices: response});
-
-                    console.log('Populated devices');
-                    console.log(response);
+                    dispatch({type: 'POPULATE_DEVICES', devices: devices});
             })
             .catch(e => console.log(e));
 
@@ -71,7 +72,7 @@ const DevicesPanel = () => {
                         <div id="content" className="">
                             <section className="content-box-collapsible z-depth-2">
                                 <div className="headline-box row row-collapsible row row-collapsible-custom">
-                                    <h3 className="col col-collapsible l8 left-align headline-title">My devices</h3>
+                                    <h3 className="col col-collapsible l8 left-align headline-title">{props.title}</h3>
                                     <a href="/addDevice"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <ul className="collapsible expandable expandable-component">
@@ -87,6 +88,20 @@ const DevicesPanel = () => {
         </DevicesContext.Provider>
     )
 };
+
+function sortDevices(devices) {
+    try{
+        return devices.sort(function(a, b) {
+            let keyA = a.name;
+            let keyB = b.name;
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+    } catch(e) {
+        throw e;
+    }
+}
 
 // // Temporary mock devices to populate the localStorage
 // const myDevices = [

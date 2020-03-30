@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.css';
-import '../components/css/editPages.css';
+import '../css/App.css';
+import '../css/editPages.css';
 
 
 class EditRoom extends React.Component {
@@ -42,7 +42,7 @@ class EditRoom extends React.Component {
             })
             .then( (res) => {
                 if (res.status === 204) {
-                    console.log("Room succesfully edited")
+                    console.log("Room successfully edited")
                     this.props.redirectHouse()
                 }
                 else if (res.status === 401) {
@@ -69,7 +69,7 @@ class EditRoom extends React.Component {
         })
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
-                console.log("Room succesfully removed")
+                console.log("Room successfully removed")
                 this.props.redirectHouse()
             }
             else if (res.status === 401) {

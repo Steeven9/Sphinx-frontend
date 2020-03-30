@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.css';
-import './css/loginPages.css';
+import '../css/App.css';
+import '../css/loginPages.css';
 
 
 class Login extends React.Component {
@@ -24,21 +24,21 @@ class Login extends React.Component {
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: this.state.password
         })
-        .then( (res) => {
-            if (res.status === 200) {
-                return res.text();                
-            }
-            else {
-                return null;
-            }
-        })
-        .then( (data) => {
-            if (data === null) {
-                this.setState({error: true});
-            } else {
-                this.props.logIn(this.state.username, data);
-            }            
-        });
+            .then( (res) => {
+                if (res.status === 200) {
+                    return res.text();
+                }
+                else {
+                    return null;
+                }
+            })
+            .then( (data) => {
+                if (data === null) {
+                    this.setState({error: true});
+                } else {
+                    this.props.logIn(this.state.username, data);
+                }
+            });
     };
 
     /**
@@ -71,7 +71,7 @@ class Login extends React.Component {
         this.setState({ password: evt.target.value });
     };
 
-     /**
+    /**
      * State: username, password
      * isEnabled: boolean to enable button
      */
@@ -89,20 +89,20 @@ class Login extends React.Component {
 
                         <div
                             className="dates-input1"><input
-                                type="text"
-                                required={true}
-                                name="username"
-                                value={this.state.username}
-                                onChange={this.handleUsernameChange}
-                                placeholder="Username or email" /></div>
+                            type="text"
+                            required={true}
+                            name="username"
+                            value={this.state.username}
+                            onChange={this.handleUsernameChange}
+                            placeholder="Username or email" /></div>
 
                         <div className="dates-input1"><input
-                                type="password"
-                                name="password"
-                                required={true}
-                                value={this.state.password}
-                                onChange={this.handlePasswordChange}
-                                placeholder="Password" /></div>
+                            type="password"
+                            name="password"
+                            required={true}
+                            value={this.state.password}
+                            onChange={this.handlePasswordChange}
+                            placeholder="Password" /></div>
 
                         { this.showError() }
 

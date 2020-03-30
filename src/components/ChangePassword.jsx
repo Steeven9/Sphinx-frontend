@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import '../css/App.css';
 import * as qs from 'query-string';
 
 class ChangePassword extends React.Component {
