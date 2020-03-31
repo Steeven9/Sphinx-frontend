@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.css';
-import './css/loginPages.css';
+import '../css/App.css';
+import '../css/loginPages.css';
 
 
 class Signup extends React.Component {
@@ -27,14 +27,14 @@ class Signup extends React.Component {
             method: 'POST',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: JSON.stringify(
-            {
-                username: this.state.username, 
-                email: this.state.email, 
-                fullname: this.state.firstname + " " + this.state.lastname,
-                password: this.state.password
-            })
+                {
+                    username: this.state.username,
+                    email: this.state.email,
+                    fullname: this.state.firstname + " " + this.state.lastname,
+                    password: this.state.password
+                })
         })
-        .then( (res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
+            .then( (res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
     };
 
     /**
@@ -76,7 +76,7 @@ class Signup extends React.Component {
     render() {
         const { firstname, lastname, username, email, password, confirmPassword } = this.state;
         const isEnabled = (email.length > 0 && password.length > 0 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password);
-    
+
         return (
             <article>
                 <div id="content" className="container">

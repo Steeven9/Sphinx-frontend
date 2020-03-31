@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.css';
-import logo from "./img/logo/logo-horizontal.svg";
+import '../css/App.css';
+
 
 class Header extends React.Component {
 
@@ -45,7 +45,7 @@ class Header extends React.Component {
                         <nav className="navbar-fixed">
                             <div className="nav-wrapper">
                                 <a href={this.state.loggedIn ? "/dashboard" : "/"} className="brand-logo">
-                                    <img className="nav-left nav-logo-horizontal responsive-img" src={logo} alt="SmartHut logo" />
+                                    <img className="nav-left nav-logo-horizontal responsive-img" src="/img/logo/logo-horizontal.svg" alt="SmartHut logo" />
                                 </a>
 
                                 {

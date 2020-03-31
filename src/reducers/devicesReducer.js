@@ -13,31 +13,6 @@ const devicesReducer = (state, action) => {
 
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
-
-            /**
-             * Uncomment the following IF statements to sync the state
-             * of nested devices while not using a database
-             */
-            // if (action.device.on !== undefined) {
-            //     state.forEach((d) => {
-            //         if (d.switched === action.device.id) {
-            //             d.slider = action.device.slider;
-            //             d.on = action.device.on;
-            //             console.log(d.name + " " + d.slider)
-            //         }
-            //     });
-            // }
-            //
-            // if (action.device.on !== undefined) {
-            //     state.forEach((d) => {
-            //         if (d.id === action.device.id) {
-            //             d.on = action.device.on;
-            //             console.log(action.device.name + " " + action.device.on)
-            //         }});
-            // }
-
-            // localStorage.setItem('devices', JSON.stringify(state));v
-
             let body;
 
                 if(action.device.slider !== undefined) {
@@ -91,9 +66,45 @@ const devicesReducer = (state, action) => {
             return [state];
 
         case 'SYNC_DEVICES':
-            console.log('Dispatch: SYNC_DEVICE');
-            // To be coded if needed
-            return state;
+            console.log('Dispatch: SYNC_DEVICES');
+
+            if (action.device.on !== undefined) {
+                state.forEach((d) => {
+                    if (action.device.switches && action.device.type !== 3) {
+                        // If parent is ON: powers children on and sets their slider value to the parent's
+                        if (action.device.on && action.device.clicked && d.switched === action.device.id) {
+                            d.on = action.device.on;
+                            d.slider = action.device.slider
+                        }
+
+                        // Syncs parent-children sliders
+                        if (action.device.on && d.on && d.switched === action.device.id) {
+                            d.slider = action.device.slider
+                        }
+
+                        // If parent is OFF: allows children to set their own power switch
+                        if (!action.device.on && action.device.clicked && d.switched === action.device.id) {
+                            d.on = action.device.on;
+
+                            // Sets stateless dimmable switch's slider to 0 on self-power OFF
+                            if (action.device.type === 5) {
+                                action.device.slider = 0
+                            }
+                        }
+
+                        // Allows self-power OFF of child
+                    } else if (d.id === action.device.id){
+                        d.on = action.device.on;
+
+                        // Forbids regular switch to set a dimmable light's slider to 0 on power ON
+                    } else if (d.switched === action.device.id && action.device.switches && action.device.type === 3) {
+                        d.on = action.device.on;
+                    }
+                });
+                action.device.clicked = false
+            }
+
+            return [...state];
 
         default:
             console.log('Dispatch: DEFAULT');

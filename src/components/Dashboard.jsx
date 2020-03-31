@@ -1,7 +1,5 @@
 import React from 'react';
-import '../App.css';
-import imgAllDevice from './img/icons/dashboard/icon-all-devices.svg';
-import imgAllRoom from './img/icons/dashboard/icon-all-rooms.svg';
+import '../css/App.css';
 
 
 class Dashboard extends React.Component {
@@ -21,11 +19,11 @@ class Dashboard extends React.Component {
         return (
             <div className="dashboard">
                 <div className="content-box3" onClick={() => { window.location.href = '/devices'; }}>
-                    <img src={imgAllDevice} alt="All devices" />
+                    <img src="/img/icons/dashboard/icon-all-devices.svg" alt="All devices" />
                     <a href="/devices" className="dash-text">See all devices</a>
                 </div>
                 <div className="content-box3" onClick={() => { window.location.href = '/house'; }}>
-                    <img src={imgAllRoom} alt="All rooms" />
+                    <img src="/img/icons/dashboard/icon-all-rooms.svg" alt="All rooms" />
                     <a href="/house" className="dash-text">See devices by room</a>
                 </div>
             </div>

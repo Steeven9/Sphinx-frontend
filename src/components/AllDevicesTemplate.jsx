@@ -1,5 +1,5 @@
-import '../App.css';
-import './css/collapsible-component.css';
+import '../css/App.css';
+import '../css/collapsible-component.css';
 import M from 'materialize-css';
 import React, { Component } from "react";
 

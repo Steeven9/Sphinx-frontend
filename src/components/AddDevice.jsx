@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import '../css/App.css';
 // import Select from 'react-select';
 
 class AddDevice extends React.Component {
