@@ -14,9 +14,9 @@ const SmartPlug = (device) => {
     const resetSmartPlug = (e) => {
         e.preventDefault();
         setConsumption('0 kWh');
-        console.log('Resetting SmartPlug');
-        device.device.label = 0;
-        dispatch({type: 'MODIFY_DEVICE', device: device});
+        device.device.label = '0 kWh';
+        dispatch({type: 'SYNC_DEVICES', device: device});
+        dispatch({type: 'MODIFY_DEVICES', device: device});
     };
 
     return ((device.device.on) ?

@@ -1,6 +1,5 @@
 import React from 'react';
-import '../App.css';
-import imgSmartHouse from './img/logo/smart-home.svg';
+import '../css/App.css';
 
 class Homepage extends React.Component {
 
@@ -15,7 +14,7 @@ class Homepage extends React.Component {
                     <main>
                         <article>
                             <section className="row headline-box">
-                                <img className="responsive-img col l5" src={imgSmartHouse} alt="SmartHut"/>
+                                <img className="responsive-img col l5" src='/img/logo/smart-home.svg' alt="SmartHut"/>
                                 <div className="col l6">
                                     <h1 className="text-homepage-headline">Smart control for your smart home</h1>
                                     <a href="/signup" className="btn-homepage-headline waves-effect waves-light btn btn-primary col l6">Join now</a>

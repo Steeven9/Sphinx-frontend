@@ -1,5 +1,5 @@
 import React from 'react';
-import '../App.css';
+import '../css/App.css';
 import DevicesPanel from './devices/DevicesPanel';
 
 
@@ -18,7 +18,7 @@ class Devices extends React.Component {
 
     render() {
         return (
-            <DevicesPanel />
+            <DevicesPanel title={"My devices"} />
         );
     }
 }

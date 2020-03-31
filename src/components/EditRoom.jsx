@@ -1,6 +1,6 @@
 import React from 'react';
-import '../App.css';
-import '../components/css/editPages.css';
+import '../css/App.css';
+import '../css/editPages.css';
 import * as qs from 'query-string';
 
 
