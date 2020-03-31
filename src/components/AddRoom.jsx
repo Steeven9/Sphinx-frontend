@@ -49,7 +49,7 @@ class AddRoom extends React.Component {
                     this.setState({success: false, error: true, incomplete: false});
                 }
             })
-            .catch( error => this.props.logOut(2))
+            .catch( error => console.log(error))
         }
     };
 

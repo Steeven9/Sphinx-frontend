@@ -95,7 +95,7 @@ class App extends React.Component {
 
     /**
      * Used to log out.
-     * exitCode: if 0, normal log out. If 1, expired session token, if 2, unexpected error
+     * exitCode: if 0, normal log out. If 1, expired session token.
      */
     logOut = (exitCode) => {
         this.setState({
@@ -110,9 +110,6 @@ class App extends React.Component {
 
         if (exitCode === 1) {
             alert("Session expired. Please log in again.")
-        }
-        else if (exitCode === 2) {
-            alert("Unexpected error, logging out...")
         }
 
         window.location.href = '/';

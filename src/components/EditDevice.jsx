@@ -55,7 +55,7 @@ class EditDevice extends React.Component {
                     console.log("Unexpected error")
                 }
             })
-            .catch( error => this.props.logOut(2))
+            .catch( error => console.log(error))
         }
     };
 
@@ -82,7 +82,7 @@ class EditDevice extends React.Component {
                 console.log("Unexpected error")
             }
         })
-        .catch( error => this.props.logOut(2))
+        .catch( error => console.log(error))
     };
 
     // function to handle state on input change
