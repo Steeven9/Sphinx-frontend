@@ -44,7 +44,7 @@ class Header extends React.Component {
                 <div className="navbar-fixed">
                         <nav className="navbar-fixed">
                             <div className="nav-wrapper">
-                                <a href={this.state.loggedIn ? "/dashboard" : "/"} className="brand-logo">
+                                <a href="/" className="brand-logo">
                                     <img className="nav-left nav-logo-horizontal responsive-img" src="/img/logo/logo-horizontal.svg" alt="SmartHut logo" />
                                 </a>
 
@@ -52,7 +52,7 @@ class Header extends React.Component {
                                     this.state.loggedIn ? 
 
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                        <li><a href="/dashboard">Dashboard</a></li>
+                                        <li><a href="/">Dashboard</a></li>
                                         <li><a href="/devices">My devices</a></li>
                                         <li><a href="/house">My rooms</a></li>
                                         <li><a href="/logout">Log out</a></li>
