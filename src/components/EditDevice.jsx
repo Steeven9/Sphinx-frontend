@@ -72,7 +72,7 @@ class EditDevice extends React.Component {
         })
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
-                console.log("Device succesfully removed")
+                console.log("Device successfully removed")
                 this.redirectToDevices()
             }
             else if (res.status === 401) {
