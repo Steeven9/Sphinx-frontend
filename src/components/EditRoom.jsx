@@ -75,7 +75,7 @@ class EditRoom extends React.Component {
         })
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
-                console.log("Room succesfully removed")
+                console.log("Room successfully removed")
                 this.redirectToHouse()
             }
             else if (res.status === 401) {
