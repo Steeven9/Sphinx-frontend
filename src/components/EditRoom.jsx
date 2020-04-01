@@ -48,7 +48,7 @@ class EditRoom extends React.Component {
             })
             .then( (res) => {
                 if (res.status === 204) {
-                    console.log("Room succesfully edited")
+                    console.log("Room successfully edited")
                     this.redirectToHouse()
                 }
                 else if (res.status === 401) {
