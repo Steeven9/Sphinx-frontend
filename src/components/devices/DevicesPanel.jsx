@@ -15,11 +15,13 @@ const DevicesPanel = (props) => {
 
 
     // Fetches devices on page load
-    useEffect( (props) => {
+    useEffect( () => {
         const params = (new URL(document.location)).searchParams;
+        const path = window.location.pathname.toLowerCase().split('/');
         const devicesFetchUrl = 'http://localhost:8080/devices/';
-        const roomDevicesUrl = 'http://localhost:8080/rooms/' + params.get('id');
-        const fetchUrl = props.roomTo !== undefined ? roomDevicesUrl : devicesFetchUrl;
+        const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id');
+        const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
+
         fetch(fetchUrl, {
             method: 'GET',
             headers: {
