@@ -4,7 +4,7 @@ image: cypress/base
 cache:
     key: frontend-cache
     paths:
-        - ~/.cache
+        - /root/.cache
 
 stages:
     - build
