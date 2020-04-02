@@ -38,12 +38,6 @@
         padding-left: 0 !important;
     }
 
-    .device-name, .device-location {
-        font-size: small !important;
-        white-space: pre !important;
-        font-size: calc(0.8vh + 1.5vmin) !important;
-    }
-
     .device-control {
         margin-top: 1vh;
     }
@@ -113,6 +107,7 @@
 
     .device-name, .device-location {
         white-space: pre !important;
+        white-space: pre !important;
         /*font-size: calc(0.8vh + 1.5vmin) !important;*/
     }
 
@@ -151,10 +146,14 @@
     }
 }
 
+.content-box-transparency {
+    background-color: rgba(255, 255, 255, 0.6) !important;
+}
+
 @media only screen and (min-width: 900px) {
     .content-box-collapsible {
         margin: 5vh auto !important;
-        background-color: #FFFFFF !important;
+        background-color: #FFFFFF;
         color: #2C2C2C !important;
         width: calc(50% + 5vmin) !important;
         border-radius: 10px !important;

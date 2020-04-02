@@ -13,6 +13,11 @@ const devicesReducer = (state, action) => {
 
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
+            const params = (new URL(document.location)).searchParams;
+            const path = window.location.pathname.toLowerCase().split('/');
+            const devicesFetchUrl = 'http://localhost:8080/devices/';
+            const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
+            let fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
             let body;
 
                 if(action.device.slider !== undefined) {
@@ -26,29 +31,28 @@ const devicesReducer = (state, action) => {
                     }
                 }
 
-                fetch('http://localhost:8080/devices/' + action.device.id, {
-                method: 'PUT',
-                headers: {
-                    'user': this.state.username,
-                    'session-token': this.state.session_token,
+                let headers = {
+                    'user': localStorage.getItem('username'),
+                    'session-token': localStorage.getItem('session_token'),
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
-                },
+                };
+
+                fetchUrl = fetchUrl + action.device.id;
+
+                fetch(devicesFetchUrl, {
+                method: 'PUT',
+                headers: headers,
                 body: JSON.stringify(body)
             })
                 .then(res => {
-                    if (res.status === 204){
-                        fetch('http://localhost:8080/devices/', {
+                    if (res.status === 200){
+                        fetch(fetchUrl, {
                             method: 'GET',
-                            headers: {
-                                'user': localStorage.getItem('username'),
-                                'session-token': localStorage.getItem('session_token')
-                            },
+                            headers: headers,
                         })
                             .then( (res) => {
-                                if (res.status === 401) {
-                                    this.props.logOut(1);
-                                } else if (res.status === 200) {
+                                if (res.status === 200) {
                                     return res.text();
                                 } else {
                                     return null;
@@ -63,7 +67,7 @@ const devicesReducer = (state, action) => {
 
                     }})
                 .catch(e => console.log(e));
-            return [state];
+            return state;
 
         case 'SYNC_DEVICES':
             console.log('Dispatch: SYNC_DEVICES');

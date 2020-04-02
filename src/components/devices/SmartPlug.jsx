@@ -16,7 +16,7 @@ const SmartPlug = (device) => {
         setConsumption('0 kWh');
         device.device.label = '0 kWh';
         dispatch({type: 'SYNC_DEVICES', device: device});
-        dispatch({type: 'MODIFY_DEVICES', device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device});
     };
 
     return ((device.device.on) ?

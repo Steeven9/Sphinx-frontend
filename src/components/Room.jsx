@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import * as qs from 'query-string';
+import DevicesPanel from "./devices/DevicesPanel";
 
 class Room extends React.Component {
 
@@ -13,22 +13,11 @@ class Room extends React.Component {
         }
     }
 
-    componentDidMount() {
-        const parsed = qs.parse(window.location.search);
-        this.setState({room_id: parsed.id})
-    }
-
-    /**
-     * TODO
-     */
     render() {
         return (
-            <div className="room">
-                html page code here
-            </div>
+            <DevicesPanel />
         );
     }
 }
-
 
 export default Room;

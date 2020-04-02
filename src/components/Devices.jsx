@@ -18,7 +18,7 @@ class Devices extends React.Component {
 
     render() {
         return (
-            <DevicesPanel title={"My devices"} />
+            <DevicesPanel />
         );
     }
 }
