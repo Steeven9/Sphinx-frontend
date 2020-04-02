@@ -4,7 +4,11 @@ import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../../css/collapsible-component.css';
 import '../../css/collapsible-devices.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+let isLoading = true;
+let isDataFound = true;
 
 /**
  * Generates a panel with a DevicePanel
@@ -12,6 +16,7 @@ import '../../css/collapsible-devices.css';
  */
 const DevicesPanel = (props) => {
     const [devices, dispatch] = useReducer(devicesReducer, []);
+    const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 
     // Fetches devices on page load
@@ -40,9 +45,10 @@ const DevicesPanel = (props) => {
             })
             .then( (data) => {
                 let devices = sortDevices(JSON.parse(data));
+                isLoading = false;
 
-                    if (data === null) {
-                        devices = [{name: 'You have no devices yet. Please add a new one.'}]
+                    if (data === null || devices.length === 0) {
+                        isDataFound = false;
                     }
                     dispatch({type: 'POPULATE_DEVICES', devices: devices});
             })
@@ -77,9 +83,15 @@ const DevicesPanel = (props) => {
                                     <h3 className="col col-collapsible l8 left-align headline-title">{props.title}</h3>
                                     <a href="/addDevice"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
-                                <ul className="collapsible expandable expandable-component">
+                                <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
+                                    <ColorCircularProgress />
+                                </div>
+                                <div className={(!isDataFound) ? "centered-loading-data-message" : "hidden"}>
+                                    <p>You haven't added any devices yet. Please add a new one.</p>
+                                </div>
+                                <ul className={(isLoading || !isDataFound) ? "hidden" : "collapsible expandable expandable-component"}>
                                     <li className="row row-collapsible row row-collapsible-custom">
-                                        <DeviceList />
+                                        <DeviceList/>
                                     </li>
                                 </ul>
                             </section>

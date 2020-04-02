@@ -253,13 +253,13 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/devices">
-                                {this.state.loggedIn ?
+                                {/*{this.state.loggedIn ?*/}
                                     <Devices
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                     />
-                                    : this.accessDenied()}
+                                    {/*: this.accessDenied()}*/}
                             </Route>
 
                             <Route path="/editDevice">

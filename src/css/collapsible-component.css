@@ -291,6 +291,16 @@
     visibility: hidden !important;
 }
 
+.centered-loading-data-message {
+    text-align: center;
+    padding: 12vh;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
 form.device-form {
     display: contents  !important;
     margin-top: 0 !important;
