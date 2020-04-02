@@ -14,7 +14,7 @@ yarn-build:
     stage: build
     script:
         - yarn install
-        - yarn test
+        - yarn ci-test
         - yarn build
     artifacts:
         paths: 
