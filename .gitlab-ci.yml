@@ -1,10 +1,10 @@
-image: node
+image: cypress/base
 
-# Cache node dependencies across all branches and jobs
+# Cache yarn and cypress across all branches and jobs
 cache:
-    key: one-key-to-rule-them-all
+    key: frontend-cache
     paths:
-        - node_modules/
+        - ~/.cache
 
 stages:
     - build
