@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/editPages.css';
+import * as qs from 'query-string';
 
 
 class EditRoom extends React.Component {
@@ -10,11 +11,16 @@ class EditRoom extends React.Component {
         this.state = {
             username: props.username,
             session_token: props.session_token,
-            room_id: props.roomTo,
+            room_id: "",
             roomName: "",
             type: "0",
             incomplete: false,
         }
+    }
+
+    componentDidMount() {
+        const parsed = qs.parse(window.location.search);
+        this.setState({room_id: parsed.id})
     }
 
     /**
@@ -43,7 +49,7 @@ class EditRoom extends React.Component {
             .then( (res) => {
                 if (res.status === 204) {
                     console.log("Room successfully edited")
-                    this.props.redirectHouse()
+                    this.redirectToHouse()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
@@ -52,7 +58,7 @@ class EditRoom extends React.Component {
                     console.log("Unexpected error")
                 }
             })
-            .catch( error => this.props.logOut(2))
+            .catch( error => console.log(error))
         }
     };
 
@@ -70,7 +76,7 @@ class EditRoom extends React.Component {
         .then( (res) => {
             if (res.status === 203 || res.status === 200) {
                 console.log("Room successfully removed")
-                this.props.redirectHouse()
+                this.redirectToHouse()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
@@ -79,7 +85,7 @@ class EditRoom extends React.Component {
                 console.log("Unexpected error")
             }
         })
-        .catch( error => this.props.logOut(2))
+        .catch( error => console.log(error))
     };
 
     // function to handle state on input change
@@ -88,6 +94,11 @@ class EditRoom extends React.Component {
     };
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
+    }
+    
+    //Redirection to /house
+    redirectToHouse = () => {
+        window.location.href = '/house'
     }
 
     /**
@@ -122,7 +133,7 @@ class EditRoom extends React.Component {
                     </div>
                     {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
                     <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.props.redirectHouse}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.redirectToHouse}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button>
                         <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save Changes</button>
                     </div>
