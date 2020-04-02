@@ -1,10 +1,15 @@
 image: cypress/base
 
+# Environment variables to point at the folders we list as paths below
+variables:
+    CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+
 # Cache yarn and cypress across all branches and jobs
 cache:
     key: frontend-cache
     paths:
-        - /root/.cache
+        - cache/Cypress
+        - node_modules
 
 stages:
     - build
