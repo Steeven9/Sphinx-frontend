@@ -71,7 +71,7 @@ class ResetPassword extends React.Component {
                                 receive the instructions to
                                 restore your password.</p>
 
-                            <div className="password-reset-input"><input type="email" required name="email"
+                            <div><input type="email" required name="email"
                                                                  value={this.state.email}
                                                                  onChange={this.handleEmailChange} placeholder="Email"/>
                             </div>

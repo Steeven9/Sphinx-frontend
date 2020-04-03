@@ -14,19 +14,6 @@ class ChangePassword extends React.Component {
     }
 
     /**
-     * Adds a new line in the page depending on the value of this.state.success
-     */
-    displayResult = () => {
-        if (this.state.show === 1) {
-            return (<p>Password changed successfully. <a href="/login">Click here</a> to login</p>)
-        } else if (this.state.show === 2) {
-            return (<p>The passwords don't match.</p>)
-        } else if (this.state.show === 3) {
-            return (<p>An error has occurred. Please try again.</p>)
-        }
-    };
-
-    /**
      * Sends the code and the username given in the form to the backend to check it.
      * Depending on the backend response, it will change the "success" and "toSend" variable values.
      */
@@ -76,20 +63,19 @@ class ChangePassword extends React.Component {
             return (<>
                 <h2 className="title">Change password</h2>
 
-                <p className="center-text">Type your new password.</p>
+                <p className="center-text">Type your new password</p>
 
-                <div><input type="password" name="password" onChange={this.changePassword}
-                                                     placeholder="Password" required/></div>
-                <div><input type="password" name="confirmPassword"
-                                                     onChange={this.changeConfirmPassword} placeholder="Repeat password"
-                                                     required/>
+                <div>
+                    <input type="password" name="password" onChange={this.changePassword} placeholder="Password"
+                           required/>
+                </div>
+                <div>
+                    <input type="password" name="confirmPassword" onChange={this.changeConfirmPassword}
+                           placeholder="Repeat password" required/>
                 </div>
 
-                <div className="message-one-line center-text">
-                    {this.displayResult()}
-                </div>
+                <div>
 
-                <div className="buttons1">
                     <div className="center-text">
                         <button type="button" name="button" className="btn-primary waves-effect waves-light btn"
                                 onClick={this.sendDatas}>Change password
@@ -98,6 +84,12 @@ class ChangePassword extends React.Component {
 
                 </div>
             </>)
+        } else if (this.state.show === 1) {
+            return (<p>Password changed successfully. <a href="/login">Click here</a> to login</p>)
+        } else if (this.state.show === 2) {
+            return (<p>The passwords don't match.</p>)
+        } else if (this.state.show === 3) {
+            return (<p>An error has occurred. Please try again.</p>)
         }
     }
 

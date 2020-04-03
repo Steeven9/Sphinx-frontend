@@ -25,10 +25,6 @@
     padding: 30px 80px 50px 80px !important;
 }
 
-.signup-input password-reset-input{
-    width: 50%;
-}
-
 .error-message {
     color: #E30000;
 }

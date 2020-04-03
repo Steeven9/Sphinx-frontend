@@ -222,3 +222,7 @@ h3 {
 .textFields {
     max-width: 100%;
 }
+
+.loading-spinner {
+    margin-top: -1em;
+}

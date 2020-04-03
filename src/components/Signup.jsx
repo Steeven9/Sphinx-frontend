@@ -98,32 +98,32 @@ class Signup extends React.Component {
 
                             <div className="row">
 
-                                <div className="signup-input col"><input required name="firstname"
+                                <div className="col l6 m12"><input required name="firstname"
                                                                     value={this.state.firstname}
                                                                     onChange={this.handleFirstnameChange} type="text"
                                                                     placeholder="First name"/></div>
 
-                                <div className="signup-input col"><input required name="lastname"
+                                <div className="col l6 m12"><input required name="lastname"
                                                                     value={this.state.lastname}
                                                                     onChange={this.handleLastnameChange} type="text"
                                                                     placeholder="Last name"/></div>
 
-                                <div className="signup-input col"><input required name="email"
+                                <div className="col l6 m12"><input required name="email"
                                                                     value={this.state.email}
                                                                     onChange={this.handleEmailChange} type="email"
                                                                     placeholder="Email"/></div>
 
-                                <div className="signup-input col"><input required name="username"
+                                <div className="col l6 m12"><input required name="username"
                                                                     value={this.state.username}
                                                                     onChange={this.handleUsernameChange} type="text"
                                                                     placeholder="Username"/></div>
 
-                                <div className="signup-input col"><input required name="password"
+                                <div className="col l6 m12"><input required name="password"
                                                                     value={this.state.password}
                                                                     onChange={this.handlePasswordChange} type="password"
                                                                     placeholder="Password"/></div>
 
-                                <div className="signup-input col"><input required name="confirmPassword"
+                                <div className="col l6 m12"><input required name="confirmPassword"
                                                                     value={this.state.confirmPassword}
                                                                     onChange={this.handleConfirmPasswordChange}
                                                                     type="password" placeholder="Confirm Password"/>
