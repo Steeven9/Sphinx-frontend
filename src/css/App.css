@@ -122,6 +122,14 @@ h3 {
     padding-left: 0 !important;
 }
 
+.primary-link {
+    color: #580B71 !important;
+}
+
+.center-text {
+    text-align: center;
+}
+
 .content-box {
     margin: 10vh auto !important;
     background-color: #FFFFFF !important;

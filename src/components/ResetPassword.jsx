@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/loginPages.css';
+import '../css/loginSignup.css';
 
 
 class ResetPassword extends React.Component {

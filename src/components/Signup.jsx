@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/loginPages.css';
+import '../css/loginSignup.css';
 
 
 class Signup extends React.Component {
@@ -25,7 +25,7 @@ class Signup extends React.Component {
         evt.preventDefault();
         fetch('http://localhost:8080/user/' + this.state.username, {
             method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
             body: JSON.stringify(
                 {
                     username: this.state.username,
@@ -34,7 +34,7 @@ class Signup extends React.Component {
                     password: this.state.password
                 })
         })
-            .then( (res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
+            .then((res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
     };
 
     /**
@@ -42,31 +42,40 @@ class Signup extends React.Component {
      */
     displayResult = () => {
         if (this.state.success === 1) {
-            return (<p>Account created successfully, please check your inbox.</p>)
-        }
-        else if (this.state.success === 0) {
-            return (<p>The account couldn't be created. Try checking your information.</p>)
+            return (
+                <>
+                    <span className="success-message">Account created successfully!</span><br/>
+                    <span className="success-message">Please check your inbox and confirm your email account.</span>
+                </>
+            )
+        } else if (this.state.success === 0) {
+            return (
+                <>
+                    <span className="error-message">The account couldn't be created!</span><br/>
+                    <span className="error-message">Check your information and try again.</span>
+                </>
+            )
         }
     }
 
     //Functions that handle changes in the inputs
     handleUsernameChange = evt => {
-        this.setState({ username: evt.target.value });
+        this.setState({username: evt.target.value});
     };
     handleFirstnameChange = evt => {
-        this.setState({ firstname: evt.target.value });
+        this.setState({firstname: evt.target.value});
     };
     handleLastnameChange = evt => {
-        this.setState({ lastname: evt.target.value });
+        this.setState({lastname: evt.target.value});
     };
     handleEmailChange = evt => {
-        this.setState({ email: evt.target.value });
+        this.setState({email: evt.target.value});
     };
     handlePasswordChange = evt => {
-        this.setState({ password: evt.target.value });
+        this.setState({password: evt.target.value});
     };
     handleConfirmPasswordChange = evt => {
-        this.setState({ confirmPassword: evt.target.value });
+        this.setState({confirmPassword: evt.target.value});
     };
 
     /**
@@ -74,45 +83,73 @@ class Signup extends React.Component {
      * isEnabled: boolean to enable button
      */
     render() {
-        const { firstname, lastname, username, email, password, confirmPassword } = this.state;
+        const {firstname, lastname, username, email, password, confirmPassword} = this.state;
         const isEnabled = (email.length > 0 && password.length > 0 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password);
 
         return (
-            <article>
-                <div id="content" className="container">
-                    <div className="content-box1 content-box z-depth-2">
-                        <h2 className="title">Create account</h2>
+            <div id="wrapper" className="homepage img-homepage-headline main-img-background">
 
-                        <p>All fields are required</p>
+                <article>
+                    <div id="content" className="container">
+                        <div className="signup-box z-depth-2">
+                            <h2 className="title">Create account</h2>
 
-                        <div className="dates">
+                            <p>All fields are required</p>
 
-                            <div className="dates-input"><input className="cred" required name="firstname" value={this.state.firstname} onChange={this.handleFirstnameChange} type="text" placeholder="First name" /></div>
+                            <div className="row">
 
-                            <div className="dates-input"><input className="cred" required name="lastname" value={this.state.lastname} onChange={this.handleLastnameChange} type="text" placeholder="Last name" /></div>
+                                <div className="signup-input col"><input required name="firstname"
+                                                                    value={this.state.firstname}
+                                                                    onChange={this.handleFirstnameChange} type="text"
+                                                                    placeholder="First name"/></div>
 
-                            <div className="dates-input"><input className="cred" required name="email" value={this.state.email} onChange={this.handleEmailChange} type="email" placeholder="Email" /></div>
+                                <div className="signup-input col"><input required name="lastname"
+                                                                    value={this.state.lastname}
+                                                                    onChange={this.handleLastnameChange} type="text"
+                                                                    placeholder="Last name"/></div>
 
-                            <div className="dates-input"><input className="cred" required name="username" value={this.state.username} onChange={this.handleUsernameChange} type="text" placeholder="Username" /></div>
+                                <div className="signup-input col"><input required name="email"
+                                                                    value={this.state.email}
+                                                                    onChange={this.handleEmailChange} type="email"
+                                                                    placeholder="Email"/></div>
 
-                            <div className="dates-input"><input className="cred" required name="password" value={this.state.password} onChange={this.handlePasswordChange} type="password" placeholder="Password" /></div>
+                                <div className="signup-input col"><input required name="username"
+                                                                    value={this.state.username}
+                                                                    onChange={this.handleUsernameChange} type="text"
+                                                                    placeholder="Username"/></div>
 
-                            <div className="dates-input"><input className="cred" required name="confirmPassword" value={this.state.confirmPassword} onChange={this.handleConfirmPasswordChange} type="password" placeholder="Confirm Password" /></div>
+                                <div className="signup-input col"><input required name="password"
+                                                                    value={this.state.password}
+                                                                    onChange={this.handlePasswordChange} type="password"
+                                                                    placeholder="Password"/></div>
 
-                        </div>
+                                <div className="signup-input col"><input required name="confirmPassword"
+                                                                    value={this.state.confirmPassword}
+                                                                    onChange={this.handleConfirmPasswordChange}
+                                                                    type="password" placeholder="Confirm Password"/>
+                                </div>
 
-                        { this.displayResult() }
+                            </div>
 
-                        <div className="center">
+                            <div className="message-two-lines center-text">
+                                {this.displayResult()}
+                            </div>
 
-                            <button type="button" name="button" className="btn-secondary btn" onClick={() => window.location.href="/login"}>Sign in</button>
+                            <div className="center">
 
-                            <button type="button" disabled={!isEnabled} name="button" className="btn-primary btn" onClick={this.sendDatas}>Create</button>
+                                <button type="button" name="button" className="btn-secondary waves-effect waves-light btn"
+                                        onClick={() => window.location.href = "/login"}>Sign in
+                                </button>
 
+                                <button type="button" disabled={!isEnabled} name="button" className="btn-primary waves-effect waves-light btn"
+                                        onClick={this.sendDatas}>Create
+                                </button>
+
+                            </div>
                         </div>
                     </div>
-                </div>
-            </article>
+                </article>
+            </div>
         );
     }
 }
