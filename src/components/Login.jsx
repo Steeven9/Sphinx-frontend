@@ -18,6 +18,12 @@ class Login extends React.Component {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
+    }
+
     /**
      * Sends all informations contained in this.state to the backend
      */
@@ -76,6 +82,9 @@ class Login extends React.Component {
     handlePasswordChange = evt => {
         this.setState({password: evt.target.value});
     };
+    // handleKeyPress = evt => {
+    //     if (evt.key === 'Enter') sendDatas()
+    // };
 
     /**
      * State: username, password
