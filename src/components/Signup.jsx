@@ -56,7 +56,7 @@ class Signup extends React.Component {
                 </>
             )
         }
-    }
+    };
 
     //Functions that handle changes in the inputs
     handleUsernameChange = evt => {
