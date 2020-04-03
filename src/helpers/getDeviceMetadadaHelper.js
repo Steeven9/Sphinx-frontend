@@ -65,3 +65,43 @@ export function getRowIcon(device) {
         return 'arrow_drop_up';
     }
 }
+
+/**
+ * Returns the device type name
+ * @param type {int}
+ * @returns {string}
+ */
+export function getDeviceTypeName(type) {
+    switch(type){
+        // Regular lights (w/o intensity)
+        case 1:
+            return 'Light';
+
+        // Smart lights (with intensity state)
+        case 2:
+            return 'Smart light';
+
+        // Light controllers
+        case 3:
+            return 'Switch';
+        case 4:
+            return 'Smart dimmer';
+        case 5:
+            return 'Dimmer';
+        case 6:
+            return 'SmartPlug';
+
+        // Sensors
+        case 7:
+            return 'Humidity sensor';
+        case 8:
+            return 'Light sensor';
+        case 9:
+            return 'Temperature sensor';
+        case 10:
+            return 'Motion sensor';
+
+        default:
+            return 'Unknown device';
+    }
+}

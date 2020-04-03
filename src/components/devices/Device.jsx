@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import DevicesContext from '../../context/devices-context'
-import { getDeviceIcon } from '../../helpers/getIconsHelper'
-import { getRowIcon } from '../../helpers/getIconsHelper'
+import {getDeviceIcon, getDeviceTypeName} from '../../helpers/getDeviceMetadadaHelper'
+import {getRowIcon} from '../../helpers/getDeviceMetadadaHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
@@ -13,10 +13,9 @@ import Slider from '@material-ui/core/Slider'
  * @constructor
  */
 const Device = ({ device }) => {
-    const { devices, dispatch } = useContext(DevicesContext);
+    const { devices, dispatch, isRoom } = useContext(DevicesContext);
     const [intensity, setIntensity] = useState(device.slider);
     const [disabled, setDisabled] = useState(device.disable);
-
     /**
      * Disables slider for stateless dimmers. As a secondary, needed effect, the call to this
      * effect is also needed to extract the next value from the state via de dependencies call.
@@ -58,7 +57,7 @@ const Device = ({ device }) => {
     const handleChangeCommitted = (e, val) => {
         setIntensity(val);
         device.slider = val;
-        dispatch({type: 'MODIFY_DEVICES', device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device});
     };
 
     /**
@@ -160,14 +159,15 @@ const Device = ({ device }) => {
         <div id={device.id} className={getDeviceHeader(device)}>
             <form id="devicesForm" className="device-form">
                 <div className="col col-collapsible l6 m6 s12">
-                    <div className="col col-collapsible l12 s1 icons-wrapper">
+                    <div className="col col-collapsible l12 s12 icons-wrapper">
                         <i className={"material-icons l1" + (device.child ? " muted-icon" : "")} >{getRowIcon(device)} </i>
                         <div className="icon-device l1">
-                            <img className="" src={getDeviceIcon(device.type)} alt={device.name} />
+                            <img className="" src={getDeviceIcon(device.type)} alt={device.name}/>
                         </div>
                         <div className="device-info col col-collapsible l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>
-                            {!device.child && <p className="device-location">{device.room}</p>}
+                            {!device.child && !isRoom && <p className="device-location">{device.room}</p>}
+                            <p className="device-type-name">{getDeviceTypeName(device.type)}</p>
                         </div>
                     </div>
                 </div>
