@@ -38,6 +38,7 @@ class Login extends React.Component {
                 }
             })
             .then((data) => {
+                this.setState({isLoading: false})
                 if (data === null) {
                     this.setState({error: true});
                 } else {
