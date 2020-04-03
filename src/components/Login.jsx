@@ -5,7 +5,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
-let isLoading = false;
 
 class Login extends React.Component {
 
@@ -14,7 +13,8 @@ class Login extends React.Component {
         this.state = {
             username: '',
             password: '',
-            error: false
+            error: false,
+            isLoading: false
         }
     }
 
@@ -22,7 +22,7 @@ class Login extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
-        isLoading = true;
+        this.setState({isLoading: true})
         evt.preventDefault();
 
         fetch('http://localhost:8080/auth/login/' + this.state.username, {
@@ -38,7 +38,6 @@ class Login extends React.Component {
                 }
             })
             .then((data) => {
-                isLoading = false;
                 if (data === null) {
                     this.setState({error: true});
                 } else {
@@ -122,7 +121,7 @@ class Login extends React.Component {
 
                             <div className="message-one-line center-text">
                                 <span>
-                                    <ColorCircularProgress className={isLoading ? "loading-spinner" : "hidden"}/>
+                                    <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
                                 </span>
                                 <span>
                                     {this.showError()}
