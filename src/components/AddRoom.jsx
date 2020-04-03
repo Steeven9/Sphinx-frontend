@@ -87,7 +87,7 @@ class AddRoom extends React.Component {
     render() {
         return (         
             <div className="addRoom">
-                <div className="content-box">
+                <div className="content-box content-box-transparency">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
                         <span className="textFields"><input type="text" name="roomName" placeholder="Room Name"
