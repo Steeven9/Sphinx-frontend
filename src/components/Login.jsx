@@ -1,7 +1,10 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/loginPages.css';
+import '../css/loginSignup.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class Login extends React.Component {
 
@@ -10,7 +13,8 @@ class Login extends React.Component {
         this.state = {
             username: '',
             password: '',
-            error: false
+            error: false,
+            isLoading: false
         }
     }
 
@@ -18,21 +22,23 @@ class Login extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
+        this.setState({isLoading: true})
         evt.preventDefault();
+
         fetch('http://localhost:8080/auth/login/' + this.state.username, {
             method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
             body: this.state.password
         })
-            .then( (res) => {
+            .then((res) => {
                 if (res.status === 200) {
                     return res.text();
-                }
-                else {
+                } else {
                     return null;
                 }
             })
-            .then( (data) => {
+            .then((data) => {
+                this.setState({isLoading: false})
                 if (data === null) {
                     this.setState({error: true});
                 } else {
@@ -57,18 +63,18 @@ class Login extends React.Component {
      */
     showError = () => {
         if (this.state.error) {
-            return(
-                <p>Couldn't log in.</p>
+            return (
+                <span className="error-message">Couldn't log in.</span>
             )
         }
     }
 
     // functions to handle state on input change
     handleUsernameChange = evt => {
-        this.setState({ username: evt.target.value });
+        this.setState({username: evt.target.value});
     };
     handlePasswordChange = evt => {
-        this.setState({ password: evt.target.value });
+        this.setState({password: evt.target.value});
     };
 
     /**
@@ -76,54 +82,72 @@ class Login extends React.Component {
      * isEnabled: boolean to enable button
      */
     render() {
-        const { username, password } = this.state;
+        const {username, password} = this.state;
         const isEnabled = username.length > 0 && password.length > 0;
         return (
-            <article>
-                <div id="content" className="container">
-                    <div className="content-box1 content-box z-depth-2">
+            <div id="wrapper" className="homepage img-homepage-headline main-img-background">
 
-                        <h2 className="title">Login</h2>
+                <article>
+                    <div id="content" className="container">
+                        <div className="login-box z-depth-2">
 
-                        <p>All fields are required</p>
+                            <h2 className="title">Log in</h2>
 
-                        <div
-                            className="dates-input1"><input
-                            type="text"
-                            required={true}
-                            name="username"
-                            value={this.state.username}
-                            onChange={this.handleUsernameChange}
-                            placeholder="Username or email" /></div>
+                            <p>All fields are required</p>
 
-                        <div className="dates-input1"><input
-                            type="password"
-                            name="password"
-                            required={true}
-                            value={this.state.password}
-                            onChange={this.handlePasswordChange}
-                            placeholder="Password" /></div>
+                            <div
+                                className="dates-input1">
+                                <input
+                                    type="text"
+                                    required={true}
+                                    name="username"
+                                    value={this.state.username}
+                                    onChange={this.handleUsernameChange}
+                                    placeholder="Username or email"/>
+                            </div>
 
-                        { this.showError() }
+                            <div className="dates-input1">
+                                <input
+                                    type="password"
+                                    name="password"
+                                    required={true}
+                                    value={this.state.password}
+                                    onChange={this.handlePasswordChange}
+                                    placeholder="Password"/>
+                            </div>
 
-                        <a href="/reset">Forgot your password?</a>
+                            <div className="center-text forgot-password">
+                                <a className="primary-link" href="/reset">Forgot your password?</a>
+                            </div>
 
-                        <div className="center">
-                            <button type="button"
-                                    name="button"
-                                    className="btn-secondary btn"
-                                    onClick={() => window.location.href="/signup"}>Create account</button>
+                            <div className="message-one-line center-text">
+                                <span>
+                                    <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                                </span>
+                                <span>
+                                    {this.showError()}
+                                </span>
+                            </div>
 
-                            <button type="button"
-                                    disabled= {!isEnabled}
-                                    name="button"
-                                    className="btn-primary btn"
-                                    onClick={this.sendDatas}>Login</button>
+                            <div className="center">
+                                <button type="button"
+                                        name="button"
+                                        className="btn-secondary waves-effect waves-light btn"
+                                        onClick={() => window.location.href = "/signup"}>Create account
+                                </button>
+
+                                <button type="button"
+                                        disabled={!isEnabled}
+                                        name="button"
+                                        className="btn-primary waves-effect waves-light btn"
+                                        onClick={this.sendDatas}>Log in
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-            </article>
+                </article>
+            </div>
         );
     }
 }

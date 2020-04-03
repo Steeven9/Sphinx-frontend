@@ -75,7 +75,7 @@ class House extends React.Component {
                 <div className="content-box">
                     <div className="canvas1">
                         <h2>My rooms</h2>
-                        <a href="/addRoom" className="add-btn waves-effect waves-light btn-primary-circular">+</a>
+                        <a href="/addRoom"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                     </div>
 
                     <div className="canvas2">

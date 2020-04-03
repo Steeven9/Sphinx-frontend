@@ -45,7 +45,9 @@ class App extends React.Component {
         this.state = {
             loggedIn: true,
             username: username,
-            session_token: session_token
+            session_token: session_token,
+
+            loginAccess: true,
         }
     }
 
@@ -66,13 +68,13 @@ class App extends React.Component {
                 },
             })
                 .then((res) => res.status === 200 ?
-                    this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn })
+                    this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn, loginAccess: false })
                     :
                     this.logOut(0)
                 )
         }
         else {
-            this.setState({ username: "", session_token: "", loggedIn: false })
+            this.setState({ username: "", session_token: "", loggedIn: false, loginAccess: true })
         }
     }
 
@@ -83,14 +85,16 @@ class App extends React.Component {
         this.setState({
             username: user,
             session_token: token,
-            loggedIn: true
+            loggedIn: true,
         });
 
         localStorage.setItem("username", user);
         localStorage.setItem("session_token", token);
         localStorage.setItem("loggedIn", "true");
 
-        window.location.href = "/";
+        if (this.state.loggedIn) {
+            window.location.href = "/";
+        }
     }
 
     /**
@@ -101,7 +105,8 @@ class App extends React.Component {
         this.setState({
             username: "",
             session_token: "",
-            loggedIn: false
+            loggedIn: false,
+            loginAccess: true
         });
 
         localStorage.setItem("username", "");
@@ -185,10 +190,12 @@ class App extends React.Component {
                         <Switch>
 
                             <Route path="/login">
-                                {this.state.loggedIn ? this.accessDenied() :
+                                {this.state.loginAccess ? 
                                     <Login
                                         logIn={this.logIn}
                                     />
+                                    :
+                                    this.accessDenied()
                                 }
                             </Route>
 

@@ -87,7 +87,7 @@ class AddRoom extends React.Component {
     render() {
         return (         
             <div className="addRoom">
-                <div className="content-box">
+                <div className="content-box content-box-transparency">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
                         <span className="textFields"><input type="text" name="roomName" placeholder="Room Name"
@@ -113,8 +113,8 @@ class AddRoom extends React.Component {
                         {this.roomCreated()}
                     </div>
                     <div className="center">
-                        <button type="button" name="button" className="btn-secondary btn" onClick={this.redirectToHouse}>Cancel</button>
-                        <button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Save room</button>
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
+                        <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>
                     </div>
                 </div>
             </div>
