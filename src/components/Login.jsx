@@ -23,6 +23,7 @@ class Login extends React.Component {
      */
     sendDatas = evt => {
         this.setState({isLoading: true})
+        this.setState({error: false})
         evt.preventDefault();
 
         fetch('http://localhost:8080/auth/login/' + this.state.username, {

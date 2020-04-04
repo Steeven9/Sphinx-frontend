@@ -3,7 +3,6 @@ import '../css/App.css';
 import '../css/editPages.css';
 import * as qs from 'query-string';
 
-
 class EditRoom extends React.Component {
 
     constructor(props) {
@@ -64,6 +63,7 @@ class EditRoom extends React.Component {
 
     /**
      * Deletes the Room
+     * * @param evt
      */
     deleteRoom = evt => {
         fetch('http://localhost:8080/rooms/' + this.state.room_id, {
@@ -131,17 +131,14 @@ class EditRoom extends React.Component {
                             </select>
                         </div>
                     </div>
-                    {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
+                    {this.state.incomplete ? <p><b>Please fill in all the data</b></p> : <></>}
                     <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.redirectToHouse}>Cancel</button>
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button>
-                        <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save Changes</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteRoom}>Delete Room</button>
+                        <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save Changes</button>
                     </div>
                 </div>
             </div>
         );
     }
 }
-
-
-export default EditRoom;
