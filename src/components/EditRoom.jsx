@@ -34,21 +34,48 @@ class EditRoom extends React.Component {
         else {
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
                 method: 'PUT',
-                headers: { 
+                headers: {
                     'user': this.state.username,
                     'session-token': this.state.session_token,
-                    'Accept': 'application/json', 
-                    'Content-Type': 'application/json' 
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: this.state.roomName, 
-                    icon: this.props.findPathRoom(this.state.type, 0), 
+                    name: this.state.roomName,
+                    icon: this.props.findPathRoom(this.state.type, 0),
                     background: this.props.findPathRoom(this.state.type, 1),
                 })
             })
+                .then( (res) => {
+                    if (res.status === 204) {
+                        console.log("Room successfully edited")
+                        this.redirectToHouse()
+                    }
+                    else if (res.status === 401) {
+                        this.props.logOut(1)
+                    }
+                    else {
+                        console.log("Unexpected error")
+                    }
+                })
+                .catch( error => console.log(error))
+        }
+    };
+
+    /**
+     * Deletes the Room
+     */
+    deleteRoom = evt => {
+        fetch('http://localhost:8080/rooms/' + this.state.room_id, {
+            method: 'DELETE',
+            headers: {
+                'user': this.state.username,
+                'session-token': this.state.session_token,
+            }
+        })
             .then( (res) => {
-                if (res.status === 204) {
-                    console.log("Room successfully edited")
+                if (res.status === 203 || res.status === 200) {
+                    console.log("Room successfully removed")
                     this.redirectToHouse()
                 }
                 else if (res.status === 401) {
@@ -59,33 +86,6 @@ class EditRoom extends React.Component {
                 }
             })
             .catch( error => console.log(error))
-        }
-    };
-
-    /**
-     * Deletes the Room
-     */
-    deleteRoom = evt => {
-        fetch('http://localhost:8080/rooms/' + this.state.room_id, {
-            method: 'DELETE',
-            headers: { 
-                'user': this.state.username,
-                'session-token': this.state.session_token,
-            }
-        })
-        .then( (res) => {
-            if (res.status === 203 || res.status === 200) {
-                console.log("Room successfully removed")
-                this.redirectToHouse()
-            }
-            else if (res.status === 401) {
-                this.props.logOut(1)
-            }
-            else {
-                console.log("Unexpected error")
-            }
-        })
-        .catch( error => console.log(error))
     };
 
     // function to handle state on input change
@@ -95,7 +95,7 @@ class EditRoom extends React.Component {
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
     }
-    
+
     //Redirection to /house
     redirectToHouse = () => {
         window.location.href = '/house'
@@ -110,9 +110,9 @@ class EditRoom extends React.Component {
                 <div className="Handle-content-box2">
                     <h2 className="title">Edit Room</h2>
                     <div className="textFields">
-                        <div className="textFields"><input type="text" name="" placeholder="New Name" 
-                            onChange={this.handleRoomNameChange} required/></div>
-                        <div className="textFields"> 
+                        <div className="textFields"><input type="text" name="" placeholder="New Name"
+                                                           onChange={this.handleRoomNameChange} required/></div>
+                        <div className="textFields">
                             <select className="selector" onChange={this.handleTypeChange}>
                                 <option value="0">Select Room Type</option>
                                 <option value="attic">Attic</option>
@@ -133,9 +133,9 @@ class EditRoom extends React.Component {
                     </div>
                     {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
                     <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.redirectToHouse}>Cancel</button>
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteRoom}>Delete Room</button>
-                        <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save Changes</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteRoom}>Delete Room</button>
+                        <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save Changes</button>
                     </div>
                 </div>
             </div>
