@@ -190,6 +190,11 @@
         margin-right: 3vh !important;
     }
 
+    .display-info-thermostat {
+        padding: 0.7vh;
+        height: 30px !important;
+    }
+
 }
 
 .flex-container {
@@ -293,6 +298,17 @@
     color: #FFFFFF;
 }
 
+.display-info-thermostat {
+    padding: 0.7vh;
+    border-radius: 21px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 28px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
 .display-active {
     background: #580B71;
 }
@@ -354,4 +370,10 @@
 form.device-form {
     display: contents  !important;
     margin-top: 0 !important;
+}
+
+/* Disables unwanted backgorund color on focus being lost in Thermostat state/mode buttons */
+button:focus {
+    outline: none;
+    background-color: transparent;
 }

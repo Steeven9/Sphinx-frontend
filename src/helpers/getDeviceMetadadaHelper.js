@@ -11,7 +11,7 @@
      9: TempSensor
     10: MotionSensor
     11: Thermostat
-    12: Blinds
+    12: SmartCurtains
     13: SecurityCamera
  */
 
@@ -57,7 +57,7 @@ export function getDeviceIcon(type) {
 
         // Other
         case 12:
-            return '/img/icons/devices/other-blinds.svg';
+            return '/img/icons/devices/smart-curtains.svg';
 
         // Surveillance
         case 13:
@@ -123,7 +123,7 @@ export function getDeviceTypeName(type) {
 
         // Other
         case 12:
-            return 'Blinds';
+            return 'Smart curtains';
 
         // Surveillance
         case 13:
@@ -176,7 +176,7 @@ export function getSliderMarks(type) {
         },
     ];
 
-    const blindMarks = [
+    const curtainsMarks = [
         {
             value: 0,
             label: 'Dark',
@@ -195,6 +195,6 @@ export function getSliderMarks(type) {
         case 11:
             return temperatureMarks;
         case 12:
-            return blindMarks;
+            return curtainsMarks;
     }
 }

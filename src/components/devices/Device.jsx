@@ -6,6 +6,11 @@ import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
 import ToggleButtons from "./ToggleButtons";
+import CardMedia from '@material-ui/core/CardMedia'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 /**
  * Device factory that can create any type of device
@@ -14,9 +19,11 @@ import ToggleButtons from "./ToggleButtons";
  * @constructor
  */
 const Device = ({device}) => {
-        const {devices, dispatch, isRoom, customMuiTheme} = useContext(DevicesContext);
+        const {devices, dispatch, isRoom} = useContext(DevicesContext);
         const [intensity, setIntensity] = useState(device.slider);
         const [disabled, setDisabled] = useState(device.disable);
+        const [open, setOpen] = React.useState(false);
+
         /**
          * Disables slider for stateless dimmers. As a secondary, needed effect, the call to this
          * effect is also needed to extract the next value from the state via de dependencies call.
@@ -62,6 +69,16 @@ const Device = ({device}) => {
             dispatch({type: 'MODIFY_DEVICE', device: device});
         };
 
+        const handleClickOpen = () => {
+            setOpen(true);
+            if(open) {
+            }
+        };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
         /**
          * Assigns classes to parent or child device's header
          * @param device
@@ -95,7 +112,7 @@ const Device = ({device}) => {
                 case 4: //DimmableSwitch
                 case 5: //StatelessDimmableSwitch
                 case 11: //Thermostat
-                case 12: //Blinds
+                case 12: //SmartCurtains
                     return getSlider(device.type);
                 case 6: //SmartPlug
                     return (<SmartPlug device={device}/>);
@@ -112,9 +129,15 @@ const Device = ({device}) => {
                 case 13: //MotionSensor
                     return (
                         <div className={"col col-collapsible l9 s8"}>
+                            {device.on && <AlertDialog/>}
                             <button type="button" name="button"
+                                    disabled={!device.on ? true : false}
                                     className={"waves-effect waves-light" + (device.on ? " btn-video-active" : " btn-video-inactive")}
-                                    onClick={showVideoFeed}>{(device.on ? "Watch now" : "No video feed")}</button>
+                                    onClick={handleClickOpen}>{(device.on ? "Watch now" : "No video feed")}
+                            </button>
+                            {/*<Button variant="outlined" color="primary" onClick={handleClickOpen}>*/}
+                            {/*    Open alert dialog*/}
+                            {/*</Button>*/}
                         </div>
                     );
                 default:
@@ -122,8 +145,21 @@ const Device = ({device}) => {
             }
         }
 
-        function showVideoFeed() {
-            // implement function here
+    /**
+     * Gets the either the temperature read by a thermostat or the average temperature of the room
+     * @param d {devie}
+     * @returns {{src, options: {sourceMap: boolean, sourceMapStyle: string}, dest: string}|{src: [string]}|number}
+     */
+    function getThermostatTemp(d) {
+            if (d.source === 0) {
+                return d.temp
+            }
+            if (d.source === 1) {
+                let filteredDevices = devices.filter((d) => d.type === 9 && d.roomId === device.roomId).map((d) => d.label)
+                filteredDevices.push(device.temp);
+                let averageTemp = filteredDevices.reduce((total, temperature) => (total + temperature)) / filteredDevices.length;
+                return averageTemp;
+            }
         }
 
         /**
@@ -138,9 +174,6 @@ const Device = ({device}) => {
                     return (<>
                         <div className="row">
                             <div className="col l9">
-                                <div className={"col l12 col-collapsible display-info" + (device.label ? " display-active" : " display-inactive")}>
-                                    <span>{device.label || "- - - - - -"}</span>
-                                </div>
                                 <Slider name={"slider"}
                                         onChange={(e, val) => {
                                             handleChange(e, val)
@@ -154,9 +187,13 @@ const Device = ({device}) => {
                                         max={minMax[1]}
                                         disabled={disabled}
                                         marks={getSliderMarks(device.type)}/>
+                                <div
+                                    className={"col l12 col-collapsible display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
+                                    <span>{device.state !== 0 ? getThermostatTemp(device) + " " + device.unit : "- - - - - -"}</span>
+                                </div>
                             </div>
                             <div className="col l2">
-                                    <ToggleButtons device={device}/>
+                                <ToggleButtons device={device}/>
                             </div>
 
                             {/*<div className="col l1"></div>*/}
@@ -182,7 +219,6 @@ const Device = ({device}) => {
             }
         }
 
-
         /**
          * Generates a power switch to turn a device on or off
          * @param device {Device}
@@ -194,7 +230,7 @@ const Device = ({device}) => {
                 case 8: //LightSensor
                 case 9: //TempSensor
                 case 10: //MotionSensor
-                case 12: //Blinds
+                case 12: //SmartCurtains
                     return (<div className="row row-collapsible l1">
                         <div className="">
                             <div className="col col-collapsible l2 m1 s1">
@@ -205,10 +241,10 @@ const Device = ({device}) => {
                     </div>);
                 case 11: //Thermostat
                     return (
-                            <div className="col col-collapsible l1 m1 s1">
-                                <i className="material-icons btn-edit btn-edit-no-switch"
-                                   onClick={() => redirectToEdit(device.id)}>edit</i>
-                            </div>
+                        <div className="col col-collapsible l1 m1 s1">
+                            <i className="material-icons btn-edit btn-edit-no-switch"
+                               onClick={() => redirectToEdit(device.id)}>edit</i>
+                        </div>
                     );
                 default:
                     return (<div className="col col-collapsible l4 device-control-switch">
@@ -223,6 +259,39 @@ const Device = ({device}) => {
                     </div>);
             }
         }
+    /**
+     * Generates a modal to play the security cam video
+     * @returns {AlertDialog}
+     **/
+    function AlertDialog() {
+            let video = 'https://res.cloudinary.com/erickgarro/video/upload/v1586203233/SmartHut/video-cabin.mp4'
+        return (
+            <div>
+                <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <h2 className="center-text">{device.room}: {device.name}</h2>
+                    {/*<DialogTitle id="alert-dialog-title">{device.room + ": " + device.name}</DialogTitle>*/}
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            <CardMedia
+                            component="video"
+                            image={video}
+                            autoPlay="true"
+                            loop="true"
+                            />
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={handleClose}>Close</button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        );
+    }
 
         return (
             <div id={device.id} className={getDeviceHeader(device)}>
@@ -251,7 +320,6 @@ const Device = ({device}) => {
                 </form>
             </div>
         )
-    }
-;
+    };
 
 export {Device as default}
