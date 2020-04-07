@@ -190,6 +190,11 @@
         margin-right: 3vh !important;
     }
 
+    .display-info-thermostat {
+        padding: 0.7vh;
+        height: 30px !important;
+    }
+
 }
 
 .flex-container {
@@ -228,11 +233,73 @@
     color: #FFFFFF;
 }
 
+.btn-video-active {
+    padding: 0.7vh;
+    margin-top: 0.75vh;
+    height: 30px !important;
+    border-radius: 21px;
+    font-style: normal;
+    font-size: 14px;
+    width: 100% !important;
+    text-align: center;
+    white-space: nowrap;
+    background: #FFB800 !important;
+    text-transform: none !important;
+    color: #580B71 !important;
+}
+
+.btn-video-inactive {
+    padding: 0.7vh;
+    margin-top: 0.75vh;
+    height: 30px !important;
+    border-radius: 21px;
+    font-style: normal;
+    font-size: 14px;
+    width: 100% !important;
+    text-align: center;
+    white-space: nowrap;
+    background: #848484;
+    text-transform: none !important;
+    color: #FFF;
+}
+
+.btn-group {
+    /*background-color: #FFB800 !important;*/
+    /*color: #580B71 !important;*/
+    border: 0;
+    cursor: pointer;
+    margin-bottom: 10px;
+    display: inline-flex;
+    outline: 0;
+    padding: 0;
+    position: relative;
+    align-items: center;
+    user-select: none;
+    border-radius: 0;
+    vertical-align: middle;
+    -moz-appearance: none;
+    justify-content: center;
+    text-decoration: none;
+    -webkit-appearance: none;
+}
+
+
 .display-info {
     padding: 0.7vh;
     margin-top: 0.75vh;
     /*width: 80px !important;*/
     height: 30px !important;
+    border-radius: 21px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 28px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.display-info-thermostat {
+    padding: 0.7vh;
     border-radius: 21px;
     font-style: normal;
     font-weight: 600;
@@ -303,4 +370,10 @@
 form.device-form {
     display: contents  !important;
     margin-top: 0 !important;
+}
+
+/* Disables unwanted backgorund color on focus being lost in Thermostat state/mode buttons */
+button:focus {
+    outline: none;
+    background-color: transparent;
 }
