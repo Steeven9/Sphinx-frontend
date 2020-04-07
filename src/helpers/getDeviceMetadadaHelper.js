@@ -139,10 +139,10 @@ export function getDeviceTypeName(type) {
  * @param type
  * @returns {number[]} [min][max]
  */
-export function getMinMax(type) {
-    switch (type) {
+export function getMinMax(device) {
+    switch (device.type) {
         case 11:
-            return [10, 30];
+            return [device.min, device.max];
         default:
             return [0, 100]
     }
@@ -153,7 +153,7 @@ export function getMinMax(type) {
  * @param type {int}
  * @returns {[{label: string, value: number}, {label: string, value: number}]}
  */
-export function getSliderMarks(type) {
+export function getSliderMarks(device) {
     const lightMarks = [
         {
             value: 0,
@@ -167,34 +167,32 @@ export function getSliderMarks(type) {
 
     const temperatureMarks = [
         {
-            value: 10,
-            label: '10°C',
+            value: device.min,
+            label: device.min + ' ' + device.unit,
         },
         {
-            value: 30,
-            label: '30°C',
+            value: device.max,
+            label: device.max + ' ' + device.unit,
         },
     ];
 
     const curtainsMarks = [
         {
             value: 0,
-            label: 'Dark',
+            label: 'Closed',
         },
         {
             value: 100,
-            label: 'Bright',
+            label: 'Opened',
         },
     ];
 
-    switch (type) {
-        case 2:
-        case 4:
-        default:
-            return lightMarks;
+    switch (device.type) {
         case 11:
             return temperatureMarks;
         case 12:
             return curtainsMarks;
+        default:
+            return lightMarks;
     }
 }

@@ -186,7 +186,7 @@ const Device = ({device}) => {
                                         min={minMax[0]}
                                         max={minMax[1]}
                                         disabled={disabled}
-                                        marks={getSliderMarks(device.type)}/>
+                                        marks={getSliderMarks(device)}/>
                                 <div
                                     className={"col l12 col-collapsible display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
                                     <span>{device.state !== 0 ? getThermostatTemp(device) + " " + device.unit : "- - - - - -"}</span>
@@ -215,7 +215,7 @@ const Device = ({device}) => {
                                     min={minMax[0]}
                                     max={minMax[1]}
                                     disabled={disabled}
-                                    marks={getSliderMarks(device.type)}/>);
+                                    marks={getSliderMarks(device)}/>);
             }
         }
 
