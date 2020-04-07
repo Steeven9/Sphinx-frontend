@@ -183,7 +183,7 @@ export function getSliderMarks(device) {
         },
         {
             value: 100,
-            label: 'Opened',
+            label: 'Open',
         },
     ];
 
