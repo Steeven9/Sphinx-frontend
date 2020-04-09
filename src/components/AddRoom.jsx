@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/addEditRoom.css'
+import '../css/editPages.css'
 
 class AddRoom extends React.Component {
 
@@ -107,6 +107,18 @@ class AddRoom extends React.Component {
         this.changeIcon();
         this.moveToInformation();
     }
+
+    // changeDinamicallyBackground = () => {
+
+    //         var reader = new FileReader();
+    //         var file = e.target.files[0];
+
+    //         reader.addEventListener('load', (event) => {
+    //             const dataUrl = reader.result;
+    //             document.getElementById('imageURL').value = dataUrl;
+    //             console.log(document.getElementById('imageURL').value);
+    //         });
+    // }
     
     //Redirection to /house
     redirectToHouse = () => {
@@ -138,7 +150,7 @@ class AddRoom extends React.Component {
                         <br/><br/><br/>
                         <div className="roomNameAndIcon">
                             <p>Customize background</p> 
-                            <input type="file" accept="image/jpeg"/>
+                            <input type="file" accept="image/jpeg" id="inputPicture"/>
                             
                         </div>
                         
