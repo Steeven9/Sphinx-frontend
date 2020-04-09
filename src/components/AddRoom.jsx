@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/App.css';
+import '../css/addEditRoom.css'
 
 class AddRoom extends React.Component {
 
@@ -10,7 +11,9 @@ class AddRoom extends React.Component {
             error: false,
             incomplete: false,
             roomName: "",
-            type: "0"
+            type: "0",
+            iconPath: "/img/icons/rooms/icon-generic-room.svg",
+            iconActualState: "/img/icons/rooms/icon-generic-room.svg"
         }
     }
 
@@ -59,7 +62,7 @@ class AddRoom extends React.Component {
     };
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
-    }
+    };
 
     /**
      * Display a message if a room has been successfully created, and if not an error message
@@ -75,6 +78,35 @@ class AddRoom extends React.Component {
             return(<p>Please complete all fields</p>)
         }
     }
+
+    /*
+    *
+    *   Functions for icon selection
+    * 
+    */
+
+    changeIcon = () => {
+        this.setState({ iconPath: this.state.iconActualState })
+    }
+
+    changeIconState = (path) => {
+        this.setState({ iconActualState: path })
+    }
+
+    moveToSelection = () => {
+        document.getElementById("addRoomInfo").hidden = true
+        document.getElementById("addRoomIconSelection").hidden = false
+    }
+
+    moveToInformation = () => {
+        document.getElementById("addRoomInfo").hidden = false
+        document.getElementById("addRoomIconSelection").hidden = true
+    }
+
+    changeAndMove = () => {
+        this.changeIcon();
+        this.moveToInformation();
+    }
     
     //Redirection to /house
     redirectToHouse = () => {
@@ -87,29 +119,32 @@ class AddRoom extends React.Component {
     render() {
         return (         
             <div className="addRoom">
-                <div className="content-box content-box-transparency">
+                <div id="addRoomInfo" className="content-box content-box-transparency">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
-                        <span className="textFields"><input type="text" name="roomName" placeholder="Room Name"
-                                onChange={this.handleRoomNameChange} required/></span>
-                        <span className="textFields"> 
-                            <select className="selector" onChange={this.handleTypeChange}>
-                                <option value="0">Select Room Type</option>
-                                <option value="attic">Attic</option>
-                                <option value="backyard">Backyard</option>
-                                <option value="basement">Basement</option>
-                                <option value="bathroom">Bathroom</option>
-                                <option value="bedroom">Bedroom</option>
-                                <option value="dining-room">Dining room</option>
-                                <option value="garage">Garage</option>
-                                <option value="generic-room">Generic room</option>
-                                <option value="hallway">Hallway</option>
-                                <option value="house-front">House front</option>
-                                <option value="kitchen">Kitchen</option>
-                                <option value="living-room">Living room</option>
-                                <option value="office">Office</option>
-                            </select>
-                        </span>
+                        <div className="roomNameAndIcon">
+                            <span className="textFields">
+                                <input type="text" name="roomName" placeholder="Room Name" onChange={this.handleRoomNameChange} required/>
+                            </span>
+                            <div className="roomNameAndIcon">
+                                <p>icon*</p> 
+                                &nbsp; &nbsp; &nbsp; &nbsp;
+                                <img className="fixedSizeIcon" src={this.state.iconPath} alt=""/> 
+                                &nbsp; &nbsp; &nbsp; &nbsp;
+                                <button className="removeBorder" onClick={this.moveToSelection}>edit</button>
+                            </div>
+                            
+                        </div>
+                        <br/><br/><br/>
+                        <div className="roomNameAndIcon">
+                            <p>Customize background</p> 
+                            <input type="file" accept="image/jpeg"/>
+                            
+                        </div>
+                        
+
+                        
+                        
                         {this.roomCreated()}
                     </div>
                     <div className="center">
@@ -117,6 +152,30 @@ class AddRoom extends React.Component {
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>
                     </div>
                 </div>
+
+                <div hidden id="addRoomIconSelection" className="content-box  content-box-transparency">
+                    <h2 className="title">Select Icon</h2>
+                    <div className="content-box-iconSelection">
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-bathroom.svg")}><img src="/img/icons/rooms/icon-bathroom.svg" alt=""/><br/>Bathroom </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-office.svg")}><img src="/img/icons/rooms/icon-office.svg" alt=""/><br/>Office </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-attic.svg")}><img src="/img/icons/rooms/icon-attic.svg" alt=""/><br/>Attic </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-basement.svg")}><img src="/img/icons/rooms/icon-basement.svg" alt=""/><br/>Basement </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-backyard.svg")}><img src="/img/icons/rooms/icon-backyard.svg" alt=""/><br/>Backyard </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-garage.svg")}><img src="/img/icons/rooms/icon-garage.svg" alt=""/><br/>Garage </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-dining-room.svg")}><img src="/img/icons/rooms/icon-dining-room.svg" alt=""/><br/>Dining</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-generic-room.svg")}><img src="/img/icons/rooms/icon-generic-room.svg" alt=""/><br/>Generic</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-hallway.svg")}><img src="/img/icons/rooms/icon-hallway.svg" alt=""/><br/>Hallway</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-house-front.svg")}><img src="/img/icons/rooms/icon-house-front.svg" alt=""/><br/>House</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-kitchen.svg")}><img src="/img/icons/rooms/icon-kitchen.svg" alt=""/><br/>Kitchen</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-living-room.svg")}><img src="/img/icons/rooms/icon-living-room.svg" alt=""/><br/>Living</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-bedroom.svg")}><img src="/img/icons/rooms/icon-bedroom.svg" alt=""/><br/>Bedroom </button>
+                    </div>  
+                    <div className="center">
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
+                        <button type="button" name="button" className="btn-primary btn waves-effect waves-light"  onClick={this.changeAndMove}>Choose</button>
+                    </div>
+                </div>
+                
             </div>
 
         );
