@@ -22,11 +22,13 @@ describe('Loads the login page', function () {
             .should('include', '/reset')
         cy.contains('Restore password')
 
-        cy.get('.btn-secondary')
-            .contains('Cancel')
-            .click()
-        cy.url()
-            .should('include', '/login')
+        cy.visit('/login')
+
+        // cy.get('.btn-secondary')
+        //     .contains('Cancel')
+        //     .click()
+        // cy.url()
+        //     .should('include', '/login')
 
             cy.get('.btn-secondary')
             .contains('Create account')
@@ -35,12 +37,6 @@ describe('Loads the login page', function () {
             .should('include', '/signup')
 
             
-
-
-
-        
-
-
         // cy.get('.dates-input1 input[type=text ]')
         //     .type('fake@gmail.com')
         //     .should('have.value', 'fake@gmail.com')
