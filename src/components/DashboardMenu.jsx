@@ -25,23 +25,23 @@ function DashboardMenu() {
             <Grid item>
                 <a href="/devices">
                     <Paper className={classes.paper}>
-                        <img className="dashboard-nav-img" src="/img/icons/dashboard/icon-all-devices-color.svg"/>
-                        <p>My devices</p>
+                        <img alt="Devices" className="dashboard-nav-img" src="/img/icons/dashboard/icon-all-devices-bw.svg"/>
+                        <p>Devices</p>
                     </Paper>
                 </a>
             </Grid>
             <Grid item>
                 <a href="/house">
                     <Paper className={classes.paper}>
-                        <img className="dashboard-nav-img" src="/img/icons/dashboard/icon-all-rooms-color.svg"/>
-                        <p>My rooms</p>
+                        <img alt="Rooms"className="dashboard-nav-img" src="/img/icons/dashboard/icon-all-rooms-bw.svg"/>
+                        <p>Rooms</p>
                     </Paper>
                 </a>
             </Grid>
             <Grid item>
                 <a href="/scenes">
                     <Paper className={classes.paper}>
-                        <img className="dashboard-nav-img" src="/img/icons/dashboard/icon-scenes-color.svg"/>
+                        <img alt="Scenes" className="dashboard-nav-img" src="/img/icons/dashboard/icon-scenes-bw.svg"/>
                         <p>Scenes</p>
                     </Paper>
                 </a>
@@ -49,7 +49,7 @@ function DashboardMenu() {
             <Grid item>
                 <a href="/automation">
                     <Paper className={classes.paper}>
-                        <img className="dashboard-nav-img" src="/img/icons/dashboard/icon-automation-color.svg"/>
+                        <img alt="automation" className="dashboard-nav-img" src="/img/icons/dashboard/icon-automation-bw.svg"/>
                         <p>Automation</p>
                     </Paper>
                 </a>
@@ -57,7 +57,7 @@ function DashboardMenu() {
             <Grid item>
                 <a href="/guests">
                     <Paper className={classes.paper}>
-                        <img className="dashboard-nav-img" src="/img/icons/dashboard/icon-guests-color.svg"/>
+                        <img alt="Guests" className="dashboard-nav-img" src="/img/icons/dashboard/icon-guests-bw.svg"/>
                         <p>Guests</p>
                     </Paper>
                 </a>
