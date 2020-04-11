@@ -55,6 +55,8 @@ class Header extends React.Component {
                                         <li><a href="/">Dashboard</a></li>
                                         <li><a href="/devices">My devices</a></li>
                                         <li><a href="/house">My rooms</a></li>
+                                        <li><a href="/automation">Automation</a></li>
+                                        <li><a href="/guests">Guests</a></li>
                                         <li><a href="/logout">Log out</a></li>
                                     </ul>
                     
