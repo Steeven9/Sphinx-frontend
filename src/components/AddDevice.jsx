@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-// import Select from 'react-select';
+import '../css/devices.css';
 
 class AddDevice extends React.Component {
 
@@ -125,7 +125,7 @@ class AddDevice extends React.Component {
             return (<p>An error has occurred, please try again</p>)
         }
         else if (this.state.incomplete) {
-            return (<p>Please insert all informations</p>)
+            return (<p>Please insert all information</p>)
         }
     }
 
@@ -140,9 +140,9 @@ class AddDevice extends React.Component {
     render() {
         return (
             <div className="addDevice">
-                <div className="content-box">
+                <div className="device-content-box z-depth-2">
                     <h2 className="title">Add device</h2>
-                    <div className="dates">
+                    <div>
                         <div className="textFields">
                             <input type="text" name="" placeholder="Device Name" onChange={this.handleDeviceNameChange} required />
                         </div>

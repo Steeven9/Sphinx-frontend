@@ -31,22 +31,6 @@ h2 {
     justify-content: center;
 }
 
-.content-box3 {
-    margin-left: 50px;
-    margin-right: 50px;
-    margin-top: 100px;
-    margin-bottom: 100px;
-    background-color: #FFFFFF;
-    color: #2C2C2C !important;
-    width: calc(22% + 10vmin);
-    border-radius: 10px;
-    padding: 20px 40px 20px 40px;
-    box-shadow: 0px 0px 5px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center !important;
-}
-
 .dash-text{
     text-align: center;
     color: #580B71;
@@ -89,7 +73,6 @@ h2 {
     top: 18vh;
     right: 20vw;
     font-size: 20px !important;
-    font-family: Open Sans;
 }
 
 .canvas2{
@@ -146,9 +129,38 @@ h2 {
     width: 35px;
     height: 35px;
 }
-  
-.line3{
-    border-top: 2px solid rgb(199, 199, 199);
-    margin: 0px;
-    background-color: inherit;
+
+.rooms-headline {
+    border-bottom: 2px solid rgb(199, 199, 199);
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 20px;
 }
+
+.rooms-content-box {
+    margin: 10vh auto !important;
+    background-color: #FFFFFF !important;
+    color: #2C2C2C !important;
+    width: calc(60% + 10vmin) !important;
+    border-radius: 10px !important;
+    padding: 20px 60px 60px 60px !important;
+}
+
+.room {
+    border-bottom: 1px solid rgb(199, 199, 199);
+}
+
+.room-content-box {
+    margin: 10vh auto !important;
+    background-color: #FFFFFF !important;
+    color: #2C2C2C !important;
+    width: calc(65% + 10vmin) !important;
+    border-radius: 10px !important;
+    padding: 30px 80px 50px 80px !important;
+}
+
+.room-inputs {
+    width: 60%;
+    margin: auto;
+}
+
