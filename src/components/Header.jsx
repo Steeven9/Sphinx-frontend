@@ -5,12 +5,12 @@ import '../css/App.css';
 class Header extends React.Component {
 
     constructor(props) {
-		super(props);
-		this.state = {
-			loggedIn: false
-		}
+        super(props);
+        this.state = {
+            loggedIn: false
+        }
     }
-    
+
     // /**
     //  * React function for changing the state whenever receiving the loggedIn variable from App.js
     //  * @param {*} props - all parameters received from App.js
@@ -19,18 +19,18 @@ class Header extends React.Component {
     //  */
     // static getDerivedStateFromProps(props, state) {
     //     console.log(props.loggedIn)
-	// 	return {
+    // 	return {
     //         loggedIn: props.loggedIn
     //     };
     // }
-    
+
     /**
      * Checks localStorage "loggedIn" value and updates the state accordingly
      */
     componentDidMount() {
         let newLoggedIn = localStorage.getItem("loggedIn") === "true";
         // console.log(newLoggedIn);
-        this.setState({ loggedIn: newLoggedIn })
+        this.setState({loggedIn: newLoggedIn})
     }
 
     /**
@@ -42,36 +42,41 @@ class Header extends React.Component {
         return (
             <header id="page-header" className="header">
                 <div className="navbar-fixed">
-                        <nav className="navbar-fixed">
-                            <div className="nav-wrapper">
-                                <a href="/" className="brand-logo">
-                                    <img className="nav-left nav-logo-horizontal responsive-img" src="/img/logo/logo-horizontal.svg" alt="SmartHut logo" />
-                                </a>
+                    <nav className="navbar-fixed">
+                        <div className="nav-wrapper">
+                            <a href="/" className="brand-logo">
+                                <img className="nav-left nav-logo-horizontal responsive-img"
+                                     src="/img/logo/logo-horizontal.svg" alt="SmartHut logo"/>
+                            </a>
 
-                                {
-                                    this.state.loggedIn ? 
-
-                                    <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                        <li><a href="/">Dashboard</a></li>
-                                        <li><a href="/devices">My devices</a></li>
-                                        <li><a href="/house">My rooms</a></li>
-                                        <li><a href="/logout">Log out</a></li>
-                                    </ul>
-                    
+                            {
+                                this.state.loggedIn ?
+                                    <>
+                                        <ul className="right nav-menu-desktop-right hide-on-med-and-down">
+                                            <li><a href="/">Dashboard</a></li>
+                                            <li><a href="/devices">My devices</a></li>
+                                            <li><a href="/house">My rooms</a></li>
+                                            <li><a href="/scenes">Scenes</a> </li>
+                                            <li><a href="/automation">Automation</a></li>
+                                            <li><a href="/guests">Guests</a></li>
+                                            <li><a href="/logout">Log out</a></li>
+                                        </ul>
+                                    </>
                                     :
 
                                     <ul className="right nav-menu-desktop-right hide-on-med-and-down">
                                         <li><a href="/signup">Create account</a></li>
                                         <li><a href="/login">Log in</a></li>
                                     </ul>
-                                }
+                            }
 
-                            </div>
-                        </nav>
-                    </div>
+                        </div>
+                    </nav>
+                </div>
             </header>
         );
     }
 }
+
 
 export default Header;

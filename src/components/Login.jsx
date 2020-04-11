@@ -14,6 +14,7 @@ class Login extends React.Component {
             username: '',
             password: '',
             error: false,
+            statusCode: '',
             isLoading: false
         }
     }
@@ -24,6 +25,7 @@ class Login extends React.Component {
     sendDatas = evt => {
         this.setState({isLoading: true})
         this.setState({error: false})
+        this.setState({statusCode: ''})
         evt.preventDefault();
 
         fetch('http://localhost:8080/auth/login/' + this.state.username, {
@@ -32,13 +34,15 @@ class Login extends React.Component {
             body: this.state.password
         })
             .then((res) => {
+                this.setState({statusCode: res.status});
+
                 if (res.status === 200) {
                     return res.text();
                 } else {
                     return null;
                 }
             })
-            .then((data) => {
+            .then((data, res) => {
                 this.setState({isLoading: false})
                 if (data === null) {
                     this.setState({error: true});
@@ -63,9 +67,12 @@ class Login extends React.Component {
      * Display an error message if this.state.error === true
      */
     showError = () => {
+        console.log(this.statusCode)
         if (this.state.error) {
             return (
-                <span className="error-message">Couldn't log in.</span>
+                <span className="error-message">
+                    {(this.state.statusCode === 403) ? "Please check your mail and verify your account." : "Couldn't log in. Please check your username or password."}
+                </span>
             )
         }
     }

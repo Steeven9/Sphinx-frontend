@@ -85,7 +85,7 @@ const Device = ({device}) => {
          * @returns {string}
          */
         function getDeviceHeader(device) {
-            if (device.switches !== undefined) {
+            if (device.switches !== null) {
                 return "collapsible-header device-parent";
             } else if (device.child === true) {
                 return "collapsible-header device-child";
@@ -135,9 +135,6 @@ const Device = ({device}) => {
                                     className={"waves-effect waves-light" + (device.on ? " btn-video-active" : " btn-video-inactive")}
                                     onClick={handleClickOpen}>{(device.on ? "Watch now" : "No video feed")}
                             </button>
-                            {/*<Button variant="outlined" color="primary" onClick={handleClickOpen}>*/}
-                            {/*    Open alert dialog*/}
-                            {/*</Button>*/}
                         </div>
                     );
                 default:
@@ -195,9 +192,6 @@ const Device = ({device}) => {
                             <div className="col l2">
                                 <ToggleButtons device={device}/>
                             </div>
-
-                            {/*<div className="col l1"></div>*/}
-
                         </div>
 
                     </>);
@@ -273,8 +267,7 @@ const Device = ({device}) => {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <h2 className="center-text">{device.room}: {device.name}</h2>
-                    {/*<DialogTitle id="alert-dialog-title">{device.room + ": " + device.name}</DialogTitle>*/}
+                    <h2 className="center-text">{device.roomName}: {device.name}</h2>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             <CardMedia
@@ -304,7 +297,7 @@ const Device = ({device}) => {
                             </div>
                             <div className="device-info col col-collapsible l12 m6 s12 left-align">
                                 <p className="device-name">{device.name}</p>
-                                {!device.child && !isRoom && <p className="device-location">{device.room}</p>}
+                                {!device.child && !isRoom && <p className="device-location">{device.roomName}</p>}
                                 <p className="device-type-name">{getDeviceTypeName(device.type)}</p>
                             </div>
                         </div>

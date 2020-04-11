@@ -11,7 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = 'http://localhost:8080/devices/';
-const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
+const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices/';
 const fetchUrl = path[1] === 'room' && +params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
 let isLoading = true;
