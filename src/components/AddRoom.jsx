@@ -11,10 +11,14 @@ class AddRoom extends React.Component {
             error: false,
             incomplete: false,
             roomName: "",
-            type: "0",
-            iconPath: "/img/icons/rooms/icon-generic-room.svg",
-            iconActualState: "/img/icons/rooms/icon-generic-room.svg"
+            type: "generic-room",
+            
         }
+    }
+
+
+    componentDidMount = () => {
+        document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(this.state.type, 1) + ')';
     }
 
     /**
@@ -22,37 +26,37 @@ class AddRoom extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.type === "0" || this.state.roomName.length === 0) {
-            this.setState({success: false, error: false, incomplete: true})
+        if (this.state.roomName.length === 0) {
+            this.setState({ success: false, error: false, incomplete: true })
         }
         else {
             fetch('http://localhost:8080/rooms/', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'user': this.props.username,
                     'session-token': this.props.session_token,
-                    'Accept': 'application/json', 
-                    'Content-Type': 'application/json' 
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: this.state.roomName, 
-                    icon: this.props.findPathRoom(this.state.type, 0), 
+                    name: this.state.roomName,
+                    icon: this.props.findPathRoom(this.state.type, 0),
                     background: this.props.findPathRoom(this.state.type, 1),
                     devices: []
                 })
             })
-            .then( (res) => {
-                if (res.status === 203) {
-                    this.setState({success: true, error: false, incomplete: false})
-                }
-                else if (res.status === 401) {
-                    this.props.logOut(1)
-                }
-                else {
-                    this.setState({success: false, error: true, incomplete: false});
-                }
-            })
-            .catch( error => console.log(error))
+                .then((res) => {
+                    if (res.status === 203) {
+                        this.setState({ success: true, error: false, incomplete: false })
+                    }
+                    else if (res.status === 401) {
+                        this.props.logOut(1)
+                    }
+                    else {
+                        this.setState({ success: false, error: true, incomplete: false });
+                    }
+                })
+                .catch(error => console.log(error))
         }
     };
 
@@ -72,10 +76,10 @@ class AddRoom extends React.Component {
             window.location.href = '/house';
         }
         else if (this.state.error) {
-            return(<p>An error has occurred, please try again</p>)
+            return (<p>An error has occurred, please try again</p>)
         }
         else if (this.state.incomplete) {
-            return(<p>Please complete all fields</p>)
+            return (<p>Please complete all fields</p>)
         }
     }
 
@@ -85,12 +89,10 @@ class AddRoom extends React.Component {
     * 
     */
 
-    changeIcon = () => {
-        this.setState({ iconPath: this.state.iconActualState })
-    }
-
     changeIconState = (path) => {
-        this.setState({ iconActualState: path })
+        this.setState({ type: path });
+        document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
+        this.moveToInformation();
     }
 
     moveToSelection = () => {
@@ -104,7 +106,6 @@ class AddRoom extends React.Component {
     }
 
     changeAndMove = () => {
-        this.changeIcon();
         this.moveToInformation();
     }
 
@@ -121,12 +122,17 @@ class AddRoom extends React.Component {
             });
             reader.readAsDataURL(file);
         }
-        
-         
+
+
     }
 
-    
-    
+
+    resetBackground = () => {
+        document.getElementById('inputPicture').value = "";
+        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
+    }
+
+
     //Redirection to /house
     redirectToHouse = () => {
         window.location.href = '/house'
@@ -136,32 +142,32 @@ class AddRoom extends React.Component {
      * Renders AddRoom page
      */
     render() {
-        return (         
+        return (
             <div className="addRoom" id="addRoom">
                 <div id="addRoomInfo" className="content-box ">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
                         <div className="roomNameAndIcon">
                             <span className="textFields">
-                                <input type="text" name="roomName" placeholder="Room Name" onChange={this.handleRoomNameChange} required/>
+                                <input type="text" name="roomName" placeholder="Room Name" onChange={this.handleRoomNameChange} required />
                             </span>
                             <div className="roomNameAndIcon">
-                                <p>Icon</p> 
-                                <img className="fixedSizeIcon" src={this.state.iconPath} alt="icon error"/> 
-                                <button className="material-icons removeBorder" onClick={this.moveToSelection}>edit</button>
-                            </div> 
-                            
-                        </div>
-                        <br/><br/><br/>
-                        <div className="roomNameAndIcon2">
-                            <p>Customize background</p> 
-                            <input type="file" className="inputBackground" accept="image/*" onChange={this.changeDinamicallyBackground} id="inputPicture"/>
-                            <input type="hidden" id="imageURL" value=""/>
-                        </div>
-                        
+                                <p>Icon</p>
+                                <img className="fixedSizeIcon" src={this.props.findPathRoom(this.state.type, 0)} alt="icon error" />
+                                <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
+                            </div>
 
-                        
-                        
+                        </div>
+                        <br /><br /><br />
+                        <div className="roomNameAndIcon2">
+                            <p>Customize background</p>
+                            <input type="file" className="inputBackground" onClick={this.resetBackground} accept="image/*" onChange={this.changeDinamicallyBackground} id="inputPicture" />
+                            <input type="hidden" id="imageURL" value="" />
+                        </div>
+
+
+
+
                         {this.roomCreated()}
                     </div>
                     <div className="center">
@@ -173,26 +179,22 @@ class AddRoom extends React.Component {
                 <div hidden id="addRoomIconSelection" className="content-box">
                     <h2 className="title">Select Icon</h2>
                     <div className="content-box-iconSelection">
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-bathroom.svg")}><img src="/img/icons/rooms/icon-bathroom.svg" alt="Bathroom"/><br/>Bathroom </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-office.svg")}><img src="/img/icons/rooms/icon-office.svg" alt="Office"/><br/>Office </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-attic.svg")}><img src="/img/icons/rooms/icon-attic.svg" alt="Attic"/><br/>Attic </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-basement.svg")}><img src="/img/icons/rooms/icon-basement.svg" alt="Basement"/><br/>Basement </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-backyard.svg")}><img src="/img/icons/rooms/icon-backyard.svg" alt="Backyard"/><br/>Backyard </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-garage.svg")}><img src="/img/icons/rooms/icon-garage.svg" alt="Garage"/><br/>Garage </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-dining-room.svg")}><img src="/img/icons/rooms/icon-dining-room.svg" alt="Dining"/><br/>Dining</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-generic-room.svg")}><img src="/img/icons/rooms/icon-generic-room.svg" alt="Generic"/><br/>Generic</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-hallway.svg")}><img src="/img/icons/rooms/icon-hallway.svg" alt="Hallway"/><br/>Hallway</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-house-front.svg")}><img src="/img/icons/rooms/icon-house-front.svg" alt="House"/><br/>House</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-kitchen.svg")}><img src="/img/icons/rooms/icon-kitchen.svg" alt="Kitchen"/><br/>Kitchen</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-living-room.svg")}><img src="/img/icons/rooms/icon-living-room.svg" alt="Living"/><br/>Living</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("/img/icons/rooms/icon-bedroom.svg")}><img src="/img/icons/rooms/icon-bedroom.svg" alt="Bedroom"/><br/>Bedroom </button>
-                    </div>  
-                    <div className="center">
-                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
-                        <button type="button" name="button" className="btn-primary btn waves-effect waves-light"  onClick={this.changeAndMove}>Choose</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bathroom")}><img src={this.props.findPathRoom('bathroom', 0)} alt="Bathroom" /><br />Bathroom </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("office")}><img src={this.props.findPathRoom('office', 0)} alt="Office" /><br />Office </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("attic")}><img src={this.props.findPathRoom('attic', 0)} alt="Attic" /><br />Attic </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("basement")}><img src={this.props.findPathRoom('basement', 0)} alt="Basement" /><br />Basement </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("backyard")}><img src={this.props.findPathRoom('backyard', 0)} alt="Backyard" /><br />Backyard </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("garage")}><img src={this.props.findPathRoom('garage', 0)} alt="Garage" /><br />Garage </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("dining-room")}><img src={this.props.findPathRoom('dining-room', 0)} alt="Dining" /><br />Dining Room</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("generic-room")}><img src={this.props.findPathRoom('generic-room', 0)} alt="Generic" /><br />Generic</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("hallway")}><img src={this.props.findPathRoom('hallway', 0)} alt="Hallway" /><br />Hallway</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("house-front")}><img src={this.props.findPathRoom('house-front', 0)} alt="House" /><br />House</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("kitchen")}><img src={this.props.findPathRoom('kitchen', 0)} alt="Kitchen" /><br />Kitchen</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("living-room")}><img src={this.props.findPathRoom('living-room', 0)} alt="Living" /><br />Living</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
                     </div>
                 </div>
-                
+
             </div>
 
         );
