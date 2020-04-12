@@ -1,9 +1,8 @@
 /// <reference types="cypress" />
 
 describe('Test the homepage', function () {
-    it('check all the function of the homepage', function () {
+    it('testing all the buttons', function () {
 
-        //testing page
         cy.visit('/')
         cy.contains('SmartHut')
          

@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
-describe('test the create account page', function () {
-    it('finds the content "SmartHut"', function () {  
+describe('test the reset password', function () {
+    it('testing all the buttons', function () {  
    
    cy.visit('/reset')   
 
