@@ -1,10 +1,11 @@
 /// <reference types="cypress" />
 
-describe('Loads the login page', function () {
-    it('finds the content "SmartHut"', function () {
+describe('Testing the login page', function () {
+    it('testing all the buttons', function () {
         cy.visit('/login')
-
         cy.contains('Log in')
+
+       
 
         cy.get('.btn-secondary')
             .contains('Create account')
@@ -24,24 +25,28 @@ describe('Loads the login page', function () {
 
         cy.visit('/login')
 
-        // cy.get('.btn-secondary')
-        //     .contains('Cancel')
-        //     .click()
-        // cy.url()
-        //     .should('include', '/login')
-
-            cy.get('.btn-secondary')
+        cy.get('.btn-secondary')
             .contains('Create account')
             .click()
         cy.url()
             .should('include', '/signup')
+        
+        cy.visit('/login')
+ 
+        cy.get('.dates-input1 input[type=text ]')
+            .type('fake@gmail.com')
+            .should('have.value', 'fake@gmail.com')
 
-            
-        // cy.get('.dates-input1 input[type=text ]')
-        //     .type('fake@gmail.com')
-        //     .should('have.value', 'fake@gmail.com')
+        cy.get('.dates-input1 input[type=password]')
+            .type('password')
+        cy.get('.btn-primary')
+            .click()
 
-        // cy.get('.dates-input1 input[type=password]')
-        //     .type('password')
+        cy.contains("Couldn't log in")
+
+
+        
+
+
     })
 })

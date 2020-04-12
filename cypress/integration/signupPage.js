@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 describe('test the signup page', function () {
-    it('finds the content "SmartHut"', function () {  
+    it('testing the buttons', function () {  
         cy.visit('/signup')
         
         cy.get('.btn-secondary')
