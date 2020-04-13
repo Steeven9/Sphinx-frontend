@@ -20,6 +20,10 @@ class EditDevice extends React.Component {
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
         this.setState({device_id: parsed.id})
+
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**

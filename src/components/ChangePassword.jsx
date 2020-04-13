@@ -13,6 +13,12 @@ class ChangePassword extends React.Component {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
+    }
+
     /**
      * Sends the code and the username given in the form to the backend to check it.
      * Depending on the backend response, it will change the "success" and "toSend" variable values.

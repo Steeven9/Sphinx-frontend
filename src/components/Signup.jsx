@@ -18,6 +18,12 @@ class Signup extends React.Component {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
+    }
+
     /**
      * Sends all informations contained in this.state to the backend
      */

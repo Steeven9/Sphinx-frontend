@@ -90,9 +90,6 @@ class Login extends React.Component {
     handlePasswordChange = evt => {
         this.setState({password: evt.target.value});
     };
-    // handleKeyPress = evt => {
-    //     if (evt.key === 'Enter') sendDatas()
-    // };
 
     /**
      * State: username, password

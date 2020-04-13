@@ -14,6 +14,12 @@ class AddRoom extends React.Component {
         }
     }
 
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
+    }
+
     /**
      * Sends informations contained in this.state to the backend
      */

@@ -19,6 +19,10 @@ class AddDevice extends React.Component {
     }
 
     componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
+
         fetch('http://localhost:8080/rooms/', {
             method: 'GET',
             headers: {
