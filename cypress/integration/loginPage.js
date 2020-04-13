@@ -5,7 +5,7 @@ describe('Testing the login page', function () {
         cy.visit('/login')
         cy.contains('Log in')
 
-       
+        
 
         cy.get('.btn-secondary')
             .contains('Create account')
