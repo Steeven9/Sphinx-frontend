@@ -139,7 +139,7 @@ class App extends React.Component {
      * Return Device icon path
      */
     findPathDevice = (type) => {
-        let path = './img/icons/devices/'
+        let path = '/img/icons/devices/'
         if (type === "1") path += 'bulb-regular'
         else if (type === "2") path += 'bulb-led'
         else if (type === "3") path += 'switch'

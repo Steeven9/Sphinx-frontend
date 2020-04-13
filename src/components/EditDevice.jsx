@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/editPages.css';
+import '../css/devices.css';
 import * as qs from 'query-string'
 
 
@@ -101,16 +101,16 @@ class EditDevice extends React.Component {
     render() {
         return (
             <div className="editRoom">
-                <div className="Handle-content-box2">
+                <div className="device-content-box z-depth-2">
                     <h2 className="title">Edit Device</h2>
                     <div className="textFields">
                         <div className="textFields"><input type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
                     </div>
                     {this.state.incomplete ? <p><b>Please fill the name</b></p> : <></>}
                     <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.redirectToDevices}>Cancel</button>
-                        <button type="button" name="button" className="Handle-btn-secondary btn" onClick={this.deleteDevice}>Delete Device</button>
-                        <button type="button" name="button" className="Handle-btn-primary btn" onClick={this.sendDatas}>Save</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteDevice}>Delete</button>
+                        <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save</button>
                     </div>
                 </div>
             </div>

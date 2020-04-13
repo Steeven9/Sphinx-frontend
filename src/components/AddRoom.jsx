@@ -86,15 +86,15 @@ class AddRoom extends React.Component {
      */
     render() {
         return (         
-            <div className="addRoom">
-                <div className="content-box content-box-transparency">
+            <div className="container">
+                <div className="room-content-box content-box-transparency z-depth-2">
                     <h2 className="title">Add room</h2>
-                    <div className="dates">
-                        <span className="textFields"><input type="text" name="roomName" placeholder="Room Name"
+                    <div className="room-inputs">
+                        <span className="textFields"><input type="text" name="roomName" placeholder="Room name"
                                 onChange={this.handleRoomNameChange} required/></span>
                         <span className="textFields"> 
                             <select className="selector" onChange={this.handleTypeChange}>
-                                <option value="0">Select Room Type</option>
+                                <option value="0">Select room type</option>
                                 <option value="attic">Attic</option>
                                 <option value="backyard">Backyard</option>
                                 <option value="basement">Basement</option>

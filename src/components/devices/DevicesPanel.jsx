@@ -11,7 +11,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = 'http://localhost:8080/devices/';
-const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
+const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices/';
 const fetchUrl = path[1] === 'room' && +params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
 let isLoading = true;
@@ -121,7 +121,8 @@ const DevicesPanel = () => {
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                 <div className="headline-box row row-collapsible row row-collapsible-custom">
                                     <h3 className="col col-collapsible l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
-                                    <a href="/addDevice"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                    <a href="/addDevice"><i
+                                        className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
