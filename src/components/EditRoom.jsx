@@ -168,6 +168,54 @@ class EditRoom extends React.Component {
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
     }
 
+    /*
+   *
+   *   Functions for icon selection
+   * 
+   */
+
+    changeIconState = (path) => {
+        this.setState({ type: path });
+        document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
+        this.moveToInformation();
+    }
+
+    moveToSelection = () => {
+        document.getElementById("addRoomInfo1").hidden = true
+        document.getElementById("addRoomIconSelection1").hidden = false
+    }
+
+    moveToInformation = () => {
+        document.getElementById("addRoomInfo1").hidden = false
+        document.getElementById("addRoomIconSelection1").hidden = true
+    }
+
+    changeAndMove = () => {
+        this.moveToInformation();
+    }
+
+    changeDinamicallyBackground = (e) => {
+
+        var reader = new FileReader();
+        var file = e.target.files[0];
+        if (file) {
+            reader.addEventListener('load', (event) => {
+                const dataUrl = reader.result;
+                document.querySelector('main').style.backgroundImage = "url(" + dataUrl + ")";
+                document.getElementById('imageURL1').value = dataUrl;
+            });
+            reader.readAsDataURL(file);
+        }
+
+
+    }
+
+    resetBackground = () => {
+        document.getElementById('inputPicture1').value = "";
+        document.getElementById('imageURL1').value = "";
+        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
+    }
+
     //Redirection to /house
     redirectToHouse = () => {
         window.location.href = '/house'
