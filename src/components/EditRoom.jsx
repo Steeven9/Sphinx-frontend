@@ -2,7 +2,10 @@ import React from 'react';
 import '../css/App.css';
 import '../css/editPages.css';
 import * as qs from 'query-string';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class EditRoom extends React.Component {
 
@@ -15,6 +18,7 @@ class EditRoom extends React.Component {
             roomName: "",
             type: "0",
             incomplete: false,
+            isLoading: false,
         }
     }
 
@@ -30,7 +34,9 @@ class EditRoom extends React.Component {
         evt.preventDefault();
         if (this.state.type === "0" || this.state.roomName === "") {
             this.setState({incomplete: true})
-        } else {
+        } 
+        else {
+            this.setState({isLoading: true})
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
                 method: 'PUT',
                 headers: {
@@ -46,6 +52,7 @@ class EditRoom extends React.Component {
                 })
             })
                 .then((res) => {
+                    this.setState({isLoading: false})
                     if (res.status === 204) {
                         console.log("Room successfully edited")
                         this.redirectToHouse()
@@ -128,6 +135,9 @@ class EditRoom extends React.Component {
                             </select>
                         </div>
                     </div>
+                    <span>
+                        <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                    </span>
                     {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
                     <div className="center">
                         <button type="button" name="button"

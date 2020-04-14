@@ -29,16 +29,18 @@ class Login extends React.Component {
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
-        this.setState({isLoading: true})
-        this.setState({error: false})
-        this.setState({statusCode: ''})
         evt.preventDefault();
 
-        fetch('http://localhost:8080/auth/login/' + this.state.username, {
-            method: 'POST',
-            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: this.state.password
-        })
+        if (this.state.username !== '') {
+            this.setState({isLoading: true})
+            this.setState({error: false})
+            this.setState({statusCode: ''})
+
+            fetch('http://localhost:8080/auth/login/' + this.state.username, {
+                method: 'POST',
+                headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+                body: this.state.password
+            })
             .then((res) => {
                 this.setState({statusCode: res.status});
 
@@ -56,24 +58,13 @@ class Login extends React.Component {
                     this.props.logIn(this.state.username, data);
                 }
             });
-    };
-
-    /**
-     * Function only used for testing without the backend
-     */
-    sendDatasTest = evt => {
-        evt.preventDefault();
-        this.props.logIn(this.state.username, "a test token");
-        if (this.state.username !== "") {
-            window.location.href = '/dashboard';
         }
-    }
+    };
 
     /**
      * Display an error message if this.state.error === true
      */
     showError = () => {
-        console.log(this.statusCode)
         if (this.state.error) {
             return (
                 <span className="error-message">

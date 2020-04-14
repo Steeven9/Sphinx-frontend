@@ -1,5 +1,9 @@
 import React from 'react';
 import '../css/App.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class AddRoom extends React.Component {
 
@@ -29,6 +33,8 @@ class AddRoom extends React.Component {
             this.setState({success: false, error: false, incomplete: true})
         }
         else {
+            this.setState({isLoading: true})
+
             fetch('http://localhost:8080/rooms/', {
                 method: 'POST',
                 headers: { 
@@ -45,6 +51,7 @@ class AddRoom extends React.Component {
                 })
             })
             .then( (res) => {
+                this.setState({isLoading: false})
                 if (res.status === 203) {
                     this.setState({success: true, error: false, incomplete: false})
                 }
@@ -115,6 +122,9 @@ class AddRoom extends React.Component {
                                 <option value="living-room">Living room</option>
                                 <option value="office">Office</option>
                             </select>
+                        </span>
+                        <span>
+                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
                         </span>
                         {this.roomCreated()}
                     </div>

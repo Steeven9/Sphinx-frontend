@@ -1,8 +1,11 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/devices.css';
-import * as qs from 'query-string'
+import * as qs from 'query-string';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class EditDevice extends React.Component {
 
@@ -14,6 +17,7 @@ class EditDevice extends React.Component {
             device_id: "",
             deviceName: "",
             incomplete: false,
+            isLoading: false
         }
     }
 
@@ -35,6 +39,7 @@ class EditDevice extends React.Component {
             this.setState({incomplete: true})
         }
         else {
+            this.setState({isLoading: true})
             fetch('http://localhost:8080/devices/' + this.state.device_id, {
                 method: 'PUT',
                 headers: { 
@@ -48,6 +53,7 @@ class EditDevice extends React.Component {
                 })
             })
             .then( (res) => {
+                this.setState({isLoading: false})
                 if (res.status === 204) {
                     console.log("Device successfully edited")
                     this.redirectToDevices()
@@ -110,6 +116,9 @@ class EditDevice extends React.Component {
                     <div className="textFields">
                         <div className="textFields"><input type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
                     </div>
+                    <span>
+                        <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                    </span>
                     {this.state.incomplete ? <p><b>Please fill the name</b></p> : <></>}
                     <div className="center">
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>

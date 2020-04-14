@@ -1,7 +1,10 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/loginSignup.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class ResetPassword extends React.Component {
 
@@ -9,7 +12,8 @@ class ResetPassword extends React.Component {
         super(props);
         this.state = {
             email: '',
-            success: -1 //if -1, nothing, if 1 display success, if 0 display error
+            success: -1, //if -1, nothing, if 1 display success, if 0 display error
+            isLoading: false
         }
     }
 
@@ -24,10 +28,19 @@ class ResetPassword extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        fetch('http://localhost:8080/auth/reset/' + this.state.email, {
-            method: 'POST',
-        })
-            .then((res) => res.status === 204 ? this.setState({success: 1}) : this.setState({success: 0}))
+
+        if (this.state.email !== '') {
+            this.setState({isLoading: true})
+            this.setState({success: -1})
+
+            fetch('http://localhost:8080/auth/reset/' + this.state.email, {
+                method: 'POST',
+            })
+            .then((res) => {
+                this.setState({isLoading: false})
+                res.status === 204 ? this.setState({success: 1}) : this.setState({success: 0})
+            })
+        }
     };
 
     /**
@@ -83,6 +96,9 @@ class ResetPassword extends React.Component {
                             </div>
 
                             <div className="message-two-lines center-text">
+                                <span>
+                                    <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                                </span>
                                 {this.displayResult()}
                             </div>
 

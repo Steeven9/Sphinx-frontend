@@ -1,6 +1,10 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/devices.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class AddDevice extends React.Component {
 
@@ -14,7 +18,8 @@ class AddDevice extends React.Component {
             type: "0",
             room: "0",
             pairing: "0",
-            selectRooms: <></>
+            selectRooms: <></>,
+            isLoading: false
         }
     }
 
@@ -73,6 +78,7 @@ class AddDevice extends React.Component {
             this.setState({ success: false, error: false, incomplete: true })
         }
         else {
+            this.setState({isLoading: true})
             let deviceName = this.state.deviceName.length === 0 ? "Device" : this.state.deviceName
             fetch('http://localhost:8080/devices/', {
                 method: 'POST',
@@ -90,6 +96,7 @@ class AddDevice extends React.Component {
                 })
             })
             .then((res) => {
+                this.setState({isLoading: false})
                 if (res.status === 203) {
                     this.setState({ success: true, error: false, incomplete: false })
                 }
@@ -173,6 +180,9 @@ class AddDevice extends React.Component {
                                 <option value="0">No pairing</option>
                             </select>
                         </div> */}
+                        <span>
+                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                        </span>
                         {this.deviceCreated()}
                     </div>
                     <div className="center">

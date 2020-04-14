@@ -1,6 +1,10 @@
 import React from 'react';
 import '../css/App.css';
 import * as qs from 'query-string';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class ChangePassword extends React.Component {
 
@@ -9,7 +13,8 @@ class ChangePassword extends React.Component {
         this.state = {
             show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, display "password mismatch". If 3, display error message
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            isLoading: false
         }
     }
 
@@ -35,6 +40,7 @@ class ChangePassword extends React.Component {
             this.setState({show: 2});
             return;
         }
+        this.setState({isLoading: true})
         fetch('http://localhost:8080/auth/reset/' + parsed.email + '/' + parsed.code, {
             method: 'POST',
             headers: {
@@ -43,8 +49,14 @@ class ChangePassword extends React.Component {
             },
             body: this.state.password
         })
-            .then((res) => res.status === 204 ? this.setState({show: 1}) : this.setState({show: 3}))
-            .catch((error) => this.setState({show: 3}))
+        .then((res) => {
+            this.setState({isLoading: false})
+            res.status === 204 ? this.setState({show: 1}) : this.setState({show: 3})
+        })
+        .catch((error) => {
+            this.setState({isLoading: false})
+            this.setState({show: 3})
+        })
     }
 
     /**
@@ -109,6 +121,9 @@ class ChangePassword extends React.Component {
                 <article>
                     <div id="content" className="container">
                         <div className="password-reset-box z-depth-2">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
                             {this.showChange()}
                         </div>
                     </div>
