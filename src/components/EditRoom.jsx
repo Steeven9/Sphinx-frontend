@@ -19,9 +19,34 @@ class EditRoom extends React.Component {
     }
 
     componentDidMount() {
-        document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(this.state.type, 1) + ')';
+        //document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(this.state.type, 1) + ')';
         const parsed = qs.parse(window.location.search);
-        this.setState({room_id: parsed.id})
+        this.setState({ room_id: parsed.id })
+
+        fetch('http://localhost:8080/rooms/' + parsed.id, {
+            method: 'GET',
+            headers: {
+                'user': this.state.username,
+                'session-token': this.state.session_token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            else {
+                return null;
+            }
+        })
+        .then((data) => {
+            console.log(data);
+            this.setState({roomName: data.name})
+            document.getElementById('editRoomFixedSizeIcon').src = data.icon
+            document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
+        })
+        .catch(error => console.log(error))
     }
 
     /**
@@ -30,7 +55,7 @@ class EditRoom extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.roomName === "") {
-            this.setState({incomplete: true})
+            this.setState({ incomplete: true })
         }
         else {
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
@@ -44,10 +69,12 @@ class EditRoom extends React.Component {
                 body: JSON.stringify({
                     name: this.state.roomName,
                     icon: this.props.findPathRoom(this.state.type, 0),
-                    background: this.props.findPathRoom(this.state.type, 1),
+                    background: document.getElementById('imageURL1').value !== "" ?
+                        document.getElementById('imageURL1').value :
+                        this.props.findPathRoom(this.state.type, 1),
                 })
             })
-                .then( (res) => {
+                .then((res) => {
                     if (res.status === 204) {
                         console.log("Room successfully edited")
                         this.redirectToHouse()
@@ -59,7 +86,7 @@ class EditRoom extends React.Component {
                         console.log("Unexpected error")
                     }
                 })
-                .catch( error => console.log(error))
+                .catch(error => console.log(error))
         }
     };
 
@@ -74,7 +101,7 @@ class EditRoom extends React.Component {
                 'session-token': this.state.session_token,
             }
         })
-            .then( (res) => {
+            .then((res) => {
                 if (res.status === 203 || res.status === 200) {
                     console.log("Room successfully removed")
                     this.redirectToHouse()
@@ -86,7 +113,7 @@ class EditRoom extends React.Component {
                     console.log("Unexpected error")
                 }
             })
-            .catch( error => console.log(error))
+            .catch(error => console.log(error))
     };
 
     // function to handle state on input change
@@ -97,13 +124,13 @@ class EditRoom extends React.Component {
         this.setState({ type: evt.target.value })
     }
 
-     /*
-    *
-    *   Functions for icon selection
-    * 
-    */
+    /*
+   *
+   *   Functions for icon selection
+   * 
+   */
 
-   changeIconState = (path) => {
+    changeIconState = (path) => {
         this.setState({ type: path });
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
         this.moveToInformation();
@@ -131,16 +158,17 @@ class EditRoom extends React.Component {
             reader.addEventListener('load', (event) => {
                 const dataUrl = reader.result;
                 document.querySelector('main').style.backgroundImage = "url(" + dataUrl + ")";
-                document.getElementById('imageURL').value = dataUrl;
+                document.getElementById('imageURL1').value = dataUrl;
             });
             reader.readAsDataURL(file);
         }
-        
-        
+
+
     }
 
     resetBackground = () => {
         document.getElementById('inputPicture1').value = "";
+        document.getElementById('imageURL1').value = "";
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
     }
 
@@ -160,24 +188,24 @@ class EditRoom extends React.Component {
                     <div className="dates">
                         <div className="roomNameAndIcon">
                             <span className="textFields">
-                                <input type="text" name="roomName" placeholder="Room Name" onChange={this.handleRoomNameChange} required/>
+                                <input type="text" name="roomName" value={this.state.roomName} placeholder="Room Name" onChange={this.handleRoomNameChange} required />
                             </span>
                             <div className="roomNameAndIcon">
-                                <p>Icon</p> 
-                                <img className="fixedSizeIcon" src={this.props.findPathRoom(this.state.type, 0)} alt="icon error"/> 
+                                <p>Icon</p>
+                                <img className="fixedSizeIcon" id="editRoomFixedSizeIcon" src={this.props.findPathRoom(this.state.type, 0)} alt="icon error" />
                                 <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
-                            </div> 
-                            
-                        </div>
-                        <br/><br/><br/>
-                        <div className="roomNameAndIcon2">
-                            <p>Customize background</p> 
-                            <input type="file" className="inputBackground" accept="image/*" onClick={this.resetBackground} onChange={this.changeDinamicallyBackground} id="inputPicture1"/>
-                            <input type="hidden" id="imageURL" value=""/>
-                        </div>
-                        
+                            </div>
 
-                        
+                        </div>
+                        <br /><br /><br />
+                        <div className="roomNameAndIcon2">
+                            <p>Customize background</p>
+                            <input type="file" className="inputBackground" accept="image/*" onClick={this.resetBackground} onChange={this.changeDinamicallyBackground} id="inputPicture1" />
+                            <input type="hidden" id="imageURL1" value="" />
+                        </div>
+
+
+
                     </div>
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
@@ -203,7 +231,7 @@ class EditRoom extends React.Component {
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
                     </div>
                 </div>
-                
+
             </div>
 
         );

@@ -41,7 +41,11 @@ class AddRoom extends React.Component {
                 body: JSON.stringify({
                     name: this.state.roomName,
                     icon: this.props.findPathRoom(this.state.type, 0),
-                    background: this.props.findPathRoom(this.state.type, 1),
+
+                    background: document.getElementById('imageURL').value !== "" ? 
+                    document.getElementById('imageURL').value : 
+                    this.props.findPathRoom(this.state.type, 1),
+
                     devices: []
                 })
             })
@@ -111,7 +115,6 @@ class AddRoom extends React.Component {
 
     changeDinamicallyBackground = (e) => {
 
-        // var preview = document.getElementById("addRoom");
         var reader = new FileReader();
         var file = e.target.files[0];
         if (file) {
@@ -123,12 +126,12 @@ class AddRoom extends React.Component {
             reader.readAsDataURL(file);
         }
 
-
     }
 
 
     resetBackground = () => {
         document.getElementById('inputPicture').value = "";
+        document.getElementById('imageURL').value = "";
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
     }
 
