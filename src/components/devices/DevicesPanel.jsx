@@ -1,5 +1,5 @@
 import React, {useEffect, useReducer} from 'react'
-import DevicesContext from '../../context/devices-context'
+import DevicesContext from '../../context/devicesContext'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
 import '../../css/collapsible-component.css';
@@ -11,13 +11,15 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = 'http://localhost:8080/devices/';
-const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices/';
+const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
 const fetchUrl = path[1] === 'room' && +params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
+let isDeviceStateChanging = false;
 let isLoading = true;
 let isDataFound = true;
 let isRoom = false;
 let title = "";
+
 
 /**
  * Generates a panel with a DevicePanel
@@ -35,7 +37,9 @@ const DevicesPanel = () => {
     useEffect(() => {
 
         if (isRoom) {
-            let fetchRoomUrl = 'http://localhost:8080/rooms/' + params.get('id');
+            const fetchRoomUrl = window.location.protocol + '//' + window.location.hostname + ':8080/rooms/' + params.get('id');
+            isDeviceStateChanging = true;
+
             fetch(fetchRoomUrl, {
                 method: 'GET',
                 headers: {
@@ -54,7 +58,7 @@ const DevicesPanel = () => {
                 })
                 .then((data) => {
                     let room = JSON.parse(data);
-                    roomBackground = room.background;
+                    roomBackground = room.background !== null && room.background;
                     title = room.name;
                 })
                 .catch(e => console.log(e));
@@ -86,7 +90,7 @@ const DevicesPanel = () => {
                 dispatch({type: 'POPULATE_DEVICES', devices: devices});
             })
             .catch(e => console.log(e));
-
+        isDeviceStateChanging = false;
     }, []);
 
     // Extracts devices from next state
@@ -105,6 +109,18 @@ const DevicesPanel = () => {
     } catch (e) {
         throw e;
     }
+
+    // Fetches every n seconds to refresh the devices, while not on an update operation
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(!isDeviceStateChanging) {
+                console.log('Timed devices refreshing!')
+                dispatch({type: 'REFRESH_DEVICES', devices: devices});
+                isDeviceStateChanging = false;
+            }
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <DevicesContext.Provider value={{devices, dispatch, isRoom}}>

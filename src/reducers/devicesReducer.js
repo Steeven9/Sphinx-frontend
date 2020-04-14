@@ -1,72 +1,117 @@
 /**
- * This reducer controles the actions triggered by the events
+ * This reducer controls the actions triggered by the events
  * handled by the device components and its children
  * @param state
  * @param action
  * @returns {state[]}
  */
 const devicesReducer = (state, action) => {
+    const host = window.location.protocol + '//' + window.location.hostname + ':8080';
+    const params = (new URL(document.location)).searchParams;
+    const path = window.location.pathname.toLowerCase().split('/');
+    const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices/';
+    let body = {};
+    let devicesFetchUrl = '';
+    let fetchUrl = '';
+
+    const headers = {
+        'user': localStorage.getItem('username'),
+        'session-token': localStorage.getItem('session_token'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    };
+
     switch (action.type) {
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
 
+        case 'REFRESH_DEVICES':
+            console.log('Dispatch: REFRESH_DEVICES');
+            devicesFetchUrl = host + '/devices';
+            fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
+
+            fetch(fetchUrl, {
+                method: 'GET',
+                headers: headers,
+            })
+                .then((res) => {
+                    if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    let response = JSON.parse(data);
+                    console.log(response);
+                    state = response
+                })
+                .catch(e => console.log(e));
+            return state;
+
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
-            const params = (new URL(document.location)).searchParams;
-            const path = window.location.pathname.toLowerCase().split('/');
-            const devicesFetchUrl = 'http://localhost:8080/devices/';
-            const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
-            let fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
-            let body;
+            devicesFetchUrl = host + '/devices/' + action.device.id;
+            fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 
-                if(action.device.slider !== undefined) {
-                    body = {
-                        slider: action.device.slider,
-                        on: action.device.on
-                    }
-                } else {
-                    body = {
-                        on: action.device.on
-                    }
-                }
+            switch(action.device.type) {
+                case 2:  //DimmableLight
+                case 4:  //DimmableSwitch
+                case 5:  //StatelessDimmableSwitch
+                case 11: //Thermostat
+                    body.slider = action.device.slider;
+                    body.on = action.device.on;
+                    break;
+                case 12: //SmartCurtains
+                    body.slider = action.device.slider;
+                    body.state = action.device.state;
+                    body.source = action.device.source;
+                    break;
+                default:  //Light, Switch, SmartPlug, SecurityCamera
+                    body.on = action.device.on;
+                    break;
 
-                let headers = {
-                    'user': localStorage.getItem('username'),
-                    'session-token': localStorage.getItem('session_token'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                };
+            }
 
-                fetchUrl = fetchUrl + action.device.id;
+            // Resets SmartPlug
+            if (action.device.reset) {
+                devicesFetchUrl = host + '/devices/reset/' + action.device.id;
+                action.device.reset = false;
+                body = {};
+            }
 
-                fetch(devicesFetchUrl, {
+            fetchUrl = fetchUrl + action.device.id;
+
+            fetch(devicesFetchUrl, {
                 method: 'PUT',
                 headers: headers,
                 body: JSON.stringify(body)
             })
                 .then(res => {
-                    if (res.status === 200){
+                    if (res.status === 200) {
                         fetch(fetchUrl, {
                             method: 'GET',
                             headers: headers,
                         })
-                            .then( (res) => {
+                            .then((res) => {
                                 if (res.status === 200) {
                                     return res.text();
                                 } else {
                                     return null;
                                 }
                             })
-                            .then( (data) => {
+                            .then((data) => {
                                 let response = JSON.parse(data);
                                 console.log(response);
                                 state = response
                             })
                             .catch(e => console.log(e));
 
-                    }})
+                    }
+                })
                 .catch(e => console.log(e));
+
             return state;
 
         case 'SYNC_DEVICES':
@@ -97,7 +142,7 @@ const devicesReducer = (state, action) => {
                         }
 
                         // Allows self-power OFF of child
-                    } else if (d.id === action.device.id){
+                    } else if (d.id === action.device.id) {
                         d.on = action.device.on;
 
                         // Forbids regular switch to set a dimmable light's slider to 0 on power ON
@@ -107,7 +152,6 @@ const devicesReducer = (state, action) => {
                 });
                 action.device.clicked = false
             }
-
             return [...state];
 
         default:
@@ -116,4 +160,4 @@ const devicesReducer = (state, action) => {
     }
 };
 
-export { devicesReducer as default }
+export {devicesReducer as default}

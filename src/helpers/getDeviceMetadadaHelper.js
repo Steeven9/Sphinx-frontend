@@ -167,12 +167,12 @@ export function getSliderMarks(device) {
 
     const temperatureMarks = [
         {
-            value: device.min,
-            label: device.min + ' ' + device.unit,
+            value: 10,
+            label: '°C',
         },
         {
-            value: device.max,
-            label: device.max + ' ' + device.unit,
+            value: 30,
+            label: '°C',
         },
     ];
 

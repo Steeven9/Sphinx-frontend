@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
 import Device from './Device'
-import DevicesContext from '../../context/devices-context'
+import DevicesContext from '../../context/devicesContext'
 
 
 /**

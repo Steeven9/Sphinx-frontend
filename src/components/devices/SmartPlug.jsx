@@ -1,5 +1,5 @@
 import React, {useState, useContext} from 'react'
-import DevicesContext from "../../context/devices-context";
+import DevicesContext from "../../context/devicesContext";
 
 
 /**
@@ -15,9 +15,12 @@ const SmartPlug = (device) => {
         e.preventDefault();
         setConsumption('0 kWh');
         device.device.label = '0 kWh';
+        device.device.reset = true;
         dispatch({type: 'SYNC_DEVICES', device: device});
         dispatch({type: 'MODIFY_DEVICE', device: device});
     };
+
+    device.device.reset = false;
 
     return ((device.device.on) ?
         <div className="col col-collapsible l8 s8 display-info display-active">

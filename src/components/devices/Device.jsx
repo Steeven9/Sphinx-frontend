@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import DevicesContext from '../../context/devices-context'
+import DevicesContext from '../../context/devicesContext'
 import {getDeviceIcon, getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadadaHelper'
 import {getRowIcon} from '../../helpers/getDeviceMetadadaHelper'
 import PowerSwitch from './PowerSwitch'

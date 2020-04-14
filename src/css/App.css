@@ -82,10 +82,6 @@ nav {
     color: #FFF;
 }
 
-nav li {
-    margin-right: 5vh;
-}
-
 h1 {
     font-style: normal !important;
     font-weight: 800 !important;
@@ -202,10 +198,6 @@ h3 {
     padding: 10px 40px 15px 40px !important;
 }
 
-.nav-menu-desktop-right {
-    margin-right: 40px;
-}
-
 .row-collapsible, .col-collapsible {
     padding: 0 !important;
 }
@@ -219,12 +211,12 @@ h3 {
 }
 
 .dashboard-nav {
-    margin: 0 auto !important;
+    margin: 0 !important;
     margin-top: calc(5% + 1vh) !important;
-    width: 100% !important;
-    min-height: 100% !important;
-    align-items: center !important;
-    justify-content: center !important;
+    /*width: 100% !important;*/
+    /*min-height: 100% !important;*/
+    /*align-items: center !important;*/
+    /*justify-content: center !important;*/
 }
 
 .dashboard-nav-img {
@@ -244,4 +236,16 @@ h3 {
     white-space: nowrap;
     z-index: 1;
     will-change: width, height;
+}
+
+nav ul a.active {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+nav ul a:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.nav-link {
+    padding: 0 5vh 0 5vh !important;
 }

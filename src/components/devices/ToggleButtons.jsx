@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import '../../css/toggle-buttons.css';
-import DevicesContext from "../../context/devices-context";
+import DevicesContext from "../../context/devicesContext";
 
 
 const useStyles = makeStyles((theme) => ({
