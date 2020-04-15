@@ -21,7 +21,7 @@ class Homepage extends React.Component {
                                 </div>
                             </section>
                             
-                            <section className="content-box z-depth-2">
+                            <section className="home-content-box z-depth-2">
                                 <h2> How does it work?</h2>
                                 <p><strong>SmartHut</strong> is your one-stop management system for all your smart lights and sensors in your home, independently from their manufacturer.</p>
 

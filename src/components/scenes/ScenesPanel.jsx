@@ -124,7 +124,28 @@ const ScenesPanel = () => {
                                 </div>
                                 <ul className="scene">
                                     <li className="row">
-                                        <SceneList />
+                                        <div className="row">
+                                            <div className="col l1">
+                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">play_circle_filled_outline</i></a>
+                                            </div>
+                                            <div className="col l1">
+                                                <img alt="Scene" className="dashboard-nav-img" src="/img/icons/scenes/sunset"/>
+                                            </div>
+                                            <div className="col l7">
+                                                name
+                                            </div>
+                                            <div className="col l1">
+                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">edit</i></a>
+                                            </div>
+                                            <div className="col l1">
+                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">file_copy</i></a>
+
+                                            </div>
+                                            <div className="col l1">
+                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">highlight_off</i></a>
+                                            </div>
+                                        </div>
+                                        {/*<SceneList />*/}
                                     </li>
                                 </ul>
                             </section>
