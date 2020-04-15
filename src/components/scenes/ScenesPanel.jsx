@@ -122,27 +122,27 @@ const ScenesPanel = () => {
                                 <div className={(!isDataFound) ? "centered-loading-data-message" : "hidden"}>
                                     <p>You haven't added any scenes yet. Please add a new one.</p>
                                 </div>
-                                <ul className="scene">
-                                    <li className="row">
-                                        <div className="row">
-                                            <div className="col l1">
-                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">play_circle_filled_outline</i></a>
+                                <ul>
+                                    <li className="scene row">
+                                        <div className="item">
+                                            <div className="scene-item col l1">
+                                                <a href="/"><i className="scene-item material-icons">play_circle_filled_outline</i></a>
                                             </div>
-                                            <div className="col l1">
-                                                <img alt="Scene" className="dashboard-nav-img" src="/img/icons/scenes/sunset"/>
+                                            <div className="scene-item col l1">
+                                                <img alt="Scene" className="img-scene-icon" src="/img/icons/scenes/icon-sunset.svg"/>
                                             </div>
-                                            <div className="col l7">
-                                                name
+                                            <div className="scene-item col l7">
+                                                Sunset
                                             </div>
-                                            <div className="col l1">
-                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">edit</i></a>
+                                            <div className="scene-item col l1">
+                                                <a href="/"><i className="scene-item material-icons">edit</i></a>
                                             </div>
-                                            <div className="col l1">
-                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">file_copy</i></a>
+                                            <div className="scene-item col l1">
+                                                <a href="/"><i className="scene-item material-icons">file_copy</i></a>
 
                                             </div>
-                                            <div className="col l1">
-                                                <a href="/addRoom"><i className="waves-effect waves-light material-icons">highlight_off</i></a>
+                                            <div className="scene-item col l1">
+                                                <a href="/"><i className="scene-item material-icons">highlight_off</i></a>
                                             </div>
                                         </div>
                                         {/*<SceneList />*/}

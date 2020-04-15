@@ -6,6 +6,29 @@
     padding: 0 !important;
 }
 
+.scene {
+    min-height: 60px;
+    display: flex;
+    align-items: center !important;
+}
+
+.scene-item {
+    display: flex !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    align-items: center !important;
+}
+
+.img-scene-icon {
+    width: calc(40% + 5vmin);
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+* {
+    border: 1px dotted purple;
+}
+
 @media only screen and (max-width: 600px) {
     .scene-content-box {
         background-color: #FFFFFF;
