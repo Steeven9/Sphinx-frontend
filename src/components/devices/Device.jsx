@@ -122,13 +122,13 @@ const Device = ({device}) => {
                 case 10: //MotionSensor
                     return (
                         <div
-                            className={"col col-collapsible l9 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
+                            className={"col col-custom l9 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
                             <span>{device.label || "- - - - - -"}</span>
                         </div>
                     );
                 case 13: //MotionSensor
                     return (
-                        <div className={"col col-collapsible l9 s8"}>
+                        <div className={"col col-custom l9 s8"}>
                             {device.on && <AlertDialog/>}
                             <button type="button" name="button"
                                     disabled={!device.on ? true : false}
@@ -185,7 +185,7 @@ const Device = ({device}) => {
                                         disabled={disabled}
                                         marks={getSliderMarks(device)}/>
                                 <div
-                                    className={"col l12 col-collapsible display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
+                                    className={"col l12 col-custom display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
                                     <span>{device.state !== 0 ? getThermostatTemp(device) + " " + device.unit : "- - - - - -"}</span>
                                 </div>
                             </div>
@@ -225,9 +225,9 @@ const Device = ({device}) => {
                 case 9: //TempSensor
                 case 10: //MotionSensor
                 case 12: //SmartCurtains
-                    return (<div className="row row-collapsible l1">
+                    return (<div className="row row-custom l1">
                         <div className="">
-                            <div className="col col-collapsible l2 m1 s1">
+                            <div className="col col-custom l2 m1 s1">
                                 <i className="material-icons btn-edit btn-edit-no-switch"
                                    onClick={() => redirectToEdit(device.id)}>edit</i>
                             </div>
@@ -235,19 +235,19 @@ const Device = ({device}) => {
                     </div>);
                 case 11: //Thermostat
                     return (
-                        <div className="col col-collapsible l1 m1 s1">
+                        <div className="col col-custom l1 m1 s1">
                             <i className="material-icons btn-edit btn-edit-no-switch"
                                onClick={() => redirectToEdit(device.id)}>edit</i>
                         </div>
                     );
                 default:
-                    return (<div className="col col-collapsible l4 device-control-switch">
-                        <div className="switch col col-collapsible l2 m8 s11 right-align">
+                    return (<div className="col col-custom l4 device-control-switch">
+                        <div className="switch col col-custom l2 m8 s11 right-align">
                             <div>
                                 <PowerSwitch device={device}/>
                             </div>
                         </div>
-                        <div className="col col-collapsible l2 m1 s1 right-align">
+                        <div className="col col-custom l2 m1 s1 right-align">
                             <i className="material-icons btn-edit" onClick={() => redirectToEdit(device.id)}>edit</i>
                         </div>
                     </div>);
@@ -289,21 +289,21 @@ const Device = ({device}) => {
         return (
             <div id={device.id} className={getDeviceHeader(device)}>
                 <form id="devicesForm" className="device-form">
-                    <div className="col col-collapsible l6 m6 s12">
-                        <div className="col col-collapsible l12 s12 icons-wrapper">
+                    <div className="col col-custom l6 m6 s12">
+                        <div className="col col-custom l12 s12 icons-wrapper">
                             <i className={"material-icons l1" + (device.child ? " muted-icon" : "")}>{getRowIcon(device)} </i>
                             <div className="icon-device l1">
                                 <img className="" src={getDeviceIcon(device.type)} alt={device.name}/>
                             </div>
-                            <div className="device-info col col-collapsible l12 m6 s12 left-align">
+                            <div className="device-info col col-custom l12 m6 s12 left-align">
                                 <p className="device-name">{device.name}</p>
                                 {!device.child && !isRoom && <p className="device-location">{device.roomName}</p>}
                                 <p className="device-type-name">{getDeviceTypeName(device.type)}</p>
                             </div>
                         </div>
                     </div>
-                    <div className="device-control col col-collapsible l6 m6 s12">
-                        <div className="col col-collapsible l8 m6 s8">
+                    <div className="device-control col col-custom l6 m6 s12">
+                        <div className="col col-custom l8 m6 s8">
                             {getSliderOrDisplayOrSmartPlug(device)}
                         </div>
                         <div>

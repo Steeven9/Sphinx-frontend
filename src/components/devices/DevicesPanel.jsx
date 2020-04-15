@@ -131,14 +131,14 @@ const DevicesPanel = () => {
                     backgroundAttachment: "fixed",
                     backgroundPosition: 'center'
                 }}>
-                    <article className="row row-collapsible row row-collapsible-custom">
+                    <article className="row row-custom row row-custom-custom">
                         <div id="content" className="">
                             <section
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
-                                <div className="headline-box row row-collapsible row row-collapsible-custom">
-                                    <h3 className="col col-collapsible l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
+                                <div className="headline-box row row-custom row row-custom-custom">
+                                    <h3 className="col col-custom l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
                                     <a href="/addDevice"><i
-                                        className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                        className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
@@ -147,7 +147,7 @@ const DevicesPanel = () => {
                                     <p>You haven't added any devices yet. Please add a new one.</p>
                                 </div>
                                 <ul className={(isLoading || !isDataFound) ? "hidden" : "collapsible expandable expandable-component"}>
-                                    <li className="row row-collapsible row row-collapsible-custom">
+                                    <li className="row row-custom row row-custom-custom">
                                         <DeviceList/>
                                     </li>
                                 </ul>

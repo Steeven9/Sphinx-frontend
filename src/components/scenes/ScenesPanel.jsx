@@ -106,13 +106,13 @@ const ScenesPanel = () => {
     return (
         <ScenesContext.Provider value={{scenes, dispatch, isGuest, myScenes}}>
             <div id="wrapper" className="scenes">
-                <main>
+                <div className="container">
                     <article className="row row-scene row-scene-custom">
-                        <div id="content" className="">
+                        <div id="content">
                             <section
                                 className="scene-content-box z-depth-2">
-                                <div className="headline-box row">
-                                    <h3 className="col col-scene l8 left-align headline-title">{(isGuest) ? title : "My Scenes"}</h3>
+                                <div className="headline-box row row-custom">
+                                    <h2 className="col col-scene l8 left-align headline-title">{(isGuest) ? title : "My Scenes"}</h2>
                                     <a href="/addScene"><i
                                         className="col col-scene l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
@@ -130,7 +130,7 @@ const ScenesPanel = () => {
                             </section>
                         </div>
                     </article>
-                </main>
+                </div>
             </div>
         </ScenesContext.Provider>
     )

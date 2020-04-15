@@ -23,12 +23,12 @@ const SmartPlug = (device) => {
     device.device.reset = false;
 
     return ((device.device.on) ?
-        <div className="col col-collapsible l8 s8 display-info display-active">
-            <i onClick={(e) => resetSmartPlug(e)} className="col col-collapsible l2 s2 material-icons btn-reset">rotate_left</i>
+        <div className="col col-custom l8 s8 display-info display-active">
+            <i onClick={(e) => resetSmartPlug(e)} className="col col-custom l2 s2 material-icons btn-reset">rotate_left</i>
             <span>{consumption}</span>
         </div>
         :
-        <div className="col col-collapsible l8 s8 display-info display-inactive">
+        <div className="col col-custom l8 s8 display-info display-inactive">
             <span>{'- - - - - -'}</span>
         </div>
     )

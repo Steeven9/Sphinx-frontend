@@ -152,7 +152,7 @@
 
 @media only screen and (min-width: 900px) {
     .content-box-collapsible {
-        margin: 5vh auto !important;
+        margin: 10vh auto !important;
         background-color: #FFFFFF;
         color: #2C2C2C !important;
         width: calc(50% + 5vmin) !important;
