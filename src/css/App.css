@@ -259,6 +259,12 @@ nav ul a:hover {
     padding: 0 5vh 0 5vh !important;
 }
 
-i:hover {
-    opacity: 0.8;
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    color: #000000 !important;
+}
+
+.btn-icon:hover {
+    opacity: 0.75;
 }

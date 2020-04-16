@@ -115,7 +115,7 @@ const DevicesPanel = () => {
         const interval = setInterval(() => {
             if(!isDeviceStateChanging) {
                 console.log('Timed devices refreshing!')
-                dispatch({type: 'REFRESH_DEVICES', devices: devices});
+                dispatch({type: 'REFRESH_DEVICES'});
                 isDeviceStateChanging = false;
             }
         }, 5000);

@@ -12,7 +12,7 @@ const path = window.location.pathname.toLowerCase().split('/');
 const scenesFetchUrl = 'http://localhost:8080/scenes/';
 const guestScenesFetchUrl = 'http://localhost:8080/guests/' + params.get('id') + '/scenes/';
 const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
-let isLoading = true;
+let isLoading = false;
 let isDataFound = true;
 let isGuest = false;
 let title = "";
@@ -124,28 +124,7 @@ const ScenesPanel = () => {
                                 </div>
                                 <ul>
                                     <li className="scene row">
-                                        <div className="item">
-                                            <div className="scene-item col l1">
-                                                <a href="/"><i className="scene-item material-icons">play_circle_filled_outline</i></a>
-                                            </div>
-                                            <div className="scene-item col l1">
-                                                <img alt="Scene" className="img-scene-icon" src="/img/icons/scenes/icon-sunset.svg"/>
-                                            </div>
-                                            <div className="scene-item col l7">
-                                                Sunset
-                                            </div>
-                                            <div className="scene-item col l1">
-                                                <a href="/"><i className="scene-item material-icons">edit</i></a>
-                                            </div>
-                                            <div className="scene-item col l1">
-                                                <a href="/"><i className="scene-item material-icons">file_copy</i></a>
-
-                                            </div>
-                                            <div className="scene-item col l1">
-                                                <a href="/"><i className="scene-item material-icons">highlight_off</i></a>
-                                            </div>
-                                        </div>
-                                        {/*<SceneList />*/}
+                                        <SceneList />
                                     </li>
                                 </ul>
                             </section>

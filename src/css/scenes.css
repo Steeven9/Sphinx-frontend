@@ -10,9 +10,15 @@
     min-height: 60px;
     display: flex;
     align-items: center !important;
+    border-bottom: 1px solid #C4C4C4;
+}
+
+.scene-item-name {
+    font-weight: 700;
 }
 
 .scene-item {
+    min-height: 40px;
     display: flex !important;
     text-align: center !important;
     vertical-align: middle !important;
@@ -20,13 +26,9 @@
 }
 
 .img-scene-icon {
-    width: calc(40% + 5vmin);
-    margin-top: auto;
-    margin-bottom: auto;
-}
-
-* {
-    border: 1px dotted purple;
+    width: calc(20% + 5vmin);
+    height: 40px;
+    margin: 0 auto;
 }
 
 @media only screen and (max-width: 600px) {
@@ -95,28 +97,6 @@
     .btn-edit {
         margin-top: 1.25vh;
     }
-
-    .no-switch {
-        margin-right: 0.70vh !important;
-        visibility: hidden;
-    }
-
-    .btn-edit-no-switch {
-        margin-left: 88px !important;
-        margin-right: 0 !important;
-    }
-
-    .display-info {
-        padding: 0.7vh;
-        margin-top: 1vh !important;
-        margin-right: 3vh !important;
-    }
-
-    .display-info-thermostat {
-        padding: 0.7vh;
-        height: 30px !important;
-    }
-
 }
 
 .flex-container {
@@ -163,12 +143,100 @@ form.scene-form {
     margin-top: 0 !important;
 }
 
-/* Disables unwanted background color on focus being lost in Thermostat state/mode buttons */
-button:focus {
-    outline: none;
-    background-color: transparent;
+.btn-icon-play {
+    width: 40px;
+    height: 40px;
+    z-index: 2
 }
 
-* {
-    /*border: 1px purple dotted;*/
+.btn-icon-play:hover {
+    cursor: pointer;
+    opacity: 0.75;
 }
+
+.btn-icon-duplicate:hover {
+    cursor: copy !important;
+}
+
+.btn-icon:focus {
+    color: #580B71;
+}
+
+i {
+    cursor: pointer;
+}
+
+/* Start Scenes play button animation */
+.btn-icon-rotate-clockwise-under {
+    position: relative;
+    left: 0px;
+    top: 0px;
+}
+
+.btn-icon-rotate-clockwise-over-1 {
+    position: relative;
+    left: -40px;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-icon-rotate-clockwise-over-2 {
+    position: relative;
+    left: -80px;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-icon-rotate-clockwise-over-3 {
+    position: relative;
+    left: -120px;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+.btn-icon-rotate-clockwise-over-4 {
+    position: relative;
+    left: -160px;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+}
+
+@keyframes rotate-clockwise{
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes rotate-clockwise{
+    0% { -webkit-transform: rotate(0deg);}
+    100% { -webkit-transform: rotate(360deg);}
+}
+
+.btn-icon-rotate-clockwise-1 {
+    transform-origin: 50% 50%;
+    animation: rotate-clockwise 4s infinite linear;
+}
+
+.btn-icon-rotate-clockwise-2 {
+    transform-origin: 50% 50%;
+    animation: rotate-clockwise 2s infinite linear;
+}
+
+.btn-icon-rotate-clockwise-3 {
+    transform-origin: 50% 50%;
+    animation: rotate-clockwise 3s infinite linear;
+}
+
+.btn-icon-rotate-clockwise-4 {
+    transform-origin: 50% 50%;
+    animation: rotate-clockwise 1s infinite linear;
+}
+/* End Scenes play button animation */
+
