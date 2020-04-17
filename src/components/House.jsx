@@ -59,11 +59,11 @@ class House extends React.Component {
                     <div className="col l2 vertical-center center-text">{room.devices.length}</div>
                     <div className="col l2"></div>
                     <div className="col l1 room-button1 vertical-center">
-                        <i className="material-icons btn-edit"
+                        <i className="material-icons btn-icon btn-edit"
                            onClick={() => this.redirectToEditRoom(room.id)}>edit</i>
                     </div>
                     <div className="col l1 room-button2 vertical-center">
-                        <i className="material-icons btn-edit"
+                        <i className="material-icons btn-icon btn-edit"
                            onClick={() => this.redirectToRoom(room.id)}>visibility_outlined</i>
                     </div>
                 </div>

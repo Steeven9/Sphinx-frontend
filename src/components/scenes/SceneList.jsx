@@ -9,12 +9,10 @@ import ScenesContext from '../../context/scenesContext'
  */
 const SceneList = () => {
     const {scenes} = useContext(ScenesContext);
-    const {myScenes} = useContext(ScenesContext);
     let id = 0;
 
-    // return scenes.map((scene) => (
-    return myScenes.map((scene) => (
-        <Scene key={id++} scene={scene} />
+    return scenes.map((scene) => (
+        <Scene key={id++} scene={scene}/>
     ))
 };
 

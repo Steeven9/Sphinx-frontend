@@ -9,10 +9,10 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const scenesFetchUrl = 'http://localhost:8080/scenes/';
-const guestScenesFetchUrl = 'http://localhost:8080/guests/' + params.get('id') + '/scenes/';
+const scenesFetchUrl = 'http://localhost:8888/scenes';
+const guestScenesFetchUrl = 'http://localhost:8888/guests/' + params.get('id') + '/scenes/';
 const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
-let isLoading = false;
+let isLoading = true;
 let isDataFound = true;
 let isGuest = false;
 let title = "";
@@ -33,7 +33,7 @@ const ScenesPanel = () => {
     useEffect(() => {
 
         // if (isGuest) {
-        //     let fetchGuestUrl = 'http://localhost:8080/guests/' + params.get('id');
+        //     let fetchGuestUrl = 'http://localhost:8888/guests/' + params.get('id');
         //     fetch(fetchGuestUrl, {
         //         method: 'GET',
         //         headers: {
@@ -57,33 +57,33 @@ const ScenesPanel = () => {
         //         .catch(e => console.log(e));
         // }
 
-        // fetch(fetchUrl, {
-        //     method: 'GET',
-        //     headers: {
-        //         'user': localStorage.getItem('username'),
-        //         'session-token': localStorage.getItem('session_token')
-        //     },
-        // })
-        //     .then((res) => {
-        //         if (res.status === 401) {
-        //             this.props.logOut(1);
-        //         } else if (res.status === 200) {
-        //             return res.text();
-        //         } else {
-        //             return null;
-        //         }
-        //     })
-        //     .then((data) => {
-        //         let scenes = sortScenes(JSON.parse(data));
-        //         isLoading = false;
-        //
-        //         if (data === null || scenes.length === 0) {
-        //             isDataFound = false;
-        //         }
-        //         dispatch({type: 'POPULATE_DEVICES', scenes: scenes});
-        //     })
-        //     .catch(e => console.log(e));
+        fetch(fetchUrl, {
+            method: 'GET',
+            headers: {
+                'user': localStorage.getItem('username'),
+                'session-token': localStorage.getItem('session_token')
+            },
+        })
+            .then((res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1);
+                } else if (res.status === 200) {
+                    return res.text();
+                } else {
+                    return null;
+                }
+            })
+            .then((data) => {
+                let scenes = sortScenes(JSON.parse(data));
+                isLoading = false;
 
+                if (data === null || scenes.length === 0) {
+                    isDataFound = false;
+                }
+                dispatch({type: 'POPULATE_SCENES', scenes: scenes});
+                isLoading = false;
+            })
+            .catch(e => console.log(e));
     }, []);
 
     // Extracts scenes from next state
@@ -91,20 +91,20 @@ const ScenesPanel = () => {
         console.log('Scenes were updated')
     }, [scenes]);
 
-    // try {
-    //     scenes.sort(function (a, b) {
-    //         let keyA = a.name;
-    //         let keyB = b.name;
-    //         if (keyA < keyB) return -1;
-    //         if (keyA > keyB) return 1;
-    //         return 0;
-    //     });
-    // } catch (e) {
-    //     throw e;
-    // }
+    try {
+        scenes.sort(function (a, b) {
+            let keyA = a.name;
+            let keyB = b.name;
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            return 0;
+        });
+    } catch (e) {
+        throw e;
+    }
 
     return (
-        <ScenesContext.Provider value={{scenes, dispatch, isGuest, myScenes}}>
+        <ScenesContext.Provider value={{scenes, dispatch, isGuest}}>
             <div id="wrapper" className="scenes">
                 <div className="container">
                     <article className="row row-scene row-scene-custom">
@@ -123,8 +123,8 @@ const ScenesPanel = () => {
                                     <p>You haven't added any scenes yet. Please add a new one.</p>
                                 </div>
                                 <ul>
-                                    <li className="scene row">
-                                        <SceneList />
+                                    <li className="scenes-panel row">
+                                        <SceneList/>
                                     </li>
                                 </ul>
                             </section>
@@ -149,21 +149,5 @@ function sortScenes(scenes) {
         throw e;
     }
 }
-
-// Temporary mock scenes
-const myScenes = [
-    {
-        name: 'Sunset',
-        effects: [
-            {
-                type: 1,
-                name: 'Light intensity',
-                value: 30,
-                devices: [1]
-            }
-        ],
-        shared: true
-    }
-];
 
 export {ScenesPanel as default}

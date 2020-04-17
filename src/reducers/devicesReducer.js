@@ -9,7 +9,7 @@ const devicesReducer = (state, action) => {
     const host = window.location.protocol + '//' + window.location.hostname + ':8080';
     const params = (new URL(document.location)).searchParams;
     const path = window.location.pathname.toLowerCase().split('/');
-    const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices/';
+    const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
     let body = {};
     let devicesFetchUrl = '';
     let fetchUrl = '';

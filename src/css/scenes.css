@@ -6,9 +6,13 @@
     padding: 0 !important;
 }
 
+.scenes-panel {
+    padding: 15px 0 15px 0;
+    align-items: center !important;
+}
+
 .scene {
-    min-height: 60px;
-    display: flex;
+    padding: 15px 0 15px 0;
     align-items: center !important;
     border-bottom: 1px solid #C4C4C4;
 }
@@ -18,7 +22,7 @@
 }
 
 .scene-item {
-    min-height: 40px;
+    height: 40px !important;
     display: flex !important;
     text-align: center !important;
     vertical-align: middle !important;
@@ -26,8 +30,10 @@
 }
 
 .img-scene-icon {
-    width: calc(20% + 5vmin);
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
     margin: 0 auto;
 }
 
@@ -55,7 +61,6 @@
 
     .scene-header {
         margin: auto !important;
-        /*padding: 1vh !important;*/
         flex-wrap: wrap;
     }
 
@@ -116,14 +121,14 @@
 .icons-wrapper {
     display: flex !important;
     text-align: center !important;
-    max-height: 40px !important;
+    height: 40px !important;
     vertical-align: middle !important;
     align-items: center !important;
 }
 
 .icon-scene {
-    height: 40px;
-    min-width: 40px;
+    height: 40px !important;
+    min-width: 40px !important;
     width: 40px !important;
     margin-right: 2vh;
 }
@@ -144,8 +149,8 @@ form.scene-form {
 }
 
 .btn-icon-play {
-    width: 40px;
-    height: 40px;
+    width: 40px !important;
+    height: 40px !important;
     z-index: 2
 }
 
@@ -160,10 +165,6 @@ form.scene-form {
 
 .btn-icon:focus {
     color: #580B71;
-}
-
-i {
-    cursor: pointer;
 }
 
 /* Start Scenes play button animation */
