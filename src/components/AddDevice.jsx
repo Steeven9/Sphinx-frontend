@@ -15,7 +15,7 @@ class AddDevice extends React.Component {
             success: false,
             error: false,
             incomplete: false,
-            deviceName: "",
+            deviceName: "Device",
             type: "0",
             room: "0",
             pairing: "0",
@@ -29,7 +29,7 @@ class AddDevice extends React.Component {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
 
-        fetch('http://localhost:8080/rooms/', {
+        fetch('http://localhost:8080/rooms', {
             method: 'GET',
             headers: {
                 'user': this.props.username,
@@ -80,8 +80,7 @@ class AddDevice extends React.Component {
         }
         else {
             this.setState({isLoading: true, success: false, error: false, incomplete: false})
-            let deviceName = this.state.deviceName.length === 0 ? "Device" : this.state.deviceName
-            fetch('http://localhost:8080/devices/', {
+            fetch('http://localhost:8080/devices', {
                 method: 'POST',
                 headers: {
                     'user': this.props.username,
@@ -90,7 +89,7 @@ class AddDevice extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: deviceName,
+                    name: this.state.deviceName,
                     icon: this.props.findPathDevice(this.state.type),
                     type: parseInt(this.state.type),
                     roomId: this.state.room
