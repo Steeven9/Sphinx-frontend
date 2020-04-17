@@ -15,7 +15,7 @@ class AddDevice extends React.Component {
             success: false,
             error: false,
             incomplete: false,
-            deviceName: "Device",
+            deviceName: "",
             type: "0",
             room: "0",
             pairing: "0",
@@ -90,7 +90,7 @@ class AddDevice extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: this.state.deviceName,
+                    name: deviceName,
                     icon: this.props.findPathDevice(this.state.type),
                     type: parseInt(this.state.type),
                     roomId: this.state.room
