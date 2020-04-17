@@ -16,8 +16,9 @@ class EditDevice extends React.Component {
             session_token: props.session_token,
             device_id: "",
             deviceName: "",
-            incomplete: false,
-            isLoading: false
+            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unauthorized, 3 unexpected error
+            errorType: "",
+            isLoading: false,
         }
     }
 
@@ -36,7 +37,7 @@ class EditDevice extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.deviceName === "") {
-            this.setState({incomplete: true})
+            this.setState({error: 0})
         }
         else {
             this.setState({isLoading: true})
@@ -54,12 +55,16 @@ class EditDevice extends React.Component {
             })
             .then( (res) => {
                 this.setState({isLoading: false})
+                console.log(res.status);
                 if (res.status === 204) {
                     console.log("Device successfully edited")
                     this.redirectToDevices()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
+                }
+                else if (res.status === 400) {
+                    this.setState({error: 1})
                 }
                 else {
                     console.log("Unexpected error")
@@ -72,7 +77,7 @@ class EditDevice extends React.Component {
     /**
      * Deletes the Room
      */
-    deleteRoom = evt => {
+    deleteDevice = evt => {
         fetch('http://localhost:8080/devices/' + this.state.device_id, {
             method: 'DELETE',
             headers: { 
@@ -88,11 +93,17 @@ class EditDevice extends React.Component {
             else if (res.status === 401) {
                 this.props.logOut(1)
             }
+            else if (res.status === 400) {
+                this.setState({error: 1})
+            }
+            else if (res.status === 403) {
+                this.setState({error: 2})
+            }
             else {
-                console.log("Unexpected error")
+                this.setState({error: 3, errorType: "Error Code: " + res.status})
             }
         })
-        .catch( error => console.log(error))
+        .catch( e => this.setState({error: 3, errorType: e}))
     };
 
     // function to handle state on input change
@@ -103,6 +114,21 @@ class EditDevice extends React.Component {
     //Redirection to /devices
     redirectToDevices = () => {
         window.location.href = '/devices'
+    }
+
+    showError = () => {
+        if (this.state.error === 0) {
+            return (<p><b>Please fill the name</b></p>)
+        }
+        else if (this.state.error === 1) {
+            return (<p><b>Error: bad request</b></p>)
+        }
+        else if (this.state.error === 2) {
+            return (<p><b>Error: unauthorized</b></p>)
+        }
+        else if (this.state.error === 3) {
+            return (<p><b>{this.state.errorType}</b></p>)
+        }
     }
 
     /**
@@ -119,7 +145,7 @@ class EditDevice extends React.Component {
                     <span>
                         <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
                     </span>
-                    {this.state.incomplete ? <p><b>Please fill the name</b></p> : <></>}
+                    {this.showError()}
                     <div className="center">
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteDevice}>Delete</button>
