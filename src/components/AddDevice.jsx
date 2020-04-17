@@ -146,7 +146,7 @@ class AddDevice extends React.Component {
                     <h2 className="title">Add device</h2>
                     <div>
                         <div className="textFields">
-                            <input type="text" name="" placeholder="Device Name" onKeyUp={this.handleDeviceNameChange} required />
+                            <input type="text" name="" placeholder="Device Name" onChange={this.handleDeviceNameChange} required />
                         </div>
                         <div className="textFields">
                             <select className="selector" onChange={this.handleTypeChange}>
