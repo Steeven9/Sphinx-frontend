@@ -11,6 +11,7 @@ class AddRoom extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            unknownError: "",
             success: false,
             error: false,
             incomplete: false,
@@ -60,16 +61,19 @@ class AddRoom extends React.Component {
             .then( (res) => {
                 this.setState({isLoading: false})
                 if (res.status === 203) {
-                    this.setState({success: true, error: false, incomplete: false})
+                    this.setState({success: true, error: false, incomplete: false, unknownError: ""})
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
+                else if (res.status === 400) {
+                    this.setState({success: false, error: true, incomplete: false, unknownError: ""});
+                }
                 else {
-                    this.setState({success: false, error: true, incomplete: false});
+                    this.setState({success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
-            .catch( error => console.log(error))
+            .catch( e => this.setState({success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
 
@@ -89,10 +93,13 @@ class AddRoom extends React.Component {
             window.location.href = '/house';
         }
         else if (this.state.error) {
-            return (<p>An error has occurred, please try again</p>)
+            return (<p>Bad Request</p>)
         }
         else if (this.state.incomplete) {
             return (<p>Please complete all fields</p>)
+        }
+        else if (this.state.unknownError !== "") {
+            return (<p>{this.state.unknownError}</p>)
         }
     }
 

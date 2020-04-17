@@ -137,6 +137,10 @@ h3 {
     white-space: nowrap;
 }
 
+.btn-edit:hover {
+    cursor: pointer;
+}
+
 .btn-primary {
     background: #FFB800 !important;
     border-radius: 23px !important;
