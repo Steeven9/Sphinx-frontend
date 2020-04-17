@@ -17,7 +17,7 @@ class EditRoom extends React.Component {
             room_id: "",
             roomName: "",
             type: "generic-room",
-            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unauthorized, 3 unexpected error
+            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
         }
@@ -52,6 +52,10 @@ class EditRoom extends React.Component {
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
         })
         .catch(error => console.log(error))
+
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
@@ -82,7 +86,7 @@ class EditRoom extends React.Component {
             })
             .then((res) => {
                 this.setState({isLoading: false})
-                if (res.status === 204) {
+                if (res.status === 200) {
                     this.redirectToHouse()
                 } 
                 else if (res.status === 401) {
@@ -91,14 +95,11 @@ class EditRoom extends React.Component {
                 else if (res.status === 400) {
                     this.setState({error: 1})
                 }
-                else if (res.status === 403) {
-                    this.setState({error: 2})
-                }
                 else {
-                    this.setState({error: 3, errorType: "Error Code: " + res.status})
+                    this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({error: 3, errorType: e}))
+            .catch( e => this.setState({error: 2, errorType: e}))
         }
     };
 
@@ -114,7 +115,7 @@ class EditRoom extends React.Component {
             }
         })
             .then((res) => {
-                if (res.status === 203 || res.status === 200) {
+                if (res.status === 204) {
                     console.log("Room successfully removed")
                     this.redirectToHouse()
                 } 
@@ -124,14 +125,11 @@ class EditRoom extends React.Component {
                 else if (res.status === 400) {
                     this.setState({error: 1})
                 }
-                else if (res.status === 403) {
-                    this.setState({error: 2})
-                }
                 else {
-                    this.setState({error: 3, errorType: "Error Code: " + res.status})
+                    this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({error: 3, errorType: e}))
+            .catch( e => this.setState({error: 2, errorType: e}))
     };
 
     // function to handle state on input change
@@ -245,15 +243,12 @@ class EditRoom extends React.Component {
 
     showError = () => {
         if (this.state.error === 0) {
-            return (<p><b>Please fill the name</b></p>)
+            return (<p><b>Please fill all informations</b></p>)
         }
         else if (this.state.error === 1) {
             return (<p><b>Error: bad request</b></p>)
         }
         else if (this.state.error === 2) {
-            return (<p><b>Error: unauthorized</b></p>)
-        }
-        else if (this.state.error === 3) {
             return (<p><b>{this.state.errorType}</b></p>)
         }
     }

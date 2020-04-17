@@ -16,7 +16,7 @@ class EditDevice extends React.Component {
             session_token: props.session_token,
             device_id: "",
             deviceName: "",
-            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unauthorized, 3 unexpected error
+            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
         }
@@ -56,7 +56,7 @@ class EditDevice extends React.Component {
             .then( (res) => {
                 this.setState({isLoading: false})
                 console.log(res.status);
-                if (res.status === 204) {
+                if (res.status === 200) {
                     console.log("Device successfully edited")
                     this.redirectToDevices()
                 }
@@ -66,14 +66,11 @@ class EditDevice extends React.Component {
                 else if (res.status === 400) {
                     this.setState({error: 1})
                 }
-                else if (res.status === 403) {
-                    this.setState({error: 2})
-                }
                 else {
-                    this.setState({error: 3, errorType: "Error Code: " + res.status})
+                    this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({error: 3, errorType: e}))
+            .catch( e => this.setState({error: 2, errorType: e}))
         }
     };
 
@@ -89,7 +86,7 @@ class EditDevice extends React.Component {
             }
         })
         .then( (res) => {
-            if (res.status === 203) {
+            if (res.status === 204) {
                 console.log("Device successfully removed")
                 this.redirectToDevices()
             }
@@ -99,14 +96,11 @@ class EditDevice extends React.Component {
             else if (res.status === 400) {
                 this.setState({error: 1})
             }
-            else if (res.status === 403) {
-                this.setState({error: 2})
-            }
             else {
-                this.setState({error: 3, errorType: "Error Code: " + res.status})
+                this.setState({error: 2, errorType: "Error Code: " + res.status})
             }
         })
-        .catch( e => this.setState({error: 3, errorType: e}))
+        .catch( e => this.setState({error: 2, errorType: e}))
     };
 
     // function to handle state on input change
@@ -127,9 +121,6 @@ class EditDevice extends React.Component {
             return (<p><b>Error: bad request</b></p>)
         }
         else if (this.state.error === 2) {
-            return (<p><b>Error: unauthorized</b></p>)
-        }
-        else if (this.state.error === 3) {
             return (<p><b>{this.state.errorType}</b></p>)
         }
     }
