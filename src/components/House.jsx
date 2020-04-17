@@ -1,14 +1,17 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/house.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class House extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            rooms: <p className="center-text">No Rooms available</p>
+            rooms: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
         }
     }
 
