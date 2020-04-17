@@ -11,10 +11,11 @@ class AddDevice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            unknownError: "",
             success: false,
             error: false,
             incomplete: false,
-            deviceName: "",
+            deviceName: "Device",
             type: "0",
             room: "0",
             pairing: "0",
@@ -35,7 +36,7 @@ class AddDevice extends React.Component {
                 'session-token': this.props.session_token,
             },
         })
-        .then( (res) => {
+        .then((res) => {
             if (res.status === 401) {
                 this.props.logOut(1);
             } else if (res.status === 200) {
@@ -44,11 +45,11 @@ class AddDevice extends React.Component {
                 return null;
             }
         })
-        .then( (data) => {
+        .then((data) => {
             let response = JSON.parse(data);
             if (response === null) {
                 this.setState({ room: "-1" })
-                this.setState({ selectRooms: <select className="selector" onChange={this.handleRoomChange}><option value="-1">Error Occurred</option></select>, room: "-1" })
+                this.setState({ selectRooms: <select className="selector"><option value="-1">Error Occurred</option></select>, room: "-1" })
             } else {
                 this.mapRooms(response);
             }
@@ -61,7 +62,7 @@ class AddDevice extends React.Component {
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
-            this.setState({ selectRooms: <select className="selector" disabled onChange={this.handleRoomChange}><option value="0">No Room Available</option></select>, room: "0" })
+            this.setState({ selectRooms: <select className="selector" disabled><option value="0">No Room Available</option></select>, room: "0" })
         } else {
             let i = 0;
             let toSet = <select className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
@@ -89,26 +90,28 @@ class AddDevice extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    name: deviceName,
+                    name: this.state.deviceName,
                     icon: this.props.findPathDevice(this.state.type),
-                    deviceType: parseInt(this.state.type),
-                    // pairing: this.state.room //ID, if "0" then no room
+                    type: parseInt(this.state.type),
+                    roomId: this.state.room
                 })
             })
             .then((res) => {
                 this.setState({isLoading: false})
-                if (res.status === 203) {
-                    this.setState({ success: true, error: false, incomplete: false })
+                if (res.status === 201) {
+                    this.setState({ success: true, error: false, incomplete: false, unknownError: "" })
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
+                else if (res.status === 400) {
+                    this.setState({ success: false, error: false, incomplete: true, unknownError: "" })
+                }
                 else {
-                    this.setState({ success: false, error: true, incomplete: false });
+                    this.setState({ success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
-            .catch(error => 
-                this.setState({isLoading: false}))
+            .catch(e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
 
@@ -131,13 +134,16 @@ class AddDevice extends React.Component {
      */
     deviceCreated = () => {
         if (this.state.success) {
-            return (<p><i>Device created successfully</i></p>)
+            this.redirectToDevices();
         }
         else if (this.state.error) {
             return (<p>An error has occurred, please try again</p>)
         }
         else if (this.state.incomplete) {
             return (<p>Please insert all information</p>)
+        }
+        else if (this.state.unknownError !== "") {
+            return (<p>{this.state.unknownError}</p>)
         }
     }
 
@@ -171,6 +177,9 @@ class AddDevice extends React.Component {
                                 <option value="8">Light sensor</option>
                                 <option value="9">Temperature sensor</option>
                                 <option value="10">Motion sensor</option>
+                                <option value="11">Thermostat</option>
+                                <option value="12">Smart curtains</option>
+                                <option value="13">Security camera</option>
                             </select>
                         </div>
                         <div className="textFields">
