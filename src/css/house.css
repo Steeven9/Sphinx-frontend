@@ -98,16 +98,18 @@ h2 {
     font-size: 22px;
 }
 
-.room-button1{
-    margin-left: -3%;
+.room-button1, .room-button2 {
     width: 35px;
     height: 35px;
+    cursor: pointer;
+}
+
+.room-button1{
+    margin-left: -3%;
 }
 
 .room-button2{
     margin-left: 7%;
-    width: 35px;
-    height: 35px;
 }
 
 .rooms-headline {

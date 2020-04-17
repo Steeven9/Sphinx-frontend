@@ -58,18 +58,11 @@ class EditRoom extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-<<<<<<< HEAD
         if (this.state.type === "0" || this.state.roomName === "") {
             this.setState({incomplete: true})
         } 
         else {
             this.setState({isLoading: true})
-=======
-        if (this.state.roomName === "") {
-            this.setState({ incomplete: true })
-        }
-        else {
->>>>>>> dev
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
                 method: 'PUT',
                 headers: {
@@ -264,13 +257,10 @@ class EditRoom extends React.Component {
 
 
                     </div>
-<<<<<<< HEAD
                     <span>
                         <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
                     </span>
                     {this.state.incomplete ? <p><b>Please fill all the data</b></p> : <></>}
-=======
->>>>>>> dev
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>
