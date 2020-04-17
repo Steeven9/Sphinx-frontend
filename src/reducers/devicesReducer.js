@@ -95,7 +95,7 @@ const devicesReducer = (state, action) => {
                             headers: headers,
                         })
                             .then((res) => {
-                                if (res.status === 200) {
+                                if (res.status === 200 || res.status === 203) {
                                     return res.text();
                                 } else {
                                     return null;

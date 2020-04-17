@@ -1,3 +1,45 @@
+function doFetch(method, scene) {
+    const host = window.location.protocol + '//' + window.location.hostname + ':8888';
+    let fetchUrl = host + '/scenes';
+    const headers = {
+        'user': localStorage.getItem('username'),
+        'session-token': localStorage.getItem('session_token'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    };
+    let body = null;
+
+    if (method === 'POST' || method === 'PUT') {
+        body = JSON.stringify({
+            name: scene.name,
+            icon: scene.icon,
+            ownerId: scene.ownerId,
+            shared: scene.shared,
+            effects: scene.effects
+        });
+    }
+
+    if (method === 'PUT' || method === 'DELETE') {
+        fetchUrl += '/' + scene.id;
+    }
+
+    fetch(fetchUrl, {
+        method: method,
+        headers: headers,
+        body: body
+    })
+        .then((res) => {
+            if (res.status === 200 || res.status === 203) {
+                console.log(method + ' successful!');
+                return res
+            } else {
+                console.log(method + ' unsuccessful!');
+                return res
+            }
+        })
+        .catch(error => console.log(error))
+}
+
 /**
  * This reducer controls the actions triggered by the events
  * handled by the scene components and its children
@@ -10,10 +52,11 @@ const scenesReducer = (state, action) => {
     const host = window.location.protocol + '//' + window.location.hostname + ':8888';
     // const params = (new URL(document.location)).searchParams;
     // const path = window.location.pathname.toLowerCase().split('/');
-    // const sharedScenesFetchUrl = host + '/scenes?id=' + params.get('id');
+    // const sharedfetchUrl = host + '/scenes?id=' + params.get('id');//check
     // let body = {};
-    let scenesFetchUrl = '';
     let fetchUrl = '';
+    // let fetchUrl = '';
+
 
     const headers = {
         'user': localStorage.getItem('username'),
@@ -27,35 +70,11 @@ const scenesReducer = (state, action) => {
             console.log('Dispatch: POPULATE_SCENES');
             return action.scenes;
 
-        case 'REFRESH_SCENES':
-            console.log('Dispatch: REFRESH_SCENES');
-            scenesFetchUrl = host + '/scenes';
-            // fetchUrl = path[1] === 'shared' && params.get('id') ? sharedScenesFetchUrl : scenesFetchUrl;
-            fetchUrl = scenesFetchUrl;
-
-            fetch(fetchUrl, {
-                method: 'GET',
-                headers: headers,
-            })
-                .then((res) => {
-                    if (res.status === 200) {
-                        return res.text();
-                    } else {
-                        return null;
-                    }
-                })
-                .then((data) => {
-                    let response = JSON.parse(data);
-                    state = response
-                })
-                .catch(e => console.log(e));
-            return state;
-
         case 'RUN_SCENE':
             console.log('Dispatch: RUN_SCENE');
-            scenesFetchUrl = host + '/scenes';
+            fetchUrl = host + '/scenes';
 
-            fetch(scenesFetchUrl + '/run/' + action.scene.id, {
+            fetch(fetchUrl + '/run/' + action.scene.id, {
                 method: 'PUT',
                 headers: headers
             })
@@ -63,19 +82,21 @@ const scenesReducer = (state, action) => {
                     action.setPlaying(false);
                     action.setResultTriggered(true);
 
-                    if (res.status === 200) {
+                    if (res.status === 200 || res.status === 203) {
                         action.setSuccess(true);
                     } else {
                         action.setSuccess(false);
                     }
                 })
                 .catch(e => console.log(e));
+
             return state;
 
         case 'DUPLICATE_SCENE':
             console.log('Dispatch: DUPLICATE_SCENE');
             let copyCount = 1;
 
+            // Renames a copy of a scene sequentially, respecting the existing copy numbers from 1 to n
             for (let scene of state) {
                 let sceneName = scene.name.split(' ');
                 let sceneCopyNumber = 0;
@@ -101,33 +122,42 @@ const scenesReducer = (state, action) => {
                 shared: action.scene.shared,
                 effects: action.scene.effects
             };
+
+            doFetch('POST', action.scene);
+            action.setActionCompleted(true);
             return [duplicatedScene, ...state];
 
         case 'DELETE_SCENE':
             console.log('Dispatch: DELETE_SCENE');
-            scenesFetchUrl = host + '/scenes';
+            // fetchUrl = host + '/scenes';
 
             state = state.filter((s) => s.id !== action.scene.id);
 
-            fetch(scenesFetchUrl + '/' + action.scene.id, {
-                method: 'DELETE',
-                headers: headers
-            })
-                .then(res => {
-                    if (res.status === 200) {
-                        console.log('Scene deleted form DB')
-                    }
-                })
-                .catch(e => console.log(e));
+            // xx
+            // fetch(fetchUrl + '/' + action.scene.id, {
+            //     method: 'DELETE',
+            //     headers: headers
+            // })
+            //     .then(res => {
+            //         if (res.status === 200 || res.status === 203) {
+            //             console.log('Scene deleted from the DB')
+            //         } else {
+            //             console.log('Could not delete from DB')
+            //         }
+            //     })
+            //     .catch(e => console.log(e));
+
+            doFetch('DELETE', action.scene);
+            action.setActionCompleted(true);
             return state;
 
         case 'MODIFY_SCENE':
             console.log('Dispatch: MODIFY_SCENE');
             // const params = (new URL(document.location)).searchParams;
             // const path = window.location.pathname.toLowerCase().split('/');
-            // const scenesFetchUrl = 'http://localhost:8888/scenes/';
-            // const roomScenesFetchUrl = 'http://localhost:8888/rooms/' + params.get('id') + '/scenes';
-            // let fetchUrl = path[1] === 'room' && params.get('id') ? roomScenesFetchUrl : scenesFetchUrl;
+            // const fetchUrl = 'http://localhost:8888/scenes/';
+            // const roomfetchUrl = 'http://localhost:8888/rooms/' + params.get('id') + '/scenes';
+            // let fetchUrl = path[1] === 'room' && params.get('id') ? roomfetchUrl : fetchUrl;
             // let body;
             //
             //     if(action.scene.slider !== undefined) {
@@ -150,7 +180,7 @@ const scenesReducer = (state, action) => {
             //
             //     fetchUrl = fetchUrl + action.scene.id;
             //
-            //     fetch(scenesFetchUrl, {
+            //     fetch(fetchUrl, {
             //     method: 'PUT',
             //     headers: headers,
             //     body: JSON.stringify(body)

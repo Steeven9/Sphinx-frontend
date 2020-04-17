@@ -9,16 +9,16 @@ import PlayIcon from './PlayIcon'
  * @constructor
  */
 const Scene = ({scene}) => {
-    const {dispatch} = useContext(ScenesContext);
+    const {dispatch, setActionCompleted} = useContext(ScenesContext);
 
     const handleDuplicate = (e) => {
         e.preventDefault();
-        dispatch({type: 'DUPLICATE_SCENE', scene: scene});
+        dispatch({type: 'DUPLICATE_SCENE', scene: scene, setActionCompleted: setActionCompleted});
     };
 
     const handleDelete = (e) => {
         e.preventDefault();
-        dispatch({type: 'DELETE_SCENE', scene: scene});
+        dispatch({type: 'DELETE_SCENE', scene: scene, setActionCompleted: setActionCompleted});
     };
 
     return (
@@ -40,7 +40,6 @@ const Scene = ({scene}) => {
                 <div className="scene-item col l1">
                     <i className="scene-item material-icons btn-icon btn-icon-duplicate"
                        onClick={(e) => handleDuplicate(e)}>file_copy</i>
-
                 </div>
                 <div className="scene-item col l1">
                     <i className="scene-item material-icons btn-icon"

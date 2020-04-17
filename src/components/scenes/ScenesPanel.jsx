@@ -22,41 +22,16 @@ let title = "";
  * @returns {ScenesPanel}
  */
 const ScenesPanel = () => {
+    const [actionCompleted, setActionCompleted] = React.useState(false);
     const [scenes, dispatch] = useReducer(scenesReducer, []);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
+    // Controls if a guest is accessing this view
     if (path[1] === 'guest' && params.get('id')) {
         isGuest = true
     }
 
-    // Fetches scenes on page load
-    useEffect(() => {
-
-        // if (isGuest) {
-        //     let fetchGuestUrl = 'http://localhost:8888/guests/' + params.get('id');
-        //     fetch(fetchGuestUrl, {
-        //         method: 'GET',
-        //         headers: {
-        //             'user': localStorage.getItem('username'),
-        //             'session-token': localStorage.getItem('session_token')
-        //         },
-        //     })
-        //         .then((res) => {
-        //             if (res.status === 401) {
-        //                 this.props.logOut(1);
-        //             } else if (res.status === 200) {
-        //                 return res.text();
-        //             } else {
-        //                 return null;
-        //             }
-        //         })
-        //         .then((data) => {
-        //             let guest = JSON.parse(data);
-        //             title = guest.name;
-        //         })
-        //         .catch(e => console.log(e));
-        // }
-
+    const fetchData = () => {
         fetch(fetchUrl, {
             method: 'GET',
             headers: {
@@ -84,12 +59,20 @@ const ScenesPanel = () => {
                 isLoading = false;
             })
             .catch(e => console.log(e));
+        setActionCompleted(false)
+    };
+
+    // Fetches scenes on page load
+    useEffect(() => {
+            fetchData()
     }, []);
 
-    // Extracts scenes from next state
+    // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
-        console.log('Scenes were updated')
-    }, [scenes]);
+        if(actionCompleted){
+            fetchData()
+        }
+    }, [actionCompleted]);
 
     try {
         scenes.sort(function (a, b) {
@@ -104,7 +87,7 @@ const ScenesPanel = () => {
     }
 
     return (
-        <ScenesContext.Provider value={{scenes, dispatch, isGuest}}>
+        <ScenesContext.Provider value={{scenes, dispatch, isGuest, setActionCompleted}}>
             <div id="wrapper" className="scenes">
                 <div className="container">
                     <article className="row row-scene row-scene-custom">

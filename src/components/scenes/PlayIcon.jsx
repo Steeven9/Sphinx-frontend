@@ -12,7 +12,6 @@ const PlayIcon = ({scene}) => {
     const [icon, setIcon] = React.useState(idleIcon);
 
     useEffect(() => {
-        console.log('triggered')
         if(resultTriggered){
             if (success) {
                 setIcon(successIcon);

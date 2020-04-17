@@ -30,7 +30,7 @@
 }
 
 .img-scene-icon {
-    width: 40px !important;
+    /*width: 40px !important;*/
     height: 40px !important;
     min-width: 40px !important;
     min-height: 40px !important;
@@ -149,8 +149,6 @@ form.scene-form {
 }
 
 .btn-icon-play {
-    width: 40px !important;
-    height: 40px !important;
     z-index: 2
 }
 
