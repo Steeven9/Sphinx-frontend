@@ -66,11 +66,14 @@ class EditDevice extends React.Component {
                 else if (res.status === 400) {
                     this.setState({error: 1})
                 }
+                else if (res.status === 403) {
+                    this.setState({error: 2})
+                }
                 else {
-                    console.log("Unexpected error")
+                    this.setState({error: 3, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( error => console.log(error))
+            .catch( e => this.setState({error: 3, errorType: e}))
         }
     };
 
@@ -86,7 +89,7 @@ class EditDevice extends React.Component {
             }
         })
         .then( (res) => {
-            if (res.status === 203 || res.status === 200) {
+            if (res.status === 203) {
                 console.log("Device successfully removed")
                 this.redirectToDevices()
             }
