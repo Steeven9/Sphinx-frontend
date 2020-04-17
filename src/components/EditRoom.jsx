@@ -67,7 +67,7 @@ class EditRoom extends React.Component {
             this.setState({error: 0})
         } 
         else {
-            this.setState({isLoading: true})
+            this.setState({isLoading: true, error: -1})
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
                 method: 'PUT',
                 headers: {
@@ -99,7 +99,10 @@ class EditRoom extends React.Component {
                     this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({error: 2, errorType: e}))
+            .catch( e => {
+                this.setState({isLoading: false})
+                this.setState({error: 2, errorType: e})
+            })
         }
     };
 
@@ -107,6 +110,7 @@ class EditRoom extends React.Component {
      * Deletes the Room
      */
     deleteRoom = evt => {
+        this.setState({isLoading: true, error: -1})
         fetch('http://localhost:8080/rooms/' + this.state.room_id, {
             method: 'DELETE',
             headers: {
@@ -114,22 +118,23 @@ class EditRoom extends React.Component {
                 'session-token': this.state.session_token,
             }
         })
-            .then((res) => {
-                if (res.status === 204) {
-                    console.log("Room successfully removed")
-                    this.redirectToHouse()
-                } 
-                else if (res.status === 401) {
-                    this.props.logOut(1)
-                } 
-                else if (res.status === 400) {
-                    this.setState({error: 1})
-                }
-                else {
-                    this.setState({error: 2, errorType: "Error Code: " + res.status})
-                }
-            })
-            .catch( e => this.setState({error: 2, errorType: e}))
+        .then((res) => {
+            this.setState({isLoading: false})
+            if (res.status === 204) {
+                console.log("Room successfully removed")
+                this.redirectToHouse()
+            } 
+            else if (res.status === 401) {
+                this.props.logOut(1)
+            } 
+            else if (res.status === 400) {
+                this.setState({error: 1})
+            }
+            else {
+                this.setState({error: 2, errorType: "Error Code: " + res.status})
+            }
+        })
+        .catch( e => this.setState({error: 2, errorType: e}))
     };
 
     // function to handle state on input change

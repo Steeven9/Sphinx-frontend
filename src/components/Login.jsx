@@ -37,9 +37,7 @@ class Login extends React.Component {
             return;
         }
         
-        this.setState({isLoading: true})
-        this.setState({error: false})
-        this.setState({statusCode: ''})
+        this.setState({isLoading: true, error: -1, statusCode: ''})
 
         fetch('http://localhost:8080/auth/login/' + this.state.username, {
             method: 'POST',
@@ -68,6 +66,10 @@ class Login extends React.Component {
             if (data !== null) {
                 this.props.logIn(this.state.username, data);
             }
+        })
+        .catch( e => {
+            this.setState({isLoading: false})
+            this.setState({error: 3, errorType: e})
         });
     };
 

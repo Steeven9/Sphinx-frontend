@@ -17,7 +17,7 @@ class AddRoom extends React.Component {
             incomplete: false,
             roomName: "",
             type: "generic-room",
-            
+            isLoading: false,
         }
     }
 
@@ -37,7 +37,7 @@ class AddRoom extends React.Component {
             this.setState({ success: false, error: false, incomplete: true })
         }
         else {
-            this.setState({isLoading: true})
+            this.setState({isLoading: true, success: false, error: false, incomplete: false})
 
             fetch('http://localhost:8080/rooms/', {
                 method: 'POST',
@@ -73,7 +73,7 @@ class AddRoom extends React.Component {
                     this.setState({success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
-            .catch( e => this.setState({success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
+            .catch( e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
 

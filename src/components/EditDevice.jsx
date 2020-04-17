@@ -40,7 +40,7 @@ class EditDevice extends React.Component {
             this.setState({error: 0})
         }
         else {
-            this.setState({isLoading: true})
+            this.setState({isLoading: true, error: -1})
             fetch('http://localhost:8080/devices/' + this.state.device_id, {
                 method: 'PUT',
                 headers: { 
@@ -78,6 +78,7 @@ class EditDevice extends React.Component {
      * Deletes the Room
      */
     deleteDevice = evt => {
+        this.setState({isLoading: true, error: -1})
         fetch('http://localhost:8080/devices/' + this.state.device_id, {
             method: 'DELETE',
             headers: { 
@@ -86,6 +87,7 @@ class EditDevice extends React.Component {
             }
         })
         .then( (res) => {
+            this.setState({isLoading: false})
             if (res.status === 204) {
                 console.log("Device successfully removed")
                 this.redirectToDevices()
@@ -100,7 +102,10 @@ class EditDevice extends React.Component {
                 this.setState({error: 2, errorType: "Error Code: " + res.status})
             }
         })
-        .catch( e => this.setState({error: 2, errorType: e}))
+        .catch( e => {
+            this.setState({isLoading: false})
+            this.setState({error: 2, errorType: e})
+        })
     };
 
     // function to handle state on input change

@@ -78,7 +78,7 @@ class AddDevice extends React.Component {
             this.setState({ success: false, error: false, incomplete: true })
         }
         else {
-            this.setState({isLoading: true})
+            this.setState({isLoading: true, success: false, error: false, incomplete: false})
             let deviceName = this.state.deviceName.length === 0 ? "Device" : this.state.deviceName
             fetch('http://localhost:8080/devices/', {
                 method: 'POST',
@@ -107,7 +107,8 @@ class AddDevice extends React.Component {
                     this.setState({ success: false, error: true, incomplete: false });
                 }
             })
-            .catch(error => console.log(error))
+            .catch(error => 
+                this.setState({isLoading: false}))
         }
     };
 
