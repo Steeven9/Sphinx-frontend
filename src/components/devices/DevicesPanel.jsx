@@ -90,9 +90,7 @@ const DevicesPanel = () => {
     }, []);
 
     // Extracts devices from next state
-    useEffect(() => {
-        console.log('Devices were updated')
-    }, [devices]);
+    useEffect(() => {}, [devices]);
 
     try {
         devices.sort(function (a, b) {

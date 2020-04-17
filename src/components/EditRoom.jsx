@@ -46,7 +46,6 @@ class EditRoom extends React.Component {
             }
         })
         .then((data) => {
-            console.log(data);
             this.setState({roomName: data.name})
             document.getElementById('editRoomFixedSizeIcon').src = data.icon
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
@@ -121,7 +120,6 @@ class EditRoom extends React.Component {
         .then((res) => {
             this.setState({isLoading: false})
             if (res.status === 204) {
-                console.log("Room successfully removed")
                 this.redirectToHouse()
             } 
             else if (res.status === 401) {

@@ -104,9 +104,7 @@ function ToggleButtons({device}) {
     };
 
     // Extracts next state
-    useEffect(() => {
-        console.log('Thermostat was updated');
-    }, [device, modes, source]);
+    useEffect(() => {}, [device, modes, source]);
 
     return (
         <Grid container spacing={2}>

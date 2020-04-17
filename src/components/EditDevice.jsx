@@ -55,9 +55,7 @@ class EditDevice extends React.Component {
             })
             .then( (res) => {
                 this.setState({isLoading: false})
-                console.log(res.status);
                 if (res.status === 200) {
-                    console.log("Device successfully edited")
                     this.redirectToDevices()
                 }
                 else if (res.status === 401) {
@@ -89,7 +87,6 @@ class EditDevice extends React.Component {
         .then( (res) => {
             this.setState({isLoading: false})
             if (res.status === 204) {
-                console.log("Device successfully removed")
                 this.redirectToDevices()
             }
             else if (res.status === 401) {

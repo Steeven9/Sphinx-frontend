@@ -27,7 +27,6 @@ const PowerSwitch = ({device}) => {
         setPower(e.target.checked);
         device.on = e.target.checked;
         device.clicked = true;
-        // console.log('Turning -> ' + device.name + ' ' + (device.on ? 'ON' : 'OFF'));
         dispatch({type: 'SYNC_DEVICES', device: device});
         dispatch({type: 'MODIFY_DEVICES', device: device});
     };
