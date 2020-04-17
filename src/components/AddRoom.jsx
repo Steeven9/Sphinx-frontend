@@ -60,7 +60,7 @@ class AddRoom extends React.Component {
             })
             .then( (res) => {
                 this.setState({isLoading: false})
-                if (res.status === 203) {
+                if (res.status === 201) {
                     this.setState({success: true, error: false, incomplete: false, unknownError: ""})
                 }
                 else if (res.status === 401) {
