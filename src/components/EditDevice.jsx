@@ -26,6 +26,27 @@ class EditDevice extends React.Component {
         const parsed = qs.parse(window.location.search);
         this.setState({device_id: parsed.id})
 
+        fetch('http://localhost:8080/devices/' + parsed.id, {
+            method: 'GET',
+            headers: {
+                'user': this.state.username,
+                'session-token': this.state.session_token
+            }
+        })
+        .then((res) => {
+            if (res.status === 200) {
+                return res.json();
+            }
+            else {
+                return null;
+            }
+        })
+        .then((data) => {
+            this.setState({deviceName: data.name})
+            // document.getElementById('editDeviceFixedSizeIcon').src = data.icon
+        })
+        .catch(error => console.log(error))
+
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
@@ -136,7 +157,9 @@ class EditDevice extends React.Component {
                 <div className="device-content-box z-depth-2">
                     <h2 className="title">Edit Device</h2>
                     <div className="textFields">
-                        <div className="textFields"><input type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
+                        <div className="textFields">
+                            <input type="text" name="deviceName" value={this.state.deviceName} placeholder="New Name" onChange={this.handleDeviceNameChange} required/>
+                        </div>
                     </div>
 
                     <div className="message-two-lines center-text">
