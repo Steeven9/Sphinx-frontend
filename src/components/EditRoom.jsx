@@ -62,7 +62,7 @@ class EditRoom extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.type === "0" || this.state.roomName === "") {
+        if (this.state.roomName === "") {
             this.setState({error: 0})
         } 
         else {
@@ -246,13 +246,13 @@ class EditRoom extends React.Component {
 
     showError = () => {
         if (this.state.error === 0) {
-            return (<p><b>Please fill all informations</b></p>)
+            return (<span className="error-message">Please fill all informations</span>)
         }
         else if (this.state.error === 1) {
-            return (<p><b>Error: bad request</b></p>)
+            return (<span className="error-message">Error: bad request</span>)
         }
         else if (this.state.error === 2) {
-            return (<p><b>{this.state.errorType}</b></p>)
+            return (<span className="error-message">{this.state.errorType}</span>)
         }
     }
 

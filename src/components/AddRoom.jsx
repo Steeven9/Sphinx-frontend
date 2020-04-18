@@ -93,13 +93,13 @@ class AddRoom extends React.Component {
             window.location.href = '/house';
         }
         else if (this.state.error) {
-            return (<p>Bad Request</p>)
+            return (<span className="error-message">Bad Request</span>)
         }
         else if (this.state.incomplete) {
-            return (<p>Please complete all fields</p>)
+            return (<span className="error-message">Please complete all fields</span>)
         }
         else if (this.state.unknownError !== "") {
-            return (<p>{this.state.unknownError}</p>)
+            return (<span className="error-message">{this.state.unknownError}</span>)
         }
     }
 

@@ -18,8 +18,7 @@ class Signup extends React.Component {
             password: '',
             confirmPassword: '',
             successOrError: -1, // if -1 nothing, if 0 display success, if 1 display incomplete, if 2 bad request,
-                                // if 3 email already in use, if 4 username already in use, 
-                                // if 5 unknwon if email or username already in use, if 6 unexpected error
+                                // if 3 email or username already in use, if 4 unexpected error
             errorType: '',
             isLoading: false,
             passwordMismatch: false,
@@ -67,18 +66,16 @@ class Signup extends React.Component {
             else if (res.status === 400) {
                 this.setState({successOrError: 2})
             }
-            else if (res.status === 999) {
-                if (res.text === this.state.email && res.text === this.state.username) this.setState({successOrError: 5})
-                else if (res.text === this.state.email) this.setState({successOrError: 3})
-                else if (res.text === this.state.username) this.setState({successOrError: 4})
+            else if (res.status === 500) {
+                this.setState({successOrError: 3})
             }
             else {
-                this.setState({successOrError: 6, errorType: "Error Code: " + res.status})
+                this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
             }
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({successOrError: 6, errorType: e})
+            this.setState({successOrError: 4, errorType: e})
         });
     };
 
@@ -101,15 +98,9 @@ class Signup extends React.Component {
             return (<span className="error-message">Error: Bad request.</span>)
         }
         else if (this.state.successOrError === 3) {
-            return (<span className="error-message">Email already in use.</span>)
-        }
-        else if (this.state.successOrError === 4) {
-            return (<span className="error-message">Nickname already in use.</span>)
-        }
-        else if (this.state.successOrError === 5) {
             return (<span className="error-message">Email or nickname already in use.</span>)
         }
-        else if (this.state.successOrError === 6) {
+        else if (this.state.successOrError === 4) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     };
