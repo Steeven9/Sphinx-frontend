@@ -142,7 +142,7 @@ class Login extends React.Component {
                                 <a className="primary-link" href="/reset">Forgot your password?</a>
                             </div>
 
-                            <div className="message-one-line center-text">
+                            <div className="message-two-lines center-text">
                                 <span>
                                     <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
                                 </span>

@@ -183,11 +183,14 @@ class AddRoom extends React.Component {
                             <input type="file" className="inputBackground" onClick={this.resetBackground} accept="image/*" onChange={this.changeDinamicallyBackground} id="inputPicture" />
                             <input type="hidden" id="imageURL" value="" />
                         </div>
-                        <span>
-                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
-                        </span>
 
-                        {this.roomCreated()}
+                        <div className="message-two-lines center-text">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
+
+                            {this.roomCreated()}
+                        </div>
                     </div>
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>

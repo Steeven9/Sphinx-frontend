@@ -282,14 +282,15 @@ class EditRoom extends React.Component {
                             <input type="file" className="inputBackground" accept="image/*" onClick={this.resetBackground} onChange={this.changeDinamicallyBackground} id="inputPicture1" />
                             <input type="hidden" id="imageURL1" value="" />
                         </div>
-
-
-
                     </div>
-                    <span>
-                        <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
-                    </span>
-                    {this.showError()}
+
+                    <div className="message-two-lines center-text">
+                        <span>
+                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                        </span>
+                        {this.showError()}
+                    </div>
+
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>

@@ -189,10 +189,12 @@ class AddDevice extends React.Component {
                                 <option value="0">No pairing</option>
                             </select>
                         </div> */}
-                        <span>
-                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
-                        </span>
-                        {this.deviceCreated()}
+                        <div className="message-two-lines center-text">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
+                            {this.deviceCreated()}
+                        </div>
                     </div>
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>

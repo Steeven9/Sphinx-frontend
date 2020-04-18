@@ -138,10 +138,14 @@ class EditDevice extends React.Component {
                     <div className="textFields">
                         <div className="textFields"><input type="text" name="" placeholder="New Name" onChange={this.handleDeviceNameChange} required/></div>
                     </div>
-                    <span>
-                        <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
-                    </span>
-                    {this.showError()}
+
+                    <div className="message-two-lines center-text">
+                        <span>
+                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                        </span>
+                        {this.showError()}
+                    </div>
+                    
                     <div className="center">
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteDevice}>Delete</button>
