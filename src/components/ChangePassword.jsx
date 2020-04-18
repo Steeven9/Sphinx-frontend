@@ -82,10 +82,10 @@ class ChangePassword extends React.Component {
 
     showIncomplete = (event) => {
         if (this.state.incomplete) {
-            return (<p>Please insert both passwords</p>)
+            return (<span className="error-message">Please insert both passwords</span>)
         }
         else if (this.state.mismatch) {
-            return (<p>The passwords don't match.</p>)
+            return (<span className="error-message">The passwords don't match.</span>)
         }
     }
 
@@ -121,9 +121,9 @@ class ChangePassword extends React.Component {
                 </div>
             </>)
         } else if (this.state.show === 1) {
-            return (<p>Password changed successfully. <a href="/login">Click here</a> to login</p>)
+            return (<span className="success-message">Password changed successfully. <a href="/login">Click here</a> to login</span>)
         } else if (this.state.show === 2) {
-            return (<p>The code is invalid or the user doesn't exit. Please, <a href="/reset">request a new link</a>.</p>)
+            return (<span className="error-message">The code is invalid or the user doesn't exit. Please, <a href="/reset">request a new link</a>.</span>)
         }
     }
 

@@ -246,13 +246,13 @@ class EditRoom extends React.Component {
 
     showError = () => {
         if (this.state.error === 0) {
-            return (<p><b>Please fill all informations</b></p>)
+            return (<span className="error-message">Please fill all informations</span>)
         }
         else if (this.state.error === 1) {
-            return (<p><b>Error: bad request</b></p>)
+            return (<span className="error-message">Error: bad request</span>)
         }
         else if (this.state.error === 2) {
-            return (<p><b>{this.state.errorType}</b></p>)
+            return (<span className="error-message">{this.state.errorType}</span>)
         }
     }
 

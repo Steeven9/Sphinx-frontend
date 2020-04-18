@@ -25,14 +25,6 @@
     padding: 30px 80px 50px 80px !important;
 }
 
-.error-message {
-    color: #E30000;
-}
-
-.success-message {
-    color: #028828;
-}
-
 .message-one-line {
     font-weight: 600;
     font-size: 14px;

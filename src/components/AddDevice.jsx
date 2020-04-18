@@ -136,13 +136,13 @@ class AddDevice extends React.Component {
             this.redirectToDevices();
         }
         else if (this.state.error) {
-            return (<p>An error has occurred, please try again</p>)
+            return (<span className="error-message">An error has occurred, please try again</span>)
         }
         else if (this.state.incomplete) {
-            return (<p>Please insert all information</p>)
+            return (<span className="error-message">Please insert all information</span>)
         }
         else if (this.state.unknownError !== "") {
-            return (<p>{this.state.unknownError}</p>)
+            return (<span className="error-message">{this.state.unknownError}</span>)
         }
     }
 
