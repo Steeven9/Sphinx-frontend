@@ -74,12 +74,14 @@ class AddDevice extends React.Component {
      * Sends informations contained in this.state to the backend
      */
     sendDatas = evt => {
+        console.log("Porcodio")
         evt.preventDefault();
         if (this.state.type === "0" || this.state.room === "0") {
             this.setState({ success: false, error: false, incomplete: true })
         }
         else {
             this.setState({isLoading: true, success: false, error: false, incomplete: false})
+            console.log("VAI: " + this.state.deviceName)
             fetch('http://localhost:8080/devices', {
                 method: 'POST',
                 headers: {
@@ -119,6 +121,7 @@ class AddDevice extends React.Component {
         this.setState({ type: evt.target.value })
     }
     handleDeviceNameChange = evt => {
+        console.log(this.state.deviceName)
         this.setState({ deviceName: evt.target.value });
     }
     handleRoomChange = evt => {
@@ -133,7 +136,7 @@ class AddDevice extends React.Component {
      */
     deviceCreated = () => {
         if (this.state.success) {
-            this.redirectToDevices();
+            // this.redirectToDevices();
         }
         else if (this.state.error) {
             return (<p>An error has occurred, please try again</p>)
