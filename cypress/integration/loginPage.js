@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+setupFiles: ['@testing-library/react/dont-cleanup-after-each']
 
 describe('Testing the login page', function () {
     it('testing all the buttons', function () {
@@ -6,12 +7,8 @@ describe('Testing the login page', function () {
         cy.contains('Log in')
 
         
-
         cy.get('.btn-secondary')
             .contains('Create account')
-
-        cy.get('.btn-primary')
-            .contains('Log in')
         
         cy.get('.btn-primary')
             .contains('Log in')
@@ -30,23 +27,25 @@ describe('Testing the login page', function () {
             .click()
         cy.url()
             .should('include', '/signup')
-        
+             
+
+
+    })
+
+it('testing the login', function () {
         cy.visit('/login')
- 
-        cy.get('.dates-input1 input[type=text ]')
-            .type('fake@gmail.com')
-            .should('have.value', 'fake@gmail.com')
-
-        cy.get('.dates-input1 input[type=password]')
-            .type('password')
-        cy.get('.btn-primary')
-            .click()
-
-        cy.contains("Couldn't log in")
-
-
-        
-
+    
+         
+        cy.server()
+        cy.request({
+            url: 'http://localhost:8080/auth/login/user1',
+            method: 'POST',
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+            body: "1234"
+        })
+        .then(function(response){
+            expect(response.status).to.eq(200)
+        })
 
     })
 })
