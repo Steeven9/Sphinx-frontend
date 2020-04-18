@@ -1,5 +1,9 @@
 import React from 'react';
 import '../css/App.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class LogOut extends React.Component {
     
@@ -12,7 +16,9 @@ class LogOut extends React.Component {
      */
     render() {
         return (
-            <></>
+            <span>
+                <ColorCircularProgress className="loading-spinner"/>
+            </span>
         );
     }
 }

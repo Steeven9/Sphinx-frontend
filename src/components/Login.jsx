@@ -13,67 +13,81 @@ class Login extends React.Component {
         this.state = {
             username: '',
             password: '',
-            error: false,
             statusCode: '',
-            isLoading: false
+            isLoading: false,
+            error: -1,  // -1 nothing, 0 incomplete, 1 wrong username or password, 2 not authenticated, 3 unexpected error
+            errorType: "",
         }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
      * Sends all informations contained in this.state to the backend
      */
     sendDatas = evt => {
-        this.setState({isLoading: true})
-        this.setState({error: false})
-        this.setState({statusCode: ''})
         evt.preventDefault();
+
+        if (this.state.username === '' || this.state.password === '') {
+            this.setState({error: 0})
+            return;
+        }
+        
+        this.setState({isLoading: true, error: -1, statusCode: ''})
 
         fetch('http://localhost:8080/auth/login/' + this.state.username, {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
             body: this.state.password
         })
-            .then((res) => {
-                this.setState({statusCode: res.status});
+        .then((res) => {
+            this.setState({statusCode: res.status});
 
-                if (res.status === 200) {
-                    return res.text();
-                } else {
-                    return null;
-                }
-            })
-            .then((data, res) => {
-                this.setState({isLoading: false})
-                if (data === null) {
-                    this.setState({error: true});
-                } else {
-                    this.props.logIn(this.state.username, data);
-                }
-            });
+            if (res.status === 200) {
+                return res.text();
+            } 
+            else if (res.status === 401 || res.status === 404) {
+                this.setState({error: 1})
+            } 
+            else if (res.status === 403) {
+                this.setState({error: 2})
+            }
+            else {
+                this.setState({error: 3, errorType: "Error Code: " + res.status})
+            }
+            return null;
+        })
+        .then((data, res) => {
+            this.setState({isLoading: false})
+            if (data !== null) {
+                this.props.logIn(this.state.username, data);
+            }
+        })
+        .catch( e => {
+            this.setState({isLoading: false})
+            this.setState({error: 3, errorType: e})
+        });
     };
-
-    /**
-     * Function only used for testing without the backend
-     */
-    sendDatasTest = evt => {
-        evt.preventDefault();
-        this.props.logIn(this.state.username, "a test token");
-        if (this.state.username !== "") {
-            window.location.href = '/dashboard';
-        }
-    }
 
     /**
      * Display an error message if this.state.error === true
      */
     showError = () => {
-        console.log(this.statusCode)
-        if (this.state.error) {
-            return (
-                <span className="error-message">
-                    {(this.state.statusCode === 403) ? "Please check your mail and verify your account." : "Couldn't log in. Please check your username or password."}
-                </span>
-            )
+        if (this.state.error === 0) {
+            return (<span className="error-message">Please fill all the informations</span>)
+        }
+        else if (this.state.error === 1) {
+            return (<span className="error-message">Wrong username or password</span>)
+        }
+        else if (this.state.error === 2) {
+            return (<span className="error-message">Account not verified</span>)
+        }
+        else if (this.state.error === 3) {
+            return (<span className="error-message">{this.state.errorType}</span>)
         }
     }
 
@@ -128,7 +142,7 @@ class Login extends React.Component {
                                 <a className="primary-link" href="/reset">Forgot your password?</a>
                             </div>
 
-                            <div className="message-one-line center-text">
+                            <div className="message-two-lines center-text">
                                 <span>
                                     <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
                                 </span>
