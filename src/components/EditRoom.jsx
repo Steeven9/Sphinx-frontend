@@ -2,7 +2,10 @@ import React from 'react';
 import '../css/App.css';
 import '../css/editPages.css';
 import * as qs from 'query-string';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class EditRoom extends React.Component {
 
@@ -14,7 +17,9 @@ class EditRoom extends React.Component {
             room_id: "",
             roomName: "",
             type: "generic-room",
-            incomplete: false,
+            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
+            errorType: "",
+            isLoading: false,
         }
     }
 
@@ -41,12 +46,15 @@ class EditRoom extends React.Component {
             }
         })
         .then((data) => {
-            console.log(data);
             this.setState({roomName: data.name})
             document.getElementById('editRoomFixedSizeIcon').src = data.icon
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
         })
         .catch(error => console.log(error))
+
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
@@ -55,9 +63,10 @@ class EditRoom extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.roomName === "") {
-            this.setState({ incomplete: true })
-        }
+            this.setState({error: 0})
+        } 
         else {
+            this.setState({isLoading: true, error: -1})
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
                 method: 'PUT',
                 headers: {
@@ -74,17 +83,25 @@ class EditRoom extends React.Component {
                         this.props.findPathRoom(this.state.type, 1),
                 })
             })
-                .then((res) => {
-                    if (res.status === 204) {
-                        console.log("Room successfully edited")
-                        this.redirectToHouse()
-                    } else if (res.status === 401) {
-                        this.props.logOut(1)
-                    } else {
-                        console.log("Unexpected error")
-                    }
-                })
-                .catch(error => console.log(error))
+            .then((res) => {
+                this.setState({isLoading: false})
+                if (res.status === 200) {
+                    this.redirectToHouse()
+                } 
+                else if (res.status === 401) {
+                    this.props.logOut(1)
+                } 
+                else if (res.status === 400) {
+                    this.setState({error: 1})
+                }
+                else {
+                    this.setState({error: 2, errorType: "Error Code: " + res.status})
+                }
+            })
+            .catch( e => {
+                this.setState({isLoading: false})
+                this.setState({error: 2, errorType: e})
+            })
         }
     };
 
@@ -92,6 +109,7 @@ class EditRoom extends React.Component {
      * Deletes the Room
      */
     deleteRoom = evt => {
+        this.setState({isLoading: true, error: -1})
         fetch('http://localhost:8080/rooms/' + this.state.room_id, {
             method: 'DELETE',
             headers: {
@@ -99,17 +117,22 @@ class EditRoom extends React.Component {
                 'session-token': this.state.session_token,
             }
         })
-            .then((res) => {
-                if (res.status === 203 || res.status === 200) {
-                    console.log("Room successfully removed")
-                    this.redirectToHouse()
-                } else if (res.status === 401) {
-                    this.props.logOut(1)
-                } else {
-                    console.log("Unexpected error")
-                }
-            })
-            .catch(error => console.log(error))
+        .then((res) => {
+            this.setState({isLoading: false})
+            if (res.status === 204) {
+                this.redirectToHouse()
+            } 
+            else if (res.status === 401) {
+                this.props.logOut(1)
+            } 
+            else if (res.status === 400) {
+                this.setState({error: 1})
+            }
+            else {
+                this.setState({error: 2, errorType: "Error Code: " + res.status})
+            }
+        })
+        .catch( e => this.setState({error: 2, errorType: e}))
     };
 
     // function to handle state on input change
@@ -221,6 +244,18 @@ class EditRoom extends React.Component {
         window.location.href = '/house'
     }
 
+    showError = () => {
+        if (this.state.error === 0) {
+            return (<span className="error-message">Please fill all informations</span>)
+        }
+        else if (this.state.error === 1) {
+            return (<span className="error-message">Error: bad request</span>)
+        }
+        else if (this.state.error === 2) {
+            return (<span className="error-message">{this.state.errorType}</span>)
+        }
+    }
+
     /**
      * Renders the room handler
      */
@@ -247,10 +282,15 @@ class EditRoom extends React.Component {
                             <input type="file" className="inputBackground" accept="image/*" onClick={this.resetBackground} onChange={this.changeDinamicallyBackground} id="inputPicture1" />
                             <input type="hidden" id="imageURL1" value="" />
                         </div>
-
-
-
                     </div>
+
+                    <div className="message-two-lines center-text">
+                        <span>
+                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                        </span>
+                        {this.showError()}
+                    </div>
+
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>

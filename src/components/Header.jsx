@@ -20,7 +20,6 @@ class Header extends React.Component {
     //  * returns the new state, that goes directly into the state of this class
     //  */
     // static getDerivedStateFromProps(props, state) {
-    //     console.log(props.loggedIn)
     // 	return {
     //         loggedIn: props.loggedIn
     //     };
@@ -31,7 +30,6 @@ class Header extends React.Component {
      */
     componentDidMount() {
         let newLoggedIn = localStorage.getItem("loggedIn") === "true";
-        // console.log(newLoggedIn);
         this.setState({loggedIn: newLoggedIn})
     }
 
@@ -55,24 +53,34 @@ class Header extends React.Component {
                                 this.state.loggedIn ?
                                     <>
                                         <ul className="right hide-on-med-and-down">
-                                            <li> <a className={(active[1] === '') ? 'nav-link active' : 'nav-link'} href="/">Dashboard</a></li>
-                                            <li> <a className={(active[1] === 'devices') ? 'nav-link active' : 'nav-link'} href="/devices">Devices</a></li>
-                                            <li> <a className={(active[1] === 'house' || active[1] === 'room') ? 'nav-link active' : 'nav-link'} href="/house">Rooms</a></li>
-                                            <li> <a className={(active[1] === 'scenes') ? 'nav-link active' : 'nav-link'} href="/scenes">Scenes</a> </li>
-                                            <li> <a className={(active[1] === 'automations') ? 'nav-link active' : 'nav-link'} href="/automations">Automations</a></li>
-                                            <li> <a className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'} href="/guests">Guests</a></li>
+                                            <li><a className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
+                                                   href="/">Dashboard</a></li>
+                                            <li><a
+                                                className={(active[1] === 'devices') ? 'nav-link active' : 'nav-link'}
+                                                href="/devices">Devices</a></li>
+                                            <li><a
+                                                className={(active[1] === 'house' || active[1] === 'room') ? 'nav-link active' : 'nav-link'}
+                                                href="/house">Rooms</a></li>
+                                            <li><a className={(active[1] === 'scenes') ? 'nav-link active' : 'nav-link'}
+                                                   href="/scenes">Scenes</a></li>
+                                            <li><a
+                                                className={(active[1] === 'automations') ? 'nav-link active' : 'nav-link'}
+                                                href="/automations">Automations</a></li>
+                                            <li><a className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'}
+                                                   href="/guests">Guests</a></li>
                                             <li><a className='nav-link' href="/logout">Log out</a></li>
                                         </ul>
                                     </>
                                     :
-
                                     <ul className="right hide-on-med-and-down">
-                                        <li> <a className={(active[1] === '') ? 'nav-link active' : 'nav-link'} href="/">Home</a></li>
-                                        <li> <a className={(active[1] === 'signup') ? 'nav-link active' : 'nav-link'} href="/signup">Create account</a></li>
-                                        <li> <a className={(active[1] === 'login') ? 'nav-link active' : 'nav-link'} href="/login">Log in</a></li>
+                                        <li><a className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
+                                               href="/">Home</a></li>
+                                        <li><a className={(active[1] === 'signup') ? 'nav-link active' : 'nav-link'}
+                                               href="/signup">Create account</a></li>
+                                        <li><a className={(active[1] === 'login') ? 'nav-link active' : 'nav-link'}
+                                               href="/login">Log in</a></li>
                                     </ul>
                             }
-
                         </div>
                     </nav>
                 </div>

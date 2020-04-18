@@ -40,7 +40,6 @@ function doFetch(fetchUrl, method, body) {
 const devicesReducer = (state, action) => {
     switch (action.type) {
         case 'POPULATE_DEVICES':
-            console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
 
         case 'MODIFY_DEVICE':
@@ -79,7 +78,6 @@ const devicesReducer = (state, action) => {
             return state;
 
         case 'SYNC_DEVICES':
-            console.log('Dispatch: SYNC_DEVICES');
 
             if (action.device.on !== undefined) {
                 state.forEach((d) => {
@@ -119,7 +117,6 @@ const devicesReducer = (state, action) => {
             return [...state];
 
         default:
-            console.log('Dispatch: DEFAULT');
             return state;
     }
 };

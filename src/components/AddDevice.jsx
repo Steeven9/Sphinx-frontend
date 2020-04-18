@@ -1,12 +1,17 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/devices.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class AddDevice extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            unknownError: "",
             success: false,
             error: false,
             incomplete: false,
@@ -14,11 +19,16 @@ class AddDevice extends React.Component {
             type: "0",
             room: "0",
             pairing: "0",
-            selectRooms: <></>
+            selectRooms: <></>,
+            isLoading: false
         }
     }
 
     componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
+
         fetch('http://localhost:8080/rooms', {
             method: 'GET',
             headers: {
@@ -69,6 +79,7 @@ class AddDevice extends React.Component {
             this.setState({ success: false, error: false, incomplete: true })
         }
         else {
+            this.setState({isLoading: true, success: false, error: false, incomplete: false})
             fetch('http://localhost:8080/devices', {
                 method: 'POST',
                 headers: {
@@ -85,20 +96,21 @@ class AddDevice extends React.Component {
                 })
             })
             .then((res) => {
+                this.setState({isLoading: false})
                 if (res.status === 201) {
-                    this.setState({ success: true, error: false, incomplete: false })
+                    this.setState({ success: true, error: false, incomplete: false, unknownError: "" })
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else if (res.status === 400) {
-                    this.setState({ success: false, error: false, incomplete: true })
+                    this.setState({ success: false, error: false, incomplete: true, unknownError: "" })
                 }
                 else {
-                    this.setState({ success: false, error: true, incomplete: false });
+                    this.setState({ success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
-            .catch(error => console.log(error))
+            .catch(e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
 
@@ -124,10 +136,13 @@ class AddDevice extends React.Component {
             this.redirectToDevices();
         }
         else if (this.state.error) {
-            return (<p>An error has occurred, please try again</p>)
+            return (<span className="error-message">An error has occurred, please try again</span>)
         }
         else if (this.state.incomplete) {
-            return (<p>Please insert all information</p>)
+            return (<span className="error-message">Please insert all information</span>)
+        }
+        else if (this.state.unknownError !== "") {
+            return (<span className="error-message">{this.state.unknownError}</span>)
         }
     }
 
@@ -174,7 +189,12 @@ class AddDevice extends React.Component {
                                 <option value="0">No pairing</option>
                             </select>
                         </div> */}
-                        {this.deviceCreated()}
+                        <div className="message-two-lines center-text">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
+                            {this.deviceCreated()}
+                        </div>
                     </div>
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>

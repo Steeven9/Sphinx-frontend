@@ -25,6 +25,21 @@
     padding: 30px 80px 50px 80px !important;
 }
 
+.message-one-line {
+    font-weight: 600;
+    font-size: 14px;
+    max-height: 20px;
+    min-height: 20px;
+}
+
+.message-two-lines {
+    margin: 20px 0 5px 0;
+    font-weight: 600;
+    font-size: 14px;
+    max-height: 42px;
+    min-height: 42px;
+}
+
 .forgot-password {
     font-style: italic;
     font-size: 14px;

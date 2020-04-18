@@ -1,16 +1,29 @@
 import React from 'react';
 import '../css/App.css';
 import * as qs from 'query-string';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class ChangePassword extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, display "password mismatch". If 3, display error message
+            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, display error message
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            isLoading: false,
+            incomplete: false,
+            mismatch: false,
         }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
@@ -21,14 +34,20 @@ class ChangePassword extends React.Component {
         event.preventDefault();
         const parsed = qs.parse(window.location.search);
 
+        if (this.state.password === "" || this.state.confirmPassword === "") {
+            this.setState({mismatch: false, incomplete: true});
+            return;
+        }
+        if (this.state.password !== this.state.confirmPassword) {
+            this.setState({mismatch: true, incomplete: false});
+            return;
+        }
+
         if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) {
             this.setState({show: 3});
             return;
         }
-        if (this.state.password !== this.state.confirmPassword) {
-            this.setState({show: 2});
-            return;
-        }
+        this.setState({isLoading: true})
         fetch('http://localhost:8080/auth/reset/' + parsed.email + '/' + parsed.code, {
             method: 'POST',
             headers: {
@@ -37,8 +56,14 @@ class ChangePassword extends React.Component {
             },
             body: this.state.password
         })
-            .then((res) => res.status === 204 ? this.setState({show: 1}) : this.setState({show: 3}))
-            .catch((error) => this.setState({show: 3}))
+        .then((res) => {
+            this.setState({isLoading: false})
+            res.status === 204 ? this.setState({show: 1}) : this.setState({show: 3})
+        })
+        .catch((error) => {
+            this.setState({isLoading: false})
+            this.setState({show: 3})
+        })
     }
 
     /**
@@ -53,6 +78,15 @@ class ChangePassword extends React.Component {
      */
     changeConfirmPassword = (event) => {
         this.setState({confirmPassword: event.target.value});
+    }
+
+    showIncomplete = (event) => {
+        if (this.state.incomplete) {
+            return (<span className="error-message">Please insert both passwords</span>)
+        }
+        else if (this.state.mismatch) {
+            return (<span className="error-message">The passwords don't match.</span>)
+        }
     }
 
     /**
@@ -74,6 +108,8 @@ class ChangePassword extends React.Component {
                            placeholder="Repeat password" required/>
                 </div>
 
+                {this.showIncomplete()}
+
                 <div>
 
                     <div className="center-text">
@@ -85,11 +121,9 @@ class ChangePassword extends React.Component {
                 </div>
             </>)
         } else if (this.state.show === 1) {
-            return (<p>Password changed successfully. <a href="/login">Click here</a> to login</p>)
+            return (<span className="success-message">Password changed successfully. <a href="/login">Click here</a> to login</span>)
         } else if (this.state.show === 2) {
-            return (<p>The passwords don't match.</p>)
-        } else if (this.state.show === 3) {
-            return (<p>An error has occurred. Please try again.</p>)
+            return (<span className="error-message">The code is invalid or the user doesn't exit. Please, <a href="/reset">request a new link</a>.</span>)
         }
     }
 
@@ -103,6 +137,9 @@ class ChangePassword extends React.Component {
                 <article>
                     <div id="content" className="container">
                         <div className="password-reset-box z-depth-2">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
                             {this.showChange()}
                         </div>
                     </div>
