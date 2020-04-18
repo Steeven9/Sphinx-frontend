@@ -26,6 +26,7 @@ let title = "";
  * @returns {DevicePanel}
  */
 const DevicesPanel = () => {
+    const [actionCompleted, setActionCompleted] = React.useState(false);
     const [devices, dispatch] = useReducer(devicesReducer, []);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
@@ -33,9 +34,8 @@ const DevicesPanel = () => {
         isRoom = true
     }
 
-    // Fetches devices on page load
-    useEffect(() => {
-
+    // Fetch room info
+    function fetchRoomInfo() {
         if (isRoom) {
             const fetchRoomUrl = window.location.protocol + '//' + window.location.hostname + ':8080/rooms/' + params.get('id');
             isDeviceStateChanging = true;
@@ -63,7 +63,10 @@ const DevicesPanel = () => {
                 })
                 .catch(e => console.log(e));
         }
+    }
 
+    // Fetch devices data
+    function fetchData() {
         fetch(fetchUrl, {
             method: 'GET',
             headers: {
@@ -87,33 +90,48 @@ const DevicesPanel = () => {
                 if (data === null || devices.length === 0) {
                     isDataFound = false;
                 }
+
+                sortDevices(devices);
                 dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                isLoading = false;
             })
             .catch(e => console.log(e));
-        isDeviceStateChanging = false;
+        setActionCompleted(false)
+    }
+
+    // Sorts the devices by name alphabetically
+    function sortDevices(devices) {
+        try {
+            return devices.sort(function (a, b) {
+                let keyA = a.name;
+                let keyB = b.name;
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+            });
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    // Fetches devices and room info on page load
+    useEffect(() => {
+        fetchRoomInfo();
+        fetchData();
     }, []);
 
-    // Extracts devices from next state
+    // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
-        console.log('Devices were updated')
-    }, [devices]);
+        if (actionCompleted) {
+            fetchData()
+        }
+    }, [actionCompleted]);
 
-    try {
-        devices.sort(function (a, b) {
-            let keyA = a.name;
-            let keyB = b.name;
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-    } catch (e) {
-        throw e;
-    }
 
     // Fetches every n seconds to refresh the devices, while not on an update operation
     useEffect(() => {
         const interval = setInterval(() => {
-            if(!isDeviceStateChanging) {
+            if (!isDeviceStateChanging) {
                 console.log('Timed devices refreshing!')
                 dispatch({type: 'REFRESH_DEVICES'});
                 isDeviceStateChanging = false;
@@ -123,7 +141,7 @@ const DevicesPanel = () => {
     }, []);
 
     return (
-        <DevicesContext.Provider value={{devices, dispatch, isRoom}}>
+        <DevicesContext.Provider value={{devices, dispatch, isRoom, setActionCompleted}}>
             <div id="wrapper" className="devices">
                 <main style={{
                     backgroundImage: isRoom && "url('" + roomBackground + "')",
@@ -159,19 +177,5 @@ const DevicesPanel = () => {
         </DevicesContext.Provider>
     )
 };
-
-function sortDevices(devices) {
-    try {
-        return devices.sort(function (a, b) {
-            let keyA = a.name;
-            let keyB = b.name;
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-    } catch (e) {
-        throw e;
-    }
-}
 
 export {DevicesPanel as default}

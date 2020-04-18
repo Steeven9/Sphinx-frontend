@@ -57,10 +57,10 @@ function getInitialSource(initSource = 0) {
  * @returns {*}
  * @constructor
  */
-function ToggleButtons({device}) {
+function ThermostatToggleButtons({device}) {
     const [source, setSource] = React.useState(getInitialSource(device.source));
     const [modes, setModes] = React.useState(getModes(device.state));
-    const {dispatch} = useContext(DevicesContext);
+    const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const classes = useStyles();
 
     const handleSource = (event, newSource) => {
@@ -99,8 +99,8 @@ function ToggleButtons({device}) {
 
     // Triggers the synchronization (render) and updating of devices (backend)
     const updateTargetTemp = (device) => {
-        dispatch({type: 'SYNC_DEVICES', device: device});
-        dispatch({type: 'MODIFY_DEVICE', device: device});
+        dispatch({type: 'REFRESH_DEVICES' , device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
     // Extracts next state
@@ -156,4 +156,4 @@ function ToggleButtons({device}) {
     );
 }
 
-export {ToggleButtons as default}
+export {ThermostatToggleButtons as default}

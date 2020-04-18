@@ -9,15 +9,15 @@ import DevicesContext from "../../context/devicesContext";
  */
 const SmartPlug = (device) => {
     const [consumption, setConsumption] = useState(device.device.label);
-    const {dispatch} = useContext(DevicesContext);
+    const {dispatch, setActionCompleted} = useContext(DevicesContext);
 
     const resetSmartPlug = (e) => {
         e.preventDefault();
         setConsumption('0 kWh');
         device.device.label = '0 kWh';
         device.device.reset = true;
-        dispatch({type: 'SYNC_DEVICES', device: device});
-        dispatch({type: 'MODIFY_DEVICE', device: device});
+        dispatch({type: 'REFRESH_DEVICES' , device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
     device.device.reset = false;

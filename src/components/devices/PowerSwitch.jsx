@@ -9,7 +9,7 @@ import DevicesContext from '../../context/devicesContext'
  * @constructor
  */
 const PowerSwitch = ({device}) => {
-    const {dispatch} = useContext(DevicesContext);
+    const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const [on, setPower] = useState(device.on);
 
     /**
@@ -28,8 +28,8 @@ const PowerSwitch = ({device}) => {
         device.on = e.target.checked;
         device.clicked = true;
         // console.log('Turning -> ' + device.name + ' ' + (device.on ? 'ON' : 'OFF'));
-        dispatch({type: 'SYNC_DEVICES', device: device});
-        dispatch({type: 'MODIFY_DEVICE', device: device});
+        dispatch({type: 'REFRESH_DEVICES' , device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
     return(

@@ -61,11 +61,11 @@ function DashboardMenu() {
                         </a>
                     </Grid>
                     <Grid item lg={4} md={6} xs={12}>
-                        <a href="/automation">
+                        <a href="/automations">
                             <Paper className={classes.paper}>
-                                <img alt="automation" className="dashboard-nav-img"
+                                <img alt="automations" className="dashboard-nav-img"
                                      src="/img/icons/dashboard/icon-automation-bw.svg"/>
-                                <p>Automation</p>
+                                <p>Automations</p>
                             </Paper>
                         </a>
                     </Grid>

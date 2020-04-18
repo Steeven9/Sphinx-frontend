@@ -269,3 +269,32 @@ nav ul a:hover {
 .btn-icon:hover {
     opacity: 0.75;
 }
+
+.hidden {
+    display: none !important;
+}
+
+/* Action feedback to user starts here */
+.error-message {
+    color: #E30000;
+}
+
+.success-message {
+    color: #028828;
+}
+
+.message-one-line {
+    font-weight: 600;
+    font-size: 14px;
+    max-height: 20px;
+    min-height: 20px;
+}
+
+.message-two-lines {
+    margin: 20px 0 5px 0;
+    font-weight: 600;
+    font-size: 14px;
+    max-height: 42px;
+    min-height: 42px;
+}
+/* Action feedback to user end */

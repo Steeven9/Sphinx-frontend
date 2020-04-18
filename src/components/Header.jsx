@@ -59,7 +59,7 @@ class Header extends React.Component {
                                             <li> <a className={(active[1] === 'devices') ? 'nav-link active' : 'nav-link'} href="/devices">Devices</a></li>
                                             <li> <a className={(active[1] === 'house' || active[1] === 'room') ? 'nav-link active' : 'nav-link'} href="/house">Rooms</a></li>
                                             <li> <a className={(active[1] === 'scenes') ? 'nav-link active' : 'nav-link'} href="/scenes">Scenes</a> </li>
-                                            <li> <a className={(active[1] === 'automation') ? 'nav-link active' : 'nav-link'} href="/automation">Automation</a></li>
+                                            <li> <a className={(active[1] === 'automations') ? 'nav-link active' : 'nav-link'} href="/automations">Automations</a></li>
                                             <li> <a className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'} href="/guests">Guests</a></li>
                                             <li><a className='nav-link' href="/logout">Log out</a></li>
                                         </ul>

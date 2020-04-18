@@ -1,3 +1,8 @@
+/**
+ * Generic fetch to POST and PUT
+ * @param method
+ * @param scene
+ */
 function doFetch(method, scene) {
     const host = window.location.protocol + '//' + window.location.hostname + ':8888';
     let fetchUrl = host + '/scenes';
@@ -50,14 +55,7 @@ function doFetch(method, scene) {
 
 const scenesReducer = (state, action) => {
     const host = window.location.protocol + '//' + window.location.hostname + ':8888';
-    // const params = (new URL(document.location)).searchParams;
-    // const path = window.location.pathname.toLowerCase().split('/');
-    // const sharedfetchUrl = host + '/scenes?id=' + params.get('id');//check
-    // let body = {};
     let fetchUrl = '';
-    // let fetchUrl = '';
-
-
     const headers = {
         'user': localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
@@ -117,7 +115,6 @@ const scenesReducer = (state, action) => {
 
             let duplicatedScene = {
                 name: 'Copy of ' + action.scene.name + ' ' + copyCount,
-                id: Math.random(),
                 icon: action.scene.icon,
                 shared: action.scene.shared,
                 effects: action.scene.effects
@@ -129,24 +126,8 @@ const scenesReducer = (state, action) => {
 
         case 'DELETE_SCENE':
             console.log('Dispatch: DELETE_SCENE');
-            // fetchUrl = host + '/scenes';
 
             state = state.filter((s) => s.id !== action.scene.id);
-
-            // xx
-            // fetch(fetchUrl + '/' + action.scene.id, {
-            //     method: 'DELETE',
-            //     headers: headers
-            // })
-            //     .then(res => {
-            //         if (res.status === 200 || res.status === 203) {
-            //             console.log('Scene deleted from the DB')
-            //         } else {
-            //             console.log('Could not delete from DB')
-            //         }
-            //     })
-            //     .catch(e => console.log(e));
-
             doFetch('DELETE', action.scene);
             action.setActionCompleted(true);
             return state;

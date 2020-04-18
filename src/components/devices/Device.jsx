@@ -5,7 +5,7 @@ import {getRowIcon} from '../../helpers/getDeviceMetadadaHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
-import ToggleButtons from "./ToggleButtons";
+import ToggleButtons from "./ThermostatToggleButtons";
 import CardMedia from '@material-ui/core/CardMedia'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -19,7 +19,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
  * @constructor
  */
 const Device = ({device}) => {
-    const {devices, dispatch, isRoom} = useContext(DevicesContext);
+    const {devices, dispatch, isRoom, setActionCompleted} = useContext(DevicesContext);
     const [intensity, setIntensity] = useState(device.slider);
     const [disabled, setDisabled] = useState(device.disable);
     const [open, setOpen] = React.useState(false);
@@ -54,7 +54,6 @@ const Device = ({device}) => {
                 d.slider = val;
             }
         });
-
         dispatch({type: 'SYNC_DEVICES', device: device});
     };
 
@@ -66,7 +65,7 @@ const Device = ({device}) => {
     const handleChangeCommitted = (e, val) => {
         setIntensity(val);
         device.slider = val;
-        dispatch({type: 'MODIFY_DEVICE', device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
     const handleClickOpen = () => {

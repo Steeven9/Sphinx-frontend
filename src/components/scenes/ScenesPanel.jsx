@@ -10,7 +10,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const scenesFetchUrl = 'http://localhost:8888/scenes';
-const guestScenesFetchUrl = 'http://localhost:8888/guests/' + params.get('id') + '/scenes/';
+const guestScenesFetchUrl = 'http://localhost:8888/guests/' + params.get('id') + '/scenes';
 const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
 let isLoading = true;
 let isDataFound = true;
@@ -31,6 +31,7 @@ const ScenesPanel = () => {
         isGuest = true
     }
 
+    // Fetch scenes data
     const fetchData = () => {
         fetch(fetchUrl, {
             method: 'GET',
@@ -64,26 +65,29 @@ const ScenesPanel = () => {
 
     // Fetches scenes on page load
     useEffect(() => {
-            fetchData()
+        fetchData()
     }, []);
 
     // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
-        if(actionCompleted){
+        if (actionCompleted) {
             fetchData()
         }
     }, [actionCompleted]);
 
-    try {
-        scenes.sort(function (a, b) {
-            let keyA = a.name;
-            let keyB = b.name;
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-    } catch (e) {
-        throw e;
+    // Sorts the devices by name alphabetically
+    function sortScenes(scenes) {
+        try {
+            return scenes.sort(function (a, b) {
+                let keyA = a.name;
+                let keyB = b.name;
+                if (keyA < keyB) return -1;
+                if (keyA > keyB) return 1;
+                return 0;
+            });
+        } catch (e) {
+            throw e;
+        }
     }
 
     return (
@@ -118,19 +122,5 @@ const ScenesPanel = () => {
         </ScenesContext.Provider>
     )
 };
-
-function sortScenes(scenes) {
-    try {
-        return scenes.sort(function (a, b) {
-            let keyA = a.name;
-            let keyB = b.name;
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-    } catch (e) {
-        throw e;
-    }
-}
 
 export {ScenesPanel as default}
