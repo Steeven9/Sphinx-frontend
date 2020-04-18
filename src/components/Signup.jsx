@@ -1,7 +1,10 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/loginSignup.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class Signup extends React.Component {
 
@@ -14,8 +17,18 @@ class Signup extends React.Component {
             email: '',
             password: '',
             confirmPassword: '',
-            success: -1 //if -1 nothing, if 1 display success, if 0 display error
+            successOrError: -1, // if -1 nothing, if 0 display success, if 1 display incomplete, if 2 bad request,
+                                // if 3 email or username already in use, if 4 unexpected error
+            errorType: '',
+            isLoading: false,
+            passwordMismatch: false,
         }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
@@ -23,6 +36,17 @@ class Signup extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
+
+        if (this.state.firstname === '' || this.state.lastname === '' || this.state.username === ''
+            || this.state.email === '' || this.state.password === '' || this.state.confirmPassword === '') {
+            this.setState({successOrError: 1})
+            return;
+        }
+        if (this.state.password !== '' && this.state.confirmPassword !== '' && this.state.password !== this.state.confirmPassword) return;
+
+        this.setState({isLoading: true, successOrError: -1})
+        this.setState({success: -1})
+
         fetch('http://localhost:8080/user/' + this.state.username, {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
@@ -34,29 +58,58 @@ class Signup extends React.Component {
                     password: this.state.password
                 })
         })
-            .then((res) => res.status === 203 ? this.setState({success: 1}) : this.setState({success: 0}))
+        .then((res) => {
+            this.setState({isLoading: false})
+            if (res.status === 201) {
+                this.setState({successOrError: 0})
+            }
+            else if (res.status === 400) {
+                this.setState({successOrError: 2})
+            }
+            else if (res.status === 500) {
+                this.setState({successOrError: 3})
+            }
+            else {
+                this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
+            }
+        })
+        .catch( e => {
+            this.setState({isLoading: false})
+            this.setState({successOrError: 4, errorType: e})
+        });
     };
 
     /**
      * Adds a new line in the page depending on the value of this.state.success
      */
     displayResult = () => {
-        if (this.state.success === 1) {
+        if (this.state.successOrError === 0) {
             return (
                 <>
                     <span className="success-message">Account created successfully!</span><br/>
                     <span className="success-message">Please check your inbox and confirm your email account.</span>
                 </>
             )
-        } else if (this.state.success === 0) {
-            return (
-                <>
-                    <span className="error-message">The account couldn't be created!</span><br/>
-                    <span className="error-message">Check your information and try again.</span>
-                </>
-            )
+        }
+        else if (this.state.successOrError === 1) {
+            return (<span className="error-message">Insert all informations.</span>)
+        }
+        else if (this.state.successOrError === 2) {
+            return (<span className="error-message">Error: Bad request.</span>)
+        }
+        else if (this.state.successOrError === 3) {
+            return (<span className="error-message">Email or nickname already in use.</span>)
+        }
+        else if (this.state.successOrError === 4) {
+            return (<span className="error-message">{this.state.errorType}</span>)
         }
     };
+
+    passwordMatch = () => {
+        if (this.state.password !== '' && this.state.confirmPassword !== '' && this.state.password !== this.state.confirmPassword) {
+            return(<span>The two passwords don't match.</span>)
+        }
+    }
 
     //Functions that handle changes in the inputs
     handleUsernameChange = evt => {
@@ -78,6 +131,14 @@ class Signup extends React.Component {
         this.setState({confirmPassword: evt.target.value});
     };
 
+    loading = () => {
+        return (
+            <div className="message-two-lines center-text"><span>
+                <ColorCircularProgress className="loading-spinner"/>
+            </span></div>
+        )
+    }
+
     /**
      * State: firstname, lastname, username, email, password, confirmPassword
      * isEnabled: boolean to enable button
@@ -94,58 +155,77 @@ class Signup extends React.Component {
                         <div className="signup-box z-depth-2">
                             <h2 className="title">Create account</h2>
 
-                            <p>All fields are required</p>
+                            {this.state.isLoading ? this.loading() :
+                                <>
+                                    <p>All fields are required</p>
 
-                            <div className="row">
+                                    <div className="row">
 
-                                <div className="col l6 m12"><input required name="firstname"
-                                                                    value={this.state.firstname}
-                                                                    onChange={this.handleFirstnameChange} type="text"
-                                                                    placeholder="First name"/></div>
+                                        <div className="col l6 m12">
+                                            <input required name="firstname"
+                                            value={this.state.firstname}
+                                            onChange={this.handleFirstnameChange} type="text"
+                                            placeholder="First name"/>
+                                        </div>
 
-                                <div className="col l6 m12"><input required name="lastname"
-                                                                    value={this.state.lastname}
-                                                                    onChange={this.handleLastnameChange} type="text"
-                                                                    placeholder="Last name"/></div>
+                                        <div className="col l6 m12">
+                                            <input required name="lastname"
+                                            value={this.state.lastname}
+                                            onChange={this.handleLastnameChange} type="text"
+                                            placeholder="Last name"/>
+                                        </div>
 
-                                <div className="col l6 m12"><input required name="email"
-                                                                    value={this.state.email}
-                                                                    onChange={this.handleEmailChange} type="email"
-                                                                    placeholder="Email"/></div>
+                                        <div className="col l6 m12">
+                                            <input required name="email"
+                                            value={this.state.email}
+                                            onChange={this.handleEmailChange} type="email"
+                                            placeholder="Email"/>
+                                        </div>
 
-                                <div className="col l6 m12"><input required name="username"
-                                                                    value={this.state.username}
-                                                                    onChange={this.handleUsernameChange} type="text"
-                                                                    placeholder="Username"/></div>
+                                        <div className="col l6 m12">
+                                            <input required name="username"
+                                            value={this.state.username}
+                                            onChange={this.handleUsernameChange} type="text"
+                                            placeholder="Username"/>
+                                        </div>
 
-                                <div className="col l6 m12"><input required name="password"
-                                                                    value={this.state.password}
-                                                                    onChange={this.handlePasswordChange} type="password"
-                                                                    placeholder="Password"/></div>
+                                        <div className="col l6 m12">
+                                            <input required name="password"
+                                            value={this.state.password}
+                                            onChange={this.handlePasswordChange} type="password"
+                                            placeholder="Password"/>
+                                        </div>
 
-                                <div className="col l6 m12"><input required name="confirmPassword"
-                                                                    value={this.state.confirmPassword}
-                                                                    onChange={this.handleConfirmPasswordChange}
-                                                                    type="password" placeholder="Confirm Password"/>
-                                </div>
+                                        <div className="col l6 m12">
+                                            <input required name="confirmPassword"
+                                            value={this.state.confirmPassword}
+                                            onChange={this.handleConfirmPasswordChange}
+                                            type="password" placeholder="Confirm Password"/>
+                                        </div>
 
-                            </div>
+                                    </div>
 
-                            <div className="message-two-lines center-text">
-                                {this.displayResult()}
-                            </div>
+                                    <div className="message-two-lines center-text">
+                                        {this.passwordMatch()} 
+                                        <br/>
+                                        <span>
+                                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                                        </span>
+                                        {this.displayResult()}
+                                    </div>
 
-                            <div className="center">
+                                    <div className="center">
 
-                                <button type="button" name="button" className="btn-secondary waves-effect waves-light btn"
-                                        onClick={() => window.location.href = "/login"}>Sign in
-                                </button>
+                                        <button type="button" name="button" className="btn-secondary waves-effect waves-light btn"
+                                                onClick={() => window.location.href = "/login"}>Sign in
+                                        </button>
 
-                                <button type="button" disabled={!isEnabled} name="button" className="btn-primary waves-effect waves-light btn"
-                                        onClick={this.sendDatas}>Create
-                                </button>
+                                        <button type="button" disabled={!isEnabled} name="button" className="btn-primary waves-effect waves-light btn"
+                                                onClick={this.sendDatas}>Create
+                                        </button>
 
-                            </div>
+                                    </div>
+                                </>}
                         </div>
                     </div>
                 </article>

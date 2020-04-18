@@ -18,7 +18,6 @@ class Header extends React.Component {
     //  * returns the new state, that goes directly into the state of this class
     //  */
     // static getDerivedStateFromProps(props, state) {
-    //     console.log(props.loggedIn)
     // 	return {
     //         loggedIn: props.loggedIn
     //     };
@@ -29,7 +28,6 @@ class Header extends React.Component {
      */
     componentDidMount() {
         let newLoggedIn = localStorage.getItem("loggedIn") === "true";
-        // console.log(newLoggedIn);
         this.setState({loggedIn: newLoggedIn})
     }
 
@@ -53,7 +51,6 @@ class Header extends React.Component {
                                 this.state.loggedIn ?
                                     <>
                                         <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                            <li><a href="/">Dashboard</a></li>
                                             <li><a href="/devices">My devices</a></li>
                                             <li><a href="/house">My rooms</a></li>
                                             <li><a href="/scenes">Scenes</a> </li>

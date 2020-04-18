@@ -8,11 +8,9 @@
 const devicesReducer = (state, action) => {
     switch (action.type) {
         case 'POPULATE_DEVICES':
-            console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
 
         case 'MODIFY_DEVICE':
-            console.log('Dispatch: MODIFY_DEVICE');
             const params = (new URL(document.location)).searchParams;
             const path = window.location.pathname.toLowerCase().split('/');
             const devicesFetchUrl = 'http://localhost:8080/devices/';
@@ -60,7 +58,6 @@ const devicesReducer = (state, action) => {
                             })
                             .then( (data) => {
                                 let response = JSON.parse(data);
-                                console.log(response);
                                 state = response
                             })
                             .catch(e => console.log(e));
@@ -70,7 +67,6 @@ const devicesReducer = (state, action) => {
             return state;
 
         case 'SYNC_DEVICES':
-            console.log('Dispatch: SYNC_DEVICES');
 
             if (action.device.on !== undefined) {
                 state.forEach((d) => {
@@ -111,7 +107,6 @@ const devicesReducer = (state, action) => {
             return [...state];
 
         default:
-            console.log('Dispatch: DEFAULT');
             return state;
     }
 };

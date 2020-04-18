@@ -1,23 +1,30 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/editPages.css'
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class AddRoom extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            unknownError: "",
             success: false,
             error: false,
             incomplete: false,
             roomName: "",
             type: "generic-room",
-            
+            isLoading: false,
         }
     }
 
-
-    componentDidMount = () => {
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(this.state.type, 1) + ')';
     }
 
@@ -30,6 +37,8 @@ class AddRoom extends React.Component {
             this.setState({ success: false, error: false, incomplete: true })
         }
         else {
+            this.setState({isLoading: true, success: false, error: false, incomplete: false})
+
             fetch('http://localhost:8080/rooms/', {
                 method: 'POST',
                 headers: {
@@ -49,18 +58,22 @@ class AddRoom extends React.Component {
                     devices: []
                 })
             })
-                .then((res) => {
-                    if (res.status === 203) {
-                        this.setState({ success: true, error: false, incomplete: false })
-                    }
-                    else if (res.status === 401) {
-                        this.props.logOut(1)
-                    }
-                    else {
-                        this.setState({ success: false, error: true, incomplete: false });
-                    }
-                })
-                .catch(error => console.log(error))
+            .then( (res) => {
+                this.setState({isLoading: false})
+                if (res.status === 201) {
+                    this.setState({success: true, error: false, incomplete: false, unknownError: ""})
+                }
+                else if (res.status === 401) {
+                    this.props.logOut(1)
+                }
+                else if (res.status === 400) {
+                    this.setState({success: false, error: true, incomplete: false, unknownError: ""});
+                }
+                else {
+                    this.setState({success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
+                }
+            })
+            .catch( e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
 
@@ -80,10 +93,13 @@ class AddRoom extends React.Component {
             window.location.href = '/house';
         }
         else if (this.state.error) {
-            return (<p>An error has occurred, please try again</p>)
+            return (<span className="error-message">Bad Request</span>)
         }
         else if (this.state.incomplete) {
-            return (<p>Please complete all fields</p>)
+            return (<span className="error-message">Please complete all fields</span>)
+        }
+        else if (this.state.unknownError !== "") {
+            return (<span className="error-message">{this.state.unknownError}</span>)
         }
     }
 
@@ -168,10 +184,13 @@ class AddRoom extends React.Component {
                             <input type="hidden" id="imageURL" value="" />
                         </div>
 
+                        <div className="message-two-lines center-text">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
 
-
-
-                        {this.roomCreated()}
+                            {this.roomCreated()}
+                        </div>
                     </div>
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>

@@ -122,6 +122,14 @@ h3 {
     text-align: center;
 }
 
+.error-message {
+    color: #E30000;
+}
+
+.success-message {
+    color: #028828;
+}
+
 .content-box {
     margin: 10vh auto !important;
     background-color: #FFFFFF !important;
@@ -135,6 +143,10 @@ h3 {
     margin-left: 2vh !important;
     margin-right: 2vh !important;
     white-space: nowrap;
+}
+
+.btn-edit:hover {
+    cursor: pointer;
 }
 
 .btn-primary {

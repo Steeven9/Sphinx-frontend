@@ -1,7 +1,10 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/loginSignup.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class ResetPassword extends React.Component {
 
@@ -9,8 +12,16 @@ class ResetPassword extends React.Component {
         super(props);
         this.state = {
             email: '',
-            success: -1 //if -1, nothing, if 1 display success, if 0 display error
+            successOrError: -1, //if -1 nothing, if 0 display success, if 1 display incomplete, if 2 not found error, if 3 unexpected error
+            errorType: '',
+            isLoading: false
         }
+    }
+
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
@@ -18,10 +29,31 @@ class ResetPassword extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
+        if (this.state.email === '') {
+            this.setState({successOrError: 1});
+            return;
+        }
+        this.setState({isLoading: true, successOrError: -1})
+
         fetch('http://localhost:8080/auth/reset/' + this.state.email, {
             method: 'POST',
         })
-            .then((res) => res.status === 204 ? this.setState({success: 1}) : this.setState({success: 0}))
+        .then((res) => {
+            this.setState({isLoading: false})
+            if (res.status === 204) {
+                this.setState({successOrError: 0})
+            }
+            else if (res.status === 404) {
+                this.setState({successOrError: 2})
+            }
+            else {
+                this.setState({successOrError: 3, errorType: "Error Code: " + res.status})
+            }
+        })
+        .catch( e => {
+            this.setState({isLoading: false})
+            this.setState({successOrError: 3, errorType: e})
+        });
     };
 
     /**
@@ -35,20 +67,22 @@ class ResetPassword extends React.Component {
      * Adds a new line in the page depending on the value of this.state.success
      */
     displayResult = () => {
-        if (this.state.success === 1) {
+        if (this.state.successOrError === 0) {
             return (
                 <>
                     <span className="success-message">Password reset request processed!</span><br/>
                     <span className="success-message">Please check your inbox and follow the link to change it.</span>
                 </>
             )
-        } else if (this.state.success === 0) {
-            return (
-                <>
-                    <span className="error-message">There was an issue with your request!</span><br/>
-                    <span className="error-message">Please check your types email address and try again.</span>
-                </>
-            )
+        }
+        else if (this.state.successOrError === 1) {
+            return (<span className="error-message">Insert email.</span>)
+        }
+        else if (this.state.successOrError === 2) {
+            return (<span className="error-message">No account with this email.</span>)
+        }
+        else if (this.state.successOrError === 3) {
+            return (<span className="error-message">{this.state.errorType}</span>)
         }
     };
 
@@ -67,16 +101,21 @@ class ResetPassword extends React.Component {
                         <div className="password-reset-box z-depth-2">
                             <h2 className="title">Restore password</h2>
 
-                            <p className="center-text top-bottom-margins">Type the email address registered to your account. If we find it in our records, you’ll
-                                receive the instructions to
-                                restore your password.</p>
+                            <p className="center-text top-bottom-margins">
+                                Type the email address registered to your account. If we find it in our records, 
+                                you’ll receive the instructions to restore your password.
+                            </p>
 
-                            <div><input type="email" required name="email"
-                                                                 value={this.state.email}
-                                                                 onChange={this.handleEmailChange} placeholder="Email"/>
+                            <div>
+                                <input type="email" required name="email" value={this.state.email}
+                                        onChange={this.handleEmailChange} placeholder="Email"
+                                />
                             </div>
 
                             <div className="message-two-lines center-text">
+                                <span>
+                                    <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                                </span>
                                 {this.displayResult()}
                             </div>
 
