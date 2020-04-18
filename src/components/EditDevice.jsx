@@ -73,7 +73,7 @@ class EditDevice extends React.Component {
     };
 
     /**
-     * Deletes the Room
+     * Deletes the Device
      */
     deleteDevice = evt => {
         this.setState({isLoading: true, error: -1})
