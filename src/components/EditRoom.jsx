@@ -62,7 +62,7 @@ class EditRoom extends React.Component {
      */
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.type === "0" || this.state.roomName === "") {
+        if (this.state.roomName === "") {
             this.setState({error: 0})
         } 
         else {
