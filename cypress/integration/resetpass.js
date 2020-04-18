@@ -15,18 +15,17 @@ describe('test the reset password', function () {
 
     })
 
-    it('testing the request', function () {  
-   
-        cy.visit('/reset')   
-     
-        cy.get('input[type=email]')
-             .type('fake@gmail.com')
+    // it('testing the request', function () {  
         
-        cy.get('.btn-primary')
-        .click()
-         
-        cy.contains('There was an issue with your request!')
+    //     cy.server()
+    //     cy.request({
+    //         url: 'http://localhost:8080/auth/login/user1@a.com',
+    //         method: 'POST',
+    //     })
+    //     .then(function(response){
+    //         expect(response.status).to.eq(204)
+    //     })
 
      
-         })
+    //      })
 })   
