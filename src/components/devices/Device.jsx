@@ -84,7 +84,7 @@ const Device = ({device}) => {
      * @returns {string}
      */
     function getDeviceHeader(device) {
-        if (device.switches !== null) {
+        if (device.switches) {
             return "collapsible-header device-parent";
         } else if (device.child === true) {
             return "collapsible-header device-child";
@@ -179,8 +179,8 @@ const Device = ({device}) => {
                                     }}
                                     valueLabelDisplay="auto"
                                     value={intensity}
-                                    min={minMax[0]}
-                                    max={minMax[1]}
+                                    min={5}
+                                    max={30}
                                     disabled={disabled}
                                     marks={getSliderMarks(device)}/>
                             <div

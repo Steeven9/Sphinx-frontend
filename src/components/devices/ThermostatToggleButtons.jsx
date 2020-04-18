@@ -99,7 +99,6 @@ function ThermostatToggleButtons({device}) {
 
     // Triggers the synchronization (render) and updating of devices (backend)
     const updateTargetTemp = (device) => {
-        dispatch({type: 'REFRESH_DEVICES' , device: device});
         dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 

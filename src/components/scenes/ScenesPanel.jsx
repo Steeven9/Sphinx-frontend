@@ -31,8 +31,8 @@ const ScenesPanel = () => {
         isGuest = true
     }
 
-    // Fetch scenes data
-    const fetchData = () => {
+    // Fetches scenes on page load
+    useEffect(() => {
         fetch(fetchUrl, {
             method: 'GET',
             headers: {
@@ -50,45 +50,67 @@ const ScenesPanel = () => {
                 }
             })
             .then((data) => {
-                let scenes = sortScenes(JSON.parse(data));
                 isLoading = false;
 
-                if (data === null || scenes.length === 0) {
+                if (data === null || data.length === 0) {
                     isDataFound = false;
+                } else {
+                    let scenes = JSON.parse(data).sort(function (a, b) {
+                        let keyA = a.name;
+                        let keyB = b.name;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
+                    dispatch({type: 'POPULATE_SCENES', scenes: scenes});
+                    isLoading = false;
                 }
-                dispatch({type: 'POPULATE_SCENES', scenes: scenes});
-                isLoading = false;
             })
             .catch(e => console.log(e));
         setActionCompleted(false)
-    };
-
-    // Fetches scenes on page load
-    useEffect(() => {
-        fetchData()
     }, []);
 
     // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
         if (actionCompleted) {
-            fetchData()
+            fetch(fetchUrl, {
+                method: 'GET',
+                headers: {
+                    'user': localStorage.getItem('username'),
+                    'session-token': localStorage.getItem('session_token')
+                },
+            })
+                .then((res) => {
+                    if (res.status === 401) {
+                        this.props.logOut(1);
+                    } else if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    isLoading = false;
+
+                    if (data === null || data.length === 0) {
+                        isDataFound = false;
+                    } else {
+                        let scenes = JSON.parse(data).sort(function (a, b) {
+                            let keyA = a.name;
+                            let keyB = b.name;
+                            if (keyA < keyB) return -1;
+                            if (keyA > keyB) return 1;
+                            return 0;
+                        });
+                        dispatch({type: 'POPULATE_SCENES', scenes: scenes});
+                        isLoading = false;
+                    }
+                })
+                .catch(e => console.log(e));
+            setActionCompleted(false)
         }
     }, [actionCompleted]);
 
-    // Sorts the devices by name alphabetically
-    function sortScenes(scenes) {
-        try {
-            return scenes.sort(function (a, b) {
-                let keyA = a.name;
-                let keyB = b.name;
-                if (keyA < keyB) return -1;
-                if (keyA > keyB) return 1;
-                return 0;
-            });
-        } catch (e) {
-            throw e;
-        }
-    }
 
     return (
         <ScenesContext.Provider value={{scenes, dispatch, isGuest, setActionCompleted}}>

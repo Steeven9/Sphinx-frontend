@@ -43,10 +43,6 @@ const devicesReducer = (state, action) => {
             console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
 
-        case 'REFRESH_DEVICES':
-            console.log('Dispatch: REFRESH_DEVICES');
-            return state;
-
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
             let fetchUrl  ='';

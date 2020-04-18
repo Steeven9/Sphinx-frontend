@@ -17,7 +17,7 @@ const DeviceList = () => {
     for (let parent of devices) {
         expandedDevices.push(parent);
 
-        if(parent.switches !== null){
+        if(parent.switches){
             parent.parent = true;
 
             for (let child of children){

@@ -8,13 +8,15 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
 
+const host = window.location.protocol + '//' + window.location.hostname + ':8080';
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const devicesFetchUrl = 'http://localhost:8080/devices';
-const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
-const fetchUrl = path[1] === 'room' && +params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
+const devicesFetchUrl = host + '/devices';
+const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
+const fetchRoomUrl = host + '/rooms/' + params.get('id');
+const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
-let isDeviceStateChanging = false;
+// let isDeviceStateChanging = false;
 let isLoading = true;
 let isDataFound = true;
 let isRoom = false;
@@ -34,18 +36,18 @@ const DevicesPanel = () => {
         isRoom = true
     }
 
-    // Fetch room info
-    function fetchRoomInfo() {
-        if (isRoom) {
-            const fetchRoomUrl = window.location.protocol + '//' + window.location.hostname + ':8080/rooms/' + params.get('id');
-            isDeviceStateChanging = true;
+    // Fetches devices and room info on page load
+    useEffect(() => {
+        const method = 'GET';
+        const headers = {
+            'user': localStorage.getItem('username'),
+            'session-token': localStorage.getItem('session_token')
+        };
 
+        if (isRoom) {
             fetch(fetchRoomUrl, {
-                method: 'GET',
-                headers: {
-                    'user': localStorage.getItem('username'),
-                    'session-token': localStorage.getItem('session_token')
-                },
+                method: method,
+                headers: headers,
             })
                 .then((res) => {
                     if (res.status === 401) {
@@ -63,16 +65,10 @@ const DevicesPanel = () => {
                 })
                 .catch(e => console.log(e));
         }
-    }
 
-    // Fetch devices data
-    function fetchData() {
         fetch(fetchUrl, {
-            method: 'GET',
-            headers: {
-                'user': localStorage.getItem('username'),
-                'session-token': localStorage.getItem('session_token')
-            },
+            method: method,
+            headers: headers,
         })
             .then((res) => {
                 if (res.status === 401) {
@@ -84,61 +80,69 @@ const DevicesPanel = () => {
                 }
             })
             .then((data) => {
-                let devices = sortDevices(JSON.parse(data));
                 isLoading = false;
 
-                if (data === null || devices.length === 0) {
+                if (data === null || data.length === 0) {
                     isDataFound = false;
+                } else {
+                    let devices = JSON.parse(data).sort(function (a, b) {
+                        let keyA = a.name;
+                        let keyB = b.name;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
+                    dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                    isLoading = false;
                 }
-
-                sortDevices(devices);
-                dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                isLoading = false;
             })
             .catch(e => console.log(e));
         setActionCompleted(false)
-    }
-
-    // Sorts the devices by name alphabetically
-    function sortDevices(devices) {
-        try {
-            return devices.sort(function (a, b) {
-                let keyA = a.name;
-                let keyB = b.name;
-                if (keyA < keyB) return -1;
-                if (keyA > keyB) return 1;
-                return 0;
-            });
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    // Fetches devices and room info on page load
-    useEffect(() => {
-        fetchRoomInfo();
-        fetchData();
     }, []);
 
     // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
         if (actionCompleted) {
-            fetchData()
+            const method = 'GET';
+            const headers = {
+                'user': localStorage.getItem('username'),
+                'session-token': localStorage.getItem('session_token')
+            };
+
+            fetch(fetchUrl, {
+                method: method,
+                headers: headers,
+            })
+                .then((res) => {
+                    if (res.status === 401) {
+                        this.props.logOut(1);
+                    } else if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    isLoading = false;
+
+                    if (data === null || data.length === 0) {
+                        isDataFound = false;
+                    } else {
+                        let devices = JSON.parse(data).sort(function (a, b) {
+                            let keyA = a.name;
+                            let keyB = b.name;
+                            if (keyA < keyB) return -1;
+                            if (keyA > keyB) return 1;
+                            return 0;
+                        });
+                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                        isLoading = false;
+                    }
+                })
+                .catch(e => console.log(e));
+            setActionCompleted(false)
         }
     }, [actionCompleted]);
-
-
-    // Fetches every n seconds to refresh the devices, while not on an update operation
-    useEffect(() => {
-        const interval = setInterval(() => {
-            if (!isDeviceStateChanging) {
-                console.log('Timed devices refreshing!')
-                dispatch({type: 'REFRESH_DEVICES'});
-                isDeviceStateChanging = false;
-            }
-        }, 5000);
-        return () => clearInterval(interval);
-    }, []);
 
     return (
         <DevicesContext.Provider value={{devices, dispatch, isRoom, setActionCompleted}}>
