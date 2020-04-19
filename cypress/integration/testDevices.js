@@ -2,14 +2,7 @@
 
 describe('test the devices page', function () {
     beforeEach(() => {
-        
-        cy.visit('/login')
-        cy.get('input[type=text]')
-            .type('user1')
-        cy.get('input[type=password]')
-            .type('1234')
-        cy.get('.btn-primary').click()
-
+        cy.Login()
     })
 
     it('testing all the buttons', function () {  
@@ -26,13 +19,12 @@ describe('test the devices page', function () {
         cy.get('.lever')
             .click()
 
-        cy.get('.btn-edit')
+        cy.get('.collapsible-header')
+            .should('have.id', '1')
+            .get('.btn-edit')
             .click()
-        cy.url()
+            .url()
             .should('include', 'editDevice?id=1')
-        
-        
-    
-
+            
     })
 })  
