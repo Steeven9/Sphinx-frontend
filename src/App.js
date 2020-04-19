@@ -275,6 +275,7 @@ class App extends React.Component {
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
+                                        findPathDevice={this.findPathDevice}
                                     />
                                     : this.accessDenied()}
                             </Route>

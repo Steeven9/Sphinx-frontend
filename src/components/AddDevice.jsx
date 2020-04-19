@@ -158,9 +158,6 @@ class AddDevice extends React.Component {
         document.getElementById("addDeviceIconSelection").hidden = true
     }
 
-    moveToInformation = () => {
-    }
-
     //Redirection to /devices
     redirectToDevices = () => {
         window.location.href = '/devices'
