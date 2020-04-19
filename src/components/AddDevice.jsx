@@ -20,7 +20,8 @@ class AddDevice extends React.Component {
             room: "0",
             pairing: "0",
             selectRooms: <></>,
-            isLoading: false
+            isLoading: false,
+            iconType: "1",
         }
     }
 
@@ -90,7 +91,7 @@ class AddDevice extends React.Component {
                 },
                 body: JSON.stringify({
                     name: this.state.deviceName,
-                    icon: this.props.findPathDevice(this.state.type),
+                    icon: this.props.findPathDevice(this.state.iconType),
                     type: parseInt(this.state.type),
                     roomId: this.state.room
                 })
@@ -146,6 +147,20 @@ class AddDevice extends React.Component {
         }
     }
 
+    moveToSelection = () => {
+        document.getElementById("addDeviceInfo").hidden = true
+        document.getElementById("addDeviceIconSelection").hidden = false
+    }
+
+    changeIconState = (type) => {
+        this.setState({iconType: type});
+        document.getElementById("addDeviceInfo").hidden = false
+        document.getElementById("addDeviceIconSelection").hidden = true
+    }
+
+    moveToInformation = () => {
+    }
+
     //Redirection to /devices
     redirectToDevices = () => {
         window.location.href = '/devices'
@@ -157,7 +172,7 @@ class AddDevice extends React.Component {
     render() {
         return (
             <div className="addDevice">
-                <div className="device-content-box z-depth-2">
+                <div id="addDeviceInfo" className="device-content-box z-depth-2">
                     <h2 className="title">Add device</h2>
                     <div>
                         <div className="textFields">
@@ -184,6 +199,11 @@ class AddDevice extends React.Component {
                         <div className="textFields">
                             {this.state.selectRooms}
                         </div>
+                        <div className="roomNameAndIcon">
+                            <p>Icon</p>
+                            <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} alt="icon error" />
+                            <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
+                        </div>
                         {/* <div className="textFields"> 
                             <select className="selector" onChange={this.handlePairingChange}>
                                 <option value="0">No pairing</option>
@@ -199,6 +219,25 @@ class AddDevice extends React.Component {
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save device</button>
+                    </div>
+                </div>
+
+                <div hidden id="addDeviceIconSelection" className="content-box">
+                    <h2 className="title">Select Icon</h2>
+                    <div className="content-box-iconSelection">
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("1")}><img src={this.props.findPathDevice('1')} alt="Light" /><br />Light </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("2")}><img src={this.props.findPathDevice('2')} alt="Dimmable Light" /><br />Dimmable Light </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("3")}><img src={this.props.findPathDevice('3')} alt="Switch" /><br />Switch </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("4")}><img src={this.props.findPathDevice('4')} alt="Dimmer" /><br />Dimmer </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("5")}><img src={this.props.findPathDevice('5')} alt="Dimmer (no-memory)" /><br />Dimmer (no-memory) </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("6")}><img src={this.props.findPathDevice('6')} alt="Smart plug" /><br />Smart plug </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("7")}><img src={this.props.findPathDevice('7')} alt="Humidity sensor" /><br />Humidity sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("8")}><img src={this.props.findPathDevice('8')} alt="Light sensor" /><br />Light sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("9")}><img src={this.props.findPathDevice('9')} alt="Temperature sensor" /><br />Temperature sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("10")}><img src={this.props.findPathDevice('10')} alt="Motion sensor" /><br />Motion sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("11")}><img src={this.props.findPathDevice('11')} alt="Thermostat" /><br />Thermostat</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("12")}><img src={this.props.findPathDevice('12')} alt="Smart curtains" /><br />Smart curtains</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("13")}><img src={this.props.findPathDevice('13')} alt="Security camera" /><br />Security camera </button>
                     </div>
                 </div>
             </div>

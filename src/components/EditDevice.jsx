@@ -53,7 +53,7 @@ class EditDevice extends React.Component {
     }
 
     /**
-     * Changes the Room
+     * Changes the Device
      */
     sendDatas = evt => {
         evt.preventDefault();
