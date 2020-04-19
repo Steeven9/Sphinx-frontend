@@ -39,6 +39,5 @@ describe('test the devices page', function () {
             .click()
             .url()
             .should('include', 'editDevice?id=1')
-
     })
 })  
