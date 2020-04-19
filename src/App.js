@@ -303,7 +303,7 @@ class App extends React.Component {
                                     : this.accessDenied()}
                             </Route>
 
-                            <Route path="/createScenes">
+                            <Route path="/addScene">
                                 {this.state.loggedIn ?
                                     <AddScene
                                         username={this.state.username}
@@ -313,7 +313,7 @@ class App extends React.Component {
                                     : this.accessDenied()}
                             </Route>
 
-                            <Route path="/editScenes">
+                            <Route path="/editScene">
                                 {this.state.loggedIn ?
                                     <EditScene
                                         username={this.state.username}

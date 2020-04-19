@@ -9,11 +9,13 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const scenesFetchUrl = 'http://localhost:8888/scenes';
-const guestScenesFetchUrl = 'http://localhost:8888/guests/' + params.get('id') + '/scenes';
+const host = window.location.protocol + '//' + window.location.hostname + ':8888';
+const scenesFetchUrl = host + '/scenes';
+const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
 const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
 let isLoading = true;
 let isDataFound = true;
+let isNetworkError = false;
 let isGuest = false;
 let title = "";
 
@@ -66,7 +68,11 @@ const ScenesPanel = () => {
                     isLoading = false;
                 }
             })
-            .catch(e => console.log(e));
+            .catch(e => {
+                console.log(e);
+                isLoading = false;
+                isNetworkError = true;
+            });
         setActionCompleted(false)
     }, []);
 
@@ -106,10 +112,23 @@ const ScenesPanel = () => {
                         isLoading = false;
                     }
                 })
-                .catch(e => console.log(e));
+                .catch(e => {
+                    console.log(e);
+                    isLoading = false;
+                    isNetworkError = true;
+                });
             setActionCompleted(false)
         }
     }, [actionCompleted]);
+
+    const errorMessage = () => {
+        if (!isDataFound) {
+            return "You haven't added any scenes yet. Please add a new one."
+        }
+        if (isNetworkError) {
+            return "We are sorry. There was an error."
+        }
+    }
 
 
     return (
@@ -128,8 +147,8 @@ const ScenesPanel = () => {
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
                                 </div>
-                                <div className={(!isDataFound) ? "centered-loading-data-message" : "hidden"}>
-                                    <p>You haven't added any scenes yet. Please add a new one.</p>
+                                <div className={(!isDataFound || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
+                                    <p className={(isNetworkError) ? "error-message" : undefined}>{errorMessage()}</p>
                                 </div>
                                 <ul>
                                     <li className="scenes-panel row">

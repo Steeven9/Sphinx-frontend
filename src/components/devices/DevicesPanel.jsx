@@ -19,6 +19,7 @@ let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
 // let isDeviceStateChanging = false;
 let isLoading = true;
 let isDataFound = true;
+let isNetworkError = false;
 let isRoom = false;
 let title = "";
 
@@ -96,7 +97,11 @@ const DevicesPanel = () => {
                     isLoading = false;
                 }
             })
-            .catch(e => console.log(e));
+            .catch(e => {
+                console.log(e);
+                isLoading = false;
+                isNetworkError = true;
+            });
         setActionCompleted(false)
     }, []);
 
@@ -139,10 +144,23 @@ const DevicesPanel = () => {
                         isLoading = false;
                     }
                 })
-                .catch(e => console.log(e));
+                .catch(e => {
+                    console.log(e);
+                    isLoading = false;
+                    isNetworkError = true;
+                });
             setActionCompleted(false)
         }
     }, [actionCompleted]);
+
+    const errorMessage = () => {
+        if (!isDataFound) {
+            return "You haven't added any devices yet. Please add a new one."
+        }
+        if (isNetworkError) {
+            return "We are sorry. There was an error."
+        }
+    }
 
     return (
         <DevicesContext.Provider value={{devices, dispatch, isRoom, setActionCompleted}}>
@@ -165,8 +183,8 @@ const DevicesPanel = () => {
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
                                 </div>
-                                <div className={(!isDataFound) ? "centered-loading-data-message" : "hidden"}>
-                                    <p>You haven't added any devices yet. Please add a new one.</p>
+                                <div className={(!isDataFound  || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
+                                    <p className={(isNetworkError) ? "error-message" : undefined}>{errorMessage()}</p>
                                 </div>
                                 <ul className={(isLoading || !isDataFound) ? "hidden" : "collapsible expandable expandable-component"}>
                                     <li className="row row-custom row row-custom-custom">

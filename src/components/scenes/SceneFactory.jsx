@@ -9,15 +9,16 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const scenesFetchUrl = 'http://localhost:8888/scenes';
-const guestScenesFetchUrl = 'http://localhost:8888/guests/' + params.get('id') + '/scenes';
+const host = window.location.protocol + '//' + window.location.hostname + ':8080';
+const scenesFetchUrl = host + '/scenes';
+const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
 const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
 let isLoading = true;
 let isDataFound = true;
 let isGuest = false;
 let title = "";
 
-const ScenesFactory = () => {
+const SceneFactory = () => {
 const [actionCompleted, setActionCompleted] = React.useState(false);
     const [scenes, dispatch] = useReducer(scenesReducer, []);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
@@ -104,36 +105,18 @@ const [actionCompleted, setActionCompleted] = React.useState(false);
     }, [actionCompleted]);
 
     return (
-        <ScenesContext.Provider value={{scenes, dispatch, isGuest, setActionCompleted}}>
-            <div id="wrapper" className="scenes">
-                <div className="container">
-                    <article className="row row-scene row-scene-custom">
-                        <div id="content">
-                            <section
-                                className="scene-content-box z-depth-2">
-                                <div className="headline-box row row-custom">
-                                    <h2 className="col col-scene l8 left-align headline-title">{(isGuest) ? title : "My Scenes"}</h2>
-                                    <a href="/addScene"><i
-                                        className="col col-scene l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
-                                </div>
-                                <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
-                                    <ColorCircularProgress/>
-                                </div>
-                                <div className={(!isDataFound) ? "centered-loading-data-message" : "hidden"}>
-                                    <p>You haven't added any scenes yet. Please add a new one.</p>
-                                </div>
-                                <ul>
-                                    <li className="scenes-panel row">
-                                        <SceneList/>
-                                    </li>
-                                </ul>
-                            </section>
-                        </div>
-                    </article>
+        <div className="container row">
+                    <div className="item l12 container-box z-depth-2">
+
+                    </div>
+
+                    <div className="item l12">
+                        <span className="bold">Step 1: </span> <span>Set your scene configuration</span>
+                    </div>
+                    <div className="item l12 container-box z-depth-2">
+        </div>
                 </div>
-            </div>
-        </ScenesContext.Provider>
     )
 };
 
-export {ScenesFactory as default}
+export {SceneFactory as default}
