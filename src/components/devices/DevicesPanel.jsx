@@ -90,7 +90,8 @@ const DevicesPanel = () => {
     }, []);
 
     // Extracts devices from next state
-    useEffect(() => {}, [devices]);
+    useEffect(() => {
+    }, [devices]);
 
     try {
         devices.sort(function (a, b) {
@@ -102,6 +103,16 @@ const DevicesPanel = () => {
         });
     } catch (e) {
         throw e;
+    }
+
+    function redirectToAdd() {
+        const params = (new URL(document.location)).searchParams;
+
+        if (isRoom) {
+            return '/addDevice?room=' + params.get('id');
+        } else {
+            return '/addDevice'
+        }
     }
 
     return (
@@ -119,8 +130,8 @@ const DevicesPanel = () => {
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                 <div className="headline-box row row-collapsible row row-collapsible-custom">
                                     <h3 className="col col-collapsible l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
-                                    <a href="/addDevice"><i
-                                        className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                    <a href={redirectToAdd()}>
+                                        <i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>

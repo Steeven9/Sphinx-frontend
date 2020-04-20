@@ -12,6 +12,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+
 /**
  * Device factory that can create any type of device
  * @param device object
@@ -98,7 +99,17 @@ const Device = ({device}) => {
      * @param id {int}
      */
     function redirectToEdit(id) {
+<<<<<<< HEAD
         window.location.href = '/editDevice?id=' + id
+=======
+        const params = (new URL(document.location)).searchParams;
+
+        if (isRoom) {
+            window.location.href = '/editDevice?id=' + id + '&room=' + params.get('id');
+        } else {
+            window.location.href = '/editDevice?id=' + id
+        }
+>>>>>>> dev
     }
 
     /**
@@ -144,7 +155,7 @@ const Device = ({device}) => {
 
     /**
      * Gets the either the temperature read by a thermostat or the average temperature of the room
-     * @param d {devie}
+     * @param d {device}
      * @returns {{src, options: {sourceMap: boolean, sourceMapStyle: string}, dest: string}|{src: [string]}|number}
      */
     function getThermostatTemp(d) {
@@ -296,7 +307,11 @@ const Device = ({device}) => {
                     <div className="col col-collapsible l12 s12 icons-wrapper">
                         <i className={"material-icons l1" + (device.child ? " muted-icon" : "")}>{getRowIcon(device)} </i>
                         <div className="icon-device l1">
+<<<<<<< HEAD
                             <img className="" src={device.icon} alt={device.name}/>
+=======
+                            <img className="" src={getDeviceIcon(device.type)} alt={device.name}/>
+>>>>>>> dev
                         </div>
                         <div className="device-info col col-collapsible l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>
