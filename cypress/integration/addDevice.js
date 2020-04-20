@@ -1,4 +1,3 @@
-/// <reference types="cypress" />
 
 describe('test the add device page', function () {
     this.beforeEach(() => {
@@ -155,4 +154,34 @@ describe('test the add device page', function () {
         cy.url()
             .should('include', '/devices')
     })
+
+it('testing the request', function () {  
+        
+        cy.visit('/addDevice')
+        cy.get('input[type=text]')
+                .type('newLight')
+        cy.get('select').first()
+            .select('Light')
+        cy.get('select').eq(1)
+            .select('room1')
+        cy.get('.btn-primary')
+            .click()
+
+        cy.server()
+        cy.request({
+            url: ' http://localhost:8080/devices',
+            body: { name: "light",
+                    icon: "/img/icons/devices/bulb-regular.svg",
+                    type: 1,
+                    roomId: "1"
+                }
+        })
+        .then(function(response){
+            expect(response.status).to.eq(200)
+        })
+
+
+
+
+        })  
 })  
