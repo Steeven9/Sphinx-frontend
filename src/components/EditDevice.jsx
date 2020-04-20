@@ -19,12 +19,16 @@ class EditDevice extends React.Component {
             error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
+            room: "",
+            fromRoom: false,
         }
     }
 
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
         this.setState({device_id: parsed.id})
+        if (parsed.room !== undefined) this.setState({room: parsed.room, fromRoom: true})
+        else this.setState({fromRoom: false})
 
         fetch('http://localhost:8080/devices/' + parsed.id, {
             method: 'GET',
@@ -77,7 +81,7 @@ class EditDevice extends React.Component {
             .then( (res) => {
                 this.setState({isLoading: false})
                 if (res.status === 200) {
-                    this.redirectToDevices()
+                    this.redirectToPrevious()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
@@ -108,7 +112,7 @@ class EditDevice extends React.Component {
         .then( (res) => {
             this.setState({isLoading: false})
             if (res.status === 204) {
-                this.redirectToDevices()
+                this.redirectToPrevious()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
@@ -131,9 +135,10 @@ class EditDevice extends React.Component {
         this.setState({ deviceName: evt.target.value });
     };
     
-    //Redirection to /devices
-    redirectToDevices = () => {
-        window.location.href = '/devices'
+    //Redirection to previous page
+    redirectToPrevious = () => {
+        if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
+        else window.location.href = '/devices'
     }
 
     showError = () => {
@@ -170,7 +175,7 @@ class EditDevice extends React.Component {
                     </div>
                     
                     <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToPrevious}>Cancel</button>
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteDevice}>Delete</button>
                         <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save</button>
                     </div>
