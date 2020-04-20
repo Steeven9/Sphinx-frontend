@@ -76,7 +76,7 @@ class AddDevice extends React.Component {
             this.setState({ selectRooms: <select className="selector" disabled><option value="0">No Room Available</option></select>, room: "0" })
         } else {
             let i = 0;
-            let toSet = <select id="roomSelector" className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
+            let toSet = <select id="roomSelector" className="selector" onChange={this.handleRoomChange}> <option value="0" style={{display:"none"}}>Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
             this.setState({ selectRooms: toSet })
         }
     }
@@ -194,7 +194,7 @@ class AddDevice extends React.Component {
                         </div>
                         <div className="textFields">
                             <select className="selector" onChange={this.handleTypeChange}>
-                                <option value="0">Device type</option>
+                                <option value="0" style={{display:"none"}}>Device type</option>
                                 <option value="1">Light</option>
                                 <option value="2">Dimmable Light</option>
                                 <option value="3">Switch</option>
