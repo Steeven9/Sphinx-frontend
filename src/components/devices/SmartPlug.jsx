@@ -8,7 +8,7 @@ import DevicesContext from "../../context/devicesContext";
  * @returns {SmartPlug}
  */
 const SmartPlug = (device) => {
-    const [consumption, setConsumption] = useState(device.device.label);
+    const [consumption, setConsumption] = useState((device.device.label !== null) ? device.device.label + ' kWh' : '0 kWh');
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
 
     const resetSmartPlug = (e) => {
@@ -22,14 +22,15 @@ const SmartPlug = (device) => {
     device.device.reset = false;
 
     return ((device.device.on) ?
-        <div className="col col-custom l8 s8 display-info display-active">
-            <i onClick={(e) => resetSmartPlug(e)} className="col col-custom l2 s2 material-icons btn-reset">rotate_left</i>
-            <span>{consumption}</span>
-        </div>
-        :
-        <div className="col col-custom l8 s8 display-info display-inactive">
-            <span>{'- - - - - -'}</span>
-        </div>
+            <div className="col col-custom l8 s8 display-info display-active">
+                <i onClick={(e) => resetSmartPlug(e)}
+                   className="col col-custom l2 s2 material-icons btn-reset">rotate_left</i>
+                <span>{consumption}</span>
+            </div>
+            :
+            <div className="col col-custom l8 s8 display-info display-inactive">
+                <span>{'- - - - - -'}</span>
+            </div>
     )
 };
 

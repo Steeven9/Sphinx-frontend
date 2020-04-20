@@ -121,6 +121,10 @@ const ScenesPanel = () => {
         }
     }, [actionCompleted]);
 
+    // Discards cached state and extract the next one
+    useEffect(() => {
+    }, [scenes]);
+
     const errorMessage = () => {
         if (!isDataFound) {
             return "You haven't added any scenes yet. Please add a new one."
@@ -147,7 +151,8 @@ const ScenesPanel = () => {
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
                                 </div>
-                                <div className={(!isDataFound || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
+                                <div
+                                    className={(!isDataFound || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
                                     <p className={(isNetworkError) ? "error-message" : undefined}>{errorMessage()}</p>
                                 </div>
                                 <ul>

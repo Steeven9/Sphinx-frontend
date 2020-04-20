@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import SceneFactory from './scenes/SceneFactory'
+import ScenesFactory from './scenes/ScenesFactory'
 
 
 /**
@@ -18,7 +18,7 @@ class EditScene extends React.Component {
 
     render() {
         return (
-            <SceneFactory />
+            <ScenesFactory/>
         );
     }
 }

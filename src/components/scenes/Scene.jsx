@@ -25,7 +25,7 @@ const Scene = ({scene}) => {
         <div className="scene row">
             <div id={scene.id} className="item">
                 <div id={scene.id} className="scene-item col l1">
-                    <PlayIcon scene={scene} />
+                    <PlayIcon scene={scene}/>
                 </div>
                 <div className="scene-item col l1">
                     <img alt={scene.name} className="img-scene-icon"

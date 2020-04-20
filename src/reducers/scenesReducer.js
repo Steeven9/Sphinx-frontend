@@ -68,6 +68,14 @@ const scenesReducer = (state, action) => {
             console.log('Dispatch: POPULATE_SCENES');
             return action.scenes;
 
+        case 'UPDATE_STATE':
+            console.log('Dispatch: UPDATE_STATE');
+            return state;
+
+        case 'CREATE_BLANK_EFFECT':
+            console.log('Dispatch: CREATE_BLANK_EFFECT');
+            return [...state, action.effect];
+
         case 'RUN_SCENE':
             console.log('Dispatch: RUN_SCENE');
             fetchUrl = host + '/scenes';

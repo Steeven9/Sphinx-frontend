@@ -11,7 +11,7 @@ function doFetch(fetchUrl, method, body) {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     };
-    const devicesFetchUrl =  host + '/devices' + fetchUrl;
+    const devicesFetchUrl = host + '/devices' + fetchUrl;
 
     fetch(devicesFetchUrl, {
         method: method,
@@ -39,12 +39,18 @@ function doFetch(fetchUrl, method, body) {
  */
 const devicesReducer = (state, action) => {
     switch (action.type) {
+
         case 'POPULATE_DEVICES':
+            console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
+
+        case 'UPDATE_STATE':
+            console.log('Dispatch: UPDATE_STATE');
+            return state;
 
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
-            let fetchUrl  ='';
+            let fetchUrl = '';
             let body = {};
 
             if (action.device.reset) {
@@ -59,11 +65,11 @@ const devicesReducer = (state, action) => {
                     case 4:  //DimmableSwitch
                     case 5:  //StatelessDimmableSwitch
                     case 11: //Thermostat
-                        body.slider = action.device.slider;
+                        body.slider = action.device.slider / 100;
                         body.on = action.device.on;
                         break;
                     case 12: //SmartCurtains
-                        body.slider = action.device.slider;
+                        body.slider = action.device.slider / 100;
                         body.state = action.device.state;
                         body.source = action.device.source;
                         break;

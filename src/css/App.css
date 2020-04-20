@@ -1,7 +1,6 @@
 /* NOTE: Copy and use this class with '!important' to give a custom width to the
 context box, in the corresponding CSS file overriding the global style */
 
-
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,800&display=swap');
 
 .App {
@@ -54,10 +53,10 @@ body {
     display: flex !important;
     min-height: 100vh !important;
     flex-direction: column !important;
-    background-color: #F4F4F4 !important;
+    background-color: #ededed !important;
 }
 
-main{
+main {
     flex: 1 0 auto !important;
 }
 
@@ -207,7 +206,7 @@ h3 {
     align-items: center !important;
 }
 
-.text-homepage-headline{
+.text-homepage-headline {
     margin-top: calc(2vw + 2vh + 0.25vmin);
 }
 
@@ -279,7 +278,7 @@ nav ul a:hover {
 }
 
 .btn-icon:hover {
-    opacity: 0.75;
+    opacity: 0.75 !important;
 }
 
 .hidden {
@@ -309,4 +308,5 @@ nav ul a:hover {
     max-height: 42px;
     min-height: 42px;
 }
+
 /* Action feedback to user end */

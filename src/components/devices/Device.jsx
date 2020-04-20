@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react'
 import DevicesContext from '../../context/devicesContext'
-import {getDeviceIcon, getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadadaHelper'
+import {getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadadaHelper'
 import {getRowIcon} from '../../helpers/getDeviceMetadadaHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
@@ -12,15 +12,17 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 
+
 /**
  * Device factory that can create any type of device
- * @param device object
- * @returns { An individual device's HTML composed of several React components }
+
+ * @param device
+ * @returns {*}
  * @constructor
  */
 const Device = ({device}) => {
     const {devices, dispatch, isRoom, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.slider);
+    const [intensity, setIntensity] = useState(device.slider / 100);
     const [disabled, setDisabled] = useState(device.disable);
     const [open, setOpen] = React.useState(false);
 
@@ -42,7 +44,7 @@ const Device = ({device}) => {
     }, [device, devices]);
 
     /**
-     * Syncronizes and re-renders devices state for view purposes dispatching the action to the devices reducer
+     * Synchronizes and re-renders devices state for view purposes dispatching the action to the devices reducer
      * @param e {event}
      * @param val {int}
      */
@@ -122,7 +124,7 @@ const Device = ({device}) => {
                 return (
                     <div
                         className={"col col-custom l9 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
-                        <span>{device.label || "- - - - - -"}</span>
+                        <span>{(device.label !== null) ? device.label + getSensorUnit(device.type) : "- - - - - -"}</span>
                     </div>
                 );
             case 13: //MotionSensor
@@ -158,6 +160,21 @@ const Device = ({device}) => {
         }
     }
 
+    function getSensorUnit(type) {
+        switch (type) {
+            case 6: //SmartPlug
+                return ' kWh'
+            case 7: //HumiditySensor
+                return ' %'
+            case 8: //LightSensor
+                return ' lm'
+            case 9: //TempSensor
+                return ' °C'
+            default:
+                return ''
+        }
+    }
+
     /**
      * Generates a slider to control the intensity of a light or of a dimmer.
      * @returns {Slider}
@@ -185,7 +202,7 @@ const Device = ({device}) => {
                                     marks={getSliderMarks(device)}/>
                             <div
                                 className={"col l12 col-custom display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
-                                <span>{device.state !== 0 ? getThermostatTemp(device) + " " + device.unit : "- - - - - -"}</span>
+                                <span>{device.state !== 0 ? getThermostatTemp(device) + " " + getSensorUnit(device.type) : "- - - - - -"}</span>
                             </div>
                         </div>
                         <div className="col l2">
@@ -295,7 +312,7 @@ const Device = ({device}) => {
                     <div className="col col-custom l12 s12 icons-wrapper">
                         <i className={"material-icons l1" + (device.child ? " muted-icon" : "")}>{getRowIcon(device)} </i>
                         <div className="icon-device l1">
-                            <img className="" src={getDeviceIcon(device.type)} alt={device.name}/>
+                            <img className="" src={device.icon} alt={device.name}/>
                         </div>
                         <div className="device-info col col-custom l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>

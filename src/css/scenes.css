@@ -37,6 +37,19 @@
     margin: 0 auto;
 }
 
+.scene-factory-box {
+    margin-bottom: 5vh !important;
+}
+
+.scene-content-box-top {
+    margin-top: 5vh !important;
+}
+
+.scene-content-box-instructions {
+    margin-top: 1vh !important;
+    margin-bottom: -1vh !important;
+}
+
 @media only screen and (max-width: 600px) {
     .scene-content-box {
         background-color: #FFFFFF;
@@ -96,7 +109,7 @@
         color: #2C2C2C !important;
         width: calc(60% + 10vmin) !important;
         border-radius: 10px !important;
-        padding: 20px 60px 60px 60px !important;
+        padding: 30px 40px 30px 40px !important;
     }
 
     .btn-edit {
@@ -144,7 +157,7 @@
 
 
 form.scene-form {
-    display: contents  !important;
+    display: contents !important;
     margin-top: 0 !important;
 }
 
@@ -204,7 +217,7 @@ form.scene-form {
     height: 40px;
 }
 
-@keyframes rotate-clockwise{
+@keyframes rotate-clockwise {
     from {
         transform: rotate(0deg);
     }
@@ -213,9 +226,13 @@ form.scene-form {
     }
 }
 
-@-webkit-keyframes rotate-clockwise{
-    0% { -webkit-transform: rotate(0deg);}
-    100% { -webkit-transform: rotate(360deg);}
+@-webkit-keyframes rotate-clockwise {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 .btn-icon-rotate-clockwise-1 {
@@ -237,5 +254,43 @@ form.scene-form {
     transform-origin: 50% 50%;
     animation: rotate-clockwise 1s infinite linear;
 }
+
 /* End Scenes play button animation */
 
+.bold {
+    font-weight: 700;
+}
+
+.scenes-factory-name-input {
+    width: 35% !important;
+}
+
+.shared-scene-switch {
+    float: right !important;
+}
+
+.transfer-list-header, .steps-header {
+    margin: -1vh 0 1vh 1vh;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.scene-effect-item {
+    height: 86px !important;
+}
+
+.scene-effect-value-label {
+    margin-top: 36px;
+}
+
+.effect-configuration {
+    margin: 0 !important;
+}
+
+.btn-circular-fix-margin {
+    margin-top: -1vh !important;
+}
+
+/** {*/
+/*    border: 1px dotted deeppink;*/
+/*}*/
