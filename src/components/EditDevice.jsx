@@ -19,16 +19,16 @@ class EditDevice extends React.Component {
             error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
-            room_id: "",
-            room: false,
+            room: "",
+            fromRoom: false,
         }
     }
 
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
         this.setState({device_id: parsed.id})
-        if (parsed.room !== undefined) this.setState({room_id: parsed.room, room: true})
-        else this.setState({room: false})
+        if (parsed.room !== undefined) this.setState({room: parsed.room, fromRoom: true})
+        else this.setState({fromRoom: false})
 
         fetch('http://localhost:8080/devices/' + parsed.id, {
             method: 'GET',
@@ -137,7 +137,7 @@ class EditDevice extends React.Component {
     
     //Redirection to /devices
     redirectToPrevious = () => {
-        if (this.state.room) window.location.href = '/room?id=' + this.state.room_id
+        if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
         else window.location.href = '/devices'
     }
 

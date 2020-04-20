@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/App.css';
 import '../css/devices.css';
+import * as qs from 'query-string';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -20,11 +21,16 @@ class AddDevice extends React.Component {
             room: "0",
             pairing: "0",
             selectRooms: <></>,
-            isLoading: false
+            isLoading: false,
+            fromRoom: false,
         }
     }
 
     componentDidMount() {
+        const parsed = qs.parse(window.location.search);
+        if (parsed.room !== undefined) this.setState({room: parsed.room, fromRoom: true})
+        else this.setState({fromRoom: false})
+
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
@@ -54,6 +60,9 @@ class AddDevice extends React.Component {
                 this.mapRooms(response);
             }
         })
+        .then(() => {
+            if (this.state.fromRoom) document.getElementById("roomSelector").value = this.state.room
+        })
         .catch(error => console.log(error));
     }
 
@@ -65,7 +74,7 @@ class AddDevice extends React.Component {
             this.setState({ selectRooms: <select className="selector" disabled><option value="0">No Room Available</option></select>, room: "0" })
         } else {
             let i = 0;
-            let toSet = <select className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
+            let toSet = <select id="roomSelector" className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
             this.setState({ selectRooms: toSet })
         }
     }
