@@ -293,6 +293,7 @@ class EditRoom extends React.Component {
 
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.deleteRoom}>Delete room</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>
                     </div>
                 </div>
