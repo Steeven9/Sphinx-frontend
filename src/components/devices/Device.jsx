@@ -1,6 +1,6 @@
 import React, {useState, useContext, useEffect} from 'react'
 import DevicesContext from '../../context/devices-context'
-import {getDeviceIcon, getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadadaHelper'
+import {getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadadaHelper'
 import {getRowIcon} from '../../helpers/getDeviceMetadadaHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
@@ -303,7 +303,7 @@ const Device = ({device}) => {
                     <div className="col col-collapsible l12 s12 icons-wrapper">
                         <i className={"material-icons l1" + (device.child ? " muted-icon" : "")}>{getRowIcon(device)} </i>
                         <div className="icon-device l1">
-                            <img className="" src={getDeviceIcon(device.type)} alt={device.name}/>
+                            <img className="" src={device.icon} alt={device.name}/>
                         </div>
                         <div className="device-info col col-collapsible l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>

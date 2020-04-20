@@ -19,6 +19,7 @@ class EditDevice extends React.Component {
             error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
+            iconType: "0",
             room: "",
             fromRoom: false,
         }
@@ -47,7 +48,7 @@ class EditDevice extends React.Component {
         })
         .then((data) => {
             this.setState({deviceName: data.name})
-            // document.getElementById('editDeviceFixedSizeIcon').src = data.icon
+            this.getIconType(data.icon)
         })
         .catch(error => console.log(error))
 
@@ -56,8 +57,25 @@ class EditDevice extends React.Component {
         });
     }
 
+    getIconType(icon) {
+        if (icon.includes("bulb-regular")) this.setState({iconType: "1"})
+        else if (icon.includes("bulb-led")) this.setState({iconType: "2"})
+        else if (icon.includes("switch")) this.setState({iconType: "3"})
+        else if (icon.includes("dimmer-state")) this.setState({iconType: "4"})
+        else if (icon.includes("dimmer-regular")) this.setState({iconType: "5"})
+        else if (icon.includes("smart-plug")) this.setState({iconType: "6"})
+        else if (icon.includes("sensor-humidity")) this.setState({iconType: "7"})
+        else if (icon.includes("sensor-light")) this.setState({iconType: "8"})
+        else if (icon.includes("sensor-temperature")) this.setState({iconType: "9"})
+        else if (icon.includes("sensor-motion")) this.setState({iconType: "10"})
+        else if (icon.includes("automation-thermostat")) this.setState({iconType: "11"})
+        else if (icon.includes("smart-curtains")) this.setState({iconType: "12"})
+        else if (icon.includes("security-camera")) this.setState({iconType: "13"})
+        else this.setState({iconType: "0"})
+    }
+
     /**
-     * Changes the Room
+     * Changes the Device
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -76,6 +94,7 @@ class EditDevice extends React.Component {
                 },
                 body: JSON.stringify({
                     name: this.state.deviceName, 
+                    icon: this.props.findPathDevice(this.state.iconType),
                 })
             })
             .then( (res) => {
@@ -153,18 +172,38 @@ class EditDevice extends React.Component {
         }
     }
 
+    changeIconState = (type) => {
+        this.setState({iconType: type});
+        this.moveToInformation();
+    }
+
+    moveToSelection = () => {
+        document.getElementById("editDeviceInfo").hidden = true
+        document.getElementById("editDeviceIconSelection").hidden = false
+    }
+    
+    moveToInformation = () => {
+        document.getElementById("editDeviceInfo").hidden = false
+        document.getElementById("editDeviceIconSelection").hidden = true
+    }
+
     /**
      * Renders the device handler
      */
     render() {
         return (
             <div className="editRoom">
-                <div className="device-content-box z-depth-2">
+                <div id="editDeviceInfo" className="device-content-box z-depth-2">
                     <h2 className="title">Edit Device</h2>
                     <div className="textFields">
                         <div className="textFields">
                             <input type="text" name="deviceName" value={this.state.deviceName} placeholder="New Name" onChange={this.handleDeviceNameChange} required/>
                         </div>
+                    </div>
+                    <div className="roomNameAndIcon">
+                        <p>Icon</p>
+                        <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} alt="icon error" />
+                        <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
                     </div>
 
                     <div className="message-two-lines center-text">
@@ -179,6 +218,27 @@ class EditDevice extends React.Component {
                         <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteDevice}>Delete</button>
                         <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save</button>
                     </div>
+                </div>
+
+                <div hidden id="editDeviceIconSelection" className="content-box">
+                    <h2 className="title">Select Icon</h2>
+                    <div className="content-box-iconSelection">
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("0")}><img src={this.props.findPathDevice('0')} alt="Unknown Device" /><br />Unknown Device </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("1")}><img src={this.props.findPathDevice('1')} alt="Light" /><br />Light </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("2")}><img src={this.props.findPathDevice('2')} alt="Dimmable Light" /><br />Dimmable Light </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("3")}><img src={this.props.findPathDevice('3')} alt="Switch" /><br />Switch </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("4")}><img src={this.props.findPathDevice('4')} alt="Dimmer" /><br />Dimmer </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("5")}><img src={this.props.findPathDevice('5')} alt="Dimmer (no-memory)" /><br />Dimmer (no-memory) </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("6")}><img src={this.props.findPathDevice('6')} alt="Smart plug" /><br />Smart plug </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("7")}><img src={this.props.findPathDevice('7')} alt="Humidity sensor" /><br />Humidity sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("8")}><img src={this.props.findPathDevice('8')} alt="Light sensor" /><br />Light sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("9")}><img src={this.props.findPathDevice('9')} alt="Temperature sensor" /><br />Temperature sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("10")}><img src={this.props.findPathDevice('10')} alt="Motion sensor" /><br />Motion sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("11")}><img src={this.props.findPathDevice('11')} alt="Thermostat" /><br />Thermostat</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("12")}><img src={this.props.findPathDevice('12')} alt="Smart curtains" /><br />Smart curtains</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("13")}><img src={this.props.findPathDevice('13')} alt="Security camera" /><br />Security camera </button>
+                    </div>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
                 </div>
             </div>
         );

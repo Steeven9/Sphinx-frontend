@@ -22,7 +22,9 @@ class AddDevice extends React.Component {
             pairing: "0",
             selectRooms: <></>,
             isLoading: false,
+            iconType: "0",
             fromRoom: false,
+            iconChanged: false,
         }
     }
 
@@ -74,7 +76,7 @@ class AddDevice extends React.Component {
             this.setState({ selectRooms: <select className="selector" disabled><option value="0">No Room Available</option></select>, room: "0" })
         } else {
             let i = 0;
-            let toSet = <select id="roomSelector" className="selector" onChange={this.handleRoomChange}> <option value="0">Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
+            let toSet = <select id="roomSelector" className="selector" onChange={this.handleRoomChange}> <option value="0" style={{display:"none"}}>Select Room</option> {rooms.map((room) => <option key={i++} value={room.id}>{room.name}</option>)}</select>
             this.setState({ selectRooms: toSet })
         }
     }
@@ -99,7 +101,7 @@ class AddDevice extends React.Component {
                 },
                 body: JSON.stringify({
                     name: this.state.deviceName,
-                    icon: this.props.findPathDevice(this.state.type),
+                    icon: this.props.findPathDevice(this.state.iconType),
                     type: parseInt(this.state.type),
                     roomId: this.state.room
                 })
@@ -107,6 +109,7 @@ class AddDevice extends React.Component {
             .then((res) => {
                 this.setState({isLoading: false})
                 if (res.status === 201) {
+                    // return res.json()
                     this.setState({ success: true, error: false, incomplete: false, unknownError: "" })
                 }
                 else if (res.status === 401) {
@@ -119,6 +122,7 @@ class AddDevice extends React.Component {
                     this.setState({ success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
+            // .then((data) => console.log(data))
             .catch(e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
@@ -126,6 +130,9 @@ class AddDevice extends React.Component {
     // function to handle state on input change
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
+        if (!this.state.iconChanged) {
+            this.setState({ iconType: evt.target.value })
+        }
     }
     handleDeviceNameChange = evt => {
         this.setState({ deviceName: evt.target.value });
@@ -133,9 +140,6 @@ class AddDevice extends React.Component {
     handleRoomChange = evt => {
         this.setState({ room: evt.target.value })
     }
-    // handlePairingChange = evt => {
-    //     this.setState({ pairing: evt.target.value })
-    // }
 
     /**
      * Display a message if a room has been successfully created, and if not an error message
@@ -155,6 +159,21 @@ class AddDevice extends React.Component {
         }
     }
 
+    changeIconState = (type) => {
+        this.setState({iconType: type, iconChanged: true});
+        this.moveToInformation();
+    }
+
+    moveToSelection = () => {
+        document.getElementById("addDeviceInfo").hidden = true
+        document.getElementById("addDeviceIconSelection").hidden = false
+    }
+    
+    moveToInformation = () => {
+        document.getElementById("addDeviceInfo").hidden = false
+        document.getElementById("addDeviceIconSelection").hidden = true
+    }
+
     //Redirection to previous page
     redirectToPrevious = () => {
         if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
@@ -167,7 +186,7 @@ class AddDevice extends React.Component {
     render() {
         return (
             <div className="addDevice">
-                <div className="device-content-box z-depth-2">
+                <div id="addDeviceInfo" className="device-content-box z-depth-2">
                     <h2 className="title">Add device</h2>
                     <div>
                         <div className="textFields">
@@ -175,7 +194,7 @@ class AddDevice extends React.Component {
                         </div>
                         <div className="textFields">
                             <select className="selector" onChange={this.handleTypeChange}>
-                                <option value="0">Device type</option>
+                                <option value="0" style={{display:"none"}}>Device type</option>
                                 <option value="1">Light</option>
                                 <option value="2">Dimmable Light</option>
                                 <option value="3">Switch</option>
@@ -194,6 +213,11 @@ class AddDevice extends React.Component {
                         <div className="textFields">
                             {this.state.selectRooms}
                         </div>
+                        <div className="roomNameAndIcon">
+                            <p>Icon</p>
+                            <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} alt="icon error" />
+                            <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
+                        </div>
                         {/* <div className="textFields"> 
                             <select className="selector" onChange={this.handlePairingChange}>
                                 <option value="0">No pairing</option>
@@ -210,6 +234,27 @@ class AddDevice extends React.Component {
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToPrevious}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save device</button>
                     </div>
+                </div>
+
+                <div hidden id="addDeviceIconSelection" className="content-box">
+                    <h2 className="title">Select Icon</h2>
+                    <div className="content-box-iconSelection">
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("0")}><img src={this.props.findPathDevice('0')} alt="Unknown Device" /><br />Unknown Device </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("1")}><img src={this.props.findPathDevice('1')} alt="Light" /><br />Light </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("2")}><img src={this.props.findPathDevice('2')} alt="Dimmable Light" /><br />Dimmable Light </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("3")}><img src={this.props.findPathDevice('3')} alt="Switch" /><br />Switch </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("4")}><img src={this.props.findPathDevice('4')} alt="Dimmer" /><br />Dimmer </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("5")}><img src={this.props.findPathDevice('5')} alt="Dimmer (no-memory)" /><br />Dimmer (no-memory) </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("6")}><img src={this.props.findPathDevice('6')} alt="Smart plug" /><br />Smart plug </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("7")}><img src={this.props.findPathDevice('7')} alt="Humidity sensor" /><br />Humidity sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("8")}><img src={this.props.findPathDevice('8')} alt="Light sensor" /><br />Light sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("9")}><img src={this.props.findPathDevice('9')} alt="Temperature sensor" /><br />Temperature sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("10")}><img src={this.props.findPathDevice('10')} alt="Motion sensor" /><br />Motion sensor</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("11")}><img src={this.props.findPathDevice('11')} alt="Thermostat" /><br />Thermostat</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("12")}><img src={this.props.findPathDevice('12')} alt="Smart curtains" /><br />Smart curtains</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("13")}><img src={this.props.findPathDevice('13')} alt="Security camera" /><br />Security camera </button>
+                    </div>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
                 </div>
             </div>
         );
