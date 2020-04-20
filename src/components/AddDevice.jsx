@@ -21,7 +21,7 @@ class AddDevice extends React.Component {
             pairing: "0",
             selectRooms: <></>,
             isLoading: false,
-            iconType: "1",
+            iconType: "0",
         }
     }
 
@@ -99,6 +99,7 @@ class AddDevice extends React.Component {
             .then((res) => {
                 this.setState({isLoading: false})
                 if (res.status === 201) {
+                    // return res.json()
                     this.setState({ success: true, error: false, incomplete: false, unknownError: "" })
                 }
                 else if (res.status === 401) {
@@ -111,6 +112,7 @@ class AddDevice extends React.Component {
                     this.setState({ success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
+            // .then((data) => console.log(data))
             .catch(e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };

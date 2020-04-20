@@ -150,7 +150,10 @@ class App extends React.Component {
         else if (type === "8") path += 'sensor-light'
         else if (type === "9") path += 'sensor-temperature'
         else if (type === "10") path += 'sensor-motion'
-        else path += 'unknwon-device'
+        else if (type === "11") path += 'automation-thermostat'
+        else if (type === "12") path += 'smart-curtains'
+        else if (type === "13") path += 'security-camera'
+        else path += 'unknown-device'
         path += '.svg'
         return path;
     }

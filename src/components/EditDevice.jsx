@@ -19,7 +19,7 @@ class EditDevice extends React.Component {
             error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
-            iconType: "1"
+            iconType: "0"
         }
     }
 
@@ -44,13 +44,30 @@ class EditDevice extends React.Component {
         })
         .then((data) => {
             this.setState({deviceName: data.name})
-            // document.getElementById('editDeviceFixedSizeIcon').src = data.icon
+            this.getIconType(data.icon)
         })
         .catch(error => console.log(error))
 
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
+    }
+
+    getIconType(icon) {
+        if (icon.includes("bulb-regular")) this.setState({iconType: "1"})
+        else if (icon.includes("bulb-led")) this.setState({iconType: "2"})
+        else if (icon.includes("switch")) this.setState({iconType: "3"})
+        else if (icon.includes("dimmer-state")) this.setState({iconType: "4"})
+        else if (icon.includes("dimmer-regular")) this.setState({iconType: "5"})
+        else if (icon.includes("smart-plug")) this.setState({iconType: "6"})
+        else if (icon.includes("sensor-humidity")) this.setState({iconType: "7"})
+        else if (icon.includes("sensor-light")) this.setState({iconType: "8"})
+        else if (icon.includes("sensor-temperature")) this.setState({iconType: "9"})
+        else if (icon.includes("sensor-motion")) this.setState({iconType: "10"})
+        else if (icon.includes("automation-thermostat")) this.setState({iconType: "11"})
+        else if (icon.includes("smart-curtains")) this.setState({iconType: "12"})
+        else if (icon.includes("security-camera")) this.setState({iconType: "13"})
+        else this.setState({iconType: "0"})
     }
 
     /**
@@ -197,6 +214,7 @@ class EditDevice extends React.Component {
                 <div hidden id="editDeviceIconSelection" className="content-box">
                     <h2 className="title">Select Icon</h2>
                     <div className="content-box-iconSelection">
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("0")}><img src={this.props.findPathDevice('0')} alt="Unknown Device" /><br />Unknown Device </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("1")}><img src={this.props.findPathDevice('1')} alt="Light" /><br />Light </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("2")}><img src={this.props.findPathDevice('2')} alt="Dimmable Light" /><br />Dimmable Light </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("3")}><img src={this.props.findPathDevice('3')} alt="Switch" /><br />Switch </button>
