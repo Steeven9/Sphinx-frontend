@@ -135,7 +135,7 @@ class EditDevice extends React.Component {
         this.setState({ deviceName: evt.target.value });
     };
     
-    //Redirection to /devices
+    //Redirection to previous page
     redirectToPrevious = () => {
         if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
         else window.location.href = '/devices'

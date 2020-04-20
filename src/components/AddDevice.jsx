@@ -142,7 +142,7 @@ class AddDevice extends React.Component {
      */
     deviceCreated = () => {
         if (this.state.success) {
-            this.redirectToDevices();
+            this.redirectToPrevious();
         }
         else if (this.state.error) {
             return (<span className="error-message">An error has occurred, please try again</span>)
@@ -155,9 +155,10 @@ class AddDevice extends React.Component {
         }
     }
 
-    //Redirection to /devices
-    redirectToDevices = () => {
-        window.location.href = '/devices'
+    //Redirection to previous page
+    redirectToPrevious = () => {
+        if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
+        else window.location.href = '/devices'
     }
 
     /**
@@ -206,7 +207,7 @@ class AddDevice extends React.Component {
                         </div>
                     </div>
                     <div className="center">
-                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToDevices}>Cancel</button>
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToPrevious}>Cancel</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save device</button>
                     </div>
                 </div>
