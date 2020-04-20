@@ -24,6 +24,7 @@ class AddDevice extends React.Component {
             isLoading: false,
             iconType: "0",
             fromRoom: false,
+            iconChanged: false,
         }
     }
 
@@ -129,6 +130,9 @@ class AddDevice extends React.Component {
     // function to handle state on input change
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
+        if (!this.state.iconChanged) {
+            this.setState({ iconType: evt.target.value })
+        }
     }
     handleDeviceNameChange = evt => {
         this.setState({ deviceName: evt.target.value });
@@ -136,9 +140,6 @@ class AddDevice extends React.Component {
     handleRoomChange = evt => {
         this.setState({ room: evt.target.value })
     }
-    // handlePairingChange = evt => {
-    //     this.setState({ pairing: evt.target.value })
-    // }
 
     /**
      * Display a message if a room has been successfully created, and if not an error message
@@ -159,7 +160,7 @@ class AddDevice extends React.Component {
     }
 
     changeIconState = (type) => {
-        this.setState({iconType: type});
+        this.setState({iconType: type, iconChanged: true});
         this.moveToInformation();
     }
 
