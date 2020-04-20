@@ -172,13 +172,17 @@ class EditDevice extends React.Component {
         }
     }
 
+    changeIconState = (type) => {
+        this.setState({iconType: type});
+        this.moveToInformation();
+    }
+
     moveToSelection = () => {
         document.getElementById("editDeviceInfo").hidden = true
         document.getElementById("editDeviceIconSelection").hidden = false
     }
-
-    changeIconState = (type) => {
-        this.setState({iconType: type});
+    
+    moveToInformation = () => {
         document.getElementById("editDeviceInfo").hidden = false
         document.getElementById("editDeviceIconSelection").hidden = true
     }
@@ -234,6 +238,7 @@ class EditDevice extends React.Component {
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("12")}><img src={this.props.findPathDevice('12')} alt="Smart curtains" /><br />Smart curtains</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("13")}><img src={this.props.findPathDevice('13')} alt="Security camera" /><br />Security camera </button>
                     </div>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
                 </div>
             </div>
         );

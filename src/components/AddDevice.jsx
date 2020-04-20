@@ -158,17 +158,21 @@ class AddDevice extends React.Component {
         }
     }
 
+    changeIconState = (type) => {
+        this.setState({iconType: type});
+        this.moveToInformation();
+    }
+
     moveToSelection = () => {
         document.getElementById("addDeviceInfo").hidden = true
         document.getElementById("addDeviceIconSelection").hidden = false
     }
-
-    changeIconState = (type) => {
-        this.setState({iconType: type});
+    
+    moveToInformation = () => {
         document.getElementById("addDeviceInfo").hidden = false
         document.getElementById("addDeviceIconSelection").hidden = true
     }
-    
+
     //Redirection to previous page
     redirectToPrevious = () => {
         if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
@@ -234,6 +238,7 @@ class AddDevice extends React.Component {
                 <div hidden id="addDeviceIconSelection" className="content-box">
                     <h2 className="title">Select Icon</h2>
                     <div className="content-box-iconSelection">
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("0")}><img src={this.props.findPathDevice('0')} alt="Unknown Device" /><br />Unknown Device </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("1")}><img src={this.props.findPathDevice('1')} alt="Light" /><br />Light </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("2")}><img src={this.props.findPathDevice('2')} alt="Dimmable Light" /><br />Dimmable Light </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("3")}><img src={this.props.findPathDevice('3')} alt="Switch" /><br />Switch </button>
@@ -248,6 +253,7 @@ class AddDevice extends React.Component {
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("12")}><img src={this.props.findPathDevice('12')} alt="Smart curtains" /><br />Smart curtains</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("13")}><img src={this.props.findPathDevice('13')} alt="Security camera" /><br />Security camera </button>
                     </div>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
                 </div>
             </div>
         );
