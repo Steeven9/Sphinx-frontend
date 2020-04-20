@@ -17,6 +17,11 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
+import Guests from './components/Guests';
+import AddGuest from './components/AddGuest';
+import EditGuest from './components/EditGuest';
+import Guest from './components/Guest';
+import SharedWithMe from './components/SharedWithMe';
 import LogOut from './components/LogOut';
 import Error404 from './components/Error404';
 
@@ -290,6 +295,56 @@ class App extends React.Component {
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                         findPathDevice={this.findPathDevice}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/guests">
+                                {this.state.loggedIn ?
+                                    <Guests
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/addGuest">
+                                {this.state.loggedIn ?
+                                    <AddGuest
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/editGuest">
+                                {this.state.loggedIn ?
+                                    <EditGuest
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/guest">
+                                {this.state.loggedIn ?
+                                    <Guest
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/sharedWithMe">
+                                {this.state.loggedIn ?
+                                    <SharedWithMe
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
                                     />
                                     : this.accessDenied()}
                             </Route>
