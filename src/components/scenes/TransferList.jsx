@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -10,6 +10,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
+import Paper from "@material-ui/core/Paper";
+import '../../css/scenes.css';
+import ScenesContext from "../../context/scenesContext";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -30,6 +34,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const useGridStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        borderRadius: 10,
+        paddingTop: 40,
+        paddingBottom: 40,
+        color: '#000000',
+        background: '#FFFFFF',
+    },
+    textInput: {
+        margin: theme.spacing(1),
+        width: '30ch',
+    },
+}));
+
 function not(a, b) {
     return a.filter((value) => b.indexOf(value) === -1);
 }
@@ -42,11 +63,31 @@ function union(a, b) {
     return [...a, ...not(b, a)];
 }
 
-export default function TransferList() {
+function getMeasureUnit(effectConfig) {
+    switch (effectConfig.type) {
+        case 2: //Temperature
+            return '°C'
+        case 3: //Power
+            return effectConfig.on ? 'On' : 'Off'
+        case 1: //Intensity
+        case 4: //Curtains aperture
+        default:
+            return '%'
+    }
+}
+
+const TransferList = (config) => {
+    const {dispatchEffects} = useContext(ScenesContext);
     const classes = useStyles();
     const [checked, setChecked] = React.useState([]);
     const [left, setLeft] = React.useState([0, 1, 2, 3]);
     const [right, setRight] = React.useState([4, 5, 6, 7]);
+    const effectConfig = config.effectConfig;
+
+    const handleDelete = (e) => {
+        e.preventDefault();
+        dispatchEffects({type: 'DELETE_SCENE_EFFECT', effectConfig: effectConfig});
+    };
 
     const leftChecked = intersection(checked, left);
     const rightChecked = intersection(checked, right);
@@ -85,6 +126,9 @@ export default function TransferList() {
         setRight(not(right, rightChecked));
         setChecked(not(checked, rightChecked));
     };
+
+    const gridClasses = useGridStyles();
+
 
     const customList = (title, items) => (
         <Card>
@@ -130,38 +174,51 @@ export default function TransferList() {
     );
 
     return (
-        <>
-            <Grid container spacing={0}>
-                <div className="transfer-list-header">Light intensity 30%</div>
-            </Grid>
-            <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
-                <Grid item>{customList('Controlling', left)}</Grid>
-                <Grid item>
-                    <Grid container direction="column" alignItems="center">
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            className={classes.button}
-                            onClick={handleCheckedRight}
-                            disabled={leftChecked.length === 0}
-                            aria-label="move selected right"
-                        >
-                            &gt;
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            className={classes.button}
-                            onClick={handleCheckedLeft}
-                            disabled={rightChecked.length === 0}
-                            aria-label="move selected left"
-                        >
-                            &lt;
-                        </Button>
-                    </Grid>
+        <Grid item xs={12} sm={12} md={6} lg={6} className={!effectConfig.visible ? "display-none" : undefined}>
+            <Paper elevation={3} className={gridClasses.paper}>
+                <Grid container spacing={0}>
+                    <div className="transfer-list-header-max-width">
+                        <div className="transfer-list-header">
+                            <span
+                                className="">{effectConfig.name} {effectConfig.slider} {getMeasureUnit(effectConfig)}
+                            </span>
+                            <i className="material-icons btn-icon-transfer-list right"
+                               onClick={(e) => handleDelete(e)}> highlight_off</i>
+                        </div>
+                    </div>
                 </Grid>
-                <Grid item>{customList('Not controlling', right)}</Grid>
-            </Grid>
-        </>
+                <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
+                    <Grid item>{customList('Controlling', left)}</Grid>
+                    <Grid item>
+                        <Grid container direction="column" alignItems="center">
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                className={classes.button}
+                                onClick={handleCheckedRight}
+                                disabled={leftChecked.length === 0}
+                                aria-label="move selected right"
+                            >
+                                &gt;
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                size="small"
+                                className={classes.button}
+                                onClick={handleCheckedLeft}
+                                disabled={rightChecked.length === 0}
+                                aria-label="move selected left"
+                            >
+                                &lt;
+                            </Button>
+                        </Grid>
+                    </Grid>
+                    <Grid item>{customList('Not controlling', right)}</Grid>
+                </Grid>
+            </Paper>
+        </Grid>
     );
 }
+
+export {TransferList as default}
+

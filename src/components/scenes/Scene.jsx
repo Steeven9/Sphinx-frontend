@@ -9,16 +9,16 @@ import PlayIcon from './PlayIcon'
  * @constructor
  */
 const Scene = ({scene}) => {
-    const {dispatch, setActionCompleted} = useContext(ScenesContext);
+    const {dispatchScene, setActionCompleted} = useContext(ScenesContext);
 
     const handleDuplicate = (e) => {
         e.preventDefault();
-        dispatch({type: 'DUPLICATE_SCENE', scene: scene, setActionCompleted: setActionCompleted});
+        dispatchScene({type: 'DUPLICATE_SCENE', scene: scene, setActionCompleted: setActionCompleted});
     };
 
     const handleDelete = (e) => {
         e.preventDefault();
-        dispatch({type: 'DELETE_SCENE', scene: scene, setActionCompleted: setActionCompleted});
+        dispatchScene({type: 'DELETE_SCENE', scene: scene, setActionCompleted: setActionCompleted});
     };
 
     return (

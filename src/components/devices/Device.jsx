@@ -1,7 +1,7 @@
 import React, {useState, useContext, useEffect} from 'react'
 import DevicesContext from '../../context/devicesContext'
-import {getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadadaHelper'
-import {getRowIcon} from '../../helpers/getDeviceMetadadaHelper'
+import {getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDeviceMetadataHelper'
+import {getRowIcon} from '../../helpers/getDeviceMetadataHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Slider from '@material-ui/core/Slider'
@@ -124,7 +124,7 @@ const Device = ({device}) => {
                 return (
                     <div
                         className={"col col-custom l9 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
-                        <span>{(device.label !== null) ? device.label + getSensorUnit(device.type) : "- - - - - -"}</span>
+                        <span>{(device.label !== null) ? device.label : "- - - - - -"}</span>
                     </div>
                 );
             case 13: //MotionSensor
@@ -160,21 +160,6 @@ const Device = ({device}) => {
         }
     }
 
-    function getSensorUnit(type) {
-        switch (type) {
-            case 6: //SmartPlug
-                return ' kWh'
-            case 7: //HumiditySensor
-                return ' %'
-            case 8: //LightSensor
-                return ' lm'
-            case 9: //TempSensor
-                return ' °C'
-            default:
-                return ''
-        }
-    }
-
     /**
      * Generates a slider to control the intensity of a light or of a dimmer.
      * @returns {Slider}
@@ -202,7 +187,7 @@ const Device = ({device}) => {
                                     marks={getSliderMarks(device)}/>
                             <div
                                 className={"col l12 col-custom display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
-                                <span>{device.state !== 0 ? getThermostatTemp(device) + " " + getSensorUnit(device.type) : "- - - - - -"}</span>
+                                <span>{device.state !== 0 ? getThermostatTemp(device) : "- - - - - -"}</span>
                             </div>
                         </div>
                         <div className="col l2">

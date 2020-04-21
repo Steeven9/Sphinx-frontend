@@ -25,7 +25,7 @@ let title = "";
  */
 const ScenesPanel = () => {
     const [actionCompleted, setActionCompleted] = React.useState(false);
-    const [scenes, dispatch] = useReducer(scenesReducer, []);
+    const [scenes, dispatchScene] = useReducer(scenesReducer, []);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
     // Controls if a guest is accessing this view
@@ -64,7 +64,7 @@ const ScenesPanel = () => {
                         if (keyA > keyB) return 1;
                         return 0;
                     });
-                    dispatch({type: 'POPULATE_SCENES', scenes: scenes});
+                    dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
                     isLoading = false;
                 }
             })
@@ -108,7 +108,7 @@ const ScenesPanel = () => {
                             if (keyA > keyB) return 1;
                             return 0;
                         });
-                        dispatch({type: 'POPULATE_SCENES', scenes: scenes});
+                        dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
                         isLoading = false;
                     }
                 })
@@ -136,7 +136,7 @@ const ScenesPanel = () => {
 
 
     return (
-        <ScenesContext.Provider value={{scenes, dispatch, isGuest, setActionCompleted}}>
+        <ScenesContext.Provider value={{scenes, dispatchScene, isGuest, setActionCompleted}}>
             <div id="wrapper" className="scenes">
                 <div className="container">
                     <article className="row row-scene row-scene-custom">

@@ -2,7 +2,7 @@ import React, {useContext, useEffect} from 'react'
 import ScenesContext from "../../context/scenesContext";
 
 const PlayIcon = ({scene}) => {
-    const {dispatch} = useContext(ScenesContext);
+    const {dispatchScene} = useContext(ScenesContext);
     const idleIcon = "/img/icons/material-ui-svg/PlayCircleOutlined.svg";
     const successIcon = "/img/icons/material-ui-svg/PlayCircleSuccess.svg";
     const errorIcon = "/img/icons/material-ui-svg/PlayCircleError.svg";
@@ -12,7 +12,7 @@ const PlayIcon = ({scene}) => {
     const [icon, setIcon] = React.useState(idleIcon);
 
     useEffect(() => {
-        if(resultTriggered){
+        if (resultTriggered) {
             if (success) {
                 setIcon(successIcon);
             } else {
@@ -31,7 +31,13 @@ const PlayIcon = ({scene}) => {
     const handlePlay = (e) => {
         e.preventDefault();
         setPlaying(!playing);
-        dispatch({type: 'RUN_SCENE', scene: scene, setSuccess: setSuccess, setPlaying: setPlaying, setResultTriggered: setResultTriggered});
+        dispatchScene({
+            type: 'RUN_SCENE',
+            scene: scene,
+            setSuccess: setSuccess,
+            setPlaying: setPlaying,
+            setResultTriggered: setResultTriggered
+        });
     };
 
     return (

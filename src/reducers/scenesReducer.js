@@ -70,11 +70,17 @@ const scenesReducer = (state, action) => {
 
         case 'UPDATE_STATE':
             console.log('Dispatch: UPDATE_STATE');
-            return state;
+            return [...state];
 
         case 'CREATE_BLANK_EFFECT':
             console.log('Dispatch: CREATE_BLANK_EFFECT');
-            return [...state, action.effect];
+            return [...state, action.effectConfig];
+
+        case 'DELETE_SCENE_EFFECT':
+            console.log('Dispatch: DELETE_SCENE_EFFECT');
+            state = state.filter((e) => e.id !== action.effectConfig.id);
+            // NOTE Add fetch
+            return [...state];
 
         case 'RUN_SCENE':
             console.log('Dispatch: RUN_SCENE');

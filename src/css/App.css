@@ -117,6 +117,10 @@ h3 {
     text-align: center;
 }
 
+.right-text {
+    text-align: right;
+}
+
 .error-message {
     color: #E30000;
 }
