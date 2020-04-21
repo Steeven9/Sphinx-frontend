@@ -11,7 +11,7 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
+            usernameOrEmail: '',
             password: '',
             statusCode: '',
             isLoading: false,
@@ -32,14 +32,14 @@ class Login extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
 
-        if (this.state.username === '' || this.state.password === '') {
+        if (this.state.usernameOrEmail === '' || this.state.password === '') {
             this.setState({error: 0})
             return;
         }
         
         this.setState({isLoading: true, error: -1, statusCode: ''})
 
-        fetch('http://localhost:8080/auth/login/' + this.state.username, {
+        fetch('http://localhost:8080/auth/login/' + this.state.usernameOrEmail, {
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
             body: this.state.password
@@ -61,10 +61,37 @@ class Login extends React.Component {
             }
             return null;
         })
-        .then((data, res) => {
-            this.setState({isLoading: false})
+        .then((data) => {
             if (data !== null) {
-                this.props.logIn(this.state.username, data);
+                fetch('http://localhost:8080/auth/validate', {
+                    method: 'POST',
+                    headers: {'Accept': 'application/json', 'Content-Type': 'application/json',
+                         'user': this.state.usernameOrEmail, 'session-token': data},
+                })
+                .then((res) => {
+                    this.setState({statusCode: res.status});
+
+                    if (res.status === 200) {
+                        return res.text();
+                    } 
+                    else if (res.status === 401 || res.status === 404) {
+                        this.setState({error: 1})
+                    } 
+                    else if (res.status === 403) {
+                        this.setState({error: 2})
+                    }
+                    else {
+                        this.setState({error: 3, errorType: "Error Code: " + res.status})
+                    }
+                    return null;
+                })
+                .then((data2) => {
+                    this.setState({isLoading: false})
+                    if (data !== null) {
+                        this.props.logIn(data2, data);
+                    }
+                })
+                
             }
         })
         .catch( e => {
@@ -93,7 +120,7 @@ class Login extends React.Component {
 
     // functions to handle state on input change
     handleUsernameChange = evt => {
-        this.setState({username: evt.target.value});
+        this.setState({usernameOrEmail: evt.target.value});
     };
     handlePasswordChange = evt => {
         this.setState({password: evt.target.value});
@@ -104,8 +131,8 @@ class Login extends React.Component {
      * isEnabled: boolean to enable button
      */
     render() {
-        const {username, password} = this.state;
-        const isEnabled = username.length > 0 && password.length > 0;
+        const {usernameOrEmail, password} = this.state;
+        const isEnabled = usernameOrEmail.length > 0 && password.length > 0;
         return (
             <div id="wrapper" className="homepage img-homepage-headline main-img-background">
 
@@ -123,7 +150,7 @@ class Login extends React.Component {
                                     type="text"
                                     required={true}
                                     name="username"
-                                    value={this.state.username}
+                                    value={this.state.usernameOrEmail}
                                     onChange={this.handleUsernameChange}
                                     placeholder="Username or email"/>
                             </div>
