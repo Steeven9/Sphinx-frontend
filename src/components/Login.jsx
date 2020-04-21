@@ -13,6 +13,7 @@ class Login extends React.Component {
         this.state = {
             usernameOrEmail: '',
             password: '',
+            sessionToken: '',
             statusCode: '',
             isLoading: false,
             error: -1,  // -1 nothing, 0 incomplete, 1 wrong username or password, 2 not authenticated, 3 unexpected error
@@ -62,36 +63,35 @@ class Login extends React.Component {
             return null;
         })
         .then((data) => {
-            if (data !== null) {
-                fetch('http://localhost:8080/auth/validate', {
-                    method: 'POST',
-                    headers: {'Accept': 'application/json', 'Content-Type': 'application/json',
-                         'user': this.state.usernameOrEmail, 'session-token': data},
-                })
-                .then((res) => {
-                    this.setState({statusCode: res.status});
+            this.setState({sessionToken: data});
 
-                    if (res.status === 200) {
-                        return res.text();
-                    } 
-                    else if (res.status === 401 || res.status === 404) {
-                        this.setState({error: 1})
-                    } 
-                    else if (res.status === 403) {
-                        this.setState({error: 2})
-                    }
-                    else {
-                        this.setState({error: 3, errorType: "Error Code: " + res.status})
-                    }
-                    return null;
-                })
-                .then((data2) => {
-                    this.setState({isLoading: false})
-                    if (data !== null) {
-                        this.props.logIn(data2, data);
-                    }
-                })
-                
+            return fetch('http://localhost:8080/auth/validate', {
+                method: 'POST',
+                headers: {'Accept': 'application/json', 'Content-Type': 'application/json',
+                        'user': this.state.usernameOrEmail, 'session-token': data},
+            });
+        })
+        .then((res) => {
+            this.setState({statusCode: res.status});
+
+            if (res.status === 200) {
+                return res.text();
+            } 
+            else if (res.status === 401 || res.status === 404) {
+                this.setState({error: 1})
+            } 
+            else if (res.status === 403) {
+                this.setState({error: 2})
+            }
+            else {
+                this.setState({error: 3, errorType: "Error Code: " + res.status})
+            }
+            return null;
+        })
+        .then((data) => {
+            this.setState({isLoading: false})
+            if (data !== null) {
+                this.props.logIn(data, this.state.sessionToken);
             }
         })
         .catch( e => {
