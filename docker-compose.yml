@@ -22,7 +22,6 @@ services:
     ports:
       - "5432:5432"
     env_file: sh_envfile
-networks: 
     volumes:
       - ./db_data:/var/lib/postgresql/data  
 networks: 
