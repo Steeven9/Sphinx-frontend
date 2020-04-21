@@ -18,6 +18,7 @@ import Devices from './components/Devices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import LogOut from './components/LogOut';
+import ResendEmail from './components/ResendEmail';
 import Error404 from './components/Error404';
 
 
@@ -304,6 +305,10 @@ class App extends React.Component {
 
                             <Route path="/changepassword">
                                 <ChangePassword />
+                            </Route>
+
+                            <Route path="/resend">
+                                <ResendEmail />
                             </Route>
 
                             <Route exact path="/">
