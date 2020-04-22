@@ -11,12 +11,8 @@ class DeviceSharedWithMe extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            guestUsername: props.guestUsername,
-            roomID: props.roomID,
             deviceID: props.deviceID,
             device: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>,
-            editGuest: props.editGuest,
-            guestDevices: props.guestDevices,
         }
     }
 
@@ -39,41 +35,10 @@ class DeviceSharedWithMe extends React.Component {
             if (data === null) return;
             let device = JSON.parse(data);
 
-            let toSet = <div className="row room">
-                <div className="col l1 image vertical-center"><img src={device.icon} alt="device-logo"/></div>
-                <div className="col l5 vertical-center">{device.name}</div>
-                <div className="col l2 vertical-center center-text"><i>{this.getType(device.type)}</i></div>
-                <div className="col l2"></div>
-                <div className="col l1 room-button1 vertical-center">
-                    {
-                        this.state.editGuest ?
-                        <label><input type="checkbox" id={device.id} onClick={() => this.handleCheckboxDeviceEditGuest()}/><span></span></label>
-                        :
-                        <label><input type="checkbox" id={device.id} onClick={() => this.props.handleCheckboxDevice()}/><span></span></label>
-                    }
-                </div>
-                <div className="col l1 room-button2 vertical-center"></div>
-            </div>
+            let toSet = this.composeDeviceHTML(device)
             this.setState({device: toSet})
             this.editDevice()
         });
-    }
-
-    isGiven = () => {
-        return (this.state.guestDevices.indexOf(this.state.deviceID) !== -1)
-    }
-
-    handleCheckboxDeviceEditGuest = () => {
-        let checked = document.getElementById(this.state.deviceID).checked
-        document.getElementById(this.state.deviceID).checked = (checked ? true : false)
-        this.props.handleCheckboxDevice(this.state.deviceID)
-    }
-
-    editDevice = () => {
-        if (this.state.editGuest && (this.state.guestDevices.indexOf(this.state.deviceID) !== -1)) {
-            document.getElementById(this.state.deviceID).checked = true;
-            this.props.handleCheckboxDevice(this.state.deviceID)
-        }
     }
 
     getType = (type) => {

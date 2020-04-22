@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/App.css';
 import '../css/house.css';
 import * as qs from 'query-string';
-import DeviceToShare from './DeviceToShare';
+import DeviceSharedWithMe from './DeviceSharedWithMe';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -54,45 +54,23 @@ class HouseSharedWithMe extends React.Component {
     }
 
     /**
-     * Maps the received array of rooms and sets it as this.state.rooms. If no rooms are available, this.state.rooms gets changed with a specific phrase.
-     * @param rooms: array of rooms
+     * Maps the received array of devices and sets it as this.state.devices. If no devices are available, this.state.devices gets changed with a specific phrase.
+     * @param devices: array of devices
      */
-    mapRooms = () => {  //TODO
-        const { rooms } = this.state;
-        if (!rooms) { 
+    mapDevices = () => {
+        const { devices } = this.state;
+        if (!devices) { 
             return <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
-        } else if (rooms.length === 0) {
-            return <p><b>You have no rooms.</b></p>
+        } else if (devices.length === 0) {
+            return <p><b>No shared devices.</b></p>
         } else {
-            return rooms.map((room) =>
-                <React.Fragment key={room.id}>
-                <div className="row rooms-headline">
-                    <div className="col l1"></div>
-                    <div className="col l5">{room.name}</div>
-                    <div className="col l2 center-text"></div>
-                    <div className="col l4">
-                        {/* {room.devices.length > 0 ? <label><input type="checkbox" id={room.id} onClick={() => this.handleCheckboxRoom(room.id)}/><span></span></label> : <></>} */}
-                    </div>
-                    </div>
-                {room.devices.length > 0 ? 
-                    room.devices.map((deviceID) => (
-                        <DeviceToShare
-                            key = {deviceID}
-                            username = {this.props.username}
-                            session_token = {this.props.session_token}
-                            roomID = {room.id}
-                            deviceID = {deviceID}
-                            editGuest = {true}
-                            guestUsername = {this.state.guestUsername}
-                            guestDevices = {this.state.guestDevices}
-                            handleCheckboxDevice = {this.handleCheckboxDevice}
-                        />
-                    ))
-                    :
-                    <p><b>There are no devices in this room.</b></p>
-                }
-                <br/>
-                </React.Fragment>
+            return devices.map((device) =>
+                <DeviceSharedWithMe
+                    key = {device}
+                    username = {this.props.username}
+                    session_token = {this.props.session_token}
+                    deviceID = {device}
+                />
             );
         }
     }
@@ -107,7 +85,7 @@ class HouseSharedWithMe extends React.Component {
                     <div className="headline-box row row-collapsible row row-collapsible-custom">
                         <h2 className="col l11 left-align headline-title">{this.state.ownerUsername}'s House</h2>
                     </div>
-                    {this.mapRooms()}
+                    {this.mapDevices()}
                 </div>
             </div>
         );
