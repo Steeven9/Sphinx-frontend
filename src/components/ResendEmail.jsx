@@ -46,13 +46,16 @@ class ResendEmail extends React.Component {
             else if (res.status === 404) {
                 this.setState({successOrError: 2})
             }
+            else if (res.status === 403) {
+                this.setState({successOrError: 3})
+            }
             else {
-                this.setState({successOrError: 3, errorType: "Error Code: " + res.status})
+                this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
             }
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({successOrError: 3, errorType: e})
+            this.setState({successOrError: 4, errorType: e.toString()})
         });
     };
 
@@ -70,7 +73,7 @@ class ResendEmail extends React.Component {
         if (this.state.successOrError === 0) {
             return (
                 <>
-                    <span className="success-message">Verification email request processed!</span><br/>
+                    <span className="success-message">Verification email sent!</span><br/>
                     <span className="success-message">Please check your inbox and follow the link to verify your account.</span>
                 </>
             )
@@ -82,6 +85,9 @@ class ResendEmail extends React.Component {
             return (<span className="error-message">No account with this email.</span>)
         }
         else if (this.state.successOrError === 3) {
+            return (<span className="error-message">Account already verified.</span>)
+        }
+        else if (this.state.successOrError === 4) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     };
