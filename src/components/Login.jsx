@@ -96,7 +96,7 @@ class Login extends React.Component {
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({error: 3, errorType: e})
+            this.setState({error: 3, errorType: e.toString()})
         });
     };
 

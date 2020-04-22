@@ -52,7 +52,7 @@ class ResetPassword extends React.Component {
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({successOrError: 3, errorType: e})
+            this.setState({successOrError: 3, errorType: e.toString()})
         });
     };
 
