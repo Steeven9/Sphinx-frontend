@@ -78,8 +78,18 @@ const scenesReducer = (state, action) => {
 
         case 'CREATE_BLANK_EFFECT':
             console.log('Dispatch: CREATE_BLANK_EFFECT');
-            console.log(action.effectConfig.id)
             return [...state, action.effectConfig];
+
+
+        case 'CREATE_SCENE':
+            console.log('Dispatch: CREATE_SCENE');
+
+            console.log(JSON.stringify('STATE >>>'))
+            console.log(JSON.stringify(state))
+            console.log(JSON.stringify('SCENE >>>'))
+            console.log(JSON.stringify(action.scene))
+
+            return [state];
 
         case 'DELETE_SCENE_EFFECT':
             console.log('Dispatch: DELETE_SCENE_EFFECT');

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -69,20 +69,78 @@ function getMeasureUnit(effectConfig) {
             return '°C'
         case 3: //Power
             return effectConfig.on ? 'On' : 'Off'
-        case 1: //Intensity
+        case 1: //Light intensity
         case 4: //Curtains aperture
         default:
             return '%'
     }
 }
 
+/**
+ * Compares two arrays and returns the difference
+ * @param {} otherArray
+ */
+function compareArrays(otherArray) {
+    return current =>
+        otherArray.filter(other => other.id === current.id || other === current.id).length === 0;
+}
+
+function getNotUsedDevices(allDevices, currentDevices) {
+    return allDevices.filter(compareArrays(currentDevices));
+}
+
+function getUsedDevices(allDevices, currentDevices) {
+    return allDevices.filter(compareArrays(allDevices.filter(compareArrays(currentDevices))));
+}
+
+function getDevicesTypesByEffectType(effectConfig) {
+    switch (effectConfig.type) {
+        case 1: //Light intensity
+            return [2, 4, 11]
+        case 2: //Temperature
+            return [11]
+        case 3: //Power
+            return [1, 2, 3, 4, 5, 6, 11, 13]
+        case 4: //Curtains aperture
+            return [12]
+        default:
+            return []
+    }
+}
+
+function getDevicesByEffectType(devices, types) {
+    let filteredDevices = [];
+    for (let type of types) {
+        for (let device of devices) {
+            if (device.type === type) {
+                filteredDevices.push(device)
+            }
+        }
+    }
+    return filteredDevices;
+}
+
 const TransferList = (config) => {
-    const {devices, dispatchEffects} = useContext(ScenesContext);
+    const {devices, dispatchEffects, isEditing, setValid} = useContext(ScenesContext);
     const classes = useStyles();
     const [checked, setChecked] = React.useState([]);
     const [left, setLeft] = React.useState([]);
-    const [right, setRight] = React.useState(devices);
+    const [right, setRight] = React.useState([]);
     const effectConfig = config.effectConfig;
+
+    useEffect(() => {
+        console.log('Setting devices');
+
+        let devicesTypes = getDevicesTypesByEffectType(config.effectConfig);
+        let filteredDevices = getDevicesByEffectType(devices, devicesTypes);
+
+        if (isEditing) {
+            setRight(getNotUsedDevices(filteredDevices, config.effectConfig.devices))
+            setLeft(getUsedDevices(filteredDevices, config.effectConfig.devices))
+        } else {
+            setRight(filteredDevices)
+        }
+    }, [config, devices]);
 
     const handleDelete = (e) => {
         e.preventDefault();
@@ -119,12 +177,15 @@ const TransferList = (config) => {
         setRight(right.concat(leftChecked));
         setLeft(not(left, leftChecked));
         setChecked(not(checked, leftChecked));
+        console.log(left.length)
+
     };
 
     const handleCheckedLeft = () => {
         setLeft(left.concat(rightChecked));
         setRight(not(right, rightChecked));
         setChecked(not(checked, rightChecked));
+        console.log(left.length)
     };
 
     const gridClasses = useGridStyles();
@@ -179,7 +240,7 @@ const TransferList = (config) => {
                     <div className="transfer-list-header-max-width">
                         <div className="transfer-list-header">
                             <span
-                                className="">{effectConfig.name} {effectConfig.slider} {getMeasureUnit(effectConfig)}
+                                className="">{effectConfig.name} {(effectConfig.type !== 3) ? effectConfig.slider : undefined} {getMeasureUnit(effectConfig)}
                             </span>
                             <i className="material-icons btn-icon-transfer-list right"
                                onClick={(e) => handleDelete(e)}> highlight_off</i>

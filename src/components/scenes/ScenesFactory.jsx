@@ -35,11 +35,11 @@ const ScenesFactory = () => {
         const [icon, setIcon] = React.useState("/img/icons/scenes/icon-unknown.svg");
         const [sceneName, setSceneName] = React.useState("");
         const [shared, setShared] = React.useState(false);
-        const [transferLists, setTransferLists] = React.useState([]);
         const [isValid, setValid] = React.useState(false);
         const [id, setId] = React.useState(0);
         const isEditing = path[1].toLowerCase() === "editscene";
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
+
         let effectConfig = {
             id: id,
             type: 0,
@@ -64,6 +64,8 @@ const ScenesFactory = () => {
                 'user': localStorage.getItem('username'),
                 'session-token': localStorage.getItem('session_token')
             };
+
+            console.log('Fetching user devices...')
 
             fetch(fetchUrl, {
                 method: method,
@@ -292,7 +294,8 @@ const ScenesFactory = () => {
         }
 
         return (
-            <ScenesContext.Provider value={{scenes, dispatchScenes, effects, dispatchEffects, devices}}>
+            <ScenesContext.Provider
+                value={{scenes, dispatchScenes, effects, dispatchEffects, devices, setValid, isEditing}}>
                 <div className="container scene-factory-box">
                     <form noValidate autoComplete="off">
                         <Grid container spacing={3} className="scene-content-box-top">
