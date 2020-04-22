@@ -257,3 +257,8 @@ h3 {
     z-index: 1;
     will-change: width, height;
 }
+
+.account-circle {
+    height: 40px;
+    width: 40px;
+}

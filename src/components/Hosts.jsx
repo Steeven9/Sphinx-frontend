@@ -6,7 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
-class Guests extends React.Component {
+class Hosts extends React.Component {
 
     constructor(props) {
         super(props);
@@ -59,26 +59,17 @@ class Guests extends React.Component {
             let i = 0;
             let toSet = guests.map((guest) =>
                 <div key={i++} className="row room">
-                    <div className="col l1 image vertical-center"><img src={"TODO"} alt="device-logo"/></div>
+                    <div className="col l1 image vertical-center"><i className="material-icons account-circle">account_circle</i></div>
                     <div className="col l5 vertical-center">{guest.username}</div>
                     <div className="col l2"></div>
                     <div className="col l1 room-button1 vertical-center">
                         <i className="material-icons btn-edit"
                            onClick={() => this.redirectToEditGuest(guest.username)}>edit</i>
                     </div>
-                    <div className="col l1 room-button2 vertical-center">
-                        <i className="material-icons btn-edit"
-                           onClick={() => this.redirectToGuest(guest.username)}>visibility_outlined</i>
-                    </div>
                 </div>
             );
             this.setState({guests: toSet})
         }
-    }
-
-    //Redirection to /guest
-    redirectToGuest = (guestUsername) => {
-        window.location.href = '/guest?username=' + guestUsername
     }
 
     //Redirection to /editGuest
@@ -111,4 +102,4 @@ class Guests extends React.Component {
 }
 
 
-export default Guests;
+export default Hosts;
