@@ -3,6 +3,7 @@ import '../css/App.css';
 import '../css/house.css';
 import * as qs from 'query-string';
 import DeviceToShare from './DeviceToShare';
+import SceneToShare from './SceneToShare';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -14,13 +15,19 @@ class EditGuest extends React.Component {
         super(props);
         this.state = {
             guestUsername: "",
-            rooms: null,
+            rooms: [],
             devices: [],
             scenes: [],
+            scenesToSend: [],
             error: -1,  // -1 nothing, 0 no devices or scenes selected, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
             guestDevices: [],
+            guestScenes: [],
+            allDevices: false,
+            allScenes: false,
+            allDevicesIDs: [],
+            allScenesIDS: [],
         }
     }
 
@@ -50,7 +57,7 @@ class EditGuest extends React.Component {
         .then((data) => {
             if (data === null) return;
             let devices = JSON.parse(data);
-            this.setState({guestDevices: devices})
+            this.setState({guestDevices: devices, devices: devices})
         });
 
         fetch('http://localhost:8080/rooms/', {
@@ -80,6 +87,54 @@ class EditGuest extends React.Component {
                 });
             }
         });
+
+        fetch('http://localhost:8080/scenes/' + this.props.username + '/devices/' + parsedGuest, {
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then((res) => {
+            if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            if (data === null) return;
+            let scenes = JSON.parse(data);
+            this.setState({guestScenes: scenes, scenesToSend: scenes})
+        });
+
+        fetch('http://localhost:8080/scenes/', {
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then((res) => {
+            if (res.status === 401) {
+                this.props.logOut(1);
+            } else if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            let response = JSON.parse(data);
+
+            if (response === null) {
+                // TODO error handling
+            } else {
+                this.setState({
+                    scenes: response,
+                });
+            }
+        });
     }
 
     /**
@@ -95,34 +150,63 @@ class EditGuest extends React.Component {
         } else {
             return rooms.map((room) =>
                 <React.Fragment key={room.id}>
-                <div className="row rooms-headline">
-                    <div className="col l1"></div>
-                    <div className="col l5">{room.name}</div>
-                    <div className="col l2 center-text"></div>
-                    <div className="col l4">
-                        {/* {room.devices.length > 0 ? <label><input type="checkbox" id={room.id} onClick={() => this.handleCheckboxRoom(room.id)}/><span></span></label> : <></>} */}
+                    <div className="row rooms-headline">
+                        <div className="col l1"></div>
+                        <div className="col l5">{room.name}</div>
+                        <div className="col l2 center-text"></div>
+                        <div className="col l4">
+                            {/* {room.devices.length > 0 ? <label><input type="checkbox" id={room.id} onClick={() => this.handleCheckboxRoom(room.id)}/><span></span></label> : <></>} */}
+                        </div>
                     </div>
-                    </div>
-                {room.devices.length > 0 ? 
-                    room.devices.map((deviceID) => (
-                        <DeviceToShare
-                            key = {deviceID}
-                            username = {this.props.username}
-                            session_token = {this.props.session_token}
-                            roomID = {room.id}
-                            deviceID = {deviceID}
-                            editGuest = {true}
-                            guestUsername = {this.state.guestUsername}
-                            guestDevices = {this.state.guestDevices}
-                            handleCheckboxDevice = {this.handleCheckboxDevice}
-                        />
-                    ))
-                    :
-                    <p><b>There are no devices in this room.</b></p>
-                }
-                <br/>
+                    <ul class="collapsible expandable expandable-component">
+                        <li class="row row-collapsible row row-collapsible-costum">
+                            {room.devices.length > 0 ? 
+                                room.devices.map((deviceID) => (
+                                    <DeviceToShare
+                                        key = {deviceID}
+                                        username = {this.props.username}
+                                        session_token = {this.props.session_token}
+                                        roomID = {room.id}
+                                        deviceID = {deviceID}
+                                        editGuest = {true}
+                                        guestUsername = {this.state.guestUsername}
+                                        guestDevices = {this.state.guestDevices}
+                                        handleCheckboxDevice = {this.handleCheckboxDevice}
+                                    />
+                                ))
+                                :
+                                <p><b>There are no devices in this room.</b></p>
+                            }
+                        </li>
+                    </ul>
                 </React.Fragment>
             );
+        }
+    }
+
+    /**
+     * Maps the received array of scenes and sets it as this.state.scenes. If no scenes are available, this.state.scenes gets changed with a specific phrase.
+     */
+    mapScenes = () => {
+        const { scenes } = this.state;
+        if (!scenes) { 
+            return <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+        } else if (scenes.length === 0) {
+            return <p><b>You have created no scenes yet.</b></p>
+        } else {
+            return scenes.map((scene) => (
+                    <SceneToShare
+                        key = {scene.id}
+                        username = {this.props.username}
+                        session_token = {this.props.session_token}
+                        scene = {scene}
+                        editGuest = {true}
+                        guestUsername = {this.state.guestUsername}
+                        guestScenes = {this.state.guestScenes}
+                        handleCheckboxScene = {this.handleCheckboxScene}
+                    />
+                )
+            )
         }
     }
 
@@ -139,9 +223,26 @@ class EditGuest extends React.Component {
         }
     }
 
-    // handleCheckboxRoom = (roomID) => {
-    //     console.log(document.getElementById(roomID))
-    // }
+    handleCheckboxScene = (sceneID) => {
+        let scenes = this.state.scenesToSend
+        if (scenes.indexOf(sceneID) !== -1) {
+            let sceneIndex = scenes.indexOf(sceneID);
+            let toSet = scenes.splice(0, sceneIndex).concat(scenes.splice(sceneIndex+1, scenes.length + 1))
+            this.setState({scenesToSend: toSet})
+        }
+        else {
+            scenes = [...this.state.scenesToSend, sceneID]
+            this.setState({scenesToSend: scenes})
+        }
+    }
+
+    selectAllDevices = () => {
+        this.state.allDevices ? this.setState({allDevices: false}) : this.setState({allDevices: true})
+    }
+
+    selectAllScenes = () => {
+        this.state.allScenes ? this.setState({allScenes: false}) : this.setState({allScenes: true})
+    }
 
     //Redirection to /guests
     redirectToGuests = () => {
@@ -168,7 +269,7 @@ class EditGuest extends React.Component {
                 body: JSON.stringify({
                     guest: this.state.guestUsername,
                     devices: this.state.devices,
-                    scenes: this.state.scenes
+                    scenes: this.state.scenesToSend
                 })
             })
             .then( (res) => {
@@ -242,7 +343,28 @@ class EditGuest extends React.Component {
                     <div className="headline-box row row-collapsible row row-collapsible-custom">
                         <h2 className="col l11 left-align headline-title">Edit guest</h2>
                     </div>
-                    {this.mapRooms()}
+                    
+                    <label><input type="checkbox" onClick={() => this.selectAllDevices()}/><span>Select all Devices</span></label>
+                    <br/>
+                    <label><input type="checkbox" onClick={() => this.selectAllScenes()}/><span>Select all Scenes</span></label>
+                    <br/>
+                    {this.state.allDevices ? <></> : this.mapRooms()}
+                    <br/>
+                    {this.state.allScenes ? <></> :
+                        <>
+                            <div className="row rooms-headline">
+                                <div className="col l1"></div>
+                                <div className="col l5">Scenes</div>
+                                <div className="col l2 center-text"></div>
+                                <div className="col l4"></div>
+                            </div>
+                            <ul class="collapsible expandable expandable-component">
+                                <li class="row row-collapsible row row-collapsible-costum">
+                                    {this.mapScenes()}
+                                </li>
+                            </ul>
+                        </>
+                    }
 
                     <div className="message-two-lines center-text">
                         <span>

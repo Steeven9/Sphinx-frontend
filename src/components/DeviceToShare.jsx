@@ -51,7 +51,7 @@ class DeviceToShare extends React.Component {
                         <div class="col col-collapsible l6 m6 s12">
                             <div class="col col-collapsible l12 s12 icons-wrapper">
                                 <i class="material-icons l1"> </i>
-                                <div class="icon-device l1"><img class="" src="/img/icons/devices/bulb-regular.svg" alt="Device"/></div>
+                                <div class="icon-device l1"><img class="" src={device.icon} alt="Device"/></div>
                                 <div class="device-info col col-collapsible l12 m6 s12 left-align">
                                     <p class="device-name">{device.name}</p>
                                 </div>
@@ -79,10 +79,6 @@ class DeviceToShare extends React.Component {
                         </div>
                     </form>
                 </div>
-    }
-
-    isGiven = () => {
-        return (this.state.guestDevices.indexOf(this.state.deviceID) !== -1)
     }
 
     handleCheckboxDeviceEditGuest = () => {
