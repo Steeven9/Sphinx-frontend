@@ -2,6 +2,7 @@ import React, {useEffect, useReducer} from 'react'
 import ScenesContext from '../../context/scenesContext'
 import scenesReducer from '../../reducers/scenesReducer'
 import effectsReducer from '../../reducers/scenesReducer'
+import devicesReducer from '../../reducers/devicesReducer'
 import '../../css/scenes.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -29,17 +30,18 @@ let isGuest = false;
 const ScenesFactory = () => {
         const [scenes, dispatchScenes] = useReducer(scenesReducer, []);
         const [effects, dispatchEffects] = useReducer(effectsReducer, []);
+        const [devices, dispatchDevices] = useReducer(devicesReducer, []);
         const [open, setOpen] = React.useState(false);
         const [icon, setIcon] = React.useState("/img/icons/scenes/icon-unknown.svg");
         const [sceneName, setSceneName] = React.useState("");
         const [shared, setShared] = React.useState(false);
         const [transferLists, setTransferLists] = React.useState([]);
         const [isValid, setValid] = React.useState(false);
+        const [id, setId] = React.useState(0);
         const isEditing = path[1].toLowerCase() === "editscene";
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
-        let key = 0;
         let effectConfig = {
-            id: effects.length,
+            id: id,
             type: 0,
             name: '',
             slider: '',
@@ -53,6 +55,50 @@ const ScenesFactory = () => {
         if (path[1] === 'guest' && params.get('id')) {
             isGuest = true
         }
+
+        // Fetches user's devices just once
+        useEffect(() => {
+            const fetchUrl = window.location.protocol + '//' + window.location.hostname + ':8080/devices'
+            const method = 'GET';
+            const headers = {
+                'user': localStorage.getItem('username'),
+                'session-token': localStorage.getItem('session_token')
+            };
+
+            fetch(fetchUrl, {
+                method: method,
+                headers: headers,
+            })
+                .then((res) => {
+                    if (res.status === 401) {
+                        this.props.logOut(1);
+                    } else if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    isLoading = false;
+                    let fetchedDevices = []
+                    if (data === null || data.length === 0) {
+                        isDataFound = false;
+                    } else {
+                        fetchedDevices = JSON.parse(data).sort(function (a, b) {
+                            let keyA = a.name;
+                            let keyB = b.name;
+                            if (keyA < keyB) return -1;
+                            if (keyA > keyB) return 1;
+                            return 0;
+                        });
+                        dispatchDevices({type: 'POPULATE_DEVICES', devices: fetchedDevices});
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        }, []);
+
 
         // Gets rid of cached state and extracts the next one
         // useEffect(() => {
@@ -208,6 +254,7 @@ const ScenesFactory = () => {
         };
 
         function createBlankEffectConfig() {
+            setId((prevState) => prevState + 1)
             dispatchEffects({type: 'CREATE_BLANK_EFFECT', effectConfig: effectConfig});
         }
 
@@ -245,7 +292,7 @@ const ScenesFactory = () => {
         }
 
         return (
-            <ScenesContext.Provider value={{scenes, dispatchScenes, effects, dispatchEffects}}>
+            <ScenesContext.Provider value={{scenes, dispatchScenes, effects, dispatchEffects, devices}}>
                 <div className="container scene-factory-box">
                     <form noValidate autoComplete="off">
                         <Grid container spacing={3} className="scene-content-box-top">
@@ -270,7 +317,8 @@ const ScenesFactory = () => {
                                                     <div className="col"/>
                                                     <label className="row">Icon</label>
                                                     <div className="row">
-                                                        <img className="fixedSizeIcon btn-icon" src={icon} alt="icon error"
+                                                        <img className="fixedSizeIcon btn-icon" src={icon}
+                                                             alt="icon error"
                                                              onClick={() => setOpen(true)}/>
                                                     </div>
 
@@ -329,14 +377,16 @@ const ScenesFactory = () => {
 
                                     {/* Configure effects */}
                                     <Grid className=" row" container>
-                                        {effects.map((config) => <SceneEffectConfig key={key++} effectConfig={config}/>)}
+                                        {effects.map((config) => <SceneEffectConfig key={config.id + '-effectConfig'}
+                                                                                    effectConfig={config}/>)}
                                     </Grid>
                                 </Paper>
                             </Grid>
                             <Grid item lg={12} className=" scene-content-box-instructions">
                                 <span className=" bold">Step 2: </span> <span>Choose the devices to which you want to apply an effect:</span>
                             </Grid>
-                            {effects.map((config) => <TransferList key={key++} effectConfig={config}/>)}
+                            {effects.map((config) => <TransferList key={config.id + '-transferList'}
+                                                                   effectConfig={config}/>)}
                         </Grid>
                     </form>
                 </div>

@@ -51,8 +51,8 @@ const SceneEffectConfig = (config) => {
                                        effectConfig.visible = true;
                                        setSlider(e.target.value)
                                        setVisible(true)
-                                       dispatchScenes({type: 'UPDATE_STATE'});
-
+                                       // xx
+                                       dispatchEffects({type: 'UPDATE_EFFECTS_STATE', effectConfig: effectConfig});
                                    }}/>
                         </div>
                         <label className="col l1 scene-effect-value-label">{getMeasureUnit(effectType)}</label>

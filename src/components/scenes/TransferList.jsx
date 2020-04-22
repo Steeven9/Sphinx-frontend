@@ -77,11 +77,11 @@ function getMeasureUnit(effectConfig) {
 }
 
 const TransferList = (config) => {
-    const {dispatchEffects} = useContext(ScenesContext);
+    const {devices, dispatchEffects} = useContext(ScenesContext);
     const classes = useStyles();
     const [checked, setChecked] = React.useState([]);
-    const [left, setLeft] = React.useState([0, 1, 2, 3]);
-    const [right, setRight] = React.useState([4, 5, 6, 7]);
+    const [left, setLeft] = React.useState([]);
+    const [right, setRight] = React.useState(devices);
     const effectConfig = config.effectConfig;
 
     const handleDelete = (e) => {
@@ -152,9 +152,8 @@ const TransferList = (config) => {
             <List className={classes.list} dense component="div" role="list">
                 {items.map((value) => {
                     const labelId = `transfer-list-all-item-${value}-label`;
-
                     return (
-                        <ListItem key={value} role="listitem" button onClick={handleToggle(value)}>
+                        <ListItem key={value.id} role="listitem" button onClick={handleToggle(value)}>
                             <ListItemIcon>
                                 <Checkbox
                                     checked={checked.indexOf(value) !== -1}
@@ -164,7 +163,7 @@ const TransferList = (config) => {
                                     inputProps={{'aria-labelledby': labelId}}
                                 />
                             </ListItemIcon>
-                            <ListItemText id={labelId} primary={`List item ${value + 1}`}/>
+                            <ListItemText id={labelId} primary={value.name} secondary={value.roomName}/>
                         </ListItem>
                     );
                 })}
