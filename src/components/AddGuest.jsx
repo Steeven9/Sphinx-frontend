@@ -76,23 +76,26 @@ class AddGuest extends React.Component {
                     <div className="col l4">
                         {/* {room.devices.length > 0 ? <label><input type="checkbox" id={room.id} onClick={() => this.handleCheckboxRoom(room.id)}/><span></span></label> : <></>} */}
                     </div>
-                    </div>
-                {room.devices.length > 0 ? 
-                    room.devices.map((deviceID) => (
-                        <DeviceToShare
-                            key = {deviceID}
-                            username = {this.props.username}
-                            session_token = {this.props.session_token}
-                            roomID = {room.id}
-                            deviceID = {deviceID}
-                            editGuest = {false}
-                            handleCheckboxDevice = {this.handleCheckboxDevice}
-                        />
-                    ))
-                    :
-                    <p><b>There are no devices in this room.</b></p>
-                }
-                <br/>
+                </div>
+                <ul class="collapsible expandable expandable-component">
+                    <li class="row row-collapsible row row-collapsible-costum">
+                        {room.devices.length > 0 ? 
+                            room.devices.map((deviceID) => (
+                                <DeviceToShare
+                                    key = {deviceID}
+                                    username = {this.props.username}
+                                    session_token = {this.props.session_token}
+                                    roomID = {room.id}
+                                    deviceID = {deviceID}
+                                    editGuest = {false}
+                                    handleCheckboxDevice = {this.handleCheckboxDevice}
+                                />
+                            ))
+                            :
+                            <p><b>There are no devices in this room.</b></p>
+                        }
+                    </li>
+                </ul>
                 </React.Fragment>
             );
         }
@@ -198,7 +201,6 @@ class AddGuest extends React.Component {
                     <div className="textFields">
                         <input type="text" name="guestUsername" value={this.state.deviceName} placeholder="Insert Guest Username" onChange={this.handleGuestUsernameChange} required/>
                     </div>
-                    <br/>
                     {this.mapRooms()}
 
                     <div className="message-two-lines center-text">

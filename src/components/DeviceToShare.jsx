@@ -39,24 +39,48 @@ class DeviceToShare extends React.Component {
             if (data === null) return;
             let device = JSON.parse(data);
 
-            let toSet = <div className="row room">
-                <div className="col l1 image vertical-center"><img src={device.icon} alt="device-logo"/></div>
-                <div className="col l5 vertical-center">{device.name}</div>
-                <div className="col l2 vertical-center center-text"><i>{this.getType(device.type)}</i></div>
-                <div className="col l2"></div>
-                <div className="col l1 room-button1 vertical-center">
-                    {
-                        this.state.editGuest ?
-                        <label><input type="checkbox" id={device.id} onClick={() => this.handleCheckboxDeviceEditGuest()}/><span></span></label>
-                        :
-                        <label><input type="checkbox" id={device.id} onClick={() => this.props.handleCheckboxDevice()}/><span></span></label>
-                    }
-                </div>
-                <div className="col l1 room-button2 vertical-center"></div>
-            </div>
+            let toSet = this.composeDeviceHTML(device)
             this.setState({device: toSet})
             this.editDevice()
         });
+    }
+
+    composeDeviceHTML = (device) => {
+        return <div id="1" class="collapsible-header">
+                    <form id="devicesForm" class="device-form">
+                        <div class="col col-collapsible l6 m6 s12">
+                            <div class="col col-collapsible l12 s12 icons-wrapper">
+                                <i class="material-icons l1"> </i>
+                                <div class="icon-device l1"><img class="" src="/img/icons/devices/bulb-regular.svg" alt="Device"/></div>
+                                <div class="device-info col col-collapsible l12 m6 s12 left-align">
+                                    <p class="device-name">{device.name}</p>
+                                    <p class="device-location">room1</p>
+                                    <p class="device-type-name"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="device-control col col-collapsible l6 m6 s12">
+                            <div class="col col-collapsible l8 m6 s8">{this.getType(device.type)}</div>
+                            <div>
+                                <div class="col col-collapsible l4 device-control-switch">
+                                    <div class="switch col col-collapsible l2 m8 s11 right-align">
+                                        <div>
+                                            <div class=""></div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-collapsible l2 m1 s1 right-align">
+                                        {
+                                            this.state.editGuest ?
+                                            <label><input type="checkbox" id={device.id} onClick={() => this.handleCheckboxDeviceEditGuest()}/><span></span></label>
+                                            :
+                                            <label><input type="checkbox" id={device.id} onClick={() => this.props.handleCheckboxDevice()}/><span></span></label>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
     }
 
     isGiven = () => {
