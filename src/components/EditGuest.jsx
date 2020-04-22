@@ -158,7 +158,7 @@ class EditGuest extends React.Component {
         else {
             this.setState({isLoading: true, error: -1})
             fetch('http://localhost:8080/guests/', {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 
                     'user': this.state.username,
                     'session-token': this.state.session_token,
