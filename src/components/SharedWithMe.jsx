@@ -6,7 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
-class Hosts extends React.Component {
+class SharedWithMe extends React.Component {
 
     constructor(props) {
         super(props);
@@ -102,4 +102,4 @@ class Hosts extends React.Component {
 }
 
 
-export default Hosts;
+export default SharedWithMe;

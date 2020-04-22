@@ -17,12 +17,11 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
-import GuestsDashboard from './components/GuestsDashboard';
 import MyGuests from './components/MyGuests';
 import AddGuest from './components/AddGuest';
 import EditGuest from './components/EditGuest';
-import Hosts from './components/Hosts';
-import HostHouse from './components/HostHouse';
+import SharedWithMe from './components/SharedWithMe';
+import HouseSharedWithMe from './components/HouseSharedWithMe';
 import LogOut from './components/LogOut';
 import Error404 from './components/Error404';
 
@@ -302,12 +301,6 @@ class App extends React.Component {
 
                             <Route path="/guests">
                                 {this.state.loggedIn ?
-                                    <GuestsDashboard />
-                                    : this.accessDenied()}
-                            </Route>
-
-                            <Route path="/myGuests">
-                                {this.state.loggedIn ?
                                     <MyGuests
                                         username={this.state.username}
                                         session_token={this.state.session_token}
@@ -338,9 +331,9 @@ class App extends React.Component {
                                     : this.accessDenied()}
                             </Route>
 
-                            <Route path="/hosts">
+                            <Route path="/sharedWithMe">
                                 {this.state.loggedIn ?
-                                    <Hosts
+                                    <SharedWithMe
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
@@ -348,9 +341,9 @@ class App extends React.Component {
                                     : this.accessDenied()}
                             </Route>
 
-                            <Route path="/hostHouse">
+                            <Route path="/houseSharedWithMe">
                                 {this.state.loggedIn ?
-                                    <HostHouse
+                                    <HouseSharedWithMe
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}

@@ -4,10 +4,12 @@ SA4 Project - Sphinx Team
 This is our smart home appilcation, built with React and running on port 3000 (cannot be changed as of now because of CORS policy).
 
 ## Using our premade Docker image
-A public Docker image is available on the Docker repository under [steeven9/sa4-sphinx-frontend](https://hub.docker.com/repository/docker/steeven9/sa4-sphinx-frontend).
+A public Docker image is available on the Docker repository under 
+[steeven9/sa4-sphinx-frontend](https://hub.docker.com/repository/docker/steeven9/sa4-sphinx-frontend).
 
 The easiest way to use it is to run `docker-compose up`.\
-This will pull and spin up both frontend (on port 3000) and [backend](https://lab.si.usi.ch/sa4-2020/sphinx/backend) (on port 8080). You will **need** the envfile that you can get from the team leaders.
+This will pull and spin up frontend (on port 3000), [backend](https://lab.si.usi.ch/sa4-2020/sphinx/backend) (on port 8080)
+and a postgres instance. You will **need** the envfile that you can get from the team leaders.
 
 If you want to run only the frontend, use\
 `docker run -it -p 3000:80 --name sphinx-frontend steeven9/sa4-sphinx-frontend`
