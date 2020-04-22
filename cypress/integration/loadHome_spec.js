@@ -20,6 +20,5 @@ describe('Test the homepage', function () {
             .should('include', '/signup')
         cy.visit('/')
 
-        
     })
 })
