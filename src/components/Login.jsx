@@ -111,7 +111,7 @@ class Login extends React.Component {
             return (<span className="error-message">Wrong username or password</span>)
         }
         else if (this.state.error === 2) {
-            return (<span className="error-message">Account not verified</span>)
+            return (<span className="error-message">Account not verified. <a className="primary-link" href="/resend">Resend email</a></span>)
         }
         else if (this.state.error === 3) {
             return (<span className="error-message">{this.state.errorType}</span>)
