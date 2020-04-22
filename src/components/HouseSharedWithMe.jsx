@@ -28,10 +28,6 @@ class HouseSharedWithMe extends React.Component {
         let parsedOwner = parsed.owner
         this.setState({ownerUsername: parsedOwner})
 
-        document.addEventListener("keydown", (evt) => {
-            if (evt.key === 'Enter') this.sendDatas(evt)
-        });
-
         fetch('http://localhost:8080/guests/' + parsedOwner + '/devices/' + this.props.username, {
             method: 'GET',
             headers: {
