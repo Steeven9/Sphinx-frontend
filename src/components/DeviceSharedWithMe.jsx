@@ -42,29 +42,29 @@ class DeviceSharedWithMe extends React.Component {
     }
 
     composeDeviceHTML = (device) => {
-        return <div id="1" class="collapsible-header">
-                    <form id="devicesForm" class="device-form">
-                        <div class="col col-collapsible l6 m6 s12">
-                            <div class="col col-collapsible l12 s12 icons-wrapper">
-                                <i class="material-icons l1"> </i>
-                                <div class="icon-device l1"><img class="" src="/img/icons/devices/bulb-regular.svg" alt="Device"/></div>
-                                <div class="device-info col col-collapsible l12 m6 s12 left-align">
-                                    <p class="device-name">{device.name}</p>
-                                    <p class="device-location">room1</p>
-                                    <p class="device-type-name"></p>
+        return <div className="collapsible-header">
+                    <form id="devicesForm" className="device-form">
+                        <div className="col col-collapsible l6 m6 s12">
+                            <div className="col col-collapsible l12 s12 icons-wrapper">
+                                <i className="material-icons l1"> </i>
+                                <div className="icon-device l1"><img className="" src="/img/icons/devices/bulb-regular.svg" alt="Device"/></div>
+                                <div className="device-info col col-collapsible l12 m6 s12 left-align">
+                                    <p className="device-name">{device.name}</p>
+                                    <p className="device-location">room1</p>
+                                    <p className="device-type-name"></p>
                                 </div>
                             </div>
                         </div>
-                        <div class="device-control col col-collapsible l6 m6 s12">
-                            <div class="col col-collapsible l8 m6 s8">{this.getType(device.type)}</div>
+                        <div className="device-control col col-collapsible l6 m6 s12">
+                            <div className="col col-collapsible l8 m6 s8">{this.getType(device.type)}</div>
                             <div>
-                                <div class="col col-collapsible l4 device-control-switch">
-                                    <div class="switch col col-collapsible l2 m8 s11 right-align">
+                                <div className="col col-collapsible l4 device-control-switch">
+                                    <div className="switch col col-collapsible l2 m8 s11 right-align">
                                         <div>
-                                            <div class=""></div>
+                                            <div className=""></div>
                                         </div>
                                     </div>
-                                    <div class="col col-collapsible l2 m1 s1 right-align">
+                                    <div className="col col-collapsible l2 m1 s1 right-align">
                                         {
                                             this.state.editGuest ?
                                             <label><input type="checkbox" id={device.id} onClick={() => this.handleCheckboxDeviceEditGuest()}/><span></span></label>

@@ -158,8 +158,8 @@ class EditGuest extends React.Component {
                             {/* {room.devices.length > 0 ? <label><input type="checkbox" id={room.id} onClick={() => this.handleCheckboxRoom(room.id)}/><span></span></label> : <></>} */}
                         </div>
                     </div>
-                    <ul class="collapsible expandable expandable-component">
-                        <li class="row row-collapsible row row-collapsible-costum">
+                    <ul className="collapsible expandable expandable-component">
+                        <li className="row row-collapsible row row-collapsible-costum">
                             {room.devices.length > 0 ? 
                                 room.devices.map((deviceID) => (
                                     <DeviceToShare
@@ -237,11 +237,27 @@ class EditGuest extends React.Component {
     }
 
     selectAllDevices = () => {
-        this.state.allDevices ? this.setState({allDevices: false}) : this.setState({allDevices: true})
+        if (this.state.allDevices === []) {
+            let toSet = []
+            this.state.rooms.forEach((room) => {
+                room.devices.forEach((device) => {
+                    toSet.push(device)
+                })
+            })
+            this.setState({allDevicesIDs: toSet})
+        }
+        this.state.allDevices ? this.setState({allDevices: false, devices: this.state.guestDevices}) : this.setState({allDevices: true})
     }
 
     selectAllScenes = () => {
-        this.state.allScenes ? this.setState({allScenes: false}) : this.setState({allScenes: true})
+        if (this.state.allScenes === []) {
+            let toSet = []
+            this.state.scenes.forEach((scene) => {
+                toSet.push(scene.id)
+            })
+            this.setState({allScenesIDs: toSet})
+        }
+        this.state.allScenes ? this.setState({allScenes: false, scenesToSend: this.state.guestScenes}) : this.setState({allScenes: true})
     }
 
     //Redirection to /guests
@@ -257,6 +273,10 @@ class EditGuest extends React.Component {
             return
         }
         else {
+            let devicesToSend = this.state.devices
+            let scenesToSend = this.state.scenesToSend
+            if (this.state.allDevices) devicesToSend = this.state.allDevicesIDs
+            if (this.state.allScenes) scenesToSend = this.state.allScenesIDs
             this.setState({isLoading: true, error: -1})
             fetch('http://localhost:8080/guests/', {
                 method: 'PUT',
@@ -268,8 +288,8 @@ class EditGuest extends React.Component {
                 },
                 body: JSON.stringify({
                     guest: this.state.guestUsername,
-                    devices: this.state.devices,
-                    scenes: this.state.scenesToSend
+                    devices: devicesToSend,
+                    scenes: scenesToSend
                 })
             })
             .then( (res) => {
@@ -358,8 +378,8 @@ class EditGuest extends React.Component {
                                 <div className="col l2 center-text"></div>
                                 <div className="col l4"></div>
                             </div>
-                            <ul class="collapsible expandable expandable-component">
-                                <li class="row row-collapsible row row-collapsible-costum">
+                            <ul className="collapsible expandable expandable-component">
+                                <li className="row row-collapsible row row-collapsible-costum">
                                     {this.mapScenes()}
                                 </li>
                             </ul>
