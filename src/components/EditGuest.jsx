@@ -1,7 +1,8 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/devices.css';
+import '../css/house.css';
 import * as qs from 'query-string';
+import DeviceToShare from './DeviceToShare';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -12,80 +13,152 @@ class EditGuest extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: props.username,
-            session_token: props.session_token,
-            device_id: "",
-            deviceName: "",
-            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
+            guestUsername: "",
+            rooms: null,
+            devices: [],
+            scenes: [],
+            error: -1,  // -1 nothing, 0 no devices or scenes selected, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
-            iconType: "0",
-            room: "",
-            fromRoom: false,
+            guestDevices: [],
         }
     }
 
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
-        this.setState({device_id: parsed.id})
-        if (parsed.room !== undefined) this.setState({room: parsed.room, fromRoom: true})
-        else this.setState({fromRoom: false})
-
-        fetch('http://localhost:8080/devices/' + parsed.id, {
-            method: 'GET',
-            headers: {
-                'user': this.state.username,
-                'session-token': this.state.session_token
-            }
-        })
-        .then((res) => {
-            if (res.status === 200) {
-                return res.json();
-            }
-            else {
-                return null;
-            }
-        })
-        .then((data) => {
-            this.setState({deviceName: data.name})
-            this.getIconType(data.icon)
-        })
-        .catch(error => console.log(error))
+        let parsedGuest = parsed.guest
+        this.setState({guestUsername: parsedGuest})
 
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
-    }
 
-    getIconType(icon) {
-        if (icon.includes("bulb-regular")) this.setState({iconType: "1"})
-        else if (icon.includes("bulb-led")) this.setState({iconType: "2"})
-        else if (icon.includes("switch")) this.setState({iconType: "3"})
-        else if (icon.includes("dimmer-state")) this.setState({iconType: "4"})
-        else if (icon.includes("dimmer-regular")) this.setState({iconType: "5"})
-        else if (icon.includes("smart-plug")) this.setState({iconType: "6"})
-        else if (icon.includes("sensor-humidity")) this.setState({iconType: "7"})
-        else if (icon.includes("sensor-light")) this.setState({iconType: "8"})
-        else if (icon.includes("sensor-temperature")) this.setState({iconType: "9"})
-        else if (icon.includes("sensor-motion")) this.setState({iconType: "10"})
-        else if (icon.includes("automation-thermostat")) this.setState({iconType: "11"})
-        else if (icon.includes("smart-curtains")) this.setState({iconType: "12"})
-        else if (icon.includes("security-camera")) this.setState({iconType: "13"})
-        else this.setState({iconType: "0"})
+        fetch('http://localhost:8080/guests/' + this.props.username + '/devices/' + parsedGuest, {
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then((res) => {
+            if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            if (data === null) return;
+            let devices = JSON.parse(data);
+            this.setState({guestDevices: devices})
+        });
+
+        fetch('http://localhost:8080/rooms/', {
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then((res) => {
+            if (res.status === 401) {
+                this.props.logOut(1);
+            } else if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            let response = JSON.parse(data);
+
+            if (response === null) {
+                //TODO error handling
+            } else {
+                this.setState({
+                    rooms: response,
+                });
+            }
+        });
     }
 
     /**
-     * Changes the Device
+     * Maps the received array of rooms and sets it as this.state.rooms. If no rooms are available, this.state.rooms gets changed with a specific phrase.
+     * @param rooms: array of rooms
      */
+    mapRooms = () => {
+        const { rooms } = this.state;
+        if (!rooms) { 
+            return <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+        } else if (rooms.length === 0) {
+            return <p><b>You have no rooms.</b></p>
+        } else {
+            return rooms.map((room) =>
+                <React.Fragment key={room.id}>
+                <div className="row rooms-headline">
+                    <div className="col l1"></div>
+                    <div className="col l5">{room.name}</div>
+                    <div className="col l2 center-text"></div>
+                    <div className="col l4">
+                        {/* {room.devices.length > 0 ? <label><input type="checkbox" id={room.id} onClick={() => this.handleCheckboxRoom(room.id)}/><span></span></label> : <></>} */}
+                    </div>
+                    </div>
+                {room.devices.length > 0 ? 
+                    room.devices.map((deviceID) => (
+                        <DeviceToShare
+                            key = {deviceID}
+                            username = {this.props.username}
+                            session_token = {this.props.session_token}
+                            roomID = {room.id}
+                            deviceID = {deviceID}
+                            editGuest = {true}
+                            guestUsername = {this.state.guestUsername}
+                            guestDevices = {this.state.guestDevices}
+                            handleCheckboxDevice = {this.handleCheckboxDevice}
+                        />
+                    ))
+                    :
+                    <p><b>There are no devices in this room.</b></p>
+                }
+                <br/>
+                </React.Fragment>
+            );
+        }
+    }
+
+    handleCheckboxDevice = (deviceID) => {
+        let devices = this.state.devices
+        if (devices.indexOf(deviceID) !== -1) {
+            let deviceIndex = devices.indexOf(deviceID);
+            let toSet = devices.splice(0, deviceIndex).concat(devices.splice(deviceIndex+1, devices.length + 1))
+            this.setState({devices: toSet})
+        }
+        else {
+            devices = [...this.state.devices, deviceID]
+            this.setState({devices: devices})
+        }
+    }
+
+    // handleCheckboxRoom = (roomID) => {
+    //     console.log(document.getElementById(roomID))
+    // }
+
+    //Redirection to /guests
+    redirectToGuests = () => {
+        window.location.href = '/guests'
+    }
+
     sendDatas = evt => {
         evt.preventDefault();
-        if (this.state.deviceName === "") {
+
+        if (this.state.devices.length === 0 && this.state.scenes.length === 0) {
             this.setState({error: 0})
+            return
         }
         else {
             this.setState({isLoading: true, error: -1})
-            fetch('http://localhost:8080/devices/' + this.state.device_id, {
-                method: 'PUT',
+            fetch('http://localhost:8080/guests/', {
+                method: 'POST',
                 headers: { 
                     'user': this.state.username,
                     'session-token': this.state.session_token,
@@ -93,14 +166,15 @@ class EditGuest extends React.Component {
                     'Content-Type': 'application/json' 
                 },
                 body: JSON.stringify({
-                    name: this.state.deviceName, 
-                    icon: this.props.findPathDevice(this.state.iconType),
+                    guest: this.state.guestUsername,
+                    devices: this.state.devices,
+                    scenes: this.state.scenes
                 })
             })
             .then( (res) => {
                 this.setState({isLoading: false})
                 if (res.status === 200) {
-                    this.redirectToPrevious()
+                    this.redirectToGuests()
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
@@ -112,16 +186,13 @@ class EditGuest extends React.Component {
                     this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({error: 2, errorType: e}))
+            .catch( e => this.setState({isLoading: false, error: 2, errorType: e.toString()}))
         }
-    };
+    }
 
-    /**
-     * Deletes the Device
-     */
-    deleteDevice = evt => {
+    deleteGuest = evt => {
         this.setState({isLoading: true, error: -1})
-        fetch('http://localhost:8080/devices/' + this.state.device_id, {
+        fetch('http://localhost:8080/guests/' + this.state.guestUsername, {
             method: 'DELETE',
             headers: { 
                 'user': this.state.username,
@@ -131,7 +202,7 @@ class EditGuest extends React.Component {
         .then( (res) => {
             this.setState({isLoading: false})
             if (res.status === 204) {
-                this.redirectToPrevious()
+                this.redirectToGuests()
             }
             else if (res.status === 401) {
                 this.props.logOut(1)
@@ -145,24 +216,13 @@ class EditGuest extends React.Component {
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({error: 2, errorType: e})
+            this.setState({error: 2, errorType: e.toString()})
         })
-    };
-
-    // function to handle state on input change
-    handleDeviceNameChange = evt => {
-        this.setState({ deviceName: evt.target.value });
-    };
-    
-    //Redirection to previous page
-    redirectToPrevious = () => {
-        if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
-        else window.location.href = '/devices'
     }
 
     showError = () => {
         if (this.state.error === 0) {
-            return (<span className="error-message">Please fill the name</span>)
+            return (<span className="error-message">Please select at least one device or scene</span>)
         }
         else if (this.state.error === 1) {
             return (<span className="error-message">Error: bad request</span>)
@@ -172,39 +232,17 @@ class EditGuest extends React.Component {
         }
     }
 
-    changeIconState = (type) => {
-        this.setState({iconType: type});
-        this.moveToInformation();
-    }
-
-    moveToSelection = () => {
-        document.getElementById("editDeviceInfo").hidden = true
-        document.getElementById("editDeviceIconSelection").hidden = false
-    }
-    
-    moveToInformation = () => {
-        document.getElementById("editDeviceInfo").hidden = false
-        document.getElementById("editDeviceIconSelection").hidden = true
-    }
-
     /**
-     * Renders the device handler
+     * Renders the list of rooms and device plus the form for the guest's username
      */
     render() {
         return (
-            <div className="editRoom">
-                <div id="editDeviceInfo" className="device-content-box z-depth-2">
-                    <h2 className="title">Edit Device</h2>
-                    <div className="textFields">
-                        <div className="textFields">
-                            <input type="text" name="deviceName" value={this.state.deviceName} placeholder="New Name" onChange={this.handleDeviceNameChange} required/>
-                        </div>
+            <div className="container">
+                <div className="rooms-content-box z-depth-2">
+                    <div className="headline-box row row-collapsible row row-collapsible-custom">
+                        <h2 className="col l11 left-align headline-title">Edit guest</h2>
                     </div>
-                    <div className="roomNameAndIcon">
-                        <p>Icon</p>
-                        <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} alt="icon error" />
-                        <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
-                    </div>
+                    {this.mapRooms()}
 
                     <div className="message-two-lines center-text">
                         <span>
@@ -212,33 +250,9 @@ class EditGuest extends React.Component {
                         </span>
                         {this.showError()}
                     </div>
-                    
-                    <div className="center">
-                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.redirectToPrevious}>Cancel</button>
-                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteDevice}>Delete</button>
-                        <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save</button>
-                    </div>
-                </div>
-
-                <div hidden id="editDeviceIconSelection" className="content-box">
-                    <h2 className="title">Select Icon</h2>
-                    <div className="content-box-iconSelection">
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("0")}><img src={this.props.findPathDevice('0')} alt="Unknown Device" /><br />Unknown Device </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("1")}><img src={this.props.findPathDevice('1')} alt="Light" /><br />Light </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("2")}><img src={this.props.findPathDevice('2')} alt="Dimmable Light" /><br />Dimmable Light </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("3")}><img src={this.props.findPathDevice('3')} alt="Switch" /><br />Switch </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("4")}><img src={this.props.findPathDevice('4')} alt="Dimmer" /><br />Dimmer </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("5")}><img src={this.props.findPathDevice('5')} alt="Dimmer (no-memory)" /><br />Dimmer (no-memory) </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("6")}><img src={this.props.findPathDevice('6')} alt="Smart plug" /><br />Smart plug </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("7")}><img src={this.props.findPathDevice('7')} alt="Humidity sensor" /><br />Humidity sensor</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("8")}><img src={this.props.findPathDevice('8')} alt="Light sensor" /><br />Light sensor</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("9")}><img src={this.props.findPathDevice('9')} alt="Temperature sensor" /><br />Temperature sensor</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("10")}><img src={this.props.findPathDevice('10')} alt="Motion sensor" /><br />Motion sensor</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("11")}><img src={this.props.findPathDevice('11')} alt="Thermostat" /><br />Thermostat</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("12")}><img src={this.props.findPathDevice('12')} alt="Smart curtains" /><br />Smart curtains</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("13")}><img src={this.props.findPathDevice('13')} alt="Security camera" /><br />Security camera </button>
-                    </div>
-                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToGuests}>Cancel</button>
+                        <button type="button" name="button" className="Handle-btn-secondary btn waves-effect waves-light" onClick={this.deleteGuest}>Delete</button>
+                    <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save</button>
                 </div>
             </div>
         );

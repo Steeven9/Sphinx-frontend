@@ -65,7 +65,7 @@ class AddGuest extends React.Component {
         if (!rooms) { 
             return <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
         } else if (rooms.length === 0) {
-            return <p><b>You have created no rooms yet. Click on the + button to add one.</b></p>
+            return <p><b>You have created no rooms yet.</b></p>
         } else {
             return rooms.map((room) =>
                 <React.Fragment key={room.id}>
@@ -85,6 +85,7 @@ class AddGuest extends React.Component {
                             session_token = {this.props.session_token}
                             roomID = {room.id}
                             deviceID = {deviceID}
+                            editGuest = {false}
                             handleCheckboxDevice = {this.handleCheckboxDevice}
                         />
                     ))
