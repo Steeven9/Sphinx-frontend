@@ -202,6 +202,7 @@ class AddGuest extends React.Component {
                         <input type="text" name="guestUsername" value={this.state.deviceName} placeholder="Insert Guest Username" onChange={this.handleGuestUsernameChange} required/>
                     </div>
                     {this.mapRooms()}
+                    {/* {this.mapScenes()} */}
 
                     <div className="message-two-lines center-text">
                         <span>

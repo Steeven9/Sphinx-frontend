@@ -54,8 +54,6 @@ class DeviceToShare extends React.Component {
                                 <div class="icon-device l1"><img class="" src="/img/icons/devices/bulb-regular.svg" alt="Device"/></div>
                                 <div class="device-info col col-collapsible l12 m6 s12 left-align">
                                     <p class="device-name">{device.name}</p>
-                                    <p class="device-location">room1</p>
-                                    <p class="device-type-name"></p>
                                 </div>
                             </div>
                         </div>

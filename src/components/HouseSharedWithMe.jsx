@@ -2,7 +2,7 @@ import React from 'react';
 import '../css/App.css';
 import '../css/house.css';
 import * as qs from 'query-string';
-import DeviceSharedWithMe from './DeviceSharedWithMe';
+// import DeviceSharedWithMe from './DeviceSharedWithMe';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -47,6 +47,26 @@ class HouseSharedWithMe extends React.Component {
             let ownerDevices = JSON.parse(data);
             this.setState({devices: ownerDevices})
         });
+
+        fetch('http://localhost:8080/guests/' + parsedOwner + '/scenes/' + this.props.username, {
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then((res) => {
+            if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            if (data === null) return;
+            let ownerScenes = JSON.parse(data);
+            this.setState({scenes: ownerScenes})
+        });
     }
 
     /**
@@ -60,14 +80,35 @@ class HouseSharedWithMe extends React.Component {
         } else if (devices.length === 0) {
             return <p><b>No shared devices.</b></p>
         } else {
-            return devices.map((device) =>
-                <DeviceSharedWithMe
-                    key = {device}
-                    username = {this.props.username}
-                    session_token = {this.props.session_token}
-                    deviceID = {device}
-                />
-            );
+            // return devices.map((device) =>
+            //     <DeviceSharedWithMe
+            //         key = {device}
+            //         username = {this.props.username}
+            //         session_token = {this.props.session_token}
+            //         deviceID = {device}
+            //     />
+            // );
+        }
+    }
+
+    /**
+     * Maps the received array of scenes and sets it as this.state.scenes. If no scenes are available, this.state.scenes gets changed with a specific phrase.
+     */
+    mapScenes = () => {
+        const { scenes } = this.state;
+        if (!scenes) { 
+            return <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+        } else if (scenes.length === 0) {
+            return <p><b>No shared scenes.</b></p>
+        } else {
+            // return devices.map((device) =>
+            //     <DeviceSharedWithMe
+            //         key = {device}
+            //         username = {this.props.username}
+            //         session_token = {this.props.session_token}
+            //         deviceID = {device}
+            //     />
+            // );
         }
     }
 
@@ -82,6 +123,7 @@ class HouseSharedWithMe extends React.Component {
                         <h2 className="col l11 left-align headline-title">{this.state.ownerUsername}'s House</h2>
                     </div>
                     {this.mapDevices()}
+                    {this.mapScenes()}
                 </div>
             </div>
         );
