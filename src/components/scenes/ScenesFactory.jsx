@@ -103,8 +103,9 @@ const ScenesFactory = () => {
 
 
         // Gets rid of cached state and extracts the next one
-        // useEffect(() => {
-        // }, [effects]);
+        useEffect(() => {
+            console.log(scenes)
+        }, [scenes]);
 
         // Fetches scenes on page load
         // useEffect(() => {
@@ -253,6 +254,13 @@ const ScenesFactory = () => {
 
         const toggle = (e) => {
             setShared(e.target.checked);
+            dispatchScenes({
+                type: 'UPDATE_STATE',
+                name: sceneName,
+                icon: icon,
+                shared: e.target.checked,
+                effects: effects
+            });
         };
 
         function createBlankEffectConfig() {
@@ -272,7 +280,15 @@ const ScenesFactory = () => {
                     <button
                         className="selectionIconBtn"
                         onClick={() => {
-                            setIcon(imageRoute + "icon-" + iconName + ".svg");
+                            let iconPath = imageRoute + "icon-" + iconName + ".svg"
+                            setIcon(iconPath);
+                            dispatchScenes({
+                                type: 'UPDATE_STATE',
+                                name: sceneName,
+                                icon: iconPath,
+                                shared: shared,
+                                effects: effects
+                            });
                             setOpen(false)
                         }}>
                         <img src={imageRoute + "icon-" + iconName + ".svg"} alt={iconName}/>
@@ -312,7 +328,16 @@ const ScenesFactory = () => {
                                                         <input className="row col scenes-factory-name-input" type="text"
                                                                name="name"
                                                                placeholder="Type a name"
-                                                               onChange={(e) => setSceneName(e.target.value)}
+                                                               onChange={(e) => {
+                                                                   setSceneName(e.target.value)
+                                                                   dispatchScenes({
+                                                                       type: 'UPDATE_STATE',
+                                                                       name: e.target.value,
+                                                                       icon: icon,
+                                                                       shared: shared,
+                                                                       effects: effects
+                                                                   });
+                                                               }}
                                                                value={sceneName} required/>
                                                     </label>
                                                 </div>

@@ -121,12 +121,13 @@ function getDevicesByEffectType(devices, types) {
 }
 
 const TransferList = (config) => {
-    const {devices, dispatchEffects, isEditing, setValid} = useContext(ScenesContext);
+    const {devices, dispatchScenes, dispatchEffects, isEditing, setValid} = useContext(ScenesContext);
     const classes = useStyles();
     const [checked, setChecked] = React.useState([]);
     const [left, setLeft] = React.useState([]);
     const [right, setRight] = React.useState([]);
     const effectConfig = config.effectConfig;
+
 
     useEffect(() => {
         console.log('Setting devices');
@@ -138,7 +139,9 @@ const TransferList = (config) => {
             setRight(getNotUsedDevices(filteredDevices, config.effectConfig.devices))
             setLeft(getUsedDevices(filteredDevices, config.effectConfig.devices))
         } else {
-            setRight(filteredDevices)
+            if (left.length === 0 && right.length === 0) {
+                setRight(filteredDevices)
+            }
         }
     }, [config, devices]);
 
@@ -174,18 +177,23 @@ const TransferList = (config) => {
     };
 
     const handleCheckedRight = () => {
+        let leftDevices = not(left, leftChecked);
         setRight(right.concat(leftChecked));
-        setLeft(not(left, leftChecked));
+        setLeft(leftDevices);
         setChecked(not(checked, leftChecked));
-        console.log(left.length)
 
+        // dispatchEffects({type: 'UPDATE_EFFECTS_STATE', devices: leftDevices});
+        dispatchScenes({type: 'UPDATE_STATE', devices: leftDevices});
     };
 
     const handleCheckedLeft = () => {
-        setLeft(left.concat(rightChecked));
+        let leftDevices = left.concat(rightChecked);
+        setLeft(leftDevices);
         setRight(not(right, rightChecked));
         setChecked(not(checked, rightChecked));
-        console.log(left.length)
+
+        // dispatchEffects({type: 'UPDATE_EFFECTS_STATE', devices: leftDevices});
+        dispatchScenes({type: 'UPDATE_STATE', devices: leftDevices});
     };
 
     const gridClasses = useGridStyles();
@@ -212,9 +220,10 @@ const TransferList = (config) => {
             <Divider/>
             <List className={classes.list} dense component="div" role="list">
                 {items.map((value) => {
-                    const labelId = `transfer-list-all-item-${value}-label`;
+                    const labelId = `transfer-list-all-item-${value + '-' + value.id}-label`;
                     return (
-                        <ListItem key={value.id} role="listitem" button onClick={handleToggle(value)}>
+                        <ListItem key={value.id} role="listitem" button
+                                  onClick={handleToggle(value)}>
                             <ListItemIcon>
                                 <Checkbox
                                     checked={checked.indexOf(value) !== -1}

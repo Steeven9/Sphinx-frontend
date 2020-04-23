@@ -70,10 +70,44 @@ const scenesReducer = (state, action) => {
 
         case 'UPDATE_STATE':
             console.log('Dispatch: UPDATE_STATE');
-            return [...state];
+            console.log(state)
+            // console.log()
+            console.log(action)
+            state = {
+                name: action.name,
+                icon: action.icon,
+                shared: action.shared,
+                effects: action.effects
+            }
+            return state;
+
+        // case 'MIX_SCENE_AND_EFFECT_STATE':
+        //     console.log('Dispatch: UPDATE_STATE');
+        //     console.log('state >>>>>>>>')
+        //     console.log(state)
+        //     console.log()
+        //     console.log('action >>>>>>>>')
+        //     console.log(action)
+        //     state = {
+        //         name: state.name,
+        //         icon: state.icon,
+        //         shared: state.shared,
+        //         effects: action.effects,
+        //         devices: action.devices
+        //     }
+        //     console.log('state AFTER >>>>>>>>')
+        //     console.log(state)
+        //     return state;
 
         case 'UPDATE_EFFECTS_STATE':
             console.log('Dispatch: UPDATE_STATE');
+            console.log('state >>>>>>>>')
+            console.log(state)
+            console.log()
+            console.log('action >>>>>>>>')
+            console.log(action)
+            // let newState =
+            state.devices = action.devices;
             return [...state];
 
         case 'CREATE_BLANK_EFFECT':
