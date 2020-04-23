@@ -26,6 +26,7 @@ const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl 
 let isLoading = true;
 let isDataFound = true;
 let isGuest = false;
+let hasName = false;
 
 const ScenesFactory = () => {
         const [scenes, dispatchScenes] = useReducer(scenesReducer, []);
@@ -56,6 +57,14 @@ const ScenesFactory = () => {
             isGuest = true
         }
 
+        // Validates if all data necessary for a POST or PUT is available and enables or disables the 'Save' button
+        useEffect(() => {
+            let countElements = effects.map(effect => effect.devices.length) //Maps sizes of devices[] in every effect
+            countElements.push(sceneName.length) //Pushes characters count from scene name
+            let canContinue = countElements.every(effect => effect > 0 && countElements.length > 1) //Evaluates that each one has at least one element, and that there are at least two indexes in countElements[]
+            setValid(canContinue)
+        }, [effects, scenes, setValid]);
+
         // Fetches user's devices just once
         useEffect(() => {
             const fetchUrl = window.location.protocol + '//' + window.location.hostname + ':8080/devices'
@@ -64,7 +73,7 @@ const ScenesFactory = () => {
                 'user': localStorage.getItem('username'),
                 'session-token': localStorage.getItem('session_token')
             };
-            
+
             fetch(fetchUrl, {
                 method: method,
                 headers: headers,
@@ -237,11 +246,13 @@ const ScenesFactory = () => {
                                             <div className="row">
                                                 <div>
                                                     <label>
-                                                        <span className="row align-left">Scene name</span>
+                                                        <span
+                                                            className="row align-left lbl-scene-name-align">Scene name</span>
                                                         <input className="row col scenes-factory-name-input" type="text"
                                                                name="name"
                                                                placeholder="Type a name"
                                                                onChange={(e) => {
+                                                                   hasName = e.target.value < 1
                                                                    setSceneName(e.target.value)
                                                                    dispatchScenes({
                                                                        type: 'UPDATE_STATE',
@@ -270,6 +281,9 @@ const ScenesFactory = () => {
                                                     {open && <IconModal/>}
                                                 </div>
                                             </div>
+                                            <span
+                                                className={hasName ? "float-left l12 error-message align-error-message-scene-name" : "hidden"}>Scenes must have a name</span>
+
                                         </div>
                                         <div className="col l4">
                                             <div className="row switch shared-scene-switch">
@@ -303,14 +317,18 @@ const ScenesFactory = () => {
                             </Grid>
 
                             <Grid item lg={12} className=" scene-content-box-instructions">
-                                <span className=" bold">Step 1: </span> <span>Set your scene configuration:</span>
+                                <span className=" bold">Step 1: </span> <span>Set your scene configuration</span> <span
+                                className="text-emphasis">(every effect must have at least one device assigned)</span>
                             </Grid>
                             <Grid item xs={12} sm={12} md={12} lg={12}>
                                 <Paper xs={12} sm={12} md={12} lg={12} elevation={3} className={classes.paper}>
                                     <Grid className=" row" container spacing={0}>
                                         <div className=" steps-header col l11">Configure effects</div>
                                         <div className=" steps-header col l1">
-                                            <i onClick={() => createBlankEffectConfig()}
+                                            <i onClick={() => {
+                                                hasName = sceneName.length < 1
+                                                createBlankEffectConfig()
+                                            }}
                                                className=" col col-custom btn waves-effect waves-light btn-primary-circular
                                      right material-icons btn-circular-fix-margin">add</i>
                                         </div>
@@ -324,7 +342,10 @@ const ScenesFactory = () => {
                                 </Paper>
                             </Grid>
                             <Grid item lg={12} className=" scene-content-box-instructions">
-                                <span className=" bold">Step 2: </span> <span>Choose the devices to which you want to apply an effect:</span>
+                                <span className=" bold">Step 2: </span> <span>Choose the devices to which you want to apply an effect</span>
+                                {!effects[0] || effects[0].type === 0 || !effects[0].visible ?
+                                    <p className="text-emphasis">Add an effect to see the available devices for
+                                                                 it.</p> : undefined}
                             </Grid>
                             {effects.map((config) => <TransferList key={config.id} effectConfig={config}/>)}
                         </Grid>

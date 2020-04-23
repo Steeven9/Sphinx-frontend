@@ -121,14 +121,16 @@ function getDevicesByEffectType(devices, types) {
 }
 
 const TransferList = (config) => {
-    const {devices, dispatchScenes, dispatchEffects, isEditing, setValid} = useContext(ScenesContext);
+    const {devices, dispatchScenes, dispatchEffects, isEditing} = useContext(ScenesContext);
     const classes = useStyles();
     const [checked, setChecked] = React.useState([]);
     const [left, setLeft] = React.useState([]);
     const [right, setRight] = React.useState([]);
     const effectConfig = config.effectConfig;
+    const leftLenght = left.length;
+    const rightLenght = right.length;
 
-
+    //Loads the devices to the left or right sides of the Transfer List on page load
     useEffect(() => {
         let devicesTypes = getDevicesTypesByEffectType(config.effectConfig);
         let filteredDevices = getDevicesByEffectType(devices, devicesTypes);
@@ -137,11 +139,11 @@ const TransferList = (config) => {
             setRight(getNotUsedDevices(filteredDevices, config.effectConfig.devices))
             setLeft(getUsedDevices(filteredDevices, config.effectConfig.devices))
         } else {
-            if (left.length === 0 && right.length === 0) {
+            if (leftLenght === 0 && rightLenght === 0) {
                 setRight(filteredDevices)
             }
         }
-    }, [config, devices]);
+    }, [config, devices, leftLenght, rightLenght, isEditing]);
 
     const handleDelete = (e) => {
         e.preventDefault();

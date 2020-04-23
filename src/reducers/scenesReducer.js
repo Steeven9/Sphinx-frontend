@@ -76,7 +76,6 @@ const scenesReducer = (state, action) => {
                 shared: action.shared,
                 effects: action.effects
             }
-            console.log(state)
             return state;
 
         case 'UPDATE_TRANSFER_LIST_STATE':

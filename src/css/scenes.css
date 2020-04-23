@@ -342,6 +342,16 @@ form.scene-form {
     display: none;
 }
 
-* {
-    /*border: 1px dotted deeppink;*/
+.align-error-message-scene-name {
+    float: left !important;
+    margin: -10px 0 0 -10px;
+}
+
+.lbl-scene-name-align {
+    margin-left: 0 !important;
+}
+
+.text-emphasis {
+    color: gray;
+    font-style: italic;
 }
