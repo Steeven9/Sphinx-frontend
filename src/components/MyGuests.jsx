@@ -51,6 +51,7 @@ class MyGuests extends React.Component {
             }
         })
         .catch(e => this.setState({guests: <p><b>Error.</b></p>}))
+        // .catch(e => this.mapGuests([{username: "Giacomo", email: "giacomo.giacomelli@usi.ch"}, {username: "Carcarlo", email: "carcarlo.carlini@usi.ch"}]))
 
         fetch('http://localhost:8080/user/' + this.props.username, {
             method: 'GET',
@@ -92,13 +93,15 @@ class MyGuests extends React.Component {
             let i = 0;
             let toSet = guests.map((guest) =>
                 <div key={i++} className="row room">
-                    <div className="col l1 image vertical-center"><i className="material-icons account-circle">account_circle</i></div>
-                    <div className="col l5 vertical-center">{guest.username}</div>
-                    <div className="col l2"></div>
+                    <div className="col l1 image vertical-center">{guest.username}</div>
+                    <div className="col l2 vertical-center"></div>
+                    <div className="col l3 vertical-center"><i>{guest.email}</i></div>
+                    <div className="col l2 vertical-center"></div>
                     <div className="col l1 room-button1 vertical-center">
-                    <i className="scene-item material-icons btn-icon"
+                    <i className="material-icons btn-edit"
                         onClick={() => this.moveToDeletion(guest.username)}> highlight_off </i>
                     </div>
+                    <div className="col l1 room-button2 vertical-center"></div>
                 </div>
             );
             this.setState({guests: toSet})
@@ -107,14 +110,14 @@ class MyGuests extends React.Component {
 
     moveToDeletion = (guestUsername) => {
         this.setState({guestToDelete: guestUsername})
-        document.getElementById("guestList").hidden = false
-        document.getElementById("deleteGuestConfirmation").hidden = true
+        document.getElementById("guestList").hidden = true
+        document.getElementById("deleteGuestConfirmation").hidden = false
     }
 
     moveToGuestList = () => {
         this.setState({guestToDelete: ""})
-        document.getElementById("guestList").hidden = true
-        document.getElementById("deleteGuestConfirmation").hidden = false
+        document.getElementById("guestList").hidden = false
+        document.getElementById("deleteGuestConfirmation").hidden = true
     }
 
     deleteGuest = () => {
@@ -129,8 +132,8 @@ class MyGuests extends React.Component {
         .then( (res) => {
             this.setState({isLoading: false})
             if (res.status === 204) {
-                document.getElementById("guestList").hidden = true
-                document.getElementById("deleteGuestConfirmation").hidden = false
+                document.getElementById("guestList").hidden = false
+                document.getElementById("deleteGuestConfirmation").hidden = true
                 window.location.href = '/guests'
             }
             else if (res.status === 401) {
@@ -198,7 +201,7 @@ class MyGuests extends React.Component {
                     <div className="row rooms-headline">
                         <div className="col l1"></div>
                         <div className="col l5">Username</div>
-                        <div className="col l4"></div>
+                        <div className="col l4">Email</div>
                     </div>
                     {this.state.guests}
                 </div>
