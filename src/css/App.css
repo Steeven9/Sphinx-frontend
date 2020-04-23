@@ -262,3 +262,11 @@ h3 {
     height: 40px;
     width: 40px;
 }
+
+.scene-item {
+    height: 40px !important;
+    display: flex !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    align-items: center !important;
+}

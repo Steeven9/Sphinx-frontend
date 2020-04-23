@@ -11,7 +11,12 @@ class MyGuests extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            guests: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+            guests: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>,
+            guestToDelete: "",
+            isLoading: false,
+            error: -1,  // -1 nothing, 0 bad request, 1 unexpected error
+            errorType: "",
+            allowSecurityCameras: true,
         }
     }
 
@@ -46,6 +51,34 @@ class MyGuests extends React.Component {
             }
         })
         .catch(e => this.setState({guests: <p><b>Error.</b></p>}))
+
+        fetch('http://localhost:8080/user/' + this.props.username, {
+            method: 'GET',
+            headers: {
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+        })
+        .then((res) => {
+            if (res.status === 401) {
+                this.props.logOut(1);
+            } else if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            let response = JSON.parse(data);
+
+            if (response === null) {
+                this.setState({guests: <p><b>An error has occurred.</b></p>});
+            } 
+            else {
+                this.setState({allowSecurityCameras: response.allowSecurityCameras});
+            }
+        })
+        .catch(e => this.setState({guests: <p><b>Error.</b></p>}))
     }
 
     /**
@@ -63,8 +96,8 @@ class MyGuests extends React.Component {
                     <div className="col l5 vertical-center">{guest.username}</div>
                     <div className="col l2"></div>
                     <div className="col l1 room-button1 vertical-center">
-                        <i className="material-icons btn-edit"
-                           onClick={() => this.redirectToEditGuest(guest.username)}>edit</i>
+                    <i className="scene-item material-icons btn-icon"
+                        onClick={() => this.moveToDeletion(guest.username)}> highlight_off </i>
                     </div>
                 </div>
             );
@@ -72,9 +105,74 @@ class MyGuests extends React.Component {
         }
     }
 
-    //Redirection to /editGuest
-    redirectToEditGuest = (guestUsername) => {
-        window.location.href = '/editGuest?guest=' + guestUsername
+    moveToDeletion = (guestUsername) => {
+        this.setState({guestToDelete: guestUsername})
+        document.getElementById("guestList").hidden = false
+        document.getElementById("deleteGuestConfirmation").hidden = true
+    }
+
+    moveToGuestList = () => {
+        this.setState({guestToDelete: ""})
+        document.getElementById("guestList").hidden = true
+        document.getElementById("deleteGuestConfirmation").hidden = false
+    }
+
+    deleteGuest = () => {
+        this.setState({isLoading: true, error: -1})
+        fetch('http://localhost:8080/guests/' + this.state.guestToDelete, {
+            method: 'DELETE',
+            headers: { 
+                'user': this.state.username,
+                'session-token': this.state.session_token,
+            }
+        })
+        .then( (res) => {
+            this.setState({isLoading: false})
+            if (res.status === 204) {
+                document.getElementById("guestList").hidden = true
+                document.getElementById("deleteGuestConfirmation").hidden = false
+                window.location.href = '/guests'
+            }
+            else if (res.status === 401) {
+                this.props.logOut(1)
+            }
+            else if (res.status === 400) {
+                this.setState({error: 0})
+            }
+            else {
+                this.setState({error: 1, errorType: "Error Code: " + res.status})
+            }
+        })
+        .catch( e => {
+            this.setState({isLoading: false})
+            this.setState({error: 1, errorType: e.toString()})
+        })
+    }
+
+    showError = () => {
+        if (this.state.error === 0) {
+            return (<span className="error-message">Error: bad request</span>)
+        }
+        else if (this.state.error === 1) {
+            return (<span className="error-message">{this.state.errorType}</span>)
+        }
+    }
+
+    changeSecurityCameraPermissions = () => {
+        let toSet = this.state.allowSecurityCameras ? false : true
+        console.log(toSet)
+        fetch('http://localhost:8080/user/' + this.state.username, {
+            method: 'POST',
+            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+            body: JSON.stringify(
+                {
+                    allowSecurityCameras: toSet,
+                })
+        })
+        .then((res) => {
+            // console.log(res)
+        })
+        .catch( e => { console.log(e) } );
     }
 
     /**
@@ -83,9 +181,17 @@ class MyGuests extends React.Component {
     render() {
         return (
             <div className="container">
-                <div className="rooms-content-box z-depth-2">
+                <div id="guestList" className="rooms-content-box z-depth-2">
                     <div className="headline-box row row-collapsible row row-collapsible-custom">
                         <h2 className="col l11 left-align headline-title">My guests</h2>
+                        <div className="switch">
+                            <label>
+                                <span>Allow access to security cameras:</span>
+                                <input type="checkbox" checked={this.state.allowSecurityCameras}
+                                   onChange={() => this.changeSecurityCameraPermissions()} />
+                                <span className="lever"/>
+                            </label>
+                        </div>
                         <a href="/addGuest"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                     </div>
 
@@ -95,6 +201,18 @@ class MyGuests extends React.Component {
                         <div className="col l4"></div>
                     </div>
                     {this.state.guests}
+                </div>
+
+                <div hidden id="deleteGuestConfirmation" className="content-box">
+                    <h2 className="title">Are you sure that you want to remove this guest?</h2>
+                    <div className="message-two-lines center-text">
+                        <span>
+                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                        </span>
+                        {this.showError()}
+                    </div>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToGuestList}>No</button>
+                    <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.deleteGuest}>Yes</button>
                 </div>
             </div>
         );

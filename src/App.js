@@ -19,7 +19,6 @@ import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import MyGuests from './components/MyGuests';
 import AddGuest from './components/AddGuest';
-import EditGuest from './components/EditGuest';
 import SharedWithMe from './components/SharedWithMe';
 import HouseSharedWithMe from './components/HouseSharedWithMe';
 import LogOut from './components/LogOut';
@@ -312,18 +311,6 @@ class App extends React.Component {
                             <Route path="/addGuest">
                                 {this.state.loggedIn ?
                                     <AddGuest
-                                        username={this.state.username}
-                                        session_token={this.state.session_token}
-                                        logOut={this.logOut}
-                                        findPathRoom={this.findPathRoom}
-                                        findPathDevice={this.findPathDevice}
-                                    />
-                                    : this.accessDenied()}
-                            </Route>
-
-                            <Route path="/editGuest">
-                                {this.state.loggedIn ?
-                                    <EditGuest
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
