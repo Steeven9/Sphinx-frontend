@@ -35,10 +35,10 @@ function doFetch(method, scene) {
     })
         .then((res) => {
             if (res.status === 200 || res.status === 203) {
-                console.log(method + ' successful!');
+                // console.log(method + ' successful!');
                 return res
             } else {
-                console.log(method + ' unsuccessful!');
+                // console.log(method + ' unsuccessful!');
                 return res
             }
         })
@@ -70,59 +70,23 @@ const scenesReducer = (state, action) => {
 
         case 'UPDATE_STATE':
             console.log('Dispatch: UPDATE_STATE');
-            console.log(state)
-            // console.log()
-            console.log(action)
             state = {
                 name: action.name,
                 icon: action.icon,
                 shared: action.shared,
                 effects: action.effects
             }
+            console.log(state)
             return state;
 
-        case 'UPDATE_EFFECT_TF_STATE':
-            console.log('Dispatch: UPDATE_EFFECT_TF_STATE');
-            console.log('state')
-            console.log(state)
-            // console.log()
-            console.log('action')
-            console.log(action)
-            console.log('action.config')
-            console.log(action.config)
-            console.log('action.devices')
-            console.log(action.devices)
-
+        case 'UPDATE_TRANSFER_LIST_STATE':
+            console.log('Dispatch: UPDATE_TRANSFER_LIST_STATE');
             action.config.devices = action.devices
 
             return action.config;
 
-        // case 'MIX_SCENE_AND_EFFECT_STATE':
-        //     console.log('Dispatch: UPDATE_STATE');
-        //     console.log('state >>>>>>>>')
-        //     console.log(state)
-        //     console.log()
-        //     console.log('action >>>>>>>>')
-        //     console.log(action)
-        //     state = {
-        //         name: state.name,
-        //         icon: state.icon,
-        //         shared: state.shared,
-        //         effects: action.effects,
-        //         devices: action.devices
-        //     }
-        //     console.log('state AFTER >>>>>>>>')
-        //     console.log(state)
-        //     return state;
-
         case 'UPDATE_EFFECTS_STATE':
             console.log('Dispatch: UPDATE_STATE');
-            console.log('state >>>>>>>>')
-            console.log(state)
-            console.log()
-            console.log('action >>>>>>>>')
-            console.log(action)
-            // let newState =
             state.devices = action.devices;
             return [...state];
 
@@ -130,16 +94,10 @@ const scenesReducer = (state, action) => {
             console.log('Dispatch: CREATE_BLANK_EFFECT');
             return [...state, action.effectConfig];
 
-
         case 'CREATE_SCENE':
             console.log('Dispatch: CREATE_SCENE');
-
-            console.log(JSON.stringify('STATE >>>'))
-            console.log(JSON.stringify(state))
-            console.log(JSON.stringify('SCENE >>>'))
-            console.log(JSON.stringify(action.scene))
-
-            return [state];
+            // NOTE Add fetch
+            return state;
 
         case 'DELETE_SCENE_EFFECT':
             console.log('Dispatch: DELETE_SCENE_EFFECT');
@@ -205,7 +163,6 @@ const scenesReducer = (state, action) => {
 
         case 'DELETE_SCENE':
             console.log('Dispatch: DELETE_SCENE');
-
             state = state.filter((s) => s.id !== action.scene.id);
             doFetch('DELETE', action.scene);
             action.setActionCompleted(true);
@@ -213,6 +170,8 @@ const scenesReducer = (state, action) => {
 
         case 'MODIFY_SCENE':
             console.log('Dispatch: MODIFY_SCENE');
+            // NOTE Add fetch
+
             // const params = (new URL(document.location)).searchParams;
             // const path = window.location.pathname.toLowerCase().split('/');
             // const fetchUrl = 'http://localhost:8888/scenes/';

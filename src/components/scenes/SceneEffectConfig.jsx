@@ -4,13 +4,13 @@ import ScenesContext from "../../context/scenesContext";
 
 
 const SceneEffectConfig = (config) => {
-    const {dispatchEffects, dispatchScenes} = useContext(ScenesContext);
+    const {dispatchScenes} = useContext(ScenesContext);
+    const {dispatchEffects} = useContext(ScenesContext);
     const effectConfig = config.effectConfig;
     const [effectName, setEffectName] = React.useState("");
     const [effectType, setEffectType] = React.useState(effectConfig.type);
     const [slider, setSlider] = React.useState(effectConfig.slider);
     const [on, setOn] = React.useState(effectConfig.on);
-    // const [visible, setVisible] = React.useState(false);
 
     const handleDelete = (e) => {
         e.preventDefault();
@@ -50,7 +50,7 @@ const SceneEffectConfig = (config) => {
                                        effectConfig.slider = e.target.value;
                                        effectConfig.visible = true;
                                        setSlider(e.target.value)
-                                       
+
                                        dispatchEffects({
                                            type: 'UPDATE_EFFECTS_STATE', effectConfig: effectConfig,
                                        });

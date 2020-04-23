@@ -64,9 +64,7 @@ const ScenesFactory = () => {
                 'user': localStorage.getItem('username'),
                 'session-token': localStorage.getItem('session_token')
             };
-
-            console.log('Fetching user devices...')
-
+            
             fetch(fetchUrl, {
                 method: method,
                 headers: headers,
@@ -104,84 +102,7 @@ const ScenesFactory = () => {
 
         // Gets rid of cached state and extracts the next one
         useEffect(() => {
-            console.log(scenes)
         }, [scenes]);
-
-        // Fetches scenes on page load
-        // useEffect(() => {
-        //     fetch(fetchUrl, {
-        //         method: 'GET',
-        //         headers: {
-        //             'user': localStorage.getItem('username'),
-        //             'session-token': localStorage.getItem('session_token')
-        //         },
-        //     })
-        //         .then((res) => {
-        //             if (res.status === 401) {
-        //                 this.props.logOut(1);
-        //             } else if (res.status === 200) {
-        //                 return res.text();
-        //             } else {
-        //                 return null;
-        //             }
-        //         })
-        //         .then((data) => {
-        //             if (data === null || data.length === 0) {
-        //                 isDataFound = false;
-        //             } else {
-        //                 let scenes = JSON.parse(data).sort(function (a, b) {
-        //                     let keyA = a.name;
-        //                     let keyB = b.name;
-        //                     if (keyA < keyB) return -1;
-        //                     if (keyA > keyB) return 1;
-        //                     return 0;
-        //                 });
-        //                 isLoading = false;
-        //                 dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
-        //             }
-        //         })
-        //         .catch(e => console.log(e));
-        //     setActionCompleted(false)
-        // }, []);
-
-        // Fetches scenes on state change, on Reducer's actions completion
-        // useEffect(() => {
-        //     if (actionCompleted) {
-        //         fetch(fetchUrl, {
-        //             method: 'GET',
-        //             headers: {
-        //                 'user': localStorage.getItem('username'),
-        //                 'session-token': localStorage.getItem('session_token')
-        //             },
-        //         })
-        //             .then((res) => {
-        //                 if (res.status === 401) {
-        //                     this.props.logOut(1);
-        //                 } else if (res.status === 200) {
-        //                     return res.text();
-        //                 } else {
-        //                     return null;
-        //                 }
-        //             })
-        //             .then((data) => {
-        //                 if (data === null || data.length === 0) {
-        //                     isDataFound = false;
-        //                 } else {
-        //                     let scenes = JSON.parse(data).sort(function (a, b) {
-        //                         let keyA = a.name;
-        //                         let keyB = b.name;
-        //                         if (keyA < keyB) return -1;
-        //                         if (keyA > keyB) return 1;
-        //                         return 0;
-        //                     });
-        //                     isLoading = false;
-        //                     dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
-        //                 }
-        //             })
-        //             .catch(e => console.log(e));
-        //         setActionCompleted(false)
-        //     }
-        // }, [actionCompleted]);
 
         // Discards cached state and extract the next one
         useEffect(() => {
@@ -204,14 +125,6 @@ const ScenesFactory = () => {
         }));
 
         const classes = useStyles();
-
-        // function DevicesEffect() {
-        //     return (
-        //         <>
-        //             {transferLists}
-        //         </>
-        //     );
-        // }
 
         const handleClose = () => {
             setOpen(false);
