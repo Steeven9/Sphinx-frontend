@@ -183,7 +183,9 @@ const TransferList = (config) => {
         setChecked(not(checked, leftChecked));
 
         // dispatchEffects({type: 'UPDATE_EFFECTS_STATE', devices: leftDevices});
-        dispatchScenes({type: 'UPDATE_STATE', devices: leftDevices});
+        // dispatchScenes({type: 'UPDATE_STATE', devices: leftDevices, config: effectConfig});
+        // dispatchScenes({type: 'UPDATE_EFFECT_TF_STATE', scene: scenes, devices: leftDevices, config: effectConfig});
+        dispatchScenes({type: 'UPDATE_EFFECT_TF_STATE', devices: leftDevices, config: effectConfig});
     };
 
     const handleCheckedLeft = () => {
@@ -193,7 +195,9 @@ const TransferList = (config) => {
         setChecked(not(checked, rightChecked));
 
         // dispatchEffects({type: 'UPDATE_EFFECTS_STATE', devices: leftDevices});
-        dispatchScenes({type: 'UPDATE_STATE', devices: leftDevices});
+        // dispatchScenes({type: 'UPDATE_STATE', devices: leftDevices, config: effectConfig});
+        // dispatchScenes({type: 'UPDATE_EFFECT_TF_STATE', scene: scenes, devices: leftDevices, config: effectConfig});
+        dispatchScenes({type: 'UPDATE_EFFECT_TF_STATE', devices: leftDevices, config: effectConfig});
     };
 
     const gridClasses = useGridStyles();

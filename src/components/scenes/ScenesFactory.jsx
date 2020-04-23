@@ -405,7 +405,7 @@ const ScenesFactory = () => {
 
                                     {/* Configure effects */}
                                     <Grid className=" row" container>
-                                        {effects.map((config) => <SceneEffectConfig key={config.id + '-effectConfig'}
+                                        {effects.map((config) => <SceneEffectConfig key={config.id}
                                                                                     effectConfig={config}/>)}
                                     </Grid>
                                 </Paper>
@@ -413,8 +413,7 @@ const ScenesFactory = () => {
                             <Grid item lg={12} className=" scene-content-box-instructions">
                                 <span className=" bold">Step 2: </span> <span>Choose the devices to which you want to apply an effect:</span>
                             </Grid>
-                            {effects.map((config) => <TransferList key={config.id + '-transferList'}
-                                                                   effectConfig={config}/>)}
+                            {effects.map((config) => <TransferList key={config.id} effectConfig={config}/>)}
                         </Grid>
                     </form>
                 </div>

@@ -81,6 +81,22 @@ const scenesReducer = (state, action) => {
             }
             return state;
 
+        case 'UPDATE_EFFECT_TF_STATE':
+            console.log('Dispatch: UPDATE_EFFECT_TF_STATE');
+            console.log('state')
+            console.log(state)
+            // console.log()
+            console.log('action')
+            console.log(action)
+            console.log('action.config')
+            console.log(action.config)
+            console.log('action.devices')
+            console.log(action.devices)
+
+            action.config.devices = action.devices
+
+            return action.config;
+
         // case 'MIX_SCENE_AND_EFFECT_STATE':
         //     console.log('Dispatch: UPDATE_STATE');
         //     console.log('state >>>>>>>>')
