@@ -72,7 +72,7 @@ class SharedWithMe extends React.Component {
         }
     }
 
-    //Redirection to /editGuest
+    //Redirection to /houseSharedWithMe
     redirectToHouseSharedWithMe = (ownerUsername) => {
         window.location.href = '/houseSharedWithMe?owner=' + ownerUsername
     }
