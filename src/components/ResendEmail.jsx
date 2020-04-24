@@ -6,7 +6,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 
 const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
-class ResetPassword extends React.Component {
+class ResendEmail extends React.Component {
 
     constructor(props) {
         super(props);
@@ -35,7 +35,7 @@ class ResetPassword extends React.Component {
         }
         this.setState({isLoading: true, successOrError: -1})
 
-        fetch('http://localhost:8080/auth/reset/' + this.state.email, {
+        fetch('http://localhost:8080/auth/resend/' + this.state.email, {
             method: 'POST',
         })
         .then((res) => {
@@ -46,13 +46,16 @@ class ResetPassword extends React.Component {
             else if (res.status === 404) {
                 this.setState({successOrError: 2})
             }
+            else if (res.status === 403) {
+                this.setState({successOrError: 3})
+            }
             else {
-                this.setState({successOrError: 3, errorType: "Error Code: " + res.status})
+                this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
             }
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({successOrError: 3, errorType: e.toString()})
+            this.setState({successOrError: 4, errorType: e.toString()})
         });
     };
 
@@ -70,8 +73,8 @@ class ResetPassword extends React.Component {
         if (this.state.successOrError === 0) {
             return (
                 <>
-                    <span className="success-message">Password reset request processed!</span><br/>
-                    <span className="success-message">Please check your inbox and follow the link to change it.</span>
+                    <span className="success-message">Verification email sent!</span><br/>
+                    <span className="success-message">Please check your inbox and follow the link to verify your account.</span>
                 </>
             )
         }
@@ -82,6 +85,9 @@ class ResetPassword extends React.Component {
             return (<span className="error-message">No account with this email.</span>)
         }
         else if (this.state.successOrError === 3) {
+            return (<span className="error-message">Account already verified.</span>)
+        }
+        else if (this.state.successOrError === 4) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     };
@@ -99,11 +105,11 @@ class ResetPassword extends React.Component {
                 <article>
                     <div id="content" className="container">
                         <div className="password-reset-box z-depth-2">
-                            <h2 className="title">Restore password</h2>
+                            <h2 className="title">Resend verification email</h2>
 
                             <p className="center-text top-bottom-margins">
                                 Type the email address registered to your account. If we find it in our records, 
-                                you’ll receive the instructions to restore your password.
+                                you’ll receive the instructions to verify your account.
                             </p>
 
                             <div>
@@ -126,7 +132,7 @@ class ResetPassword extends React.Component {
                                 </button>
 
                                 <button type="button" name="button" disabled={!isEnabled} className="btn-primary waves-effect waves-light btn"
-                                        onClick={this.sendDatas}>Reset
+                                        onClick={this.sendDatas}>Resend
                                 </button>
 
                             </div>
@@ -139,4 +145,4 @@ class ResetPassword extends React.Component {
 }
 
 
-export default ResetPassword;
+export default ResendEmail;

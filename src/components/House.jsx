@@ -55,8 +55,9 @@ class House extends React.Component {
         if (rooms.length === 0) {
             this.setState({rooms: <p><b>You have created no rooms yet. Click on the + button to add one.</b></p>});
         } else {
+            let i = 0;
             let toSet = rooms.map((room) =>
-                <div className="row room">
+                <div key={i++} className="row room">
                     <div className="col l1 image vertical-center"><img src={room.icon} alt="device-logo"/></div>
                     <div className="col l5 vertical-center">{room.name}</div>
                     <div className="col l2 vertical-center center-text">{room.devices.length}</div>

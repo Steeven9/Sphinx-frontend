@@ -21,6 +21,7 @@ import Scenes from './components/Scenes';
 import AddScene from './components/AddScene';
 import EditScene from './components/EditScene';
 import LogOut from './components/LogOut';
+import ResendEmail from './components/ResendEmail';
 import Error404 from './components/Error404';
 
 
@@ -153,7 +154,10 @@ class App extends React.Component {
         else if (type === "8") path += 'sensor-light'
         else if (type === "9") path += 'sensor-temperature'
         else if (type === "10") path += 'sensor-motion'
-        else path += 'unknwon-device'
+        else if (type === "11") path += 'automation-thermostat'
+        else if (type === "12") path += 'smart-curtains'
+        else if (type === "13") path += 'security-camera'
+        else path += 'unknown-device'
         path += '.svg'
         return path;
     }
@@ -278,6 +282,7 @@ class App extends React.Component {
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
+                                        findPathDevice={this.findPathDevice}
                                     />
                                     : this.accessDenied()}
                             </Route>
@@ -333,6 +338,10 @@ class App extends React.Component {
 
                             <Route path="/changepassword">
                                 <ChangePassword />
+                            </Route>
+
+                            <Route path="/resend">
+                                <ResendEmail />
                             </Route>
 
                             <Route exact path="/">

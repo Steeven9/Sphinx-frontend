@@ -166,6 +166,16 @@ const DevicesPanel = () => {
         }
     }
 
+    function redirectToAdd() {
+        const params = (new URL(document.location)).searchParams;
+
+        if (isRoom) {
+            return '/addDevice?room=' + params.get('id');
+        } else {
+            return '/addDevice'
+        }
+    }
+
     return (
         <DevicesContext.Provider value={{devices, dispatch, isRoom, setActionCompleted}}>
             <div id="wrapper" className="devices">

@@ -99,7 +99,13 @@ const Device = ({device}) => {
      * @param id {int}
      */
     function redirectToEdit(id) {
-        window.location.href = '/editDevice?id=' + id
+        const params = (new URL(document.location)).searchParams;
+
+        if (isRoom) {
+            window.location.href = '/editDevice?id=' + id + '&room=' + params.get('id');
+        } else {
+            window.location.href = '/editDevice?id=' + id
+        }
     }
 
     /**
@@ -145,7 +151,7 @@ const Device = ({device}) => {
 
     /**
      * Gets the either the temperature read by a thermostat or the average temperature of the room
-     * @param d {devie}
+     * @param d {device}
      * @returns {{src, options: {sourceMap: boolean, sourceMapStyle: string}, dest: string}|{src: [string]}|number}
      */
     function getThermostatTemp(d) {

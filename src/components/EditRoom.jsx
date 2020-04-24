@@ -100,7 +100,7 @@ class EditRoom extends React.Component {
             })
             .catch( e => {
                 this.setState({isLoading: false})
-                this.setState({error: 2, errorType: e})
+                this.setState({error: 2, errorType: e.toString()})
             })
         }
     };
@@ -132,7 +132,7 @@ class EditRoom extends React.Component {
                 this.setState({error: 2, errorType: "Error Code: " + res.status})
             }
         })
-        .catch( e => this.setState({error: 2, errorType: e}))
+        .catch( e => this.setState({error: 2, errorType: e.toString()}))
     };
 
     // function to handle state on input change
@@ -293,6 +293,7 @@ class EditRoom extends React.Component {
 
                     <div className="center">
                         <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.deleteRoom}>Delete room</button>
                         <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>
                     </div>
                 </div>
@@ -314,6 +315,7 @@ class EditRoom extends React.Component {
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("living-room")}><img src={this.props.findPathRoom('living-room', 0)} alt="Living" /><br />Living</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
                     </div>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
                 </div>
 
             </div>

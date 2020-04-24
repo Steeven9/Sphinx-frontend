@@ -75,7 +75,7 @@ class Signup extends React.Component {
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({successOrError: 4, errorType: e})
+            this.setState({successOrError: 4, errorType: e.toString()})
         });
     };
 
