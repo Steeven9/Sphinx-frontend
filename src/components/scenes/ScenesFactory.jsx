@@ -19,24 +19,33 @@ import SceneEffectConfig from './SceneEffectConfig'
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const host = window.location.protocol + '//' + window.location.hostname + ':8888';
-const scenesFetchUrl = host + '/scenes';
-const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
-const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
-let isLoading = true;
-let isDataFound = true;
-let isGuest = false;
+// const host = window.location.protocol + '//' + window.location.hostname + ':8888';
+// const scenesFetchUrl = host + '/scenes';
+// const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
+// const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
+
+let isLoading = false;
+// let isGuest = false;
 let hasName = false;
+
+// const headers = {
+//     'user': localStorage.getItem('username'),
+//     'session-token': localStorage.getItem('session_token'),
+//     'Accept': 'application/json',
+//     'Content-Type': 'application/json'
+// };
 
 const ScenesFactory = () => {
         const [scenes, dispatchScenes] = useReducer(scenesReducer, []);
         const [effects, dispatchEffects] = useReducer(effectsReducer, []);
         const [devices, dispatchDevices] = useReducer(devicesReducer, []);
+        const [confirmation, setConfirmation] = React.useState(false);
         const [open, setOpen] = React.useState(false);
         const [icon, setIcon] = React.useState("/img/icons/scenes/icon-unknown.svg");
         const [sceneName, setSceneName] = React.useState("");
         const [shared, setShared] = React.useState(false);
         const [isValid, setValid] = React.useState(false);
+        const [actionCompleted, setActionCompleted] = React.useState(false);
         const [id, setId] = React.useState(0);
         const isEditing = path[1].toLowerCase() === "editscene";
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
@@ -47,15 +56,21 @@ const ScenesFactory = () => {
             name: '',
             slider: '',
             on: false,
-            state: 0,
             devices: [],
             visible: false
         }
 
-        // Controls if a guest is accessing this view
-        if (path[1] === 'guest' && params.get('id')) {
-            isGuest = true
-        }
+        // // Controls if a guest is accessing this view
+        // if (path[1] === 'guest' && params.get('id')) {
+        //     isGuest = true
+        // }
+
+        // function getDeviceById(id) {
+        //     return devices.filter(device => {
+        //         console.log(device.id)
+        //         return device.id === id
+        //     })
+        // }
 
         // Validates if all data necessary for a POST or PUT is available and enables or disables the 'Save' button
         useEffect(() => {
@@ -63,18 +78,20 @@ const ScenesFactory = () => {
             countElements.push(sceneName.length) //Pushes characters count from scene name
             let canContinue = countElements.every(effect => effect > 0 && countElements.length > 1) //Evaluates that each one has at least one element, and that there are at least two indexes in countElements[]
             setValid(canContinue)
-        }, [effects, scenes, setValid]);
+        }, [effects, scenes, sceneName, setValid]);
 
         // Fetches user's devices just once
         useEffect(() => {
-            const fetchUrl = window.location.protocol + '//' + window.location.hostname + ':8080/devices'
+            const fetchUrl = window.location.protocol + '//' + window.location.hostname;
             const method = 'GET';
             const headers = {
                 'user': localStorage.getItem('username'),
                 'session-token': localStorage.getItem('session_token')
             };
+            let fetchedDevices = []
+            isLoading = true;
 
-            fetch(fetchUrl, {
+            fetch(fetchUrl + ':8080/devices', {
                 method: method,
                 headers: headers,
             })
@@ -88,10 +105,7 @@ const ScenesFactory = () => {
                     }
                 })
                 .then((data) => {
-                    isLoading = false;
-                    let fetchedDevices = []
                     if (data === null || data.length === 0) {
-                        isDataFound = false;
                     } else {
                         fetchedDevices = JSON.parse(data).sort(function (a, b) {
                             let keyA = a.name;
@@ -102,11 +116,59 @@ const ScenesFactory = () => {
                         });
                         dispatchDevices({type: 'POPULATE_DEVICES', devices: fetchedDevices});
                     }
+                    isLoading = false;
                 })
                 .catch(e => {
                     console.log(e);
                 });
-        }, []);
+
+            if (isEditing) {
+                isLoading = true;
+                fetch(fetchUrl + ':8888/scenes/' + params.get('id'), {
+                    method: method,
+                    headers: headers,
+                })
+                    .then((res) => {
+                        if (res.status === 401) {
+                            this.props.logOut(1);
+                        } else if (res.status === 200) {
+                            return res.text();
+                        } else {
+                            return null;
+                        }
+                    })
+                    .then((data) => {
+                        if (data === null || data.length === 0) {
+                        } else {
+                            // Sets the scene data into the form
+                            let scene = JSON.parse(data)
+                            setSceneName(scene.name)
+                            setIcon(scene.icon)
+                            setShared(scene.shared)
+
+                            // Mutates the devices[] content into actual devices
+                            scene.effects.forEach(effect => {
+                                let newDevices = effect.devices.map(id => fetchedDevices.find(device => device.id === id))
+                                effect.devices = newDevices
+                            })
+
+                            // Adds a boolean label to trigger visibility of the effects and dispatches one at a time
+                            scene.effects.forEach(effect => {
+                                    effect.visible = true
+                                    dispatchEffects({
+                                        type: 'LOAD_SCENE',
+                                        effectConfig: effect
+                                    });
+                                }
+                            )
+                        }
+                        isLoading = false;
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
+            }
+        }, [isEditing]);
 
 
         // Gets rid of cached state and extracts the next one
@@ -139,6 +201,10 @@ const ScenesFactory = () => {
             setOpen(false);
         };
 
+        const handleRedirect = () => {
+            window.location.href = '/scenes'
+        };
+
         /**
          * Generates a modal to choose the effect icon
          * @returns {IconModal}
@@ -147,8 +213,7 @@ const ScenesFactory = () => {
             return (
                 <div>
                     <Dialog
-                        maxWidth
-                        borderRadius={10}
+                        maxWidth="md"
                         open={open}
                         onClose={handleClose}
                         aria-labelledby="alert-dialog-title"
@@ -162,7 +227,7 @@ const ScenesFactory = () => {
                         </DialogContent>
                         <DialogActions>
                             <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
-                                    onClick={handleClose}>Close
+                                    onClick={handleClose}>Cancel
                             </button>
                         </DialogActions>
                     </Dialog>
@@ -187,7 +252,10 @@ const ScenesFactory = () => {
 
         function createBlankEffectConfig() {
             setId((prevState) => prevState + 1)
-            dispatchEffects({type: 'CREATE_BLANK_EFFECT', effectConfig: effectConfig});
+            dispatchEffects({
+                type: 'CREATE_BLANK_EFFECT',
+                effectConfig: effectConfig,
+            });
         }
 
         function getSceneIcons() {
@@ -199,20 +267,20 @@ const ScenesFactory = () => {
 
             return sceneIcons.map((iconName) => {
                 return (
-                    <button
-                        className="selectionIconBtn"
-                        onClick={() => {
-                            let iconPath = imageRoute + "icon-" + iconName + ".svg"
-                            setIcon(iconPath);
-                            dispatchScenes({
-                                type: 'UPDATE_STATE',
-                                name: sceneName,
-                                icon: iconPath,
-                                shared: shared,
-                                effects: effects
-                            });
-                            setOpen(false)
-                        }}>
+                    <button key={iconName}
+                            className="selectionIconBtn"
+                            onClick={() => {
+                                let iconPath = imageRoute + "icon-" + iconName + ".svg"
+                                setIcon(iconPath);
+                                dispatchScenes({
+                                    type: 'UPDATE_STATE',
+                                    name: sceneName,
+                                    icon: iconPath,
+                                    shared: shared,
+                                    effects: effects
+                                });
+                                setOpen(false)
+                            }}>
                         <img src={imageRoute + "icon-" + iconName + ".svg"} alt={iconName}/>
                     </button>
                 )
@@ -229,6 +297,44 @@ const ScenesFactory = () => {
             if (mode === "addscene") {
                 return "Add scene"
             }
+        }
+
+        function ConfirmationModal() {
+            return (
+                <div>
+                    <Dialog
+                        open={confirmation}
+                        onClose={handleRedirect}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {actionCompleted ?
+                                    <p className="center-text bold">{!isEditing ? "Creation successful!" : "Modification successful!"}</p>
+                                    :
+                                    <div>
+                                        <p className="center-tex bold">{!isEditing ? "Creation failed!" : "Modification failed!"}</p>
+                                        <p className="center-text">Please review your scene and try again.</p>
+                                    </div>
+                                }
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <button type="button" name="button"
+                                    className="btn-secondary btn waves-effect waves-light center"
+                                    onClick={() => {
+                                        if (actionCompleted) {
+                                            handleRedirect()
+                                        } else {
+                                            setConfirmation(false)
+                                        }
+                                    }}>OK
+                            </button>
+                        </DialogActions>
+                    </Dialog>
+                </div>
+            );
         }
 
         return (
@@ -279,6 +385,7 @@ const ScenesFactory = () => {
                                                            onClick={() => setOpen(true)}> edit </i>
                                                     </div>
                                                     {open && <IconModal/>}
+                                                    {confirmation && <ConfirmationModal/>}
                                                 </div>
                                             </div>
                                             <span
@@ -295,9 +402,14 @@ const ScenesFactory = () => {
                                                 </label>
                                             </div>
                                             <div className="row right-text">
+                                                <span>
+                                                    <ColorCircularProgress
+                                                        className={isLoading ? "loading-spinner" : "hidden"}/>
+                                                </span>
                                                 <button type="button" name="button"
                                                         className="btn-secondary btn waves-effect waves-light"
                                                         onClick={() => {
+                                                            handleRedirect()
                                                         }}>Cancel
                                                 </button>
                                                 <button type="button" name="button"
@@ -307,8 +419,35 @@ const ScenesFactory = () => {
                                                 </button>
                                                 <button type=" button" name=" button" disabled={!isValid}
                                                         className="btn-primary btn waves-effect waves-light"
-                                                        onClick={() => {
-                                                        }}>Save
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            setActionCompleted(!actionCompleted)
+
+                                                            if (isEditing) {
+                                                                dispatchScenes({
+                                                                    id: id,
+                                                                    type: 'MODIFY_SCENE',
+                                                                    name: sceneName,
+                                                                    icon: icon,
+                                                                    shared: shared,
+                                                                    effects: effects,
+                                                                    setActionCompleted: setActionCompleted,
+                                                                    setConfirmation: setConfirmation,
+                                                                    isLoading: isLoading
+                                                                });
+                                                            } else {
+                                                                dispatchScenes({
+                                                                    type: 'CREATE_SCENE',
+                                                                    name: sceneName,
+                                                                    icon: icon,
+                                                                    shared: shared,
+                                                                    effects: effects,
+                                                                    setActionCompleted: setActionCompleted,
+                                                                    setConfirmation: setConfirmation,
+                                                                    isLoading: isLoading
+                                                                });
+                                                            }
+                                                        }}>{isEditing ? "Modify" : "Save"}
                                                 </button>
                                             </div>
                                         </div>
