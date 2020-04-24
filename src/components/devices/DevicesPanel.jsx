@@ -191,8 +191,8 @@ const DevicesPanel = () => {
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                 <div className="headline-box row row-custom row row-custom-custom">
                                     <h3 className="col col-custom l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
-                                    <a href="/addDevice"><i
-                                        className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                     <a href={redirectToAdd()}>
+                                     <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
