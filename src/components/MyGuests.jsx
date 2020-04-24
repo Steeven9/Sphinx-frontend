@@ -51,7 +51,6 @@ class MyGuests extends React.Component {
             }
         })
         .catch(e => this.setState({guests: <p><b>Error.</b></p>}))
-        // .catch(e => this.mapGuests([{username: "Giacomo", email: "giacomo.giacomelli@usi.ch"}, {username: "Carcarlo", email: "carcarlo.carlini@usi.ch"}]))
 
         fetch('http://localhost:8080/user/' + this.props.username, {
             method: 'GET',
