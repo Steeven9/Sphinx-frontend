@@ -247,7 +247,7 @@ const TransferList = (config) => {
                     <div className="transfer-list-header-max-width">
                         <div className="transfer-list-header">
                             <span
-                                className="">{effectConfig.name} {(effectConfig.type !== 3) ? effectConfig.slider : undefined} {getMeasureUnit(effectConfig)}
+                            >{effectConfig.name} {(effectConfig.type !== 3) ? effectConfig.slider : undefined} {getMeasureUnit(effectConfig)}
                             </span>
                             <i className="material-icons btn-icon-transfer-list right"
                                onClick={(e) => handleDelete(e)}> highlight_off</i>

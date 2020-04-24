@@ -176,7 +176,7 @@ const DevicesPanel = () => {
                     backgroundPosition: 'center'
                 }}>
                     <article className="row row-custom row row-custom-custom">
-                        <div id="content" className="">
+                        <div id="content">
                             <section
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                 <div className="headline-box row row-custom row row-custom-custom">

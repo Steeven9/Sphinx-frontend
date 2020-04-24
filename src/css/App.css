@@ -286,7 +286,7 @@ nav ul a:hover {
 }
 
 .hidden {
-    display: none !important;
+    visibility: hidden !important;
 }
 
 /* Action feedback to user starts here */

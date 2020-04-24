@@ -24,7 +24,7 @@ const path = window.location.pathname.toLowerCase().split('/');
 // const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
 // const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
 
-let isLoading = false;
+// let isLoading = false;
 // let isGuest = false;
 let hasName = false;
 
@@ -35,6 +35,11 @@ let hasName = false;
 //     'Content-Type': 'application/json'
 // };
 
+/**
+ * Creates customizable scenes
+ * @returns {*}
+ * @constructor
+ */
 const ScenesFactory = () => {
         const [scenes, dispatchScenes] = useReducer(scenesReducer, []);
         const [effects, dispatchEffects] = useReducer(effectsReducer, []);
@@ -45,6 +50,7 @@ const ScenesFactory = () => {
         const [sceneName, setSceneName] = React.useState("");
         const [shared, setShared] = React.useState(false);
         const [isValid, setValid] = React.useState(false);
+        const [isLoading, setLoading] = React.useState(false);
         const [actionCompleted, setActionCompleted] = React.useState(false);
         const [id, setId] = React.useState(0);
         const isEditing = path[1].toLowerCase() === "editscene";
@@ -89,7 +95,6 @@ const ScenesFactory = () => {
                 'session-token': localStorage.getItem('session_token')
             };
             let fetchedDevices = []
-            isLoading = true;
 
             fetch(fetchUrl + ':8080/devices', {
                 method: method,
@@ -116,14 +121,13 @@ const ScenesFactory = () => {
                         });
                         dispatchDevices({type: 'POPULATE_DEVICES', devices: fetchedDevices});
                     }
-                    isLoading = false;
                 })
                 .catch(e => {
                     console.log(e);
                 });
 
             if (isEditing) {
-                isLoading = true;
+                setLoading(true)
                 fetch(fetchUrl + ':8888/scenes/' + params.get('id'), {
                     method: method,
                     headers: headers,
@@ -152,17 +156,18 @@ const ScenesFactory = () => {
                                 effect.devices = newDevices
                             })
 
+                            setLoading(false)
                             // Adds a boolean label to trigger visibility of the effects and dispatches one at a time
                             scene.effects.forEach(effect => {
                                     effect.visible = true
+                                    effect.preexisting = true
                                     dispatchEffects({
                                         type: 'LOAD_SCENE',
-                                        effectConfig: effect
+                                        effectConfig: effect,
                                     });
                                 }
                             )
                         }
-                        isLoading = false;
                     })
                     .catch(e => {
                         console.log(e);
@@ -239,7 +244,7 @@ const ScenesFactory = () => {
         useEffect(() => {
         }, [shared]);
 
-        const toggle = (e) => {
+        const toggleShared = (e) => {
             setShared(e.target.checked);
             dispatchScenes({
                 type: 'UPDATE_STATE',
@@ -250,6 +255,10 @@ const ScenesFactory = () => {
             });
         };
 
+        /**
+         * Initializes a blank scene configuration to start working
+         * @returns void
+         **/
         function createBlankEffectConfig() {
             setId((prevState) => prevState + 1)
             dispatchEffects({
@@ -257,7 +266,7 @@ const ScenesFactory = () => {
                 effectConfig: effectConfig,
             });
         }
-
+        
         function getSceneIcons() {
             const imageRoute = "/img/icons/scenes/";
             const sceneIcons = ["coconut-drink", "beach", "cloud", "cloudy-moon", "cloudy-night", "cocktail", "cyclone",
@@ -311,11 +320,13 @@ const ScenesFactory = () => {
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 {actionCompleted ?
-                                    <p className="center-text bold">{!isEditing ? "Creation successful!" : "Modification successful!"}</p>
+                                    <span
+                                        className="center-text bold">{!isEditing ? "Creation successful!" : "Modification successful!"}</span>
                                     :
                                     <div>
-                                        <p className="center-tex bold">{!isEditing ? "Creation failed!" : "Modification failed!"}</p>
-                                        <p className="center-text">Please review your scene and try again.</p>
+                                        <span
+                                            className="center-tex bold">{!isEditing ? "Creation failed!" : "Modification failed!"}</span>
+                                        <span className="center-text">Please review your scene and try again.</span>
                                     </div>
                                 }
                             </DialogContentText>
@@ -348,64 +359,65 @@ const ScenesFactory = () => {
                                     <h3 className="left-align headline-title">{getTitle()}</h3>
 
                                     <div className="row">
-                                        <div className="col l8">
-                                            <div className="row">
-                                                <div>
-                                                    <label>
+                                        <div className="col l4">
+                                            <div>
+                                                <label>
                                                         <span
                                                             className="row align-left lbl-scene-name-align">Scene name</span>
-                                                        <input className="row col scenes-factory-name-input" type="text"
-                                                               name="name"
-                                                               placeholder="Type a name"
-                                                               onChange={(e) => {
-                                                                   hasName = e.target.value < 1
-                                                                   setSceneName(e.target.value)
-                                                                   dispatchScenes({
-                                                                       type: 'UPDATE_STATE',
-                                                                       name: e.target.value,
-                                                                       icon: icon,
-                                                                       shared: shared,
-                                                                       effects: effects
-                                                                   });
-                                                               }}
-                                                               value={sceneName} required/>
-                                                    </label>
-                                                </div>
-                                                <div className="col scene-icon">
-                                                    <div className="col"/>
-                                                    <label className="row">Icon</label>
-                                                    <div className="row">
-                                                        <img className="fixedSizeIcon btn-icon" src={icon}
-                                                             alt="icon error"
-                                                             onClick={() => setOpen(true)}/>
-                                                    </div>
-
-                                                    <div className="">
-                                                        <i className="material-icons btn-icon btn-icon-edit-fix"
-                                                           onClick={() => setOpen(true)}> edit </i>
-                                                    </div>
-                                                    {open && <IconModal/>}
-                                                    {confirmation && <ConfirmationModal/>}
-                                                </div>
+                                                    <input className="row scenes-factory-name-input" type="text"
+                                                           name="name"
+                                                           placeholder="Type a name"
+                                                           onChange={(e) => {
+                                                               hasName = e.target.value < 1
+                                                               setSceneName(e.target.value)
+                                                               dispatchScenes({
+                                                                   type: 'UPDATE_STATE',
+                                                                   name: e.target.value,
+                                                                   icon: icon,
+                                                                   shared: shared,
+                                                                   effects: effects
+                                                               });
+                                                           }}
+                                                           value={sceneName} required/>
+                                                </label>
                                             </div>
                                             <span
                                                 className={hasName ? "float-left l12 error-message align-error-message-scene-name" : "hidden"}>Scenes must have a name</span>
 
                                         </div>
-                                        <div className="col l4">
+
+                                        <div className="col l2 scene-icon">
+                                            <label className="row">Icon</label>
+                                            <div className="row">
+                                                <img className="fixedSizeIcon btn-icon" src={icon}
+                                                     alt="icon error"
+                                                     onClick={() => setOpen(true)}/>
+                                            </div>
+                                            <div>
+                                                <i className="material-icons btn-icon btn-icon-edit-fix"
+                                                   onClick={() => setOpen(true)}> edit </i>
+                                            </div>
+                                            {open && <IconModal/>}
+                                            {confirmation && <ConfirmationModal/>}
+                                        </div>
+                                        <div className="col l6">
                                             <div className="row switch shared-scene-switch">
-                                                <label>
-                                                    <span>Shared with guests:</span>
-                                                    <input type="checkbox" checked={shared}
-                                                           onChange={(e) => toggle(e)}/>
+                                                <label className="col">
+                                                    <span className="col">Shared with guests:</span>
+                                                    <input className="col" type="checkbox" checked={shared}
+                                                           onChange={(e) => toggleShared(e)}/>
                                                     <span className="lever"/>
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div className="col l8 center">
+                                            <div className="loading-spinner-container">
+                                                {isLoading && <ColorCircularProgress
+                                                    className="loading-spinner"/>}
+                                            </div>
+                                        </div>
+                                        <div className="col l12">
                                             <div className="row right-text">
-                                                <span>
-                                                    <ColorCircularProgress
-                                                        className={isLoading ? "loading-spinner" : "hidden"}/>
-                                                </span>
                                                 <button type="button" name="button"
                                                         className="btn-secondary btn waves-effect waves-light"
                                                         onClick={() => {
@@ -417,11 +429,12 @@ const ScenesFactory = () => {
                                                         onClick={() => {
                                                         }}>Delete
                                                 </button>
-                                                <button type=" button" name=" button" disabled={!isValid}
+                                                <button type=" button" name=" button" disabled={!isValid || isLoading}
                                                         className="btn-primary btn waves-effect waves-light"
                                                         onClick={(e) => {
                                                             e.preventDefault();
                                                             setActionCompleted(!actionCompleted)
+                                                            setLoading(true)
 
                                                             if (isEditing) {
                                                                 dispatchScenes({
@@ -433,7 +446,7 @@ const ScenesFactory = () => {
                                                                     effects: effects,
                                                                     setActionCompleted: setActionCompleted,
                                                                     setConfirmation: setConfirmation,
-                                                                    isLoading: isLoading
+                                                                    setLoading: setLoading
                                                                 });
                                                             } else {
                                                                 dispatchScenes({
@@ -444,7 +457,7 @@ const ScenesFactory = () => {
                                                                     effects: effects,
                                                                     setActionCompleted: setActionCompleted,
                                                                     setConfirmation: setConfirmation,
-                                                                    isLoading: isLoading
+                                                                    setLoading: setLoading
                                                                 });
                                                             }
                                                         }}>{isEditing ? "Modify" : "Save"}

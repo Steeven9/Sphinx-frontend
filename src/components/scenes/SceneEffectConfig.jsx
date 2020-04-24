@@ -2,7 +2,12 @@ import React, {useContext} from 'react'
 import '../../css/scenes.css';
 import ScenesContext from "../../context/scenesContext";
 
-
+/**
+ * Configurator to set scene type and target values
+ * @param config
+ * @returns {*}
+ * @constructor
+ */
 const SceneEffectConfig = (config) => {
     const {dispatchScenes} = useContext(ScenesContext);
     const {dispatchEffects} = useContext(ScenesContext);
@@ -17,6 +22,11 @@ const SceneEffectConfig = (config) => {
         dispatchEffects({type: 'DELETE_SCENE_EFFECT', effectConfig: effectConfig});
     };
 
+    /**
+     * Gets effect name by type
+     * @param type
+     * @returns {string}
+     */
     function getEffectName(type) {
         switch (type) {
             case 1:
@@ -32,6 +42,11 @@ const SceneEffectConfig = (config) => {
         }
     }
 
+    /**
+     * Gets input element according to scene type
+     * @param type
+     * @returns {*}
+     */
     function getEffectValueInput(type) {
         switch (type) {
             case 1: //Light intensity
@@ -85,6 +100,7 @@ const SceneEffectConfig = (config) => {
         }
     }
 
+    // Get's measure unit for values according to type
     function getMeasureUnit(type) {
         switch (type) {
             case 2: //Temperature
@@ -100,6 +116,10 @@ const SceneEffectConfig = (config) => {
         setOn(e.target.checked);
     };
 
+    /**
+     * Generates drop down to select scene type
+     * @returns {*}
+     */
     function getEffectFilter() {
         return (
             <div className=" col l6 effect-configuration">
@@ -107,6 +127,7 @@ const SceneEffectConfig = (config) => {
                     <label>Controlling</label>
                     <select required className=" browser-default" key={effectConfig.type.toString()}
                             value={effectConfig.type.toString()}
+                            disabled={effectConfig.preexisting}
                             onChange={(e) => {
                                 effectConfig.type = parseInt(e.target.value)
                                 effectConfig.name = getEffectName(parseInt(e.target.value))

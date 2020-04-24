@@ -198,7 +198,7 @@ const Device = ({device}) => {
                 </>);
             default:
                 return (<Slider name={"slider"}
-                                className=""
+
                                 onChange={(e, val) => {
                                     handleChange(e, val)
                                 }}
@@ -227,7 +227,7 @@ const Device = ({device}) => {
             case 10: //MotionSensor
             case 12: //SmartCurtains
                 return (<div className="row row-custom l1">
-                    <div className="">
+                    <div>
                         <div className="col col-custom l2 m1 s1">
                             <i className="material-icons btn-edit btn-edit-no-switch"
                                onClick={() => redirectToEdit(device.id)}>edit</i>
@@ -297,7 +297,7 @@ const Device = ({device}) => {
                     <div className="col col-custom l12 s12 icons-wrapper">
                         <i className={"material-icons l1" + (device.child ? " muted-icon" : "")}>{getRowIcon(device)} </i>
                         <div className="icon-device l1">
-                            <img className="" src={device.icon} alt={device.name}/>
+                            <img src={device.icon} alt={device.name}/>
                         </div>
                         <div className="device-info col col-custom l12 m6 s12 left-align">
                             <p className="device-name">{device.name}</p>

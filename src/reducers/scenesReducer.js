@@ -63,7 +63,6 @@ const scenesReducer = (state, action) => {
 
         case 'CREATE_SCENE':
             console.log('Dispatch: CREATE_SCENE');
-            action.isLoading = true
 
             let newScene = {
                 name: action.name,
@@ -81,14 +80,13 @@ const scenesReducer = (state, action) => {
                 body: JSON.stringify(newScene)
             })
                 .then(res => {
-                    console.log(res.status)
-
                     if (res.status === 200 || res.status === 203) {
                         action.setActionCompleted(true);
+                        action.setLoading(false);
                     } else {
                         action.setActionCompleted(false);
+                        action.setLoading(false)
                     }
-                    action.isLoading = false
                     action.setConfirmation(true)
                 })
                 .catch(e => console.log(e));
@@ -191,7 +189,6 @@ const scenesReducer = (state, action) => {
         case 'MODIFY_SCENE':
             console.log('Dispatch: MODIFY_SCENE');
 
-            action.isLoading = true
             let editedScene = {
                 name: action.name,
                 icon: action.icon,
@@ -201,7 +198,7 @@ const scenesReducer = (state, action) => {
 
             // Mutates the devices[] into IDs only in each effect
             prepareSceneForFetch(editedScene)
-            console.log(editedScene)
+
             fetch(fetchUrl + '/' + action.id, {
                 method: 'PUT',
                 headers: headers,
@@ -210,10 +207,11 @@ const scenesReducer = (state, action) => {
                 .then(res => {
                     if (res.status === 200 || res.status === 203) {
                         action.setActionCompleted(true);
+                        action.setLoading(false);
                     } else {
                         action.setActionCompleted(false);
+                        action.setLoading(false);
                     }
-                    action.isLoading = false
                     action.setConfirmation(true)
                 })
                 .catch(e => console.log(e));

@@ -134,7 +134,6 @@ const ScenesPanel = () => {
         }
     }
 
-
     return (
         <ScenesContext.Provider value={{scenes, dispatchScene, isGuest, setActionCompleted}}>
             <div id="wrapper" className="scenes">

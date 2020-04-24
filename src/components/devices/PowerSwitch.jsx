@@ -17,7 +17,7 @@ const PowerSwitch = ({device}) => {
      */
     useEffect(() => {
         setPower(device.on)
-        }, [device]);
+    }, [device]);
 
     /**
      * Toggles the device on change and dispatches the the action to the devices reducer
@@ -31,8 +31,8 @@ const PowerSwitch = ({device}) => {
         dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
-    return(
-        <div className="">
+    return (
+        <div>
             <label>
                 <input
                     type='checkbox'

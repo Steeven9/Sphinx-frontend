@@ -1,6 +1,12 @@
 import React, {useContext, useEffect} from 'react'
 import ScenesContext from "../../context/scenesContext";
 
+/**
+ * Animated icon to show when a scene is running
+ * @param scene
+ * @returns {*}
+ * @constructor
+ */
 const PlayIcon = ({scene}) => {
     const {dispatchScene} = useContext(ScenesContext);
     const idleIcon = "/img/icons/material-ui-svg/PlayCircleOutlined.svg";

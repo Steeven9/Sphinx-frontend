@@ -21,6 +21,14 @@
     font-weight: 700;
 }
 
+.loading-spinner-container {
+    padding-top: 30px;
+    height: 50px !important;
+    text-align: right;
+    margin-right: 60px;
+    align-content: flex-end;
+}
+
 .scene-item {
     height: 40px !important;
     display: flex !important;
@@ -262,7 +270,7 @@ form.scene-form {
 }
 
 .scenes-factory-name-input {
-    width: 35% !important;
+    /*width: 35% !important;*/
 }
 
 .scenes-factory-value-input {
