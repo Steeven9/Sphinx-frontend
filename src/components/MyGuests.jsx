@@ -209,15 +209,15 @@ class MyGuests extends React.Component {
                 <div id="guestList" className="rooms-content-box z-depth-2">
                     <div className="headline-box row row-collapsible row row-collapsible-custom">
                         <h2 className="col l11 left-align headline-title">My guests</h2>
-                        <div className="switch">
-                            <label>
-                                <span>Allow access to security cameras:</span>
-                                <input type="checkbox" checked={this.state.allowSecurityCameras}
-                                   onChange={() => this.changeSecurityCameraPermissions()} />
-                                <span className="lever"/>
-                            </label>
-                        </div>
-                        <a href="/addGuest"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                        <a href="/addGuest"><i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                    </div>
+                    <div className="switch">
+                        <label>
+                            <span>Allow access to security cameras:</span>
+                            <input type="checkbox" checked={this.state.allowSecurityCameras}
+                                onChange={() => this.changeSecurityCameraPermissions()} />
+                            <span className="lever"/>
+                        </label>
                     </div>
 
                     <div className="row rooms-headline">

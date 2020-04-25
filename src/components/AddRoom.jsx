@@ -162,8 +162,8 @@ class AddRoom extends React.Component {
      */
     render() {
         return (
-            <div className="addRoom" id="addRoom">
-                <div id="addRoomInfo" className="content-box ">
+            <div className="addRoom container" id="addRoom">
+                <div id="addRoomInfo" className="room-edit-content-box z-depth-2 content-box-transparency">
                     <h2 className="title">Add room</h2>
                     <div className="dates">
                         <div className="roomNameAndIcon">

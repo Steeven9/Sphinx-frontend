@@ -63,11 +63,11 @@ class House extends React.Component {
                     <div className="col l2 vertical-center center-text">{room.devices.length}</div>
                     <div className="col l2"></div>
                     <div className="col l1 room-button1 vertical-center">
-                        <i className="material-icons btn-edit"
+                        <i className="material-icons btn-icon btn-edit"
                            onClick={() => this.redirectToEditRoom(room.id)}>edit</i>
                     </div>
                     <div className="col l1 room-button2 vertical-center">
-                        <i className="material-icons btn-edit"
+                        <i className="material-icons btn-icon btn-edit"
                            onClick={() => this.redirectToRoom(room.id)}>visibility_outlined</i>
                     </div>
                 </div>
@@ -93,9 +93,9 @@ class House extends React.Component {
         return (
             <div className="container">
                 <div className="rooms-content-box z-depth-2">
-                    <div className="headline-box row row-collapsible row row-collapsible-custom">
-                        <h2 className="col l11 left-align headline-title">My rooms</h2>
-                        <a href="/addRoom"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                    <div className="headline-box row row-custom">
+                        <h2 className="col col-scene l8 left-align headline-title">My Rooms</h2>
+                        <a href="/addRoom"><i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                     </div>
 
                     <div className="row rooms-headline">

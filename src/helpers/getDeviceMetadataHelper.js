@@ -142,7 +142,7 @@ export function getDeviceTypeName(type) {
 export function getMinMax(device) {
     switch (device.type) {
         case 11:
-            return [device.min, device.max];
+            return [10, 30];
         default:
             return [0, 100]
     }
@@ -167,12 +167,12 @@ export function getSliderMarks(device) {
 
     const temperatureMarks = [
         {
-            value: device.min,
-            label: device.min + ' ' + device.unit,
+            value: 5,
+            label: '5°C',
         },
         {
-            value: device.max,
-            label: device.max + ' ' + device.unit,
+            value: 30,
+            label: '30°C',
         },
     ];
 
