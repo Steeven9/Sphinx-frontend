@@ -13,18 +13,6 @@ class Header extends React.Component {
         }
     }
 
-    // /**
-    //  * React function for changing the state whenever receiving the loggedIn variable from App.js
-    //  * @param {*} props - all parameters received from App.js
-    //  * @param {*} state - this state
-    //  * returns the new state, that goes directly into the state of this class
-    //  */
-    // static getDerivedStateFromProps(props, state) {
-    // 	return {
-    //         loggedIn: props.loggedIn
-    //     };
-    // }
-
     /**
      * Checks localStorage "loggedIn" value and updates the state accordingly
      */
@@ -35,7 +23,7 @@ class Header extends React.Component {
 
     /**
      * Renders the header depending on the variable loggedIn.
-     * The logged in header has a clickable logo that links to the home and clickable buttons that link to the rooms, the devices and to the log out;
+     * The logged in header has a clickable logo that links to the home and clickable buttons that links to all main pages;
      * The logged out header has a clickable logo that links to the homepage and clickable buttons that link to Sign in and Log in;
      */
     render() {

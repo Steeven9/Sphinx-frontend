@@ -22,8 +22,8 @@ class MyGuests extends React.Component {
 
     /**
      * Fetches GET request to /guests/ and if succesfull sets the answer into this.state.guests
-     * Fetches GET request to /user/ and if succesfull sets the value of allowSecurityCamers into the state
-     * If any of the fetches in unsuccesfull, it display an error message
+     * Fetches GET request to /user/ and if successful sets the value of allowSecurityCamers into the state
+     * If any of the fetches is unsuccessful, it display an error message
      */
     componentDidMount() {
         fetch('http://localhost:8080/guests/', {

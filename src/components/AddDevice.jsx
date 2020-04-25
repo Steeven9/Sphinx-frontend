@@ -28,6 +28,12 @@ class AddDevice extends React.Component {
         }
     }
 
+    /**
+     * If present, takes the value for this.state.room parsing the URL
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     * Fetches GET request to /rooms/ and if successful sets the response into this.state.selectRooms
+     * If the fetch is unsuccessful, it displays an error message
+     */
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
         if (parsed.room !== undefined) this.setState({room: parsed.room, fromRoom: true})
@@ -70,6 +76,7 @@ class AddDevice extends React.Component {
 
     /**
      * Map received array rooms into the Selector
+     * @param rooms: array of rooms
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
@@ -82,7 +89,9 @@ class AddDevice extends React.Component {
     }
 
     /**
-     * Sends informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /devices/ with this.state.deviceName, iconType, type and room
+     * Display a different message depending on if it's successful or not.
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -109,7 +118,6 @@ class AddDevice extends React.Component {
             .then((res) => {
                 this.setState({isLoading: false})
                 if (res.status === 201) {
-                    // return res.json()
                     this.setState({ success: true, error: false, incomplete: false, unknownError: "" })
                 }
                 else if (res.status === 401) {
@@ -122,27 +130,37 @@ class AddDevice extends React.Component {
                     this.setState({ success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
                 }
             })
-            // .then((data) => console.log(data))
             .catch(e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
         }
     };
 
-    // function to handle state on input change
+    /**
+     * Handles changes in Type input
+     */
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
         if (!this.state.iconChanged) {
             this.setState({ iconType: evt.target.value })
         }
     }
+
+    /**
+     * Handles changes in Device Name input
+     */
     handleDeviceNameChange = evt => {
         this.setState({ deviceName: evt.target.value });
     }
+
+    /**
+     * Handles changes in Room input
+     */
     handleRoomChange = evt => {
         this.setState({ room: evt.target.value })
     }
 
     /**
-     * Display a message if a room has been successfully created, and if not an error message
+     * Calls this.redirectToPrevious if the device has been successfully created
+     * Displays an error message otherwise
      */
     deviceCreated = () => {
         if (this.state.success) {
@@ -159,22 +177,35 @@ class AddDevice extends React.Component {
         }
     }
 
+    /**
+     * Changes the value of this.state.iconType and iconChanged based on the received type,
+     * then calls this.moveToInformation.
+     * @param type
+     */
     changeIconState = (type) => {
         this.setState({iconType: type, iconChanged: true});
         this.moveToInformation();
     }
 
+    /**
+     * Changes the display view to the list of possible icons
+     */
     moveToSelection = () => {
         document.getElementById("addDeviceInfo").hidden = true
         document.getElementById("addDeviceIconSelection").hidden = false
     }
     
+    /**
+     * Changes the display view back to the default one
+     */
     moveToInformation = () => {
         document.getElementById("addDeviceInfo").hidden = false
         document.getElementById("addDeviceIconSelection").hidden = true
     }
 
-    //Redirection to previous page
+    /**
+     * Redirection to previous page
+    */ 
     redirectToPrevious = () => {
         if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
         else window.location.href = '/devices'
@@ -218,11 +249,6 @@ class AddDevice extends React.Component {
                             <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} alt="icon error" />
                             <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
                         </div>
-                        {/* <div className="textFields"> 
-                            <select className="selector" onChange={this.handlePairingChange}>
-                                <option value="0">No pairing</option>
-                            </select>
-                        </div> */}
                         <div className="message-two-lines center-text">
                             <span>
                                 <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>

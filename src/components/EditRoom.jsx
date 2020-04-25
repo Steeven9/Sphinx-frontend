@@ -23,10 +23,19 @@ class EditRoom extends React.Component {
         }
     }
 
+    /**
+     * Takes the value for this.state.room_id parsing the URL
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     * Fetches GET request to /rooms/:id and 
+     * if successful sets the response into this.state.roomName and changes the icon and background image
+     */
     componentDidMount() {
-        //document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(this.state.type, 1) + ')';
         const parsed = qs.parse(window.location.search);
         this.setState({ room_id: parsed.id })
+
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
 
         fetch('http://localhost:8080/rooms/' + parsed.id, {
             method: 'GET',
@@ -51,14 +60,12 @@ class EditRoom extends React.Component {
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
         })
         .catch(error => console.log(error))
-
-        document.addEventListener("keydown", (evt) => {
-            if (evt.key === 'Enter') this.sendDatas(evt)
-        });
     }
 
     /**
-     * Changes the Room
+     * Fetches POST request to /rooms/:id with this.state.roomName, iconType and the background image of the page
+     * If successfull, calls this.redirectToHouse, 
+     * otherwise it displays an error message
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -106,7 +113,9 @@ class EditRoom extends React.Component {
     };
 
     /**
-     * Deletes the Room
+     * Fetches DELETE request to /room/:id
+     * If successful, calls this.redirectToHouse, 
+     * otherwise it displays an error message
      */
     deleteRoom = evt => {
         this.setState({isLoading: true, error: -1})
@@ -135,42 +144,52 @@ class EditRoom extends React.Component {
         .catch( e => this.setState({error: 2, errorType: e.toString()}))
     };
 
-    // function to handle state on input change
+    /**
+     * Handles changes in Room Name input
+     */
     handleRoomNameChange = evt => {
         this.setState({roomName: evt.target.value});
     };
+
+    /**
+     * Handles changes in Type input
+     */
     handleTypeChange = evt => {
         this.setState({type: evt.target.value})
     }
 
-    /*
-   *
-   *   Functions for icon selection
-   * 
-   */
-
+    /**
+     * Changes the value of this.state.type and the background of the page based on the received type,
+     * then calls this.moveToInformation.
+     * @param path
+     */
     changeIconState = (path) => {
         this.setState({ type: path });
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
         this.moveToInformation();
     }
 
+    /**
+     * Changes the display view to the list of possible icons
+     */
     moveToSelection = () => {
         document.getElementById("addRoomInfo1").hidden = true
         document.getElementById("addRoomIconSelection1").hidden = false
     }
-
+    
+    /**
+     * Changes the display view back to the default one
+     */
     moveToInformation = () => {
         document.getElementById("addRoomInfo1").hidden = false
         document.getElementById("addRoomIconSelection1").hidden = true
     }
 
-    changeAndMove = () => {
-        this.moveToInformation();
-    }
-
+    /**
+     * Changes the background with a user selected one
+     * @param e
+     */
     changeDinamicallyBackground = (e) => {
-
         var reader = new FileReader();
         var file = e.target.files[0];
         if (file) {
@@ -181,69 +200,28 @@ class EditRoom extends React.Component {
             });
             reader.readAsDataURL(file);
         }
-
-
     }
 
+    /**
+     * Restore the background selected by the user and 
+     * changes it back to the one stored in this.state.type
+     */
     resetBackground = () => {
         document.getElementById('inputPicture1').value = "";
         document.getElementById('imageURL1').value = "";
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
     }
 
-    /*
-   *
-   *   Functions for icon selection
-   * 
-   */
-
-    changeIconState = (path) => {
-        this.setState({ type: path });
-        document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
-        this.moveToInformation();
-    }
-
-    moveToSelection = () => {
-        document.getElementById("addRoomInfo1").hidden = true
-        document.getElementById("addRoomIconSelection1").hidden = false
-    }
-
-    moveToInformation = () => {
-        document.getElementById("addRoomInfo1").hidden = false
-        document.getElementById("addRoomIconSelection1").hidden = true
-    }
-
-    changeAndMove = () => {
-        this.moveToInformation();
-    }
-
-    changeDinamicallyBackground = (e) => {
-
-        var reader = new FileReader();
-        var file = e.target.files[0];
-        if (file) {
-            reader.addEventListener('load', (event) => {
-                const dataUrl = reader.result;
-                document.querySelector('main').style.backgroundImage = "url(" + dataUrl + ")";
-                document.getElementById('imageURL1').value = dataUrl;
-            });
-            reader.readAsDataURL(file);
-        }
-
-
-    }
-
-    resetBackground = () => {
-        document.getElementById('inputPicture1').value = "";
-        document.getElementById('imageURL1').value = "";
-        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
-    }
-
-    //Redirection to /house
+    /**
+     * Redirection to /house
+    */ 
     redirectToHouse = () => {
         window.location.href = '/house'
     }
 
+    /**
+     * Display error message depending on the value of this.state.error
+     */
     showError = () => {
         if (this.state.error === 0) {
             return (<span className="error-message">Please fill all informations</span>)

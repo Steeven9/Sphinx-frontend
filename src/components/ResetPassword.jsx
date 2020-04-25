@@ -18,6 +18,9 @@ class ResetPassword extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -25,7 +28,9 @@ class ResetPassword extends React.Component {
     }
 
     /**
-     * Sends all informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /auth/reset/
+     * Displays a message based on successful or not response
      */
     sendDatas = evt => {
         evt.preventDefault();

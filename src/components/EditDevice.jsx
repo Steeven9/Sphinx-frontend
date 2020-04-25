@@ -25,11 +25,22 @@ class EditDevice extends React.Component {
         }
     }
 
+    /**
+     * Takes the value for this.state.device_id parsing the URL
+     * If present, takes the value for this.state.room parsing the URL
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     * Fetches GET request to /devices/:id and 
+     * if successful sets the response into this.state.deviceName and calls this.getIconType
+     */
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
         this.setState({device_id: parsed.id})
         if (parsed.room !== undefined) this.setState({room: parsed.room, fromRoom: true})
         else this.setState({fromRoom: false})
+
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
 
         fetch('http://localhost:8080/devices/' + parsed.id, {
             method: 'GET',
@@ -51,12 +62,12 @@ class EditDevice extends React.Component {
             this.getIconType(data.icon)
         })
         .catch(error => console.log(error))
-
-        document.addEventListener("keydown", (evt) => {
-            if (evt.key === 'Enter') this.sendDatas(evt)
-        });
     }
 
+    /**
+     * Based on the received icon, it sets the corresponding iconType into the state
+     * @param icon: string
+     */
     getIconType(icon) {
         if (icon.includes("bulb-regular")) this.setState({iconType: "1"})
         else if (icon.includes("bulb-led")) this.setState({iconType: "2"})
@@ -75,7 +86,10 @@ class EditDevice extends React.Component {
     }
 
     /**
-     * Changes the Device
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /devices/:id with this.state.deviceName and iconType
+     * If successfull, calls this.redirectToPrevious, 
+     * otherwise it displays an error message
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -117,7 +131,9 @@ class EditDevice extends React.Component {
     };
 
     /**
-     * Deletes the Device
+     * Fetches DELETE request to /devices/:id
+     * If successful, calls this.redirectToPrevious, 
+     * otherwise it displays an error message
      */
     deleteDevice = evt => {
         this.setState({isLoading: true, error: -1})
@@ -149,17 +165,24 @@ class EditDevice extends React.Component {
         })
     };
 
-    // function to handle state on input change
+    /**
+     * Handles changes in Device Name input
+     */
     handleDeviceNameChange = evt => {
         this.setState({ deviceName: evt.target.value });
     };
-    
-    //Redirection to previous page
+
+    /**
+     * Redirection to previous page
+    */ 
     redirectToPrevious = () => {
         if (this.state.fromRoom) window.location.href = '/room?id=' + this.state.room
         else window.location.href = '/devices'
     }
 
+    /**
+     * Display error message depending on the value of this.state.error
+     */
     showError = () => {
         if (this.state.error === 0) {
             return (<span className="error-message">Please fill the name</span>)
@@ -172,16 +195,27 @@ class EditDevice extends React.Component {
         }
     }
 
+    /**
+     * Changes the value of this.state.iconType and iconChanged based on the received type,
+     * then calls this.moveToInformation.
+     * @param type
+     */
     changeIconState = (type) => {
         this.setState({iconType: type});
         this.moveToInformation();
     }
 
+    /**
+     * Changes the display view to the list of possible icons
+     */
     moveToSelection = () => {
         document.getElementById("editDeviceInfo").hidden = true
         document.getElementById("editDeviceIconSelection").hidden = false
     }
     
+    /**
+     * Changes the display view back to the default one
+     */
     moveToInformation = () => {
         document.getElementById("editDeviceInfo").hidden = false
         document.getElementById("editDeviceIconSelection").hidden = true

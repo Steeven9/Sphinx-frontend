@@ -88,6 +88,7 @@ class App extends React.Component {
 
     /**
      * Used to set username and session token
+     * If logged in, redirects to /
      */
     logIn = (user, token) => {
         this.setState({
@@ -107,7 +108,8 @@ class App extends React.Component {
 
     /**
      * Used to log out.
-     * exitCode: if 0, normal log out. If 1, expired session token.
+     * Redirects to /
+     * @param exitCode: if 0, normal log out. If 1, expired session token.
      */
     logOut = (exitCode) => {
         this.setState({
@@ -145,6 +147,7 @@ class App extends React.Component {
 
     /**
      * Return Device icon path
+     * @param type: string
      */
     findPathDevice = (type) => {
         let path = '/img/icons/devices/'
@@ -168,6 +171,7 @@ class App extends React.Component {
 
     /**
      * Return Room icon/background path
+     * @param type: string
      * @param flag: if false icon, if true background
      */
     findPathRoom = (type, flag) => {

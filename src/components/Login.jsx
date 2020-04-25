@@ -21,6 +21,9 @@ class Login extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -28,7 +31,11 @@ class Login extends React.Component {
     }
 
     /**
-     * Sends all informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /auth/login/:username with this.state.password
+     * If successful, fetches POST request to /auth/login/:email
+     * If both are successful, it calls this.props.login
+     * If one of them is not, it display an error message
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -111,7 +118,7 @@ class Login extends React.Component {
     };
 
     /**
-     * Display an error message if this.state.error === true
+     * Display an error message based on the value of this.state.error
      */
     showError = () => {
         if (this.state.error === 0) {
@@ -128,10 +135,16 @@ class Login extends React.Component {
         }
     }
 
-    // functions to handle state on input change
+    /**
+     * Handles changes in Username input
+     */
     handleUsernameChange = evt => {
         this.setState({ usernameOrEmail: evt.target.value });
     };
+
+    /**
+     * Handles changes in Password input
+     */
     handlePasswordChange = evt => {
         this.setState({ password: evt.target.value });
     };
