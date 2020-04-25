@@ -49,8 +49,8 @@ function Dashboard() {
             <Grid item>
                 <a href="/automation">
                     <Paper className={classes.paper}>
-                        <img alt="automation" className="dashboard-nav-img" src="/img/icons/dashboard/icon-automation-bw.svg"/>
-                        <p>Automation</p>
+                        <img alt="Automations" className="dashboard-nav-img" src="/img/icons/dashboard/icon-automation-bw.svg"/>
+                        <p>Automations</p>
                     </Paper>
                 </a>
             </Grid>
