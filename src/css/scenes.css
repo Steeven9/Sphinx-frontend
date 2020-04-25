@@ -261,9 +261,9 @@ form.scene-form {
     font-weight: 700;
 }
 
-.scenes-factory-name-input {
-    /*width: 35% !important;*/
-}
+/* .scenes-factory-name-input {
+    width: 35% !important;
+} */
 
 .scenes-factory-value-input {
     width: 99.44px !important;

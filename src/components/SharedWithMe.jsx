@@ -15,8 +15,12 @@ class SharedWithMe extends React.Component {
         }
     }
 
+    /**
+     * Fetches GET request to /guests/houses/ and if successful sets the answer into this.state.owners
+     * If unsuccesfull, it display an error message
+     */
     componentDidMount() {
-        fetch('http://localhost:8080/guests/houses', {
+        fetch('http://localhost:8080/guests/houses/', {
             method: 'GET',
             headers: {
                 'user': this.props.username,
@@ -59,10 +63,11 @@ class SharedWithMe extends React.Component {
             let i = 0;
             let toSet = owners.map((owner) =>
                 <div key={i++} className="row room">
-                    <div className="col l1 image vertical-center"><i className="material-icons account-circle">account_circle</i></div>
-                    <div className="col l5 vertical-center">{owner.username}</div>
-                    <div className="col l2"></div>
-                    <div className="col l1 room-button2 vertical-center">
+                    <div className="col l1 image vertical-center">{owner.username}</div>
+                    <div className="col l2 vertical-center"></div>
+                    <div className="col l3 vertical-center"><i>{owner.email}</i></div>
+                    <div className="col l2 vertical-center"></div>
+                    <div className="col l1 room-button1 vertical-center">
                         <i className="material-icons btn-edit"
                            onClick={() => this.redirectToHouseSharedWithMe(owner.username)}>visibility_outlined</i>
                     </div>
@@ -91,7 +96,7 @@ class SharedWithMe extends React.Component {
                     <div className="row rooms-headline">
                         <div className="col l1"></div>
                         <div className="col l5">Owner</div>
-                        <div className="col l4"></div>
+                        <div className="col l4">Email</div>
                     </div>
                     {this.state.owners}
                 </div>

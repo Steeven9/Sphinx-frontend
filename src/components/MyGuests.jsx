@@ -103,8 +103,8 @@ class MyGuests extends React.Component {
                     <div className="col l3 vertical-center"><i>{guest.email}</i></div>
                     <div className="col l2 vertical-center"></div>
                     <div className="col l1 room-button1 vertical-center">
-                    <i className="material-icons btn-edit"
-                        onClick={() => this.moveToDeletion(guest.username)}> highlight_off </i>
+                        <i className="material-icons btn-edit"
+                            onClick={() => this.moveToDeletion(guest.username)}> highlight_off </i>
                     </div>
                     <div className="col l1 room-button2 vertical-center"></div>
                 </div>
