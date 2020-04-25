@@ -14,34 +14,14 @@ class HouseSharedWithMe extends React.Component {
     }
 
     /**
-     * Changes this.state.flag value and depending on it calls either moveToDevices() or moveToScenes()
+     * Changes this.state.flag value and depending on it it changes the view between Devices and Scenes
      */
     toggleDevicesScenes = () => {
         let toggle = this.state.flag ? false : true
         this.setState({flag: toggle})
 
-        if (toggle) {
-            this.moveToDevices()
-        }
-        else {
-            this.moveToScenes()
-        }
-    }
-
-    /**
-     * Changes the display view to the list of devices
-     */
-    moveToDevices = () => {
-        document.getElementById("ownerDevices").hidden = false
-        document.getElementById("ownerScenes").hidden = true
-    }
-
-    /**
-     * Changes the display view to the list of scenes
-     */
-    moveToScenes = () => {
-        document.getElementById("ownerDevices").hidden = true
-        document.getElementById("ownerScenes").hidden = false
+        document.getElementById("ownerDevices").hidden = !toggle
+        document.getElementById("ownerScenes").hidden = toggle
     }
 
     //Redirection to /sharedWithMe
