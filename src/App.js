@@ -22,6 +22,7 @@ import AddGuest from './components/AddGuest';
 import SharedWithMe from './components/SharedWithMe';
 import HouseSharedWithMe from './components/HouseSharedWithMe';
 import LogOut from './components/LogOut';
+import ResendEmail from './components/ResendEmail';
 import Error404 from './components/Error404';
 
 
@@ -348,6 +349,10 @@ class App extends React.Component {
 
                             <Route path="/changepassword">
                                 <ChangePassword />
+                            </Route>
+
+                            <Route path="/resend">
+                                <ResendEmail />
                             </Route>
 
                             <Route exact path="/">

@@ -112,7 +112,7 @@ class EditDevice extends React.Component {
                     this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({error: 2, errorType: e}))
+            .catch( e => this.setState({error: 2, errorType: e.toString()}))
         }
     };
 
@@ -145,7 +145,7 @@ class EditDevice extends React.Component {
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({error: 2, errorType: e})
+            this.setState({error: 2, errorType: e.toString()})
         })
     };
 
