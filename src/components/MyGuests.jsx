@@ -20,6 +20,11 @@ class MyGuests extends React.Component {
         }
     }
 
+    /**
+     * Fetches GET request to /guests/ and if succesfull sets the answer into this.state.guests
+     * Fetches GET request to /user/ and if succesfull sets the value of allowSecurityCamers into the state
+     * If any of the fetches in unsuccesfull, it display an error message
+     */
     componentDidMount() {
         fetch('http://localhost:8080/guests/', {
             method: 'GET',
@@ -32,6 +37,7 @@ class MyGuests extends React.Component {
             if (res.status === 401) {
                 this.props.logOut(1);
             } else if (res.status === 200) {
+                console.log(res)
                 return res.text();
             } else {
                 return null;
@@ -107,32 +113,63 @@ class MyGuests extends React.Component {
         }
     }
 
+    /**
+     * Changes the display view to show confirmation of the deletion of the selected user
+     * @param guestUsername: username of the guest to delete
+     */
     moveToDeletion = (guestUsername) => {
         this.setState({guestToDelete: guestUsername})
         document.getElementById("guestList").hidden = true
         document.getElementById("deleteGuestConfirmation").hidden = false
     }
 
+    /**
+     * Changes the display view to the list of guests
+     */
     moveToGuestList = () => {
         this.setState({guestToDelete: ""})
         document.getElementById("guestList").hidden = false
         document.getElementById("deleteGuestConfirmation").hidden = true
     }
 
+    /**
+     * Changes this.state.allowSecurityCamera value and then 
+     * fetches it thorugh a PUT request to /user/:username with this.props.username
+     */
+    changeSecurityCameraPermissions = () => {
+        let toSet = this.state.allowSecurityCameras ? false : true
+        fetch('http://localhost:8080/user/' + this.props.username, {
+            method: 'PUT',
+            headers: { 
+                'user': this.props.username,
+                'session-token': this.props.session_token,
+            },
+            body: JSON.stringify({allowSecurityCameras: toSet})
+        })
+        .then((res) => {
+            // console.log(res)
+        })
+        .catch( e => { console.log(e) } );
+    }
+
+    /**
+     * Fetches a DELETE request to /guests/:username with the username of the Guest to delete
+     * If successfull, calls this.moveToGuestList and reloads the page in order to receive the updated list of guests
+     * If unsuccessfull, changes the value of this.state.error
+     */
     deleteGuest = () => {
         this.setState({isLoading: true, error: -1})
         fetch('http://localhost:8080/guests/' + this.state.guestToDelete, {
             method: 'DELETE',
             headers: { 
-                'user': this.state.username,
-                'session-token': this.state.session_token,
+                'user': this.props.username,
+                'session-token': this.props.session_token,
             }
         })
         .then( (res) => {
             this.setState({isLoading: false})
             if (res.status === 204) {
-                document.getElementById("guestList").hidden = false
-                document.getElementById("deleteGuestConfirmation").hidden = true
+                this.moveToGuestList()
                 window.location.href = '/guests'
             }
             else if (res.status === 401) {
@@ -151,6 +188,9 @@ class MyGuests extends React.Component {
         })
     }
 
+    /**
+     * Returns HTML with error message to display based on this.state.error
+     */
     showError = () => {
         if (this.state.error === 0) {
             return (<span className="error-message">Error: bad request</span>)
@@ -158,23 +198,6 @@ class MyGuests extends React.Component {
         else if (this.state.error === 1) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
-    }
-
-    changeSecurityCameraPermissions = () => {
-        let toSet = this.state.allowSecurityCameras ? false : true
-        console.log(toSet)
-        fetch('http://localhost:8080/user/' + this.state.username, {
-            method: 'POST',
-            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: JSON.stringify(
-                {
-                    allowSecurityCameras: toSet,
-                })
-        })
-        .then((res) => {
-            // console.log(res)
-        })
-        .catch( e => { console.log(e) } );
     }
 
     /**

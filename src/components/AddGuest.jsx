@@ -17,12 +17,16 @@ class AddGuest extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
     }
 
+    //Input Handler
     handleGuestUsernameOrEmailChange = (evt) => {
         this.setState({ guestUsernameOrEmail: evt.target.value });
     }
@@ -32,6 +36,10 @@ class AddGuest extends React.Component {
         window.location.href = '/guests'
     }
 
+    /**
+     * Fetches a POST request with this.state.guestUsernameOrEmail if it's not empty,
+     * otherwise it sets this.state.error to 0
+     */
     sendDatas = evt => {
         evt.preventDefault();
 
@@ -43,8 +51,8 @@ class AddGuest extends React.Component {
             fetch('http://localhost:8080/guests/', {
                 method: 'POST',
                 headers: { 
-                    'user': this.state.username,
-                    'session-token': this.state.session_token,
+                    'user': this.props.username,
+                    'session-token': this.props.session_token,
                     'Accept': 'application/json', 
                     'Content-Type': 'application/json' 
                 },
@@ -71,6 +79,9 @@ class AddGuest extends React.Component {
         }
     }
 
+    /**
+     * Returns HTML with error message to display based on this.state.error
+     */
     showError = () => {
         if (this.state.error === 0) {
             return (<span className="error-message">Please fill the guest's username or email</span>)
@@ -84,7 +95,7 @@ class AddGuest extends React.Component {
     }
 
     /**
-     * Renders the list of rooms and device plus the form for the guest's username
+     * Renders the input for adding a new Guest
      */
     render() {
         return (
