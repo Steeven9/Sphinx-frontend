@@ -17,6 +17,9 @@ import Room from './components/Room';
 import Devices from './components/Devices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
+import Scenes from './components/Scenes';
+import AddScene from './components/AddScene';
+import EditScene from './components/EditScene';
 import LogOut from './components/LogOut';
 import ResendEmail from './components/ResendEmail';
 import Error404 from './components/Error404';
@@ -291,6 +294,36 @@ class App extends React.Component {
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                         findPathDevice={this.findPathDevice}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/scenes">
+                                {this.state.loggedIn ?
+                                    <Scenes
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/addScene">
+                                {this.state.loggedIn ?
+                                    <AddScene
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
+                            <Route path="/editScene">
+                                {this.state.loggedIn ?
+                                    <EditScene
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
                                     />
                                     : this.accessDenied()}
                             </Route>

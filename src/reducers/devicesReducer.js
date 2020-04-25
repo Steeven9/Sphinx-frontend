@@ -1,5 +1,37 @@
 /**
- * This reducer controles the actions triggered by the events
+ * Generic fetch to POST and PUT
+ * @param method
+ * @param device
+ */
+function doFetch(fetchUrl, method, body) {
+    const host = window.location.protocol + '//' + window.location.hostname + ':8080';
+    const headers = {
+        'user': localStorage.getItem('username'),
+        'session-token': localStorage.getItem('session_token'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    };
+    const devicesFetchUrl = host + '/devices' + fetchUrl;
+
+    fetch(devicesFetchUrl, {
+        method: method,
+        headers: headers,
+        body: body
+    })
+        .then((res) => {
+            if (res.status === 200 || res.status === 203) {
+                console.log(method + ' successful!');
+                return res
+            } else {
+                console.log(method + ' unsuccessful!');
+                return res
+            }
+        })
+        .catch(error => console.log(error))
+}
+
+/**
+ * This reducer controls the actions triggered by the events
  * handled by the device components and its children
  * @param state
  * @param action
@@ -7,63 +39,48 @@
  */
 const devicesReducer = (state, action) => {
     switch (action.type) {
+
         case 'POPULATE_DEVICES':
+            console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
 
+        case 'UPDATE_STATE':
+            console.log('Dispatch: UPDATE_STATE');
+            return state;
+
         case 'MODIFY_DEVICE':
-            const params = (new URL(document.location)).searchParams;
-            const path = window.location.pathname.toLowerCase().split('/');
-            const devicesFetchUrl = 'http://localhost:8080/devices/';
-            const roomDevicesFetchUrl = 'http://localhost:8080/rooms/' + params.get('id') + '/devices';
-            let fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
-            let body;
+            console.log('Dispatch: MODIFY_DEVICE');
+            let fetchUrl = '';
+            let body = {};
 
-                if(action.device.slider !== undefined) {
-                    body = {
-                        slider: action.device.slider,
-                        on: action.device.on
-                    }
-                } else {
-                    body = {
-                        on: action.device.on
-                    }
+            if (action.device.reset) {
+                fetchUrl = '/reset/' + action.device.id;
+                action.device.reset = false;
+                body = {};
+            } else {
+                fetchUrl = '/' + action.device.id;
+
+                switch (action.device.type) {
+                    case 2:  //DimmableLight
+                    case 4:  //DimmableSwitch
+                    case 5:  //StatelessDimmableSwitch
+                    case 11: //Thermostat
+                        body.slider = action.device.slider / 100;
+                        body.on = action.device.on;
+                        break;
+                    case 12: //SmartCurtains
+                        body.slider = action.device.slider / 100;
+                        body.state = action.device.state;
+                        body.source = action.device.source;
+                        break;
+                    default:  //Light, Switch, SmartPlug, SecurityCamera
+                        body.on = action.device.on;
+                        break;
                 }
+            }
 
-                let headers = {
-                    'user': localStorage.getItem('username'),
-                    'session-token': localStorage.getItem('session_token'),
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                };
-
-                fetchUrl = fetchUrl + action.device.id;
-
-                fetch(devicesFetchUrl, {
-                method: 'PUT',
-                headers: headers,
-                body: JSON.stringify(body)
-            })
-                .then(res => {
-                    if (res.status === 200){
-                        fetch(fetchUrl, {
-                            method: 'GET',
-                            headers: headers,
-                        })
-                            .then( (res) => {
-                                if (res.status === 200) {
-                                    return res.text();
-                                } else {
-                                    return null;
-                                }
-                            })
-                            .then( (data) => {
-                                let response = JSON.parse(data);
-                                state = response
-                            })
-                            .catch(e => console.log(e));
-
-                    }})
-                .catch(e => console.log(e));
+            doFetch(fetchUrl, 'PUT', JSON.stringify(body));
+            action.setActionCompleted(true);
             return state;
 
         case 'SYNC_DEVICES':
@@ -93,17 +110,16 @@ const devicesReducer = (state, action) => {
                         }
 
                         // Allows self-power OFF of child
-                    } else if (d.id === action.device.id){
+                    } else if (d.id === action.device.id) {
                         d.on = action.device.on;
 
                         // Forbids regular switch to set a dimmable light's slider to 0 on power ON
-                    } else if (d.switched === action.device.id && action.device.switches && action.device.type === 3) {
+                    } else if (d.switched === action.device.id && action.device.switches !== null && action.device.type === 3) {
                         d.on = action.device.on;
                     }
                 });
                 action.device.clicked = false
             }
-
             return [...state];
 
         default:
@@ -111,4 +127,4 @@ const devicesReducer = (state, action) => {
     }
 };
 
-export { devicesReducer as default }
+export {devicesReducer as default}

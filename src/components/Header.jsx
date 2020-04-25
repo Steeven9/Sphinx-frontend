@@ -2,6 +2,8 @@ import React from 'react';
 import '../css/App.css';
 
 
+const active = window.location.pathname.toLowerCase().split('/')
+
 class Header extends React.Component {
 
     constructor(props) {
@@ -50,23 +52,35 @@ class Header extends React.Component {
                             {
                                 this.state.loggedIn ?
                                     <>
-                                        <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                            <li><a href="/devices">My devices</a></li>
-                                            <li><a href="/house">My rooms</a></li>
-                                            <li><a href="/scenes">Scenes</a> </li>
-                                            <li><a href="/automation">Automation</a></li>
-                                            <li><a href="/guests">Guests</a></li>
-                                            <li><a href="/logout">Log out</a></li>
+                                        <ul className="right hide-on-med-and-down">
+                                            <li><a className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
+                                                   href="/">Dashboard</a></li>
+                                            <li><a
+                                                className={(active[1] === 'devices') ? 'nav-link active' : 'nav-link'}
+                                                href="/devices">Devices</a></li>
+                                            <li><a
+                                                className={(active[1] === 'house' || active[1] === 'room') ? 'nav-link active' : 'nav-link'}
+                                                href="/house">Rooms</a></li>
+                                            <li><a className={(active[1] === 'scenes') ? 'nav-link active' : 'nav-link'}
+                                                   href="/scenes">Scenes</a></li>
+                                            <li><a
+                                                className={(active[1] === 'automations') ? 'nav-link active' : 'nav-link'}
+                                                href="/automations">Automations</a></li>
+                                            <li><a className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'}
+                                                   href="/guests">Guests</a></li>
+                                            <li><a className='nav-link' href="/logout">Log out</a></li>
                                         </ul>
                                     </>
                                     :
-
-                                    <ul className="right nav-menu-desktop-right hide-on-med-and-down">
-                                        <li><a href="/signup">Create account</a></li>
-                                        <li><a href="/login">Log in</a></li>
+                                    <ul className="right hide-on-med-and-down">
+                                        <li><a className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
+                                               href="/">Home</a></li>
+                                        <li><a className={(active[1] === 'signup') ? 'nav-link active' : 'nav-link'}
+                                               href="/signup">Create account</a></li>
+                                        <li><a className={(active[1] === 'login') ? 'nav-link active' : 'nav-link'}
+                                               href="/login">Log in</a></li>
                                     </ul>
                             }
-
                         </div>
                     </nav>
                 </div>

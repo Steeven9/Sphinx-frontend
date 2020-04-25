@@ -1,7 +1,6 @@
 /* NOTE: Copy and use this class with '!important' to give a custom width to the
 context box, in the corresponding CSS file overriding the global style */
 
-
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,700,800&display=swap');
 
 .App {
@@ -54,10 +53,10 @@ body {
     display: flex !important;
     min-height: 100vh !important;
     flex-direction: column !important;
-    background-color: #F4F4F4 !important;
+    background-color: #ededed !important;
 }
 
-main{
+main {
     flex: 1 0 auto !important;
 }
 
@@ -80,10 +79,6 @@ nav {
     background-size: cover;
     z-index: -1;
     color: #FFF;
-}
-
-nav li {
-    margin-right: 5vh;
 }
 
 h1 {
@@ -122,6 +117,10 @@ h3 {
     text-align: center;
 }
 
+.right-text {
+    text-align: right;
+}
+
 .error-message {
     color: #E30000;
 }
@@ -135,6 +134,15 @@ h3 {
     background-color: #FFFFFF !important;
     color: #2C2C2C !important;
     width: calc(60% + 10vmin) !important;
+    border-radius: 10px !important;
+    padding: 20px 40px 20px 40px !important;
+}
+
+.home-content-box {
+    margin: 5vh auto !important;
+    background-color: #FFFFFF !important;
+    color: #2C2C2C !important;
+    width: calc(70% + 15vmin) !important;
     border-radius: 10px !important;
     padding: 20px 40px 20px 40px !important;
 }
@@ -202,7 +210,7 @@ h3 {
     align-items: center !important;
 }
 
-.text-homepage-headline{
+.text-homepage-headline {
     margin-top: calc(2vw + 2vh + 0.25vmin);
 }
 
@@ -214,11 +222,7 @@ h3 {
     padding: 10px 40px 15px 40px !important;
 }
 
-.nav-menu-desktop-right {
-    margin-right: 40px;
-}
-
-.row-collapsible, .col-collapsible {
+.row-custom, .col-custom {
     padding: 0 !important;
 }
 
@@ -231,12 +235,12 @@ h3 {
 }
 
 .dashboard-nav {
-    margin: 0 auto !important;
+    margin: 0 !important;
     margin-top: calc(5% + 1vh) !important;
-    width: 100% !important;
-    min-height: 100% !important;
-    align-items: center !important;
-    justify-content: center !important;
+    /*width: 100% !important;*/
+    /*min-height: 100% !important;*/
+    /*align-items: center !important;*/
+    /*justify-content: center !important;*/
 }
 
 .dashboard-nav-img {
@@ -257,3 +261,56 @@ h3 {
     z-index: 1;
     will-change: width, height;
 }
+
+nav ul a.active {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+nav ul a:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.nav-link {
+    padding: 0 5vh 0 5vh !important;
+}
+
+.btn-icon {
+    width: 40px;
+    height: 40px;
+    color: #000000 !important;
+    cursor: pointer;
+}
+
+.btn-icon:hover {
+    opacity: 0.75 !important;
+}
+
+.hidden {
+    visibility: hidden !important;
+}
+
+/* Action feedback to user starts here */
+.error-message {
+    color: #E30000;
+}
+
+.success-message {
+    color: #028828;
+}
+
+.message-one-line {
+    font-weight: 600;
+    font-size: 14px;
+    max-height: 20px;
+    min-height: 20px;
+}
+
+.message-two-lines {
+    margin: 20px 0 5px 0;
+    font-weight: 600;
+    font-size: 14px;
+    max-height: 42px;
+    min-height: 42px;
+}
+
+/* Action feedback to user end */

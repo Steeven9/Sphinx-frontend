@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react'
-import DevicesContext from '../../context/devices-context'
+import DevicesContext from '../../context/devicesContext'
 
 
 /**
@@ -9,7 +9,7 @@ import DevicesContext from '../../context/devices-context'
  * @constructor
  */
 const PowerSwitch = ({device}) => {
-    const {devices,dispatch} = useContext(DevicesContext);
+    const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const [on, setPower] = useState(device.on);
 
     /**
@@ -17,7 +17,7 @@ const PowerSwitch = ({device}) => {
      */
     useEffect(() => {
         setPower(device.on)
-    }, [device, devices]);
+    }, [device]);
 
     /**
      * Toggles the device on change and dispatches the the action to the devices reducer
@@ -27,12 +27,12 @@ const PowerSwitch = ({device}) => {
         setPower(e.target.checked);
         device.on = e.target.checked;
         device.clicked = true;
-        dispatch({type: 'SYNC_DEVICES', device: device});
-        dispatch({type: 'MODIFY_DEVICES', device: device});
+        // console.log('Turning -> ' + device.name + ' ' + (device.on ? 'ON' : 'OFF'));
+        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
-    return(
-        <div className="">
+    return (
+        <div>
             <label>
                 <input
                     type='checkbox'
