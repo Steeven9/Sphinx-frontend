@@ -34,7 +34,7 @@ class AddRoom extends React.Component {
     
     /**
      * If all informations aren't filled in, it displays an error message, otherwise:
-     * Fetches POST request to /rppms/ with this.state.roomName, iconType and the background image of the page
+     * Fetches POST request to /rooms/ with this.state.roomName, iconType and the background image of the page
      * Display a different message depending on if it's successful or not.
      */
     sendDatas = evt => {
