@@ -29,14 +29,6 @@
     align-content: flex-end;
 }
 
-.scene-item {
-    height: 40px !important;
-    display: flex !important;
-    text-align: center !important;
-    vertical-align: middle !important;
-    align-items: center !important;
-}
-
 .img-scene-icon {
     /*width: 40px !important;*/
     height: 40px !important;

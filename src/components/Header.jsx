@@ -68,6 +68,8 @@ class Header extends React.Component {
                                                 href="/automations">Automations</a></li>
                                             <li><a className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'}
                                                    href="/guests">Guests</a></li>
+                                            <li><a className={(active[1] === 'sharedwithme') ? 'nav-link active' : 'nav-link'}
+                                                    href="/sharedWithMe">Shared with me</a></li>
                                             <li><a className='nav-link' href="/logout">Log out</a></li>
                                         </ul>
                                     </>
