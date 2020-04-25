@@ -4,7 +4,7 @@ import '../css/loginSignup.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
-const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
+const ColorCircularProgress = withStyles({ root: { color: '#580B71' }, })(CircularProgress);
 
 class Login extends React.Component {
 
@@ -34,69 +34,79 @@ class Login extends React.Component {
         evt.preventDefault();
 
         if (this.state.usernameOrEmail === '' || this.state.password === '') {
-            this.setState({error: 0})
+            this.setState({ error: 0 })
             return;
         }
-        
-        this.setState({isLoading: true, error: -1, statusCode: ''})
+
+        this.setState({ isLoading: true, error: -1, statusCode: '' })
 
         fetch('http://localhost:8080/auth/login/' + this.state.usernameOrEmail, {
             method: 'POST',
-            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
+            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
             body: this.state.password
         })
         .then((res) => {
-            this.setState({statusCode: res.status});
+            this.setState({ statusCode: res.status });
 
             if (res.status === 200) {
                 return res.text();
-            } 
+            }
             else if (res.status === 401 || res.status === 404) {
-                this.setState({error: 1})
-            } 
+                this.setState({ error: 1 })
+            }
             else if (res.status === 403) {
-                this.setState({error: 2})
+                this.setState({ error: 2 })
             }
             else {
-                this.setState({error: 3, errorType: "Error Code: " + res.status})
+                this.setState({ error: 3, errorType: "Error Code: " + res.status })
             }
             return null;
         })
         .then((data) => {
-            this.setState({sessionToken: data});
+            if (data != null) {
+                this.setState({ sessionToken: data });
 
-            return fetch('http://localhost:8080/auth/validate', {
-                method: 'POST',
-                headers: {'Accept': 'application/json', 'Content-Type': 'application/json',
-                        'user': this.state.usernameOrEmail, 'session-token': data},
-            });
+                return fetch('http://localhost:8080/auth/validate', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json', 'Content-Type': 'application/json',
+                        'user': this.state.usernameOrEmail, 'session-token': data
+                    },
+                });
+            } else {
+                return null;
+            }
         })
         .then((res) => {
-            this.setState({statusCode: res.status});
+            if (res != null) {
+                this.setState({ statusCode: res.status });
 
-            if (res.status === 200) {
-                return res.text();
-            } 
-            else if (res.status === 401 || res.status === 404) {
-                this.setState({error: 1})
-            } 
-            else if (res.status === 403) {
-                this.setState({error: 2})
+                if (res.status === 200) {
+                    return res.text();
+                }
+                else if (res.status === 401 || res.status === 404) {
+                    this.setState({ error: 1 })
+                }
+                else if (res.status === 403) {
+                    this.setState({ error: 2 })
+                }
+                else {
+                    this.setState({ error: 3, errorType: "Error Code: " + res.status })
+                }
+                return null;
+            } else {
+                return null;
             }
-            else {
-                this.setState({error: 3, errorType: "Error Code: " + res.status})
-            }
-            return null;
         })
         .then((data) => {
-            this.setState({isLoading: false})
+            this.setState({ isLoading: false })
             if (data !== null) {
                 this.props.logIn(data, this.state.sessionToken);
             }
         })
-        .catch( e => {
-            this.setState({isLoading: false})
-            this.setState({error: 3, errorType: e.toString()})
+        .catch(e => {
+            this.setState({ isLoading: false })
+            this.setState({ error: 3, errorType: e.toString() })
         });
     };
 
@@ -120,10 +130,10 @@ class Login extends React.Component {
 
     // functions to handle state on input change
     handleUsernameChange = evt => {
-        this.setState({usernameOrEmail: evt.target.value});
+        this.setState({ usernameOrEmail: evt.target.value });
     };
     handlePasswordChange = evt => {
-        this.setState({password: evt.target.value});
+        this.setState({ password: evt.target.value });
     };
 
     /**
@@ -131,7 +141,7 @@ class Login extends React.Component {
      * isEnabled: boolean to enable button
      */
     render() {
-        const {usernameOrEmail, password} = this.state;
+        const { usernameOrEmail, password } = this.state;
         const isEnabled = usernameOrEmail.length > 0 && password.length > 0;
         return (
             <div id="wrapper" className="homepage img-homepage-headline main-img-background">
@@ -152,7 +162,7 @@ class Login extends React.Component {
                                     name="username"
                                     value={this.state.usernameOrEmail}
                                     onChange={this.handleUsernameChange}
-                                    placeholder="Username or email"/>
+                                    placeholder="Username or email" />
                             </div>
 
                             <div className="dates-input1">
@@ -162,7 +172,7 @@ class Login extends React.Component {
                                     required={true}
                                     value={this.state.password}
                                     onChange={this.handlePasswordChange}
-                                    placeholder="Password"/>
+                                    placeholder="Password" />
                             </div>
 
                             <div className="center-text forgot-password">
@@ -171,7 +181,7 @@ class Login extends React.Component {
 
                             <div className="message-two-lines center-text">
                                 <span>
-                                    <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                                    <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"} />
                                 </span>
                                 <span>
                                     {this.showError()}
@@ -180,16 +190,16 @@ class Login extends React.Component {
 
                             <div className="center">
                                 <button type="button"
-                                        name="button"
-                                        className="btn-secondary waves-effect waves-light btn"
-                                        onClick={() => window.location.href = "/signup"}>Create account
+                                    name="button"
+                                    className="btn-secondary waves-effect waves-light btn"
+                                    onClick={() => window.location.href = "/signup"}>Create account
                                 </button>
 
                                 <button type="button"
-                                        disabled={!isEnabled}
-                                        name="button"
-                                        className="btn-primary waves-effect waves-light btn"
-                                        onClick={this.sendDatas}>Log in
+                                    disabled={!isEnabled}
+                                    name="button"
+                                    className="btn-primary waves-effect waves-light btn"
+                                    onClick={this.sendDatas}>Log in
                                 </button>
                             </div>
                         </div>
