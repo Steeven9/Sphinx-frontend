@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/editPages.css'
+import '../css/editPages.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 

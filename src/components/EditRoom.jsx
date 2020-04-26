@@ -239,8 +239,8 @@ class EditRoom extends React.Component {
      */
     render() {
         return (
-            <div className="addRoom" id="addRoom">
-                <div id="addRoomInfo1" className="content-box ">
+            <div className="addRoom container" id="addRoom">
+                <div id="addRoomInfo1" className="room-edit-content-box z-depth-2 content-box-transparency">
                     <h2 className="title">Edit room</h2>
                     <div className="dates">
                         <div className="roomNameAndIcon">
