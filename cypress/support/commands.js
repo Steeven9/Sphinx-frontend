@@ -58,10 +58,18 @@ Cypress.Commands.overwrite("visit", async (originalFn, url, options) => {
     return originalFn(url, opts);
 });
 Cypress.Commands.add("Login", () => {
+    cy.server()
+    cy.route({
+        url: 'http://localhost:8080/auth/login/user1',
+        method: "POST",
+        body: "1234",
+        response: "sdjvayusd6asdyasgdi7a"
+    })
+
     cy.visit('/login')
-        cy.get('input[type=text]')
-            .type('user1')
-        cy.get('input[type=password]')
-            .type('1234')
-        cy.get('.btn-primary').click()
+    cy.get('input[type=text]')
+        .type('user1')
+    cy.get('input[type=password]')
+        .type('1234')
+    cy.get('.btn-primary').click()
 })

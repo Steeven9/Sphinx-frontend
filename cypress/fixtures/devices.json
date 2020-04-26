@@ -1,0 +1,5 @@
+{ "name": "light",
+    "icon": "/img/icons/devices/bulb-regular.svg",
+    "type": 1,
+    "roomId": 1
+}
