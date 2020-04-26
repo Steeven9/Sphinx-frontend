@@ -8,7 +8,7 @@ import DevicesContext from "../../context/devicesContext";
  * @returns {SmartPlug}
  */
 const SmartPlug = (device) => {
-    const [consumption, setConsumption] = useState((device.device.label !== null) ? device.device.label + ' kWh' : '0 kWh');
+    const [consumption, setConsumption] = useState((device.device.label !== null) ? device.device.label : '0 kWh');
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
 
     const resetSmartPlug = (e) => {
@@ -16,7 +16,7 @@ const SmartPlug = (device) => {
         setConsumption('0 kWh');
         device.device.label = '0 kWh';
         device.device.reset = true;
-        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
+        dispatch({type: 'MODIFY_DEVICE', device: device.device, setActionCompleted: setActionCompleted});
     };
 
     device.device.reset = false;

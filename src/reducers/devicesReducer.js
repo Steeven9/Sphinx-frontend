@@ -52,7 +52,7 @@ const devicesReducer = (state, action) => {
             console.log('Dispatch: MODIFY_DEVICE');
             let fetchUrl = '';
             let body = {};
-
+            
             if (action.device.reset) {
                 fetchUrl = '/reset/' + action.device.id;
                 action.device.reset = false;
