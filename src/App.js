@@ -147,7 +147,8 @@ class App extends React.Component {
 
     /**
      * Return Device icon path
-     * @param type: string
+     * @param {string} type - the device type
+     * @return {string} the path to the device icon
      */
     findPathDevice = (type) => {
         let path = '/img/icons/devices/'
