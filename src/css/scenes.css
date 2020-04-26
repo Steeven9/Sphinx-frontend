@@ -354,3 +354,11 @@ form.scene-form {
     color: gray;
     font-style: italic;
 }
+
+.select-border {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #f2f2f2;
+    border-radius: 2px;
+    height: 3rem;
+}
