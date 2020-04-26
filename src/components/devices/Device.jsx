@@ -5,6 +5,7 @@ import {getRowIcon} from '../../helpers/getDeviceMetadataHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
 import Thermostat from './Thermostat'
+import StatelessDimmerButtons from './StatelessDimmerButtons'
 import Slider from '@material-ui/core/Slider'
 import CardMedia from '@material-ui/core/CardMedia'
 import Dialog from '@material-ui/core/Dialog';
@@ -113,14 +114,15 @@ const Device = ({device}) => {
      * @param device {Device}
      * @returns {Slider|SmartPlug display|Sensor display}
      */
-    function getSliderOrDisplayOrSmartPlug(device) {
+    function getDeviceControllerOrDisplay(device) {
         switch (device.type) {
             case 2: //DimmableLight
             case 4: //DimmableSwitch
-            case 5: //StatelessDimmableSwitch
             case 11: //Thermostat
             case 12: //SmartCurtains
                 return getSlider(device.type);
+            case 5: //StatelessDimmableSwitch
+                return (<StatelessDimmerButtons device={device} devices={devices} setIntensity={setIntensity}/>)
             case 6: //SmartPlug
                 return (<SmartPlug device={device}/>);
             case 7: //HumiditySensor
@@ -184,7 +186,7 @@ const Device = ({device}) => {
      * @param device {Device}
      * @returns {PowerSwitch}
      */
-    function getPowerSwitch(device) {
+    function getSwitch(device) {
         switch (device.type) {
             case 7: //HumiditySensor
             case 8: //LightSensor
@@ -199,6 +201,7 @@ const Device = ({device}) => {
                         </div>
                     </div>
                 </div>);
+            case 5: //StatelessDimmer
             case 11: //Thermostat
                 return (
                     <div className="col col-custom l1 m1 s1">
@@ -273,10 +276,10 @@ const Device = ({device}) => {
                 </div>
                 <div className="device-control col col-custom l6 m6 s12">
                     <div className="col col-custom l8 m6 s8">
-                        {getSliderOrDisplayOrSmartPlug(device)}
+                        {getDeviceControllerOrDisplay(device)}
                     </div>
                     <div>
-                        {getPowerSwitch(device)}
+                        {getSwitch(device)}
                     </div>
                 </div>
             </form>

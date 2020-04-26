@@ -63,7 +63,12 @@ const devicesReducer = (state, action) => {
                 switch (action.device.type) {
                     case 2:  //DimmableLight
                     case 4:  //DimmableSwitch
+                        body.on = action.device.on;
+                        body.slider = action.device.slider / 100;
+                        break;
                     case 5:  //StatelessDimmableSwitch
+                        body.slider = action.device.slider / 100;
+                        break;
                     case 11: //Thermostat
                         body.slider = action.device.slider / 100;
                         body.state = action.device.state;
