@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {useEffect, useState, useReducer} from 'react'
 import DevicesContext from '../../context/devicesContext'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
@@ -16,10 +16,6 @@ const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
-// let isDeviceStateChanging = false;
-let isLoading = true;
-let isDataFound = true;
-let isNetworkError = false;
 let isRoom = false;
 let title = "";
 
@@ -31,6 +27,9 @@ let title = "";
 const DevicesPanel = () => {
     const [actionCompleted, setActionCompleted] = React.useState(false);
     const [devices, dispatch] = useReducer(devicesReducer, []);
+    const [isDataFound, setIsDataFound] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isNetworkError, setIsNetworkError] = useState(false);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
     if (path[1] === 'room' && params.get('id')) {
@@ -81,12 +80,14 @@ const DevicesPanel = () => {
                 }
             })
             .then((data) => {
-                isLoading = false;
-
-                if (data === null || data.length === 0) {
-                    isDataFound = false;
+                setIsLoading(false)
+                let devices = JSON.parse(data)
+                console.log(devices)
+                console.log(devices.length)
+                if (devices.length === 0) {
+                    setIsDataFound(false);
                 } else {
-                    let devices = JSON.parse(data).sort(function (a, b) {
+                    devices.sort(function (a, b) {
                         let keyA = a.name;
                         let keyB = b.name;
                         if (keyA < keyB) return -1;
@@ -94,13 +95,13 @@ const DevicesPanel = () => {
                         return 0;
                     });
                     dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                    isLoading = false;
+                    setIsLoading(false)
                 }
             })
             .catch(e => {
                 console.log(e);
-                isLoading = false;
-                isNetworkError = true;
+                setIsLoading(false)
+                setIsNetworkError(true)
             });
         setActionCompleted(false)
     }, []);
@@ -130,10 +131,10 @@ const DevicesPanel = () => {
                         }
                     })
                     .then((data) => {
-                        isLoading = false;
+                        setIsLoading(false)
 
                         if (data === null || data.length === 0) {
-                            isDataFound = false;
+                            setIsDataFound(false)
                         } else {
                             let devices = JSON.parse(data).sort(function (a, b) {
                                 let keyA = a.name;
@@ -143,13 +144,13 @@ const DevicesPanel = () => {
                                 return 0;
                             });
                             dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                            isLoading = false;
+                            setIsLoading(false)
                         }
                     })
                     .catch(e => {
                         console.log(e);
-                        isLoading = false;
-                        isNetworkError = true;
+                        setIsLoading(false)
+                        setIsNetworkError(true)
                     });
                 setActionCompleted(false)
             }

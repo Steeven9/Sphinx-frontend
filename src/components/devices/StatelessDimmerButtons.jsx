@@ -26,8 +26,6 @@ function StatelessDimmerButtons({device, devices}) {
         device.slider = val;
         switchedDevices.forEach((d) => {
             if (d.switched === device.id) {
-                console.log('d.switched: ' + d.switched)
-                console.log('device.id: ' + device.id)
                 d.slider = d.slider + val;
 
                 if (d.slider > 100) {
