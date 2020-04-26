@@ -5,8 +5,22 @@ describe('test the devices page', function () {
         cy.Login()
     })
 
-    it('testing all the buttons', function () {  
-   
+    it('testing all the buttons', function () {
+        cy.route({
+            url: 'http://localhost:8080/devices',
+            method: "GET",
+            response: "fixture:devices.json"
+        })
+        cy.route({
+            url: 'http://localhost:8080/auth/validate',
+            method: "POST",
+            headers: {
+                username: "user1",
+                "session-token": "sdjvayusd6asdyasgdi7a"
+            },
+            response: "user1"
+        })
+
         cy.visit('/devices')
         cy.contains('My devices')
 
@@ -25,6 +39,6 @@ describe('test the devices page', function () {
             .click()
             .url()
             .should('include', 'editDevice?id=1')
-            
+
     })
 })  
