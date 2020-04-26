@@ -6,6 +6,9 @@ describe('test the devices page', function () {
     })
 
     it('testing all the buttons', function () {
+        let headers = cy.getHeaders();
+
+        cy.server()
         cy.route({
             url: 'http://localhost:8080/devices',
             method: "GET",
@@ -14,18 +17,15 @@ describe('test the devices page', function () {
         cy.route({
             url: 'http://localhost:8080/auth/validate',
             method: "POST",
-            headers: {
-                username: "user1",
-                "session-token": "sdjvayusd6asdyasgdi7a"
-            },
+            headers: headers,
             response: "user1"
         })
 
         cy.visit('/devices')
-        cy.contains('My devices')
+        cy.contains('My Devices')
 
-        cy.get('.btn')
-            .click()
+        cy.get('.btn-primary-circular')
+            .click({force: true})
         cy.url()
             .should('include', '/addDevice')
         cy.visit('/devices')
@@ -39,6 +39,5 @@ describe('test the devices page', function () {
             .click()
             .url()
             .should('include', 'editDevice?id=1')
-
     })
 })  

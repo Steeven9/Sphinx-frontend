@@ -6,6 +6,8 @@ describe('test the edit device page', function () {
     })
 
     it('testing all the buttons', function () {
+        let headers = cy.getHeaders();
+
         cy.server()
         cy.route({
             url: 'http://localhost:8080/auth/validate',
@@ -16,7 +18,13 @@ describe('test the edit device page', function () {
             },
             response: "user1"
         })
-   
+        cy.route({
+            url: 'http://localhost:8080/devices/1',
+            method: "GET",
+            headers: headers,
+            response: "fixture:devices.json"
+        })
+
         cy.visit('/editDevice?id=1')
         cy.contains('Edit Device')
 
@@ -25,9 +33,5 @@ describe('test the edit device page', function () {
         cy.url()
             .should('include', '/devices')
         cy.visit('/editDevice?id=1')
-
-      
-        
-            
     })
 })  
