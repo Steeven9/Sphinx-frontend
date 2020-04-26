@@ -588,3 +588,6 @@ package-lock.json
 
 # Custom env file
 sh_envfile
+
+# Cypress
+cypress/screenshots/
