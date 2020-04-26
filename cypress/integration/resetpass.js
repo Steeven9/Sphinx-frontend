@@ -17,31 +17,14 @@ describe('test the reset password', function () {
 
     it('testing the request', function () {  
    
-        cy.visit('/reset')   
-     
-        cy.get('input[type=email]')
-             .type('mario@usi.ch')
-        
-        cy.get('.btn-primary')
-        .click() 
-        cy.contains('Password reset request processed!')
+        cy.visit('/reset')  
+        cy.server() 
 
-        cy.get('input[type=email]')
-             .type('fake@usi.ch')
-        
-        cy.get('.btn-primary')
-        .click() 
-        cy.contains('There was an issue with your request!')
-        
-
-        cy.server()
-        cy.request({
+        cy.route({
             url: 'http://localhost:8080/auth/reset/mario@usi.ch',
-            method: 'POST',
+            method: "POST",
+            status: 204,
+            response: {}
         })
-        .then(function(response){
-            expect(response.status).to.eq(204)
-        })
-
      })
 })   

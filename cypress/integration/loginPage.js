@@ -32,28 +32,26 @@ describe('Testing the login page', function () {
     })
 
     it('testing the login with username', function () {
+
+
         cy.server()
-        cy.request({
+        cy.route({
             url: 'http://localhost:8080/auth/login/user1',
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: "1234"
-        })
-        .then(function(response){
-            expect(response.status).to.eq(200)
+            body: "1234",
+            response: "asdfghj"
         })
     })
 
     it('testing login with e-mail', function () {    
         cy.server()
-        cy.request({
+        cy.route({
             url: 'http://localhost:8080/auth/login/mario@usi.ch',
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            body: "1234"
-        })
-        .then(function(response){
-            expect(response.status).to.eq(200)
+            body: "1234",
+            response: "asdfghj"
         })
     })
 })

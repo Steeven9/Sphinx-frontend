@@ -15,7 +15,7 @@ describe('test the signup page', function () {
         cy.visit('/signup')
         
         cy.server()
-        cy.request({
+        cy.route({
             url: 'http://localhost:8080/user/user2',
             method: 'POST',
             headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
@@ -25,14 +25,13 @@ describe('test the signup page', function () {
                     email: 'user2@a.com',
                     fullname: 'user 2',
                     password: '12345'
-                })
+                }),
+            response: "fixture:usersTest.json"
         })
-        .then(function(response){
-            expect(response.status).to.eq(203)
-        })
-       
-     })
+      
+    })
+ })
     
 
-})
+
 
