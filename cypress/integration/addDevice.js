@@ -9,7 +9,7 @@ describe('test the add device page', function () {
         cy.visit('/addDevice')
         cy.contains('Add device')
 
-        cy.get('.btn-secondary')
+        cy.get('.btn-secondary').first()
             .click()
         cy.url()
             .should('include', '/devices')
@@ -21,33 +21,31 @@ describe('test the add device page', function () {
     })
 
     it('testing the request', function () {
+        let headers = cy.getHeaders();
+
         cy.server()
         cy.route({
             url: 'http://localhost:8080/devices',
             method: "GET",
+            headers: headers,
             response: "fixture:devices.json"
         })
         cy.route({
             url: 'http://localhost:8080/rooms',
             method: "GET",
-            response: "fixture:getRooms.json"            
+            headers: headers,
+            response: "fixture:rooms.json"            
         })
         cy.route({
             url: 'http://localhost:8080/auth/validate',
             method: "POST",
-            headers: {
-                username: "user1",
-                "session-token": "sdjvayusd6asdyasgdi7a"
-            },
+            headers: headers,
             response: "user1"
         })
         cy.route({
             url: 'http://localhost:8080/devices',
             method: "POST",
-            headers: {
-                username: "user1",
-                "session-token": "sdjvayusd6asdyasgdi7a"
-            },
+            headers: headers,
             body: {name: "asd", icon: "/img/icons/devices/bulb-led.svg", type: 2, roomId: "2"},
             status: 201,
             response: {}

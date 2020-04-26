@@ -65,6 +65,15 @@ Cypress.Commands.add("Login", () => {
         body: "1234",
         response: "sdjvayusd6asdyasgdi7a"
     })
+    cy.route({
+        url: 'http://localhost:8080/auth/validate',
+        method: "POST",
+        headers: {
+            username: "user1",
+            "session-token": "sdjvayusd6asdyasgdi7a"
+        },
+        response: "user1"
+    })
 
     cy.visit('/login')
     cy.get('input[type=text]')
@@ -73,3 +82,10 @@ Cypress.Commands.add("Login", () => {
         .type('1234')
     cy.get('.btn-primary').click()
 })
+
+Cypress.Commands.add("getHeaders", () => {
+    return {
+        username: "user1",
+        "session-token": "sdjvayusd6asdyasgdi7a"
+    };
+});
