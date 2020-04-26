@@ -58,7 +58,7 @@ function getInitialSource(initSource = 0) {
  * @constructor
  */
 function ThermostatToggleButtons({device}) {
-    const [source, setSource] = React.useState(getInitialSource(device.source));
+    const [source, setSource] = React.useState(getInitialSource("0"));
     const [modes, setModes] = React.useState(getModes(device.state));
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const classes = useStyles();
@@ -91,10 +91,35 @@ function ThermostatToggleButtons({device}) {
                 device.state = 2;
             }
         }
-
         setModes(incomingModes);
         updateTargetTemp(device);
     };
+
+    // Manages the state of the thermostats dynamically according to the target temp - temp relation
+    useEffect(() => {
+        let selfTemp = device.temp.split(' ')
+        let averageTemp = device.averageTemp.split(' ')
+        let evalTemp;
+
+        if (source === "0") {
+            evalTemp = parseInt(selfTemp[0])
+        } else {
+            evalTemp = parseInt(averageTemp[0])
+        }
+
+        if (device.slider < evalTemp) {
+            device.state = 3
+            setModes(["1", "3"])
+        } else if (device.slider > evalTemp) {
+            device.state = 2
+            setModes(["1", "2"])
+        } else {
+            console.log('evalTemp === device.slider')
+
+            setModes(["1"])
+            device.state = 1
+        }
+    }, [device, device.slider]);
 
 
     // Triggers the synchronization (render) and updating of devices (backend)
@@ -103,7 +128,8 @@ function ThermostatToggleButtons({device}) {
     };
 
     // Extracts next state
-    useEffect(() => {}, [device, modes, source]);
+    useEffect(() => {
+    }, [device, modes, source]);
 
     return (
         <Grid container spacing={2}>
@@ -117,11 +143,13 @@ function ThermostatToggleButtons({device}) {
                         size="small"
                         aria-label="temperature control"
                     >
-                        <ToggleButton value="2" className="btn-thermostat" aria-label="cooling"
+                        {/*<ToggleButton value="2" className="btn-thermostat btn-false-disabled" aria-label="cooling"*/}
+                        <ToggleButton value="2" className="btn-thermostat btn-false-disabled" aria-label="cooling"
                                       disabled={modes[0] === "0"}>
                             <CoolingIcon/>
                         </ToggleButton>
-                        <ToggleButton value="3" className="btn-thermostat" aria-label="heating"
+                        {/*<ToggleButton value="3" className="btn-thermostat btn-false-disabled" aria-label="heating"*/}
+                        <ToggleButton value="3" className="btn-thermostat btn-false-disabled" aria-label="heating"
                                       disabled={modes[0] === "0"}>
                             <HeatingIcon/>
                         </ToggleButton>
@@ -144,7 +172,7 @@ function ThermostatToggleButtons({device}) {
                             <Typography className="temperatureSource">Self</Typography>
                         </ToggleButton>
                         <ToggleButton value="1" aria-label="room average">
-                            <Typography  className="temperatureSource">Room</Typography>
+                            <Typography className="temperatureSource">Room</Typography>
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </div>
@@ -154,3 +182,4 @@ function ThermostatToggleButtons({device}) {
 }
 
 export {ThermostatToggleButtons as default}
+

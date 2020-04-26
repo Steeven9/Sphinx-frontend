@@ -150,8 +150,8 @@ export function getMinMax(device) {
 
 /**
  * Returns the min and max marks to show on a slider according to device type
- * @param type {int}
  * @returns {[{label: string, value: number}, {label: string, value: number}]}
+ * @param device
  */
 export function getSliderMarks(device) {
     const lightMarks = [

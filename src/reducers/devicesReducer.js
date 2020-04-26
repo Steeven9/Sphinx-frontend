@@ -52,7 +52,7 @@ const devicesReducer = (state, action) => {
             console.log('Dispatch: MODIFY_DEVICE');
             let fetchUrl = '';
             let body = {};
-            
+
             if (action.device.reset) {
                 fetchUrl = '/reset/' + action.device.id;
                 action.device.reset = false;
@@ -66,12 +66,11 @@ const devicesReducer = (state, action) => {
                     case 5:  //StatelessDimmableSwitch
                     case 11: //Thermostat
                         body.slider = action.device.slider / 100;
-                        body.on = action.device.on;
+                        body.state = action.device.state;
+                        body.source = action.device.source;
                         break;
                     case 12: //SmartCurtains
                         body.slider = action.device.slider / 100;
-                        body.state = action.device.state;
-                        body.source = action.device.source;
                         break;
                     default:  //Light, Switch, SmartPlug, SecurityCamera
                         body.on = action.device.on;

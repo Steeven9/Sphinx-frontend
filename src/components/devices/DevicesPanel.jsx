@@ -105,53 +105,53 @@ const DevicesPanel = () => {
         setActionCompleted(false)
     }, []);
 
-    // Fetches scenes on state change, on Reducer's actions completion
-    useEffect(() => {
-        if (actionCompleted) {
-            const method = 'GET';
-            const headers = {
-                'user': localStorage.getItem('username'),
-                'session-token': localStorage.getItem('session_token')
-            };
-
-            fetch(fetchUrl, {
-                method: method,
-                headers: headers,
-            })
-                .then((res) => {
-                    if (res.status === 401) {
-                        this.props.logOut(1);
-                    } else if (res.status === 200) {
-                        return res.text();
-                    } else {
-                        return null;
-                    }
-                })
-                .then((data) => {
-                    isLoading = false;
-
-                    if (data === null || data.length === 0) {
-                        isDataFound = false;
-                    } else {
-                        let devices = JSON.parse(data).sort(function (a, b) {
-                            let keyA = a.name;
-                            let keyB = b.name;
-                            if (keyA < keyB) return -1;
-                            if (keyA > keyB) return 1;
-                            return 0;
-                        });
-                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                        isLoading = false;
-                    }
-                })
-                .catch(e => {
-                    console.log(e);
-                    isLoading = false;
-                    isNetworkError = true;
-                });
-            setActionCompleted(false)
-        }
-    }, [actionCompleted]);
+    // // Fetches scenes on state change, on Reducer's actions completion
+    // useEffect(() => {
+    //     if (actionCompleted) {
+    //         const method = 'GET';
+    //         const headers = {
+    //             'user': localStorage.getItem('username'),
+    //             'session-token': localStorage.getItem('session_token')
+    //         };
+    //
+    //         fetch(fetchUrl, {
+    //             method: method,
+    //             headers: headers,
+    //         })
+    //             .then((res) => {
+    //                 if (res.status === 401) {
+    //                     this.props.logOut(1);
+    //                 } else if (res.status === 200) {
+    //                     return res.text();
+    //                 } else {
+    //                     return null;
+    //                 }
+    //             })
+    //             .then((data) => {
+    //                 isLoading = false;
+    //
+    //                 if (data === null || data.length === 0) {
+    //                     isDataFound = false;
+    //                 } else {
+    //                     let devices = JSON.parse(data).sort(function (a, b) {
+    //                         let keyA = a.name;
+    //                         let keyB = b.name;
+    //                         if (keyA < keyB) return -1;
+    //                         if (keyA > keyB) return 1;
+    //                         return 0;
+    //                     });
+    //                     dispatch({type: 'POPULATE_DEVICES', devices: devices});
+    //                     isLoading = false;
+    //                 }
+    //             })
+    //             .catch(e => {
+    //                 console.log(e);
+    //                 isLoading = false;
+    //                 isNetworkError = true;
+    //             });
+    //         setActionCompleted(false)
+    //     }
+    // }, [actionCompleted]);
 
     // Discards cached state and extract the next one
     useEffect(() => {
@@ -191,8 +191,8 @@ const DevicesPanel = () => {
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                 <div className="headline-box row row-custom row row-custom-custom">
                                     <h3 className="col col-custom l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
-                                     <a href={redirectToAdd()}>
-                                     <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                    <a href={redirectToAdd()}>
+                                        <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>
