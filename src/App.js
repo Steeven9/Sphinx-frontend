@@ -109,7 +109,7 @@ class App extends React.Component {
     /**
      * Used to log out.
      * Redirects to /
-     * @param exitCode: if 0, normal log out. If 1, expired session token.
+     * @param {number} exitCode - if 0, normal log out. If 1, expired session token.
      */
     logOut = (exitCode) => {
         this.setState({
