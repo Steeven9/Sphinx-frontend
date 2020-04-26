@@ -172,8 +172,8 @@ class App extends React.Component {
 
     /**
      * Return Room icon/background path
-     * @param type: string
-     * @param flag: if false icon, if true background
+     * @param {string} type
+     * @param {boolean} flag: if false icon, if true background
      */
     findPathRoom = (type, flag) => {
         let path = './img/'

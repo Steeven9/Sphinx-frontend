@@ -161,7 +161,7 @@ class EditRoom extends React.Component {
     /**
      * Changes the value of this.state.type and the background of the page based on the received type,
      * then calls this.moveToInformation.
-     * @param path
+     * @param {string} path
      */
     changeIconState = (path) => {
         this.setState({ type: path });

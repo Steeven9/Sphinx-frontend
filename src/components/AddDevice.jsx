@@ -77,7 +77,7 @@ class AddDevice extends React.Component {
 
     /**
      * Map received array rooms into the Selector
-     * @param rooms: array of rooms
+     * @param {room array} rooms: array of rooms
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
@@ -181,7 +181,7 @@ class AddDevice extends React.Component {
     /**
      * Changes the value of this.state.iconType and iconChanged based on the received type,
      * then calls this.moveToInformation.
-     * @param type
+     * @param {string} type
      */
     changeIconState = (type) => {
         this.setState({iconType: type, iconChanged: true});

@@ -119,7 +119,7 @@ class AddRoom extends React.Component {
     /**
      * Changes the value of this.state.type and the background of this page based on the received path,
      * then calls this.moveToInformation.
-     * @param path
+     * @param {string} path
      */
     changeIconState = (path) => {
         this.setState({ type: path });

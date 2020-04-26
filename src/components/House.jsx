@@ -55,7 +55,7 @@ class House extends React.Component {
     /**
      * Maps the received array of rooms and sets it as this.state.rooms. 
      * If no rooms are available, this.state.rooms gets changed with a specific phrase.
-     * @param rooms: array of rooms
+     * @param {room array} rooms: array of rooms
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {

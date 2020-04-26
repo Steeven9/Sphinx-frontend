@@ -67,7 +67,7 @@ class EditDevice extends React.Component {
 
     /**
      * Based on the received icon, it sets the corresponding iconType into the state
-     * @param icon: string
+     * @param {string} icon
      */
     getIconType(icon) {
         if (icon.includes("bulb-regular")) this.setState({iconType: "1"})
@@ -199,7 +199,7 @@ class EditDevice extends React.Component {
     /**
      * Changes the value of this.state.iconType and iconChanged based on the received type,
      * then calls this.moveToInformation.
-     * @param type
+     * @param {string} type
      */
     changeIconState = (type) => {
         this.setState({iconType: type});

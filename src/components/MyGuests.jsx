@@ -89,7 +89,7 @@ class MyGuests extends React.Component {
 
     /**
      * Maps the received array of guests and sets it as this.state.guests. If no guests are available, this.state.guests gets changed with a specific phrase.
-     * @param guests: array of guests
+     * @param {user array} guests: array of guests
      */
     mapGuests = (guests) => {
         if (guests.length === 0) {
@@ -115,7 +115,7 @@ class MyGuests extends React.Component {
 
     /**
      * Changes the display view to show confirmation of the deletion of the selected user
-     * @param guestUsername: username of the guest to delete
+     * @param {user array} guestUsername: username of the guest to delete
      */
     moveToDeletion = (guestUsername) => {
         this.setState({guestToDelete: guestUsername})

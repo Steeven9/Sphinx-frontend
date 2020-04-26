@@ -50,7 +50,7 @@ class SharedWithMe extends React.Component {
 
     /**
      * Maps the received array of owners and sets it as this.state.owners. If no owners are available, this.state.owners gets changed with a specific phrase.
-     * @param owners: array of owners
+     * @param {user array} owners: array of owners
      */
     mapOwners = (owners) => {
         if (owners.length === 0) {
