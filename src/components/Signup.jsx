@@ -22,6 +22,7 @@ class Signup extends React.Component {
             errorType: '',
             isLoading: false,
             passwordMismatch: false,
+            isEnabled: false,
         }
     }
 
@@ -49,8 +50,7 @@ class Signup extends React.Component {
         }
         if (this.state.password !== '' && this.state.confirmPassword !== '' && this.state.password !== this.state.confirmPassword) return;
 
-        this.setState({isLoading: true, successOrError: -1})
-        this.setState({success: -1})
+        this.setState({isLoading: true, successOrError: -1, isEnabled: false})
 
         fetch('http://localhost:8080/user/' + this.state.username, {
             method: 'POST',
@@ -67,6 +67,8 @@ class Signup extends React.Component {
             this.setState({isLoading: false})
             if (res.status === 201) {
                 this.setState({successOrError: 0})
+                document.getElementById("createButton").disabled = true;
+                return
             }
             else if (res.status === 400) {
                 this.setState({successOrError: 2})
@@ -77,6 +79,7 @@ class Signup extends React.Component {
             else {
                 this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
             }
+            this.updateIsEnabled("", -1)
         })
         .catch( e => {
             this.setState({isLoading: false})
@@ -124,6 +127,7 @@ class Signup extends React.Component {
      */
     handleUsernameChange = evt => {
         this.setState({username: evt.target.value});
+        this.updateIsEnabled(evt.target.value, 0)
     };
 
     /**
@@ -131,6 +135,7 @@ class Signup extends React.Component {
      */
     handleFirstnameChange = evt => {
         this.setState({firstname: evt.target.value});
+        this.updateIsEnabled(evt.target.value, 1)
     };
 
     /**
@@ -138,6 +143,7 @@ class Signup extends React.Component {
      */
     handleLastnameChange = evt => {
         this.setState({lastname: evt.target.value});
+        this.updateIsEnabled(evt.target.value, 2)
     };
 
     /**
@@ -145,6 +151,7 @@ class Signup extends React.Component {
      */
     handleEmailChange = evt => {
         this.setState({email: evt.target.value});
+        this.updateIsEnabled(evt.target.value, 3)
     };
 
     /**
@@ -152,6 +159,7 @@ class Signup extends React.Component {
      */
     handlePasswordChange = evt => {
         this.setState({password: evt.target.value});
+        this.updateIsEnabled(evt.target.value, 4)
     };
 
     /**
@@ -159,6 +167,23 @@ class Signup extends React.Component {
      */
     handleConfirmPasswordChange = evt => {
         this.setState({confirmPassword: evt.target.value});
+        this.updateIsEnabled(evt.target.value, 5)
+    };
+
+    /**
+     * Changes this.state.isEnabled
+     * @param {string} newInput: modified element in the inputs
+     * @param {number} flag: 0 = username, 1 = firstname, 2 = lastname, 3 = email, 4 = password, 5 = confirmPassword, anything else is just reset
+     */
+    updateIsEnabled = (newInput, flag) => {
+        let {username, firstname, lastname, email, password, confirmPassword} = this.state;
+        if (flag === 0) username = newInput;
+        else if (flag === 1) firstname = newInput;
+        else if (flag === 2) lastname = newInput;
+        else if (flag === 3) email = newInput;
+        else if (flag === 4) password = newInput;
+        else if (flag === 5) confirmPassword = newInput;
+        this.setState({isEnabled: (email.length > 0 && password.length > 0 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password)})
     };
 
     /**
@@ -177,9 +202,6 @@ class Signup extends React.Component {
      * isEnabled: boolean to enable button
      */
     render() {
-        const {firstname, lastname, username, email, password, confirmPassword} = this.state;
-        const isEnabled = (email.length > 0 && password.length > 0 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password);
-
         return (
             <div id="wrapper" className="homepage img-homepage-headline main-img-background">
 
@@ -187,78 +209,74 @@ class Signup extends React.Component {
                     <div id="content" className="container">
                         <div className="signup-box z-depth-2">
                             <h2 className="title">Create account</h2>
+                                <p>All fields are required</p>
 
-                            {this.state.isLoading ? this.loading() :
-                                <>
-                                    <p>All fields are required</p>
+                                <div className="row">
 
-                                    <div className="row">
-
-                                        <div className="col l6 m12">
-                                            <input required name="firstname"
-                                            value={this.state.firstname}
-                                            onChange={this.handleFirstnameChange} type="text"
-                                            placeholder="First name"/>
-                                        </div>
-
-                                        <div className="col l6 m12">
-                                            <input required name="lastname"
-                                            value={this.state.lastname}
-                                            onChange={this.handleLastnameChange} type="text"
-                                            placeholder="Last name"/>
-                                        </div>
-
-                                        <div className="col l6 m12">
-                                            <input required name="email"
-                                            value={this.state.email}
-                                            onChange={this.handleEmailChange} type="email"
-                                            placeholder="Email"/>
-                                        </div>
-
-                                        <div className="col l6 m12">
-                                            <input required name="username"
-                                            value={this.state.username}
-                                            onChange={this.handleUsernameChange} type="text"
-                                            placeholder="Username"/>
-                                        </div>
-
-                                        <div className="col l6 m12">
-                                            <input required name="password"
-                                            value={this.state.password}
-                                            onChange={this.handlePasswordChange} type="password"
-                                            placeholder="Password"/>
-                                        </div>
-
-                                        <div className="col l6 m12">
-                                            <input required name="confirmPassword"
-                                            value={this.state.confirmPassword}
-                                            onChange={this.handleConfirmPasswordChange}
-                                            type="password" placeholder="Confirm Password"/>
-                                        </div>
-
+                                    <div className="col l6 m12">
+                                        <input required name="firstname"
+                                        value={this.state.firstname}
+                                        onChange={this.handleFirstnameChange} type="text"
+                                        placeholder="First name"/>
                                     </div>
 
-                                    <div className="message-two-lines center-text">
-                                        {this.passwordMatch()} 
-                                        <br/>
-                                        <span>
-                                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
-                                        </span>
-                                        {this.displayResult()}
+                                    <div className="col l6 m12">
+                                        <input required name="lastname"
+                                        value={this.state.lastname}
+                                        onChange={this.handleLastnameChange} type="text"
+                                        placeholder="Last name"/>
                                     </div>
 
-                                    <div className="center">
-
-                                        <button type="button" name="button" className="btn-secondary waves-effect waves-light btn"
-                                                onClick={() => window.location.href = "/login"}>Sign in
-                                        </button>
-
-                                        <button type="button" disabled={!isEnabled} name="button" className="btn-primary waves-effect waves-light btn"
-                                                onClick={this.sendDatas}>Create
-                                        </button>
-
+                                    <div className="col l6 m12">
+                                        <input required name="email"
+                                        value={this.state.email}
+                                        onChange={this.handleEmailChange} type="email"
+                                        placeholder="Email"/>
                                     </div>
-                                </>}
+
+                                    <div className="col l6 m12">
+                                        <input required name="username"
+                                        value={this.state.username}
+                                        onChange={this.handleUsernameChange} type="text"
+                                        placeholder="Username"/>
+                                    </div>
+
+                                    <div className="col l6 m12">
+                                        <input required name="password"
+                                        value={this.state.password}
+                                        onChange={this.handlePasswordChange} type="password"
+                                        placeholder="Password"/>
+                                    </div>
+
+                                    <div className="col l6 m12">
+                                        <input required name="confirmPassword"
+                                        value={this.state.confirmPassword}
+                                        onChange={this.handleConfirmPasswordChange}
+                                        type="password" placeholder="Confirm Password"/>
+                                    </div>
+
+                                </div>
+
+                                <div className="message-two-lines center-text">
+                                    {this.passwordMatch()} 
+                                    <br/>
+                                    <span>
+                                        <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                                    </span>
+                                    {this.displayResult()}
+                                </div>
+
+                                <div className="center">
+
+                                    <button type="button" name="button" className="btn-secondary waves-effect waves-light btn"
+                                            onClick={() => window.location.href = "/login"}>Sign in
+                                    </button>
+
+                                    <button type="button" disabled={!this.state.isEnabled} name="button" className="btn-primary waves-effect waves-light btn" id="createButton"
+                                            onClick={this.sendDatas}>Create
+                                    </button>
+
+                                </div>
                         </div>
                     </div>
                 </article>
