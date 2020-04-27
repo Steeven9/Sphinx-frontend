@@ -70,15 +70,12 @@ class Signup extends React.Component {
                 document.getElementById("createButton").disabled = true;
                 return
             }
-            else if (res.status === 400) {
-                this.setState({successOrError: 2})
-            }
-            else if (res.status === 500) {
-                this.setState({successOrError: 3})
-            }
             else {
-                this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
-            }
+                return res.text();
+            }            
+        })
+        .then((data) => {
+            this.setState({successOrError: 2, errorType: "Error: " + data})
             this.updateIsEnabled("", -1)
         })
         .catch( e => {
@@ -103,12 +100,6 @@ class Signup extends React.Component {
             return (<span className="error-message">Insert all informations.</span>)
         }
         else if (this.state.successOrError === 2) {
-            return (<span className="error-message">Error: Bad request.</span>)
-        }
-        else if (this.state.successOrError === 3) {
-            return (<span className="error-message">Email or nickname already in use.</span>)
-        }
-        else if (this.state.successOrError === 4) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     };
