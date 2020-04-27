@@ -591,3 +591,6 @@ sh_envfile
 
 ### DB data directory ###
 db_data/
+
+# Cypress
+cypress/screenshots/
