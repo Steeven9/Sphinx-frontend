@@ -187,17 +187,6 @@ class Signup extends React.Component {
     };
 
     /**
-     * Returns the loading spinner
-     */
-    loading = () => {
-        return (
-            <div className="message-two-lines center-text"><span>
-                <ColorCircularProgress className="loading-spinner"/>
-            </span></div>
-        )
-    }
-
-    /**
      * State: firstname, lastname, username, email, password, confirmPassword
      * isEnabled: boolean to enable button
      */
