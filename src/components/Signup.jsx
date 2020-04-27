@@ -68,15 +68,17 @@ class Signup extends React.Component {
             if (res.status === 201) {
                 this.setState({successOrError: 0})
                 document.getElementById("createButton").disabled = true;
-                return
+                return null;
             }
             else {
                 return res.text();
             }            
         })
         .then((data) => {
-            this.setState({successOrError: 2, errorType: "Error: " + data})
-            this.updateIsEnabled("", -1)
+            if (data != null) {
+                this.setState({successOrError: 2, errorType: "Error: " + data})
+                this.updateIsEnabled("", -1)
+            }            
         })
         .catch( e => {
             this.setState({isLoading: false})
