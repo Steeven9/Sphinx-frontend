@@ -134,6 +134,7 @@ const SceneEffectConfig = (config) => {
                                 setEffectType(parseInt(e.target.value))
                                 setEffectName(getEffectName(parseInt(e.target.value)))
                                 dispatchScenes({type: 'UPDATE_STATE'});
+                                effectConfig.preexisting = true;
                             }}>
                         <option value="0" disabled>Choose an effect</option>
                         <option value="1">Light intensity</option>

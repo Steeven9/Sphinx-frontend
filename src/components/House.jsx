@@ -11,7 +11,8 @@ class House extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rooms: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+            rooms: <div className="message-two-lines center-text"><span><ColorCircularProgress
+                className="loading-spinner"/></span></div>
         }
     }
 
@@ -44,7 +45,7 @@ class House extends React.Component {
                     this.setState({rooms: <p><b>An error has occurred.</b></p>});
                 } else if (response.length === 0) {
                     this.setState({
-                        rooms: <p><b>You still have not create any rooms. Please click on the + button to add one.</b></p>
+                        rooms: <p>You haven't added any rooms yet. Please add a new one.</p>
                     });
                 } else {
                     this.mapRooms(response);
@@ -59,7 +60,7 @@ class House extends React.Component {
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
-            this.setState({rooms: <p><b>You have created no rooms yet. Click on the + button to add one.</b></p>});
+            this.setState({rooms: <p>You have created no rooms yet. Click on the + button to add one.</p>});
         } else {
             let i = 0;
             let toSet = rooms.map((room) =>
@@ -105,7 +106,8 @@ class House extends React.Component {
                 <div className="rooms-content-box z-depth-2">
                     <div className="headline-box row row-custom">
                         <h2 className="col col-scene l8 left-align headline-title">My Rooms</h2>
-                        <a href="/addRoom"><i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                        <a href="/addRoom"><i
+                            className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                     </div>
 
                     <div className="row rooms-headline">

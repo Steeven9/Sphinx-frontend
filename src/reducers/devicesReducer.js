@@ -63,15 +63,19 @@ const devicesReducer = (state, action) => {
                 switch (action.device.type) {
                     case 2:  //DimmableLight
                     case 4:  //DimmableSwitch
-                    case 5:  //StatelessDimmableSwitch
-                    case 11: //Thermostat
-                        body.slider = action.device.slider / 100;
                         body.on = action.device.on;
+                        body.slider = action.device.slider / 100;
                         break;
-                    case 12: //SmartCurtains
+                    case 5:  //StatelessDimmableSwitch
+                        body.slider = action.device.slider / 100;
+                        break;
+                    case 11: //Thermostat
                         body.slider = action.device.slider / 100;
                         body.state = action.device.state;
                         body.source = action.device.source;
+                        break;
+                    case 12: //SmartCurtains
+                        body.slider = action.device.slider / 100;
                         break;
                     default:  //Light, Switch, SmartPlug, SecurityCamera
                         body.on = action.device.on;

@@ -266,7 +266,7 @@ const ScenesFactory = () => {
                 effectConfig: effectConfig,
             });
         }
-        
+
         function getSceneIcons() {
             const imageRoute = "/img/icons/scenes/";
             const sceneIcons = ["coconut-drink", "beach", "cloud", "cloudy-moon", "cloudy-night", "cocktail", "cyclone",
@@ -481,13 +481,13 @@ const ScenesFactory = () => {
                                                 hasName = sceneName.length < 1
                                                 createBlankEffectConfig()
                                             }}
-                                               className=" col col-custom btn waves-effect waves-light btn-primary-circular
+                                               className="col col-custom btn waves-effect waves-light btn-primary-circular
                                      right material-icons btn-circular-fix-margin">add</i>
                                         </div>
                                     </Grid>
 
                                     {/* Configure effects */}
-                                    <Grid className=" row" container>
+                                    <Grid className="row" container>
                                         {effects.map((config) => <SceneEffectConfig key={config.id}
                                                                                     effectConfig={config}/>)}
                                     </Grid>

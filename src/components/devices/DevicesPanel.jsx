@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {useEffect, useState, useReducer} from 'react'
 import DevicesContext from '../../context/devicesContext'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
@@ -16,10 +16,6 @@ const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
-// let isDeviceStateChanging = false;
-let isLoading = true;
-let isDataFound = true;
-let isNetworkError = false;
 let isRoom = false;
 let title = "";
 
@@ -31,6 +27,9 @@ let title = "";
 const DevicesPanel = () => {
     const [actionCompleted, setActionCompleted] = React.useState(false);
     const [devices, dispatch] = useReducer(devicesReducer, []);
+    const [isDataFound, setIsDataFound] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isNetworkError, setIsNetworkError] = useState(false);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
     if (path[1] === 'room' && params.get('id')) {
@@ -81,12 +80,14 @@ const DevicesPanel = () => {
                 }
             })
             .then((data) => {
-                isLoading = false;
-
-                if (data === null || data.length === 0) {
-                    isDataFound = false;
+                setIsLoading(false)
+                let devices = JSON.parse(data)
+                console.log(devices)
+                console.log(devices.length)
+                if (devices.length === 0) {
+                    setIsDataFound(false);
                 } else {
-                    let devices = JSON.parse(data).sort(function (a, b) {
+                    devices.sort(function (a, b) {
                         let keyA = a.name;
                         let keyB = b.name;
                         if (keyA < keyB) return -1;
@@ -94,63 +95,66 @@ const DevicesPanel = () => {
                         return 0;
                     });
                     dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                    isLoading = false;
+                    setIsLoading(false)
                 }
             })
             .catch(e => {
                 console.log(e);
-                isLoading = false;
-                isNetworkError = true;
+                setIsLoading(false)
+                setIsNetworkError(true)
             });
         setActionCompleted(false)
     }, []);
 
     // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
-        if (actionCompleted) {
-            const method = 'GET';
-            const headers = {
-                'user': localStorage.getItem('username'),
-                'session-token': localStorage.getItem('session_token')
-            };
+        setTimeout(() => {
+            console.log(actionCompleted)
+            if (actionCompleted) {
+                const method = 'GET';
+                const headers = {
+                    'user': localStorage.getItem('username'),
+                    'session-token': localStorage.getItem('session_token')
+                };
 
-            fetch(fetchUrl, {
-                method: method,
-                headers: headers,
-            })
-                .then((res) => {
-                    if (res.status === 401) {
-                        this.props.logOut(1);
-                    } else if (res.status === 200) {
-                        return res.text();
-                    } else {
-                        return null;
-                    }
+                fetch(fetchUrl, {
+                    method: method,
+                    headers: headers,
                 })
-                .then((data) => {
-                    isLoading = false;
+                    .then((res) => {
+                        if (res.status === 401) {
+                            this.props.logOut(1);
+                        } else if (res.status === 200) {
+                            return res.text();
+                        } else {
+                            return null;
+                        }
+                    })
+                    .then((data) => {
+                        setIsLoading(false)
 
-                    if (data === null || data.length === 0) {
-                        isDataFound = false;
-                    } else {
-                        let devices = JSON.parse(data).sort(function (a, b) {
-                            let keyA = a.name;
-                            let keyB = b.name;
-                            if (keyA < keyB) return -1;
-                            if (keyA > keyB) return 1;
-                            return 0;
-                        });
-                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                        isLoading = false;
-                    }
-                })
-                .catch(e => {
-                    console.log(e);
-                    isLoading = false;
-                    isNetworkError = true;
-                });
-            setActionCompleted(false)
-        }
+                        if (data === null || data.length === 0) {
+                            setIsDataFound(false)
+                        } else {
+                            let devices = JSON.parse(data).sort(function (a, b) {
+                                let keyA = a.name;
+                                let keyB = b.name;
+                                if (keyA < keyB) return -1;
+                                if (keyA > keyB) return 1;
+                                return 0;
+                            });
+                            dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                            setIsLoading(false)
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        setIsLoading(false)
+                        setIsNetworkError(true)
+                    });
+                setActionCompleted(false)
+            }
+        }, 5000);
     }, [actionCompleted]);
 
     // Discards cached state and extract the next one
@@ -191,8 +195,8 @@ const DevicesPanel = () => {
                                 className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                 <div className="headline-box row row-custom row row-custom-custom">
                                     <h3 className="col col-custom l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
-                                     <a href={redirectToAdd()}>
-                                     <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                    <a href={redirectToAdd()}>
+                                        <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                     <ColorCircularProgress/>

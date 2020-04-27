@@ -4,8 +4,9 @@ import {getDeviceTypeName, getMinMax, getSliderMarks} from '../../helpers/getDev
 import {getRowIcon} from '../../helpers/getDeviceMetadataHelper'
 import PowerSwitch from './PowerSwitch'
 import SmartPlug from './SmartPlug'
+import Thermostat from './Thermostat'
+import StatelessDimmerButtons from './StatelessDimmerButtons'
 import Slider from '@material-ui/core/Slider'
-import ToggleButtons from "./ThermostatToggleButtons";
 import CardMedia from '@material-ui/core/CardMedia'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,8 +23,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
  */
 const Device = ({device}) => {
     const {devices, dispatch, isRoom, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.slider / 100);
-    const [disabled, setDisabled] = useState(device.disable);
+    const [intensity, setIntensity] = useState(device.slider * 100);
+    const [disabled, setDisabled] = useState(device.disabled);
     const [open, setOpen] = React.useState(false);
 
     /**
@@ -113,14 +114,15 @@ const Device = ({device}) => {
      * @param device {Device}
      * @returns {Slider|SmartPlug display|Sensor display}
      */
-    function getSliderOrDisplayOrSmartPlug(device) {
+    function getDeviceControllerOrDisplay(device) {
         switch (device.type) {
             case 2: //DimmableLight
             case 4: //DimmableSwitch
-            case 5: //StatelessDimmableSwitch
             case 11: //Thermostat
             case 12: //SmartCurtains
                 return getSlider(device.type);
+            case 5: //StatelessDimmableSwitch
+                return (<StatelessDimmerButtons device={device} devices={devices} setIntensity={setIntensity}/>)
             case 6: //SmartPlug
                 return (<SmartPlug device={device}/>);
             case 7: //HumiditySensor
@@ -150,23 +152,6 @@ const Device = ({device}) => {
     }
 
     /**
-     * Gets the either the temperature read by a thermostat or the average temperature of the room
-     * @param d {device}
-     * @returns {{src, options: {sourceMap: boolean, sourceMapStyle: string}, dest: string}|{src: [string]}|number}
-     */
-    function getThermostatTemp(d) {
-        if (d.source === 0) {
-            return d.temp
-        }
-        if (d.source === 1) {
-            let filteredDevices = devices.filter((d) => d.type === 9 && d.roomId === device.roomId).map((d) => d.label)
-            filteredDevices.push(device.temp);
-            let averageTemp = filteredDevices.reduce((total, temperature) => (total + temperature)) / filteredDevices.length;
-            return averageTemp;
-        }
-    }
-
-    /**
      * Generates a slider to control the intensity of a light or of a dimmer.
      * @returns {Slider}
      */
@@ -175,33 +160,9 @@ const Device = ({device}) => {
 
         switch (type) {
             case 11: //Thermostat
-                return (<>
-                    <div className="row">
-                        <div className="col l9">
-                            <Slider name={"slider"}
-                                    onChange={(e, val) => {
-                                        handleChange(e, val)
-                                    }}
-                                    onChangeCommitted={(e, val) => {
-                                        handleChangeCommitted(e, val)
-                                    }}
-                                    valueLabelDisplay="auto"
-                                    value={intensity}
-                                    min={5}
-                                    max={30}
-                                    disabled={disabled}
-                                    marks={getSliderMarks(device)}/>
-                            <div
-                                className={"col l12 col-custom display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
-                                <span>{device.state !== 0 ? getThermostatTemp(device) : "- - - - - -"}</span>
-                            </div>
-                        </div>
-                        <div className="col l2">
-                            <ToggleButtons device={device}/>
-                        </div>
-                    </div>
-
-                </>);
+                return (
+                    <Thermostat device={device}/>
+                )
             default:
                 return (<Slider name={"slider"}
 
@@ -225,7 +186,7 @@ const Device = ({device}) => {
      * @param device {Device}
      * @returns {PowerSwitch}
      */
-    function getPowerSwitch(device) {
+    function getSwitch(device) {
         switch (device.type) {
             case 7: //HumiditySensor
             case 8: //LightSensor
@@ -240,6 +201,7 @@ const Device = ({device}) => {
                         </div>
                     </div>
                 </div>);
+            case 5: //StatelessDimmer
             case 11: //Thermostat
                 return (
                     <div className="col col-custom l1 m1 s1">
@@ -314,10 +276,10 @@ const Device = ({device}) => {
                 </div>
                 <div className="device-control col col-custom l6 m6 s12">
                     <div className="col col-custom l8 m6 s8">
-                        {getSliderOrDisplayOrSmartPlug(device)}
+                        {getDeviceControllerOrDisplay(device)}
                     </div>
                     <div>
-                        {getPowerSwitch(device)}
+                        {getSwitch(device)}
                     </div>
                 </div>
             </form>

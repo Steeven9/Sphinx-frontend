@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer} from 'react'
+import React, {useEffect, useReducer, useState} from 'react'
 import ScenesContext from '../../context/scenesContext'
 import scenesReducer from '../../reducers/scenesReducer'
 import SceneList from './SceneList'
@@ -13,9 +13,6 @@ const host = window.location.protocol + '//' + window.location.hostname + ':8888
 const scenesFetchUrl = host + '/scenes';
 const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
 const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
-let isLoading = true;
-let isDataFound = true;
-let isNetworkError = false;
 let isGuest = false;
 let title = "";
 
@@ -26,6 +23,9 @@ let title = "";
 const ScenesPanel = () => {
     const [actionCompleted, setActionCompleted] = React.useState(false);
     const [scenes, dispatchScene] = useReducer(scenesReducer, []);
+    const [isDataFound, setIsDataFound] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isNetworkError, setIsNetworkError] = useState(false);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
     // Controls if a guest is accessing this view
@@ -52,12 +52,14 @@ const ScenesPanel = () => {
                 }
             })
             .then((data) => {
-                isLoading = false;
+                setIsLoading(false)
+                let scenes = JSON.parse(data);
 
-                if (data === null || data.length === 0) {
-                    isDataFound = false;
+                if (scenes === null || scenes.length === 0) {
+                    setIsDataFound(false)
                 } else {
-                    let scenes = JSON.parse(data).sort(function (a, b) {
+
+                    scenes.sort(function (a, b) {
                         let keyA = a.name;
                         let keyB = b.name;
                         if (keyA < keyB) return -1;
@@ -65,13 +67,13 @@ const ScenesPanel = () => {
                         return 0;
                     });
                     dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
-                    isLoading = false;
+                    setIsLoading(false)
                 }
             })
             .catch(e => {
                 console.log(e);
-                isLoading = false;
-                isNetworkError = true;
+                setIsLoading(false)
+                setIsNetworkError(true)
             });
         setActionCompleted(false)
     }, []);
@@ -96,10 +98,10 @@ const ScenesPanel = () => {
                     }
                 })
                 .then((data) => {
-                    isLoading = false;
+                    setIsLoading(false)
 
                     if (data === null || data.length === 0) {
-                        isDataFound = false;
+                        setIsDataFound(false)
                     } else {
                         let scenes = JSON.parse(data).sort(function (a, b) {
                             let keyA = a.name;
@@ -109,13 +111,13 @@ const ScenesPanel = () => {
                             return 0;
                         });
                         dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
-                        isLoading = false;
+                        setIsLoading(false)
                     }
                 })
                 .catch(e => {
                     console.log(e);
-                    isLoading = false;
-                    isNetworkError = true;
+                    setIsLoading(false)
+                    setIsNetworkError(true)
                 });
             setActionCompleted(false)
         }
