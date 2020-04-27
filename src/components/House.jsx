@@ -16,6 +16,11 @@ class House extends React.Component {
         }
     }
 
+    /**
+     * Fetches GET request to /rooms/ and 
+     * if successful sets the response into this.state.rooms
+     * otherwise displays an error message
+     */
     componentDidMount() {
         fetch('http://localhost:8080/rooms/', {
             method: 'GET',
@@ -49,8 +54,9 @@ class House extends React.Component {
     }
 
     /**
-     * Maps the received array of rooms and sets it as this.state.rooms. If no rooms are available, this.state.rooms gets changed with a specific phrase.
-     * @param rooms: array of rooms
+     * Maps the received array of rooms and sets it as this.state.rooms. 
+     * If no rooms are available, this.state.rooms gets changed with a specific phrase.
+     * @param {room array} rooms: array of rooms
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
@@ -77,12 +83,16 @@ class House extends React.Component {
         }
     }
 
-    //Redirection to /room
+    /**
+     * Redirection to /room
+    */ 
     redirectToRoom = (roomID) => {
         window.location.href = '/room?id=' + roomID
     }
 
-    //Redirection to /editRoom
+    /**
+     * Redirection to /editRoom
+    */ 
     redirectToEditRoom = (roomID) => {
         window.location.href = '/editRoom?id=' + roomID
     }

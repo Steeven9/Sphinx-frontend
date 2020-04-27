@@ -20,6 +20,9 @@ class ChangePassword extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -80,6 +83,9 @@ class ChangePassword extends React.Component {
         this.setState({confirmPassword: event.target.value});
     }
 
+    /**
+     * Returns the error message depending on the value of this.state.incomplete and mismatch
+     */
     showIncomplete = (event) => {
         if (this.state.incomplete) {
             return (<span className="error-message">Please insert both passwords</span>)

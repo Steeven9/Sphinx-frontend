@@ -14,8 +14,8 @@ class Verification extends React.Component {
     }
 
     /**
-     * Sends the code and the username given in the form to the backend to check it.
-     * Depending on the backend response, it will change the "success" and "toSend" variable values.
+     * Parses the URL and fetches a request to /auth/verify with what has been parsed
+     * Displays a message if successful or not response
      */
     componentDidMount() {
         const parsed = qs.parse(window.location.search);
@@ -37,21 +37,7 @@ class Verification extends React.Component {
     }
 
     /**
-     * Every time that the text inside the input changes, this.state.username gets changed.
-     */
-    changeUsername = (event) => {
-        this.setState({ username: event.target.value });
-    }
-
-    /**
-     * Every time that the text inside the input changes, this.state.code gets changed.
-     */
-    changeCode = (event) => {
-        this.setState({ code: event.target.value });
-    }
-
-    /**
-     * Depending on the value of show, returns either the form to fill, or the result of the authentication.
+     * Depending on the value of this.state.show, returns either the form to fill, or the result of the authentication.
      */
     showValidation = () => {
         if (this.state.show === 1) {

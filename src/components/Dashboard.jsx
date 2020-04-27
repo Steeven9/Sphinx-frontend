@@ -79,16 +79,15 @@ function Dashboard() {
                         </Paper>
                     </a>
                 </Grid>
-                <Grid item>
+                <Grid item lg={4} md={6} xs={12}>
                     <a href="/sharedWithMe">
                         <Paper className={classes.paper}>
-                            <img alt="Shared-With-Me" className="dashboard-nav-img"
-                                 src="/img/icons/dashboard/icon-house-guest.svg"/>
-                            <p>Shared with me</p>
+                            <img alt="Shared-With-Me" className="dashboard-nav-img" 
+                                src="/img/icons/dashboard/icon-house-guest.svg"/>
+                            <p>Shared With Me</p>
                         </Paper>
                     </a>
                 </Grid>
-
             </Grid>
         </div>
     );

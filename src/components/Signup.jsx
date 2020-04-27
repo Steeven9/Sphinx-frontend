@@ -25,6 +25,9 @@ class Signup extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -32,7 +35,9 @@ class Signup extends React.Component {
     }
 
     /**
-     * Sends all informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /user/:username with this.state.username, email, firstname, lastname and password
+     * Displays a message based on successful or not response
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -105,32 +110,60 @@ class Signup extends React.Component {
         }
     };
 
+    /**
+     * Displays an error while the passwords in the two password inputs don't match
+     */
     passwordMatch = () => {
         if (this.state.password !== '' && this.state.confirmPassword !== '' && this.state.password !== this.state.confirmPassword) {
             return(<span>The two passwords don't match.</span>)
         }
     }
 
-    //Functions that handle changes in the inputs
+    /**
+     * Handles changes in Username input
+     */
     handleUsernameChange = evt => {
         this.setState({username: evt.target.value});
     };
+
+    /**
+     * Handles changes in First Name input
+     */
     handleFirstnameChange = evt => {
         this.setState({firstname: evt.target.value});
     };
+
+    /**
+     * Handles changes in Last Name input
+     */
     handleLastnameChange = evt => {
         this.setState({lastname: evt.target.value});
     };
+
+    /**
+     * Handles changes in Email input
+     */
     handleEmailChange = evt => {
         this.setState({email: evt.target.value});
     };
+
+    /**
+     * Handles changes in Password input
+     */
     handlePasswordChange = evt => {
         this.setState({password: evt.target.value});
     };
+
+    /**
+     * Handles changes in Confirm Password input
+     */
     handleConfirmPasswordChange = evt => {
         this.setState({confirmPassword: evt.target.value});
     };
 
+    /**
+     * Returns the loading spinner
+     */
     loading = () => {
         return (
             <div className="message-two-lines center-text"><span>

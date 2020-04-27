@@ -22,8 +22,8 @@ class MyGuests extends React.Component {
 
     /**
      * Fetches GET request to /guests/ and if succesfull sets the answer into this.state.guests
-     * Fetches GET request to /user/ and if succesfull sets the value of allowSecurityCamers into the state
-     * If any of the fetches in unsuccesfull, it display an error message
+     * Fetches GET request to /user/ and if successful sets the value of allowSecurityCamers into the state
+     * If any of the fetches is unsuccessful, it display an error message
      */
     componentDidMount() {
         fetch('http://localhost:8080/guests/', {
@@ -89,7 +89,7 @@ class MyGuests extends React.Component {
 
     /**
      * Maps the received array of guests and sets it as this.state.guests. If no guests are available, this.state.guests gets changed with a specific phrase.
-     * @param guests: array of guests
+     * @param {user array} guests: array of guests
      */
     mapGuests = (guests) => {
         if (guests.length === 0) {
@@ -115,7 +115,7 @@ class MyGuests extends React.Component {
 
     /**
      * Changes the display view to show confirmation of the deletion of the selected user
-     * @param guestUsername: username of the guest to delete
+     * @param {user array} guestUsername: username of the guest to delete
      */
     moveToDeletion = (guestUsername) => {
         this.setState({guestToDelete: guestUsername})

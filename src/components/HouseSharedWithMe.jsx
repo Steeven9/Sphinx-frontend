@@ -71,7 +71,7 @@ class HouseSharedWithMe extends React.Component {
 
     /**
      * Maps the received array of devices and sets it as this.state.devices. If no devices are available, this.state.devices gets changed with a specific phrase.
-     * @param devices: array of devices
+     * @param {device array} devices: array of devices
      */
     mapDevices = () => {
         const { devices } = this.state;

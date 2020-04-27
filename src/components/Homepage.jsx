@@ -5,7 +5,6 @@ class Homepage extends React.Component {
 
     /**
      * Renders the initial logged out screen of the website.
-     * It has two buttons that link to the Sign up page. Everything else is just fancy graphics.
      */
     render() {
         return (
