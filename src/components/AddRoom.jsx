@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/editPages.css'
+import '../css/editPages.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -21,15 +21,21 @@ class AddRoom extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     * Changes the page background based on the value of this.state.type
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
         });
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(this.state.type, 1) + ')';
     }
-
+    
     /**
-     * Sends informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /rooms/ with this.state.roomName, iconType and the background image of the page
+     * Display a different message depending on if it's successful or not.
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -77,16 +83,23 @@ class AddRoom extends React.Component {
         }
     };
 
-    // function to handle state on input change
+    /**
+     * Handles changes in Room Name input
+     */
     handleRoomNameChange = evt => {
         this.setState({ roomName: evt.target.value });
     };
+
+    /**
+     * Handles changes in Type input
+     */
     handleTypeChange = evt => {
         this.setState({ type: evt.target.value })
     };
 
     /**
-     * Display a message if a room has been successfully created, and if not an error message
+     * Redirects to /house if a room has been successfully created
+     * Displays an error message if not
      */
     roomCreated = () => {
         if (this.state.success) {
@@ -103,34 +116,38 @@ class AddRoom extends React.Component {
         }
     }
 
-    /*
-    *
-    *   Functions for icon selection
-    * 
-    */
-
+    /**
+     * Changes the value of this.state.type and the background of this page based on the received path,
+     * then calls this.moveToInformation.
+     * @param {string} path
+     */
     changeIconState = (path) => {
         this.setState({ type: path });
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
         this.moveToInformation();
     }
 
+    /**
+     * Changes the display view to the list of possible icons
+     */
     moveToSelection = () => {
         document.getElementById("addRoomInfo").hidden = true
         document.getElementById("addRoomIconSelection").hidden = false
     }
 
+    /**
+     * Changes the display view back to the default one
+     */
     moveToInformation = () => {
         document.getElementById("addRoomInfo").hidden = false
         document.getElementById("addRoomIconSelection").hidden = true
     }
 
-    changeAndMove = () => {
-        this.moveToInformation();
-    }
-
+    /**
+     * Changes the background with a user selected one
+     * @param e
+     */
     changeDinamicallyBackground = (e) => {
-
         var reader = new FileReader();
         var file = e.target.files[0];
         if (file) {
@@ -141,18 +158,21 @@ class AddRoom extends React.Component {
             });
             reader.readAsDataURL(file);
         }
-
     }
 
-
+    /**
+     * Restore the background selected by the user and 
+     * changes it back to the one stored in this.state.type
+     */
     resetBackground = () => {
         document.getElementById('inputPicture').value = "";
         document.getElementById('imageURL').value = "";
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
     }
 
-
-    //Redirection to /house
+    /**
+     * Redirection to /house
+    */ 
     redirectToHouse = () => {
         window.location.href = '/house'
     }
