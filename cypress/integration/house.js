@@ -4,7 +4,7 @@ describe('Testing the house page', function () {
     
     beforeEach(() => {
         cy.Login()
-        cy.visit('/house').fixture("rooms.json")
+        cy.visit('/house')
         cy.route("GET", "**/rooms", "fixture:rooms.json").as("getRooms");
       })
 
