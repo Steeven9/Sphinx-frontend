@@ -82,7 +82,6 @@ Cypress.Commands.add("Login", () => {
         .type('1234')
     cy.get('.btn-primary').click()
 })
-
 Cypress.Commands.add("getHeaders", () => {
     return {
         username: "user1",
