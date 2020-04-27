@@ -63,7 +63,6 @@ describe('test the add device page', function () {
         cy.url()
             .should('include', '/devices')
     })
-<<<<<<< HEAD
 
     it('testing the request', function () {
         cy.server()
@@ -75,7 +74,7 @@ describe('test the add device page', function () {
         cy.route({
             url: 'http://localhost:8080/rooms',
             method: "GET",
-            response: "fixture:getRooms.json"            
+            response: "fixture:rooms.json"            
         })
         cy.route({
             url: 'http://localhost:8080/auth/validate',
@@ -110,6 +109,4 @@ describe('test the add device page', function () {
         cy.url()
             .should('include', '/devices')
     })
-=======
->>>>>>> 851a95f7298cd05c0d6bae52e39f320e83d7b958
 })  
