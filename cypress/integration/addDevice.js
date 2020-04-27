@@ -63,6 +63,7 @@ describe('test the add device page', function () {
         cy.url()
             .should('include', '/devices')
     })
+<<<<<<< HEAD
 
     it('testing the request', function () {
         cy.server()
@@ -109,4 +110,6 @@ describe('test the add device page', function () {
         cy.url()
             .should('include', '/devices')
     })
+=======
+>>>>>>> 851a95f7298cd05c0d6bae52e39f320e83d7b958
 })  
