@@ -208,7 +208,7 @@ describe('test the add device page', function () {
         cy.route({
             url: 'http://localhost:8080/rooms',
             method: "GET",
-            response: "fixture:getRooms.json"            
+            response: "fixture:rooms.json"            
         })
         cy.route({
             url: 'http://localhost:8080/auth/validate',
