@@ -15,7 +15,7 @@ import {getSliderMarks} from "../../helpers/getDeviceMetadataHelper";
 
 function Thermostat({device}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.averageTemp);
+    const [intensity, setIntensity] = useState(device.quantity);
     const [source, setSource] = React.useState(device.source.toString());
     const [modes, setModes] = React.useState(getModes(device.stateTemp));
     const [disabled, setDisabled] = useState(device.disabled);
@@ -153,8 +153,6 @@ function Thermostat({device}) {
             evalTemp = parseFloat(averageTemp)
         }
 
-        console.log('selfTemp: ' + selfTemp, 'averageTemp: ' + averageTemp)
-        console.log('intensity: ' + intensity, 'eval: ' + evalTemp)
         if (intensity < evalTemp) {
             device.stateTemp = 2
             setModes(["1", "2"])
