@@ -154,7 +154,7 @@ const DevicesPanel = () => {
                     });
                 setActionCompleted(false)
             }
-        }, 5000);
+        }, 10000);
     }, [actionCompleted]);
 
     // Discards cached state and extract the next one

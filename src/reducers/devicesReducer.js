@@ -70,8 +70,8 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider / 100;
                         break;
                     case 11: //Thermostat
-                        body.slider = action.device.slider / 100;
-                        body.state = action.device.state;
+                        body.targetTemp = action.device.targetTemp;
+                        body.stateTemp = action.device.stateTemp;
                         body.source = action.device.source;
                         break;
                     case 12: //SmartCurtains
