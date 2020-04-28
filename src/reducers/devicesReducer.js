@@ -70,8 +70,9 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider / 100;
                         break;
                     case 11: //Thermostat
-                        body.slider = action.device.slider / 100;
-                        body.state = action.device.state;
+                        body.quantity = action.device.quantity;
+                        body.targetTemp = action.device.targetTemp;
+                        body.stateTemp = action.device.stateTemp;
                         body.source = action.device.source;
                         break;
                     case 12: //SmartCurtains
@@ -88,37 +89,61 @@ const devicesReducer = (state, action) => {
             return state;
 
         case 'SYNC_DEVICES':
+            console.log('Dispatch: SYNC_DEVICES');
 
-            if (action.device.on !== undefined) {
-                state.forEach((d) => {
-                    if (action.device.switches && action.device.type !== 3) {
-                        // If parent is ON: powers children on and sets their slider value to the parent's
-                        if (action.device.on && action.device.clicked && d.switched === action.device.id) {
-                            d.on = action.device.on;
-                            d.slider = action.device.slider
-                        }
+            for (let device of state) {
+                if (device.id === action.device.id) {
 
-                        // Syncs parent-children sliders
-                        if (action.device.on && d.on && d.switched === action.device.id) {
-                            d.slider = action.device.slider
-                        }
-
-                        // If parent is OFF: allows children to set their own power switch
-                        if (!action.device.on && action.device.clicked && d.switched === action.device.id) {
-                            d.on = action.device.on;
-                        }
-
-                        // Allows self-power OFF of child
-                    } else if (d.id === action.device.id) {
-                        d.on = action.device.on;
-
-                        // Forbids regular switch to set a dimmable light's slider to 0 on power ON
-                    } else if (d.switched === action.device.id && action.device.switches !== null && action.device.type === 3) {
-                        d.on = action.device.on;
+                    if (device.slider !== null && !device.on) {
+                        device.slider = action.device.slider
                     }
-                });
-                action.device.clicked = false
+
+                    if (device.on !== null) {
+                        device.on = action.device.on
+                    }
+
+                    if (!device.clicked && !device.child) {
+                        device.on = action.device.on;
+                    }
+
+                    if (device.type === 11) {
+                        device.slider = action.device.slider
+                    }
+
+                } else if (device.switched) {
+                    for (let parent of device.switched) {
+                        if (parent === action.device.id) {
+
+                            if (device.slider !== null) {
+
+                                if (device.on && action.device.on) {
+                                    device.slider = action.device.slider
+                                }
+
+                                if (device.on && action.device.type === 5) {
+                                    device.slider += action.device.slider
+                                }
+                            }
+
+                            if (action.device.clicked) {
+                                if (device.type !== 11) {
+                                    device.on = action.device.on
+                                    device.slider = action.device.slider
+                                } else {
+                                    if (action.device.on === true) {
+                                        device.state = 1
+                                        device.disabled = false;
+                                    } else {
+                                        device.state = 0
+                                        device.disabled = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
+            action.device.clicked = false
             return [...state];
 
         default:
