@@ -62,9 +62,10 @@ function getNotUsedDevices(allDevices, currentDevices) {
     return allDevices.filter(compareArrays(currentDevices));
 }
 
-function getUsedDevices(allDevices, currentDevices) {
-    return allDevices.filter(compareArrays(allDevices.filter(compareArrays(currentDevices))));
-}
+// Do not delete!
+// function getUsedDevices(allDevices, currentDevices) {
+//     return allDevices.filter(compareArrays(allDevices.filter(compareArrays(currentDevices))));
+// }
 
 //// Device types guide:
 //  1: Light
