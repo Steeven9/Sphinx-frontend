@@ -12,10 +12,7 @@ describe('test the edit device page', function () {
         cy.route({
             url: 'http://localhost:8080/auth/validate',
             method: "POST",
-            headers: {
-                username: "user1",
-                "session-token": "sdjvayusd6asdyasgdi7a"
-            },
+            headers: headers,
             response: "user1"
         })
         cy.route({

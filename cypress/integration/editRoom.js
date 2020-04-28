@@ -69,7 +69,6 @@ describe('Testing the edit room page', function () {
         .should("deep.equal", {
             name: editRoomName,
             icon: "./img/icons/rooms/icon-garage.svg",
-            background: "./img/backgrounds/rooms/background-garage.svg",
         });
        
 
