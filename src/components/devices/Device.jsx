@@ -111,6 +111,23 @@ const Device = ({device}) => {
     }
 
     /**
+     * Shows the correct feedback from a motion sensor
+     * @param device
+     * @returns {string|*}
+     */
+    function getSensorValue(device) {
+        if (device.type === 10) {
+            if (device.label.toLowerCase() === "true") {
+                return ">> detected <<"
+            } else {
+                return "idle"
+            }
+        } else {
+            return device.label
+        }
+    }
+
+    /**
      * Depending on device type, returns either an intensity slider, a SmartPlug's display or a Sensor's display
      * @param device {Device}
      * @returns {Slider|SmartPlug display|Sensor display}
@@ -133,7 +150,7 @@ const Device = ({device}) => {
                 return (
                     <div
                         className={"col col-custom l9 s8 display-info" + (device.label ? " display-active" : " display-inactive")}>
-                        <span>{(device.label !== null) ? device.label : "- - - - - -"}</span>
+                        <span>{(device.label !== null) ? getSensorValue(device) : "- - - - - -"}</span>
                     </div>
                 );
             case 13: //MotionSensor
