@@ -106,11 +106,6 @@ const devicesReducer = (state, action) => {
                         // If parent is OFF: allows children to set their own power switch
                         if (!action.device.on && action.device.clicked && d.switched === action.device.id) {
                             d.on = action.device.on;
-
-                            // Sets stateless dimmable switch's slider to 0 on self-power OFF
-                            if (action.device.type === 5) {
-                                action.device.slider = 0
-                            }
                         }
 
                         // Allows self-power OFF of child
