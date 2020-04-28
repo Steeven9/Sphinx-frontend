@@ -58,6 +58,7 @@ body {
 
 main {
     flex: 1 0 auto !important;
+    background-size: cover;
 }
 
 footer {
