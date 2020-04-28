@@ -20,6 +20,7 @@ class EditRoom extends React.Component {
             error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
+            modifiedBackground: false,
         }
     }
 
@@ -55,7 +56,7 @@ class EditRoom extends React.Component {
             }
         })
         .then((data) => {
-            this.setState({roomName: data.name})
+            this.setState({roomName: data.name, type: this.decomposeIconPath(data.icon)})
             document.getElementById('editRoomFixedSizeIcon').src = data.icon
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
         })
@@ -74,6 +75,22 @@ class EditRoom extends React.Component {
         } 
         else {
             this.setState({isLoading: true, error: -1})
+            let toSend;
+            if (this.state.modifiedBackground) {
+                toSend = JSON.stringify({
+                    name: this.state.roomName,
+                    icon: this.props.findPathRoom(this.state.type, 0),
+                    background: document.getElementById('imageURL1').value !== "" ?
+                        document.getElementById('imageURL1').value :
+                        this.props.findPathRoom(this.state.type, 1),
+                })
+            }
+            else {
+                toSend = JSON.stringify({
+                    name: this.state.roomName,
+                    icon: this.props.findPathRoom(this.state.type, 0)
+                })
+            }
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
                 method: 'PUT',
                 headers: {
@@ -82,13 +99,7 @@ class EditRoom extends React.Component {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    name: this.state.roomName,
-                    icon: this.props.findPathRoom(this.state.type, 0),
-                    background: document.getElementById('imageURL1').value !== "" ?
-                        document.getElementById('imageURL1').value :
-                        this.props.findPathRoom(this.state.type, 1),
-                })
+                body: toSend
             })
             .then((res) => {
                 this.setState({isLoading: false})
@@ -190,6 +201,7 @@ class EditRoom extends React.Component {
      * @param e
      */
     changeDinamicallyBackground = (e) => {
+        this.setState({modifiedBackground: true})
         var reader = new FileReader();
         var file = e.target.files[0];
         if (file) {
@@ -210,6 +222,27 @@ class EditRoom extends React.Component {
         document.getElementById('inputPicture1').value = "";
         document.getElementById('imageURL1').value = "";
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
+    }
+
+    /**
+     * Return type of the given icon
+     * @param {string} path - the path of the icon
+     * @return {string} the type of the icon
+     */
+    decomposeIconPath = (path) => {
+        if (path.includes("bathroom")) return "bathroom"
+        else if (path.includes("office")) return "office"
+        else if (path.includes("attic")) return "attic"
+        else if (path.includes("basement")) return "basement"
+        else if (path.includes("backyard")) return "backyard"
+        else if (path.includes("garage")) return "garage"
+        else if (path.includes("dining-room")) return "dining-room"
+        else if (path.includes("generic-room")) return "generic-room"
+        else if (path.includes("hallway")) return "hallway"
+        else if (path.includes("house-front")) return "house-front"
+        else if (path.includes("kitchen")) return "kitchen"
+        else if (path.includes("living-room")) return "living-room"
+        else if (path.includes("bedroom")) return "bedroom"
     }
 
     /**
