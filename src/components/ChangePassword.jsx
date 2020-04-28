@@ -1,16 +1,34 @@
 import React from 'react';
-import '../App.css';
+import '../css/App.css';
 import * as qs from 'query-string';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class ChangePassword extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, display "password mismatch". If 3, display error message
+            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, missing code or email in link.
+                     // If 3, wrong code. If 4, user not found. If 5, unexpected error.
             password: "",
-            confirmPassword: ""
+            confirmPassword: "",
+            isLoading: false,
+            incomplete: false,
+            mismatch: false,
+            errorType: ""
         }
+    }
+
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
+    componentDidMount() {
+        document.addEventListener("keydown", (evt) => {
+            if (evt.key === 'Enter') this.sendDatas(evt)
+        });
     }
 
     /**
@@ -21,38 +39,65 @@ class ChangePassword extends React.Component {
         event.preventDefault();
         const parsed = qs.parse(window.location.search);
 
-        if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) { 
-            this.setState({ show: 3 });
+        if (this.state.password === "" || this.state.confirmPassword === "") {
+            this.setState({mismatch: false, incomplete: true});
             return;
         }
-        if (this.state.password !== this.state.confirmPassword) { 
-            this.setState({ show: 2 });
+        if (this.state.password !== this.state.confirmPassword) {
+            this.setState({mismatch: true, incomplete: false});
             return;
         }
+
+        if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) {
+            this.setState({show: 2});
+            return;
+        }
+        this.setState({isLoading: true})
         fetch('http://localhost:8080/auth/reset/' + parsed.email + '/' + parsed.code, {
             method: 'POST',
             headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
             },
             body: this.state.password
         })
-        .then( (res) => res.status === 204 ? this.setState({ show: 1 }) : this.setState({ show: 3 }) )
-        .catch( (error) => this.setState({ show: 3 }) )
+        .then((res) => {
+            this.setState({isLoading: false})
+            if (res.status === 204) this.setState({show: 1})
+            else if (res.status === 401) this.setState({show: 3})
+            else if (res.status === 404) this.setState({show: 4})
+            else this.setState({show: 5, errorType: "Error code: " + res.status})
+        })
+        .catch((e) => {
+            this.setState({isLoading: false})
+            this.setState({show: 5, errorType: e.toString()})
+        })
     }
 
     /**
      * Every time that the text inside the input changes, this.state.username gets changed.
      */
     changePassword = (event) => {
-        this.setState({ password: event.target.value });
+        this.setState({password: event.target.value});
     }
 
     /**
      * Every time that the text inside the input changes, this.state.code gets changed.
      */
     changeConfirmPassword = (event) => {
-        this.setState({ confirmPassword: event.target.value });
+        this.setState({confirmPassword: event.target.value});
+    }
+
+    /**
+     * Returns the error message depending on the value of this.state.incomplete and mismatch
+     */
+    showIncomplete = (event) => {
+        if (this.state.incomplete) {
+            return (<span className="error-message">Please insert both passwords</span>)
+        }
+        else if (this.state.mismatch) {
+            return (<span className="error-message">The passwords don't match.</span>)
+        }
     }
 
     /**
@@ -63,26 +108,44 @@ class ChangePassword extends React.Component {
             return (<>
                 <h2 className="title">Change password</h2>
 
-                <p>Insert your new password.</p>
+                <p className="center-text">Type your new password</p>
 
-                <div className="dates-input1"><input type="password" name="password" onChange={this.changePassword} placeholder="Password" required /></div>
-                <div className="dates-input1"><input type="password" name="confirmPassword" onChange={this.changeConfirmPassword} placeholder="Repeat password" required /></div>
+                <div>
+                    <input type="password" name="password" onChange={this.changePassword} placeholder="Password"
+                           required/>
+                </div>
+                <div>
+                    <input type="password" name="confirmPassword" onChange={this.changeConfirmPassword}
+                           placeholder="Repeat password" required/>
+                </div>
 
-                <div className="buttons1">
+                {this.showIncomplete()}
 
-                    <div className="dates-input1"><button type="button" name="button" className="btn-primary btn" onClick={this.sendDatas}>Change</button></div>
+                <div>
+
+                    <div className="center-text">
+                        <button type="button" name="button" className="btn-primary waves-effect waves-light btn"
+                                onClick={this.sendDatas}>Change password
+                        </button>
+                    </div>
 
                 </div>
             </>)
-        }
+        } 
         else if (this.state.show === 1) {
-            return (<p>Password changed successfully. <a href="/login">Click here</a> to login</p>)
-        }
+            return (<span className="success-message">Password changed successfully. <a href="/login">Click here</a> to login</span>)
+        } 
         else if (this.state.show === 2) {
-            return (<p>The passwords don't match.</p>)
+            return (<span className="error-message">Link is invalid. Please, <a href="/reset">request a new link</a>.</span>)
         }
         else if (this.state.show === 3) {
-            return (<p>An error has occurred. Please try again.</p>)
+            return (<span className="error-message">Invalid code. Please, <a href="/reset">request a new link</a>.</span>)
+        }
+        else if (this.state.show === 4) {
+            return (<span className="error-message">User not found. Please, <a href="/reset">request a new link</a>.</span>)
+        }
+        else if (this.state.show === 5) {
+            return (<span className="error-message">Something went wrong ({this.state.errorType}).<br/>Please, <a href="/reset">request a new link</a>.</span>)
         }
     }
 
@@ -92,13 +155,18 @@ class ChangePassword extends React.Component {
      */
     render() {
         return (
-            <article>
-                <div id="content" className="container">
-                    <div className="content-box1 content-box z-depth-2">
-                        {this.showChange()}
+            <div id="wrapper" className="homepage img-homepage-headline main-img-background">
+                <article>
+                    <div id="content" className="container">
+                        <div className="password-reset-box z-depth-2">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
+                            {this.showChange()}
+                        </div>
                     </div>
-                </div>
-            </article>
+                </article>
+            </div>
         );
     }
 }
