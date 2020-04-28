@@ -21,6 +21,7 @@ class EditRoom extends React.Component {
             errorType: "",
             isLoading: false,
             modifiedBackground: false,
+            background: "",
         }
     }
 
@@ -56,7 +57,7 @@ class EditRoom extends React.Component {
             }
         })
         .then((data) => {
-            this.setState({roomName: data.name, type: this.decomposeIconPath(data.icon)})
+            this.setState({roomName: data.name, type: this.decomposeIconPath(data.icon), background: data.background})
             document.getElementById('editRoomFixedSizeIcon').src = data.icon
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
         })
@@ -80,8 +81,8 @@ class EditRoom extends React.Component {
                 toSend = JSON.stringify({
                     name: this.state.roomName,
                     icon: this.props.findPathRoom(this.state.type, 0),
-                    background: document.getElementById('imageURL1').value !== "" ?
-                        document.getElementById('imageURL1').value :
+                    background: this.state.background !== "" ?
+                        this.state.background :
                         this.props.findPathRoom(this.state.type, 1),
                 })
             }
@@ -176,7 +177,8 @@ class EditRoom extends React.Component {
      */
     changeIconState = (path) => {
         this.setState({ type: path });
-        document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
+        console.log(this.state.modifiedBackground)
+        if (!this.state.modifiedBackground) document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
         this.moveToInformation();
     }
 
@@ -194,6 +196,8 @@ class EditRoom extends React.Component {
     moveToInformation = () => {
         document.getElementById("addRoomInfo1").hidden = false
         document.getElementById("addRoomIconSelection1").hidden = true
+        console.log(this.state.background)
+        document.querySelector('main').style.backgroundImage = 'url(' + this.state.background + ')'
     }
 
     /**
@@ -209,6 +213,7 @@ class EditRoom extends React.Component {
                 const dataUrl = reader.result;
                 document.querySelector('main').style.backgroundImage = "url(" + dataUrl + ")";
                 document.getElementById('imageURL1').value = dataUrl;
+                this.setState({background: dataUrl})
             });
             reader.readAsDataURL(file);
         }

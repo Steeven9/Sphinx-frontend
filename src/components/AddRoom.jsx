@@ -18,6 +18,7 @@ class AddRoom extends React.Component {
             roomName: "",
             type: "generic-room",
             isLoading: false,
+            background: "",
         }
     }
 
@@ -44,7 +45,6 @@ class AddRoom extends React.Component {
         }
         else {
             this.setState({isLoading: true, success: false, error: false, incomplete: false})
-
             fetch('http://localhost:8080/rooms/', {
                 method: 'POST',
                 headers: {
@@ -57,8 +57,8 @@ class AddRoom extends React.Component {
                     name: this.state.roomName,
                     icon: this.props.findPathRoom(this.state.type, 0),
 
-                    background: document.getElementById('imageURL').value !== "" ? 
-                    document.getElementById('imageURL').value : 
+                    background: this.state.background !== "" ? 
+                    this.state.background : 
                     this.props.findPathRoom(this.state.type, 1),
 
                     devices: []
@@ -141,6 +141,10 @@ class AddRoom extends React.Component {
     moveToInformation = () => {
         document.getElementById("addRoomInfo").hidden = false
         document.getElementById("addRoomIconSelection").hidden = true
+        if (this.state.background !== "") {
+            document.querySelector('main').style.backgroundImage = "url(" + this.state.background + ")";
+            document.getElementById('imageURL').value = this.state.background;
+        } 
     }
 
     /**
@@ -155,8 +159,10 @@ class AddRoom extends React.Component {
                 const dataUrl = reader.result;
                 document.querySelector('main').style.backgroundImage = "url(" + dataUrl + ")";
                 document.getElementById('imageURL').value = dataUrl;
+                this.setState({background: dataUrl})
             });
             reader.readAsDataURL(file);
+        
         }
     }
 
