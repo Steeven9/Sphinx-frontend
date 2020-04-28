@@ -32,7 +32,8 @@ const Device = ({device}) => {
      * effect is also needed to extract the next value from the state via de dependencies call.
      */
     useEffect(() => {
-        setIntensity(device.slider);
+        if (device.slider < 1 && device.slider > 0) setIntensity(device.slider * 100);
+        else setIntensity(device.slider);
         if (device.type === 5) {
             if (!device.on) {
                 device.disabled = true;
