@@ -15,6 +15,7 @@ import EditRoom from './components/EditRoom';
 import AddRoom from './components/AddRoom';
 import Room from './components/Room';
 import Devices from './components/Devices';
+import CoupleDevices from './components/devices/CoupleDevices';
 import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import MyGuests from './components/MyGuests';
@@ -76,13 +77,17 @@ class App extends React.Component {
                 },
             })
                 .then((res) => res.status === 200 ?
-                    this.setState({ username: newUsername, session_token: newSession_token, loggedIn: newLoggedIn, loginAccess: false })
+                    this.setState({
+                        username: newUsername,
+                        session_token: newSession_token,
+                        loggedIn: newLoggedIn,
+                        loginAccess: false
+                    })
                     :
                     this.logOut(0)
                 )
-        }
-        else {
-            this.setState({ username: "", session_token: "", loggedIn: false, loginAccess: true })
+        } else {
+            this.setState({username: "", session_token: "", loggedIn: false, loginAccess: true})
         }
     }
 
@@ -179,8 +184,7 @@ class App extends React.Component {
         let path = './img/'
         if (flag) {
             path += 'backgrounds/rooms/background-'
-        }
-        else {
+        } else {
             path += 'icons/rooms/icon-'
         }
         path += type
@@ -206,7 +210,7 @@ class App extends React.Component {
                         <Switch>
 
                             <Route path="/login">
-                                {this.state.loginAccess ? 
+                                {this.state.loginAccess ?
                                     <Login
                                         logIn={this.logIn}
                                     />
@@ -217,20 +221,20 @@ class App extends React.Component {
 
                             <Route path="/signup">
                                 {this.state.loggedIn ? this.accessDenied() :
-                                    <Signup />
+                                    <Signup/>
                                 }
                             </Route>
 
                             <Route path="/reset">
-                                <ResetPassword />
+                                <ResetPassword/>
                             </Route>
 
                             <Route path="/verification">
-                                <Verification />
+                                <Verification/>
                             </Route>
 
                             <Route path="/changepassword">
-                                <ChangePassword />
+                                <ChangePassword/>
                             </Route>
 
                             <Route path="/house">
@@ -306,7 +310,18 @@ class App extends React.Component {
                                     />
                                     : this.accessDenied()}
                             </Route>
-                        
+
+                            <Route path="/devicesCoupling">
+                                {this.state.loggedIn ?
+                                    <CoupleDevices
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                        findPathDevice={this.findPathDevice}
+                                    />
+                                    : this.accessDenied()}
+                            </Route>
+
                             <Route path="/scenes">
                                 {this.state.loggedIn ?
                                     <Scenes
@@ -386,11 +401,11 @@ class App extends React.Component {
                             </Route>
 
                             <Route path="/changepassword">
-                                <ChangePassword />
+                                <ChangePassword/>
                             </Route>
 
                             <Route path="/resend">
-                                <ResendEmail />
+                                <ResendEmail/>
                             </Route>
 
                             <Route exact path="/">
@@ -399,20 +414,20 @@ class App extends React.Component {
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                     />
-                                    : 
-                                    <Homepage />
+                                    :
+                                    <Homepage/>
                                 }
                             </Route>
 
                             <Route path="*">
-                                <Error404 />
+                                <Error404/>
                             </Route>
 
 
                         </Switch>
                     </main>
 
-                    <Footer />
+                    <Footer/>
                 </div>
             </Router>
         );
