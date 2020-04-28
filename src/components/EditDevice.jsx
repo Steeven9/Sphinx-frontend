@@ -23,6 +23,7 @@ class EditDevice extends React.Component {
             iconType: "0",
             room: "",
             fromRoom: false,
+            type: 0,
         }
     }
 
@@ -58,7 +59,7 @@ class EditDevice extends React.Component {
                 }
             })
             .then((data) => {
-                this.setState({deviceName: data.name})
+                this.setState({deviceName: data.name, type: data.type})
                 this.getIconType(data.icon)
             })
             .catch(error => console.log(error))
@@ -258,10 +259,14 @@ class EditDevice extends React.Component {
                                 className="Handle-btn-secondary btn waves-effect waves-light"
                                 onClick={this.deleteDevice}>Delete
                         </button>
-                        <button type="button" name="button"
-                                className="Handle-btn-primary btn waves-effect waves-light"
-                                onClick={this.coupleDevice}>Edit coupling
-                        </button>
+                        {(this.state.type === 3 || this.state.type === 4 || this.state.type === 5) ?
+                            <button type="button" name="button"
+                                    className="Handle-btn-primary btn waves-effect waves-light" id="couplingButton"
+                                    onClick={this.coupleDevice}>Edit coupling
+                            </button>
+                            :
+                            <></>
+                        }
                         <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light"
                                 onClick={this.sendDatas}>Save
                         </button>
