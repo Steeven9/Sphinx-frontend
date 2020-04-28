@@ -1,17 +1,26 @@
 import React from 'react';
-import '../App.css';
-import '../components/css/house.css';
+import '../css/App.css';
+import '../css/house.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
 
+const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
 class House extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            rooms: <p><b>No Rooms available</b></p>
+            rooms: <div className="message-two-lines center-text"><span><ColorCircularProgress
+                className="loading-spinner"/></span></div>
         }
     }
 
+    /**
+     * Fetches GET request to /rooms/ and 
+     * if successful sets the response into this.state.rooms
+     * otherwise displays an error message
+     */
     componentDidMount() {
         fetch('http://localhost:8080/rooms/', {
             method: 'GET',
@@ -20,7 +29,7 @@ class House extends React.Component {
                 'session-token': this.props.session_token,
             },
         })
-            .then( (res) => {
+            .then((res) => {
                 if (res.status === 401) {
                     this.props.logOut(1);
                 } else if (res.status === 200) {
@@ -29,13 +38,15 @@ class House extends React.Component {
                     return null;
                 }
             })
-            .then( (data) => {
+            .then((data) => {
                 let response = JSON.parse(data);
 
                 if (response === null) {
-                    this.setState({ rooms: <p><b>An error has occurred.</b></p> });
-                } else if (response.length === 0){
-                    this.setState({ rooms: <p><b>You still have not create any rooms. Please select the + button to add one.</b></p> });
+                    this.setState({rooms: <p><b>An error has occurred.</b></p>});
+                } else if (response.length === 0) {
+                    this.setState({
+                        rooms: <p>You haven't added any rooms yet. Please add a new one.</p>
+                    });
                 } else {
                     this.mapRooms(response);
                 }
@@ -43,25 +54,47 @@ class House extends React.Component {
     }
 
     /**
-     * Maps the received array of rooms and sets it as this.state.rooms. If no rooms are available, this.state.rooms gets changed with a specific phrase.
-     * @param rooms: array of rooms
+     * Maps the received array of rooms and sets it as this.state.rooms. 
+     * If no rooms are available, this.state.rooms gets changed with a specific phrase.
+     * @param {room array} rooms: array of rooms
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
-            this.setState({ rooms: <p><b>No Rooms available</b></p> });
-        }
-        else {
-            let toSet = rooms.map((room) => <div className="room"><div className="image vertical-center"><img src={room.icon} alt="device-logo" /></div><div className="room-name vertical-center">{room.name}</div><div className="dev-number vertical-center">{room.devices.length}</div><div className="room-button1 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToEditRoom(room.id)}>edit</i></div><div className="room-button2 vertical-center"><i className="material-icons btn-edit" onClick={() => this.goToRoom(room.id)}>visibility-outlined</i></div></div>)
-            this.setState({ rooms: toSet })
+            this.setState({rooms: <p>You have created no rooms yet. Click on the + button to add one.</p>});
+        } else {
+            let i = 0;
+            let toSet = rooms.map((room) =>
+                <div key={i++} className="row room">
+                    <div className="col l1 image vertical-center"><img src={room.icon} alt="device-logo"/></div>
+                    <div className="col l5 vertical-center">{room.name}</div>
+                    <div className="col l2 vertical-center center-text">{room.devices.length}</div>
+                    <div className="col l2"></div>
+                    <div className="col l1 room-button1 vertical-center">
+                        <i className="material-icons btn-icon btn-edit"
+                           onClick={() => this.redirectToEditRoom(room.id)}>edit</i>
+                    </div>
+                    <div className="col l1 room-button2 vertical-center">
+                        <i className="material-icons btn-icon btn-edit"
+                           onClick={() => this.redirectToRoom(room.id)}>visibility_outlined</i>
+                    </div>
+                </div>
+            );
+            this.setState({rooms: toSet})
         }
     }
 
-    goToRoom = (roomID) => {
-        this.props.redirectRoom(roomID)
+    /**
+     * Redirection to /room
+    */ 
+    redirectToRoom = (roomID) => {
+        window.location.href = '/room?id=' + roomID
     }
 
-    goToEditRoom = (roomID) => {
-        this.props.redirectEditRoom(roomID)
+    /**
+     * Redirection to /editRoom
+    */ 
+    redirectToEditRoom = (roomID) => {
+        window.location.href = '/editRoom?id=' + roomID
     }
 
     /**
@@ -69,19 +102,21 @@ class House extends React.Component {
      */
     render() {
         return (
-            <div className="house">
-                <div className="content-box">
-                    <div className="canvas1">
-                        <h2>My rooms</h2>
-                        <a href="/addRoom" className="add-btn waves-effect waves-light btn-primary-circular">+</a>
+            <div className="container">
+                <div className="rooms-content-box z-depth-2">
+                    <div className="headline-box row row-custom">
+                        <h2 className="col col-scene l8 left-align headline-title">My Rooms</h2>
+                        <a href="/addRoom"><i
+                            className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                     </div>
 
-                    <div className="canvas2">
-                        <div className="informations"><div className="name1">Name</div><div className="name1">Devices</div></div>
-                        <hr className="line" />
-                        {this.state.rooms}
-                        <hr className="line" />
+                    <div className="row rooms-headline">
+                        <div className="col l1"></div>
+                        <div className="col l5">Name</div>
+                        <div className="col l2 center-text">Devices</div>
+                        <div className="col l4"></div>
                     </div>
+                    {this.state.rooms}
                 </div>
             </div>
         );

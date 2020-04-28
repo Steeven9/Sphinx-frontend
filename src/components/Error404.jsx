@@ -1,17 +1,10 @@
 import React from 'react';
-import '../App.css';
+import '../css/App.css';
 
 class Template extends React.Component {
 
-    constructor(props) {
-		super(props);
-		this.state = {
-			// placeholder
-		}
-	}
-
     /**
-     * Template
+     * Renders Error404 page
      */
     render() {
         return (

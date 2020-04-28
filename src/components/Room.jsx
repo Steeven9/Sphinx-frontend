@@ -1,27 +1,16 @@
 import React from 'react';
-import '../App.css';
+import '../css/App.css';
+import DevicesPanel from "./devices/DevicesPanel";
 
+/**
+ * Placeholder page for the whole devices dashboard components pages
+ */
 class Room extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: props.username,
-            session_token: props.session_token
-        }
-    }
-
-    /**
-     * TODO
-     */
     render() {
         return (
-            <div className="room">
-                html page code here
-            </div>
+            <DevicesPanel />
         );
     }
 }
-
 
 export default Room;

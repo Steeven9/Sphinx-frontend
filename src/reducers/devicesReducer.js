@@ -1,5 +1,37 @@
 /**
- * This reducer controles the actions triggered by the events
+ * Generic fetch to POST and PUT
+ * @param method
+ * @param device
+ */
+function doFetch(fetchUrl, method, body) {
+    const host = window.location.protocol + '//' + window.location.hostname + ':8080';
+    const headers = {
+        'user': localStorage.getItem('username'),
+        'session-token': localStorage.getItem('session_token'),
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    };
+    const devicesFetchUrl = host + '/devices' + fetchUrl;
+
+    fetch(devicesFetchUrl, {
+        method: method,
+        headers: headers,
+        body: body
+    })
+        .then((res) => {
+            if (res.status === 200 || res.status === 203) {
+                console.log(method + ' successful!');
+                return res
+            } else {
+                console.log(method + ' unsuccessful!');
+                return res
+            }
+        })
+        .catch(error => console.log(error))
+}
+
+/**
+ * This reducer controls the actions triggered by the events
  * handled by the device components and its children
  * @param state
  * @param action
@@ -7,98 +39,116 @@
  */
 const devicesReducer = (state, action) => {
     switch (action.type) {
+
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
             return action.devices;
 
-        case 'MODIFY_DEVICE':
-            console.log('Dispatch: MODIFY_DEVICE');
-
-            /**
-             * Uncomment the following IF statements to sync the state
-             * of nested devices while not using a database
-             */
-            // if (action.device.on !== undefined) {
-            //     state.forEach((d) => {
-            //         if (d.switched === action.device.id) {
-            //             d.slider = action.device.slider;
-            //             d.on = action.device.on;
-            //             console.log(d.name + " " + d.slider)
-            //         }
-            //     });
-            // }
-            //
-            // if (action.device.on !== undefined) {
-            //     state.forEach((d) => {
-            //         if (d.id === action.device.id) {
-            //             d.on = action.device.on;
-            //             console.log(action.device.name + " " + action.device.on)
-            //         }});
-            // }
-
-            // localStorage.setItem('devices', JSON.stringify(state));v
-
-            let body;
-
-                if(action.device.slider !== undefined) {
-                    body = {
-                        slider: action.device.slider,
-                        on: action.device.on
-                    }
-                } else {
-                    body = {
-                        on: action.device.on
-                    }
-                }
-
-                fetch('http://localhost:8080/devices/' + action.device.id, {
-                method: 'PUT',
-                headers: {
-                    'user': this.state.username,
-                    'session-token': this.state.session_token,
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(body)
-            })
-                .then(res => {
-                    if (res.status === 204){
-                        fetch('http://localhost:8080/rooms/', {
-                            method: 'GET',
-                            headers: {
-                                'user': localStorage.getItem('username'),
-                                'session-token': localStorage.getItem('session_token')
-                            },
-                        })
-                            .then( (res) => {
-                                if (res.status === 401) {
-                                    this.props.logOut(1);
-                                } else if (res.status === 200) {
-                                    return res.text();
-                                } else {
-                                    return null;
-                                }
-                            })
-                            .then( (data) => {
-                                let response = JSON.parse(data);
-                                console.log(response);
-                                state = response
-                            })
-                            .catch(e => console.log(e));
-
-                    }})
-                .catch(e => console.log(e));
-            return [state];
-
-        case 'SYNC_DEVICES':
-            console.log('Dispatch: SYNC_DEVICE');
-            // To be coded if needed
+        case 'UPDATE_STATE':
+            console.log('Dispatch: UPDATE_STATE');
             return state;
 
+        case 'MODIFY_DEVICE':
+            console.log('Dispatch: MODIFY_DEVICE');
+            let fetchUrl = '';
+            let body = {};
+
+            if (action.device.reset) {
+                fetchUrl = '/reset/' + action.device.id;
+                action.device.reset = false;
+                body = {};
+            } else {
+                fetchUrl = '/' + action.device.id;
+
+                switch (action.device.type) {
+                    case 2:  //DimmableLight
+                    case 4:  //DimmableSwitch
+                        body.on = action.device.on;
+                        body.slider = action.device.slider / 100;
+                        break;
+                    case 5:  //StatelessDimmableSwitch
+                        body.slider = action.device.slider / 100;
+                        break;
+                    case 11: //Thermostat
+                        body.quantity = action.device.quantity;
+                        body.targetTemp = action.device.targetTemp;
+                        body.stateTemp = action.device.stateTemp;
+                        body.source = action.device.source;
+                        break;
+                    case 12: //SmartCurtains
+                        body.slider = action.device.slider / 100;
+                        break;
+                    default:  //Light, Switch, SmartPlug, SecurityCamera
+                        body.on = action.device.on;
+                        break;
+                }
+            }
+
+            doFetch(fetchUrl, 'PUT', JSON.stringify(body));
+            action.setActionCompleted(true);
+            return state;
+
+        case 'SYNC_DEVICES':
+            console.log('Dispatch: SYNC_DEVICES');
+
+            for (let device of state) {
+                if (device.id === action.device.id) {
+
+                    if (device.slider !== null && !device.on) {
+                        device.slider = action.device.slider
+                    }
+
+                    if (device.on !== null) {
+                        device.on = action.device.on
+                    }
+
+                    if (!device.clicked && !device.child) {
+                        device.on = action.device.on;
+                    }
+
+                    if (device.type === 11) {
+                        device.slider = action.device.slider
+                    }
+
+                } else if (device.switched) {
+                    for (let parent of device.switched) {
+                        if (parent === action.device.id) {
+
+                            if (device.slider !== null) {
+
+                                if (device.on && action.device.on) {
+                                    device.slider = action.device.slider
+                                }
+
+                                if (device.on && action.device.type === 5) {
+                                    device.slider += action.device.slider
+                                }
+                            }
+
+                            if (action.device.clicked) {
+                                if (device.type !== 11) {
+                                    device.on = action.device.on
+                                    device.slider = action.device.slider
+                                } else {
+                                    if (action.device.on === true) {
+                                        device.state = 1
+                                        device.disabled = false;
+                                    } else {
+                                        device.state = 0
+                                        device.disabled = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            action.device.clicked = false
+            return [...state];
+
         default:
-            console.log('Dispatch: DEFAULT');
             return state;
     }
 };
 
-export { devicesReducer as default }
+export {devicesReducer as default}

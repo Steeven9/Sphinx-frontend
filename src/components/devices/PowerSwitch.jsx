@@ -1,5 +1,5 @@
-import React, {useState, useContext} from 'react'
-import DevicesContext from '../../context/devices-context'
+import React, {useState, useContext, useEffect} from 'react'
+import DevicesContext from '../../context/devicesContext'
 
 
 /**
@@ -8,24 +8,38 @@ import DevicesContext from '../../context/devices-context'
  * @returns {PowerSwitch}
  * @constructor
  */
-const PowerSwitch = (dev) => {
-    let device = dev.device;
+const PowerSwitch = ({device}) => {
+    const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const [on, setPower] = useState(device.on);
-    const {dispatch} = useContext(DevicesContext);
 
+    /**
+     * Sets the power state on change and extracts the next state
+     */
+    useEffect(() => {
+        setPower(device.on)
+    }, [device]);
+
+    /**
+     * Toggles the device on change and dispatches the the action to the devices reducer
+     * @param e {event}
+     */
     const toggle = (e) => {
-        console.log('toggle')
         setPower(e.target.checked);
         device.on = e.target.checked;
-        console.log('Turning ' + device.name + ' ' + device.on ? 'on' : 'off' );
-        // device.on = device.on;
-        dispatch({type: 'MODIFY_DEVICE', device: device});
+        device.clicked = true;
+        // console.log('Turning -> ' + device.name + ' ' + (device.on ? 'ON' : 'OFF'));
+        dispatch({type: 'SYNC_DEVICES', device: device});
+        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
-    return(
-        <div className="">
+    return (
+        <div>
             <label>
-                <input type='checkbox' value={on} onChange={(e) => toggle(e)} defaultChecked={on} />
+                <input
+                    type='checkbox'
+                    checked={on}
+                    onChange={(e) => toggle(e)}
+                />
                 <span className='lever'></span>
             </label>
         </div>

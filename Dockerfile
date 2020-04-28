@@ -6,4 +6,4 @@ COPY build build
 
 RUN npm install -g serve
 
-CMD serve -s build -l ${PORT}
+CMD serve -s build -l ${PORT} -n

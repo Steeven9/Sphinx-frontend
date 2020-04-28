@@ -1,9 +1,23 @@
-import React, {useEffect, useReducer} from 'react'
-import DevicesContext from '../../context/devices-context'
+import React, {useEffect, useState, useReducer} from 'react'
+import DevicesContext from '../../context/devicesContext'
 import devicesReducer from '../../reducers/devicesReducer'
 import DeviceList from './DeviceList'
-import '../css/collapsible-component.css';
-import '../css/collapsible-devices.css';
+import '../../css/collapsible-component.css';
+import '../../css/collapsible-devices.css';
+import CircularProgress from "@material-ui/core/CircularProgress";
+import withStyles from "@material-ui/core/styles/withStyles";
+
+
+const host = window.location.protocol + '//' + window.location.hostname + ':8080';
+const params = (new URL(document.location)).searchParams;
+const path = window.location.pathname.toLowerCase().split('/');
+const devicesFetchUrl = host + '/devices';
+const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
+const fetchRoomUrl = host + '/rooms/' + params.get('id');
+const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
+let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
+let isRoom = false;
+let title = "";
 
 
 /**
@@ -11,23 +25,52 @@ import '../css/collapsible-devices.css';
  * @returns {DevicePanel}
  */
 const DevicesPanel = () => {
+    const [actionCompleted, setActionCompleted] = React.useState(false);
     const [devices, dispatch] = useReducer(devicesReducer, []);
+    const [isDataFound, setIsDataFound] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isNetworkError, setIsNetworkError] = useState(false);
+    const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
-    // Stores devices in localStorage
-    useEffect( () => {
-        // if (localStorage.devices === undefined) {
-        //     localStorage.setItem('devices', JSON.stringify(myDevices));
-        //     console.log('Devices stored in localStorage');
-        // }
+    if (path[1] === 'room' && params.get('id')) {
+        isRoom = true
+    }
 
-        fetch('http://localhost:8080/rooms/', {
-            method: 'GET',
-            headers: {
-                'user': localStorage.getItem('username'),
-                'session-token': localStorage.getItem('session_token')
-            },
+    // Fetches devices and room info on page load
+    useEffect(() => {
+        const method = 'GET';
+        const headers = {
+            'user': localStorage.getItem('username'),
+            'session-token': localStorage.getItem('session_token')
+        };
+
+        if (isRoom) {
+            fetch(fetchRoomUrl, {
+                method: method,
+                headers: headers,
+            })
+                .then((res) => {
+                    if (res.status === 401) {
+                        this.props.logOut(1);
+                    } else if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    let room = JSON.parse(data);
+                    roomBackground = room.background !== null && room.background;
+                    title = room.name;
+                })
+                .catch(e => console.log(e));
+        }
+
+        fetch(fetchUrl, {
+            method: method,
+            headers: headers,
         })
-            .then( (res) => {
+            .then((res) => {
                 if (res.status === 401) {
                     this.props.logOut(1);
                 } else if (res.status === 200) {
@@ -36,58 +79,134 @@ const DevicesPanel = () => {
                     return null;
                 }
             })
-            .then( (data) => {
-                let response = JSON.parse(data);
-
-                    dispatch({type: 'POPULATE_DEVICES', devices: [{}]});
-                    console.log('Populated devices');
-                    console.log(response);
+            .then((data) => {
+                setIsLoading(false)
+                let devices = JSON.parse(data)
+                // console.log(devices)
+                // console.log(devices.length)
+                if (devices.length === 0) {
+                    setIsDataFound(false);
+                } else {
+                    devices.sort(function (a, b) {
+                        let keyA = a.name;
+                        let keyB = b.name;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
+                    dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                    setIsLoading(false)
+                }
             })
-            .catch(e => console.log(e));
-
+            .catch(e => {
+                console.log(e);
+                setIsLoading(false)
+                setIsNetworkError(true)
+            });
+        setActionCompleted(false)
     }, []);
 
-    // // Retrieves devices from localStorage and dispatches the render action
-    // useEffect(() => {
-    //     // const devices = JSON.parse(localStorage.getItem('devices'));
-    //     // console.log('Devices retrieved from localStorage');
-    //     // if(devices) {
-    //     //     dispatch({type: 'POPULATE_DEVICES', devices: devices});
-    //     //     console.log('Populated devices');
-    //     // }
-    //
-    // }, []);
-
+    // Fetches scenes on state change, after n milliseconds, on Reducer's actions completion
     useEffect(() => {
-        console.log('Devices were updated')
+        setTimeout(() => {
+            if (actionCompleted) {
+                const method = 'GET';
+                const headers = {
+                    'user': localStorage.getItem('username'),
+                    'session-token': localStorage.getItem('session_token')
+                };
+
+                fetch(fetchUrl, {
+                    method: method,
+                    headers: headers,
+                })
+                    .then((res) => {
+                        if (res.status === 401) {
+                            this.props.logOut(1);
+                        } else if (res.status === 200) {
+                            return res.text();
+                        } else {
+                            return null;
+                        }
+                    })
+                    .then((data) => {
+                        setIsLoading(false)
+
+                        if (data === null || data.length === 0) {
+                            setIsDataFound(false)
+                        } else {
+                            let devices = JSON.parse(data).sort(function (a, b) {
+                                let keyA = a.name;
+                                let keyB = b.name;
+                                if (keyA < keyB) return -1;
+                                if (keyA > keyB) return 1;
+                                return 0;
+                            });
+                            dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                            setIsLoading(false)
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
+                        setIsLoading(false)
+                        setIsNetworkError(true)
+                    });
+                setActionCompleted(false)
+            }
+        }, 10000);
+    }, [actionCompleted]);
+
+    // Discards cached state and extract the next one
+    useEffect(() => {
     }, [devices]);
 
-    try{
-        devices.sort(function(a, b) {
-            var keyA = a.name,
-                keyB = b.name;
-            if (keyA < keyB) return -1;
-            if (keyA > keyB) return 1;
-            return 0;
-        });
-    } catch(e){
-        throw e;
+    const errorMessage = () => {
+        if (!isDataFound) {
+            return "You haven't added any devices yet. Please add a new one."
+        }
+        if (isNetworkError) {
+            return "We are sorry. There was an error."
+        }
     }
 
-    return(
-        <DevicesContext.Provider value={{devices, dispatch}}>
+    function redirectToAdd() {
+        const params = (new URL(document.location)).searchParams;
+
+        if (isRoom) {
+            return '/addDevice?room=' + params.get('id');
+        } else {
+            return '/addDevice'
+        }
+    }
+
+    return (
+        <DevicesContext.Provider value={{devices, dispatch, isRoom, setActionCompleted}}>
             <div id="wrapper" className="devices">
-                <main>
-                    <article className="row row-collapsible row row-collapsible-custom">
-                        <div id="content" className="">
-                            <section className="content-box-collapsible z-depth-2">
-                                <div className="headline-box row row-collapsible row row-collapsible-custom">
-                                    <h3 className="col col-collapsible l8 left-align headline-title">My devices</h3>
-                                    <a href="/addDevice"><i className="col col-collapsible l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                <main style={{
+                    backgroundImage: isRoom && "url('" + roomBackground + "')",
+                    backgroundRepeat: "no-repeat",
+                    backgroundAttachment: "fixed",
+                    backgroundPosition: 'center'
+                }}>
+                    <article className="row row-custom row row-custom-custom">
+                        <div id="content">
+                            <section
+                                className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
+                                <div className="headline-box row row-custom row row-custom-custom">
+                                    <h3 className="col col-custom l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
+                                    <a href={redirectToAdd()}>
+                                        <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                 </div>
-                                <ul className="collapsible expandable expandable-component">
-                                    <li className="row row-collapsible row row-collapsible-custom">
-                                        <DeviceList />
+                                <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
+                                    <ColorCircularProgress/>
+                                </div>
+                                <div
+                                    className={(!isDataFound || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
+                                    <p className={(isNetworkError) ? "error-message" : undefined}>{errorMessage()}</p>
+                                </div>
+                                <ul className={(isLoading || !isDataFound) ? "hidden" : "collapsible expandable expandable-component"}>
+                                    <li className="row row-custom row row-custom-custom">
+                                        <DeviceList/>
                                     </li>
                                 </ul>
                             </section>
@@ -98,101 +217,5 @@ const DevicesPanel = () => {
         </DevicesContext.Provider>
     )
 };
-
-// Temporary mock devices to populate the localStorage
-// const myDevices = [
-//     {
-//         id: 0,
-//         icon: "DimmableLight",
-//         type: 2,
-//         name: "LED light",
-//         room: "Master bedroom",
-//         switched: 2,
-//         slider: 75,
-//         on: false
-//     },
-//     {
-//         id: 1,
-//         icon: "Light",
-//         type: 1,
-//         room: "Kitchen",
-//         name: "Light bulb",
-//         switched: 3,
-//         on: true
-//     },
-//     {
-//         id: 2,
-//         icon: "DimmableSwitch",
-//         type: 4,
-//         room: "Master bedroom",
-//         name: "Dimmable switch",
-//         slider: 100,
-//         switches: [0, 7],
-//         on: false
-//     },
-//     {
-//         id: 3,
-//         icon: "Switch",
-//         type: 3,
-//         name: "Switch",
-//         room: "Kitchen",
-//         switches: [1],
-//         on: true
-//     },
-//     {
-//         id: 4,
-//         icon: "TempSensor",
-//         type: 9,
-//         room: "Living room",
-//         name: "Temperature sensor",
-//         label: "2'000 lm"
-//     },
-//     {
-//         id: 5,
-//         icon: "SmartPlug",
-//         type: 6,
-//         room: "Garage",
-//         name: "Smart plug",
-//         label: '350 kWh',
-//         on: true
-//     },
-//     {
-//         id: 6,
-//         icon: "MotionSensor",
-//         type: 10,
-//         room: "Backyard",
-//         name: "Motion sensor"
-//     },
-//     {
-//         id: 7,
-//         icon: "DimmableLight",
-//         type: 2,
-//         name: "Smart LED light",
-//         room: "Master bedroom",
-//         switched: 2,
-//         slider: 30,
-//         on: false
-//     },
-//     {
-//         id: 8,
-//         icon: "iconDimmerRegular",
-//         type: 5,
-//         name: "Regular dimmer",
-//         room: "Guest's room",
-//         switches: [9],
-//         slider: 0,
-//         on: false
-//     },
-//     {
-//         id: 9,
-//         icon: "DimmableLight",
-//         type: 2,
-//         name: "Smart LED light 2",
-//         room: "Guest's room",
-//         switched: 8,
-//         slider: 60,
-//         on: false
-//     }
-// ];
 
 export {DevicesPanel as default}
