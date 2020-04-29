@@ -15,7 +15,7 @@ const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
-let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
+let roomBackground;
 let isRoom = false;
 let title = "";
 

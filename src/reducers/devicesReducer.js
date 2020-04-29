@@ -70,9 +70,9 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider / 100;
                         break;
                     case 11: //Thermostat
-                        body.quantity = action.device.quantity;
-                        body.targetTemp = action.device.targetTemp;
-                        body.stateTemp = action.device.stateTemp;
+                        console.log(JSON.stringify(action.device))
+                        body.slider = action.device.slider / 100;
+                        body.state = action.device.state;
                         body.source = action.device.source;
                         break;
                     case 12: //SmartCurtains
@@ -106,8 +106,10 @@ const devicesReducer = (state, action) => {
                         device.on = action.device.on;
                     }
 
-                    if (device.type === 11) {
+                    if (device.type === 11) { //Thermostat
                         device.slider = action.device.slider
+                        device.state = action.device.state
+                        device.source = action.device.source
                     }
 
                 } else if (device.switched) {
@@ -126,7 +128,7 @@ const devicesReducer = (state, action) => {
                             }
 
                             if (action.device.clicked) {
-                                if (device.type !== 11) {
+                                if (device.type !== 11) { //Not thermostat
                                     device.on = action.device.on
                                     device.slider = action.device.slider
                                 } else {
