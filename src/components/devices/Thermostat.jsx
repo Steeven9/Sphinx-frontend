@@ -31,7 +31,6 @@ function Thermostat({device}) {
         }
     }));
     const classes = useStyles();
-    console.log(device)
 
     /**
      * Gets a string array to set the mode/state of a thermostat,
@@ -151,16 +150,19 @@ function Thermostat({device}) {
             evalTemp = parseFloat(averageTemp[0])
         }
 
-        if (intensity < evalTemp) {
-            device.state = 2
-            setModes(["1", "2"])
-        } else if (intensity > evalTemp) {
-            device.state = 3
-            setModes(["1", "3"])
-        } else {
-            setModes(["1"])
+        if (evalTemp < intensity + 0.5 && evalTemp > intensity - 0.5) {
+            setModes(["1"]) //idle
             device.state = 1
+        } else {
+            if (intensity > evalTemp) {
+                device.state = 3 //heating
+                setModes(["1", "3"])
+            } else {
+                device.state = 2 //cooling
+                setModes(["1", "2"])
+            }
         }
+
     }, [device, device.averageTemp, source, intensity]);
 
     return (
@@ -175,8 +177,9 @@ function Thermostat({device}) {
                         }}
                         valueLabelDisplay="auto"
                         value={intensity}
-                        min={0}
-                        max={100}
+                        step={0.5}
+                        min={5}
+                        max={40}
                         disabled={disabled}
                         marks={getSliderMarks(device)}/>
                 <div

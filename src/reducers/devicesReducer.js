@@ -70,7 +70,6 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider / 100;
                         break;
                     case 11: //Thermostat
-                        console.log(JSON.stringify(action.device))
                         body.slider = action.device.slider / 100;
                         body.state = action.device.state;
                         body.source = action.device.source;
