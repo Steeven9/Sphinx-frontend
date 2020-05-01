@@ -143,6 +143,8 @@ class MyGuests extends React.Component {
             headers: { 
                 'user': this.props.username,
                 'session-token': this.props.session_token,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({allowSecurityCameras: toSet})
         })
