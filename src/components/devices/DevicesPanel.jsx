@@ -82,8 +82,7 @@ const DevicesPanel = () => {
             .then((data) => {
                 setIsLoading(false)
                 let devices = JSON.parse(data)
-                // console.log(devices)
-                // console.log(devices.length)
+
                 if (devices.length === 0) {
                     setIsDataFound(false);
                 } else {
