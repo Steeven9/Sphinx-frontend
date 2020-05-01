@@ -15,7 +15,7 @@ import {getSliderMarks} from "../../helpers/getDeviceMetadataHelper";
 
 function Thermostat({device}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.slider * 100);
+    const [intensity, setIntensity] = useState(device.slider);
     const [source, setSource] = React.useState(device.source.toString());
     const [modes, setModes] = React.useState(getModes(device.state));
     const [disabled, setDisabled] = useState(device.disabled);
@@ -31,6 +31,8 @@ function Thermostat({device}) {
         }
     }));
     const classes = useStyles();
+
+    console.log(device.slider)
 
     /**
      * Gets a string array to set the mode/state of a thermostat,
@@ -242,4 +244,3 @@ function Thermostat({device}) {
 }
 
 export {Thermostat as default}
-
