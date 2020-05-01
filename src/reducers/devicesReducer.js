@@ -1,7 +1,8 @@
 /**
  * Generic fetch to POST and PUT
+ * @param fetchUrl
  * @param method
- * @param device
+ * @param body
  */
 function doFetch(fetchUrl, method, body) {
     const host = window.location.protocol + '//' + window.location.hostname + ':8080';

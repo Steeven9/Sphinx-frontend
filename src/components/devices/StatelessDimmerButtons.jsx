@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext} from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import '../../css/toggle-buttons.css';
 import DevicesContext from "../../context/devicesContext";
 
 
-function StatelessDimmerButtons({device, devices}) {
+function StatelessDimmerButtons({device}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
 
     /**
