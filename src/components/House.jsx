@@ -48,9 +48,29 @@ class House extends React.Component {
                         rooms: <p>You haven't added any rooms yet. Please add a new one.</p>
                     });
                 } else {
-                    this.mapRooms(response);
+                    this.mapRooms(this.sortRooms(response));
                 }
             });
+    }
+
+    /**
+     * Sorts the received array of rooms, case-insensitive. 
+     * @param {room array} rooms: array of rooms
+     * @return {room array} array of rooms sorted
+     */
+    sortRooms = (rooms) => {
+        rooms.sort(function (a, b) {
+            let keyA = a.name.toLowerCase();
+            let keyB = b.name.toLowerCase();
+            if (keyA < keyB) return -1;
+            if (keyA > keyB) return 1;
+            if (keyA === keyB) {
+                if (a.id < b.id) return -1;
+                if (a.id > b.id) return 1;
+            }
+            return 0;
+        });
+        return rooms;
     }
 
     /**

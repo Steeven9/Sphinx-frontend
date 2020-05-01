@@ -88,10 +88,14 @@ const DevicesPanel = () => {
                     setIsDataFound(false);
                 } else {
                     devices.sort(function (a, b) {
-                        let keyA = a.name;
-                        let keyB = b.name;
+                        let keyA = a.name.toLowerCase();
+                        let keyB = b.name.toLowerCase();
                         if (keyA < keyB) return -1;
                         if (keyA > keyB) return 1;
+                        if (keyA === keyB) {
+                            if (a.id < b.id) return -1;
+                            if (a.id > b.id) return 1;
+                        }
                         return 0;
                     });
                     dispatch({type: 'POPULATE_DEVICES', devices: devices});
