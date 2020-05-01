@@ -46,6 +46,8 @@ describe('Testing the house page', function () {
             background: "./img/backgrounds/rooms/background-bedroom.svg",
             devices: []
         });
+       
+       
 
     })
 
