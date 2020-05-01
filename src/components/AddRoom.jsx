@@ -227,19 +227,19 @@ class AddRoom extends React.Component {
                 <div hidden id="addRoomIconSelection" className="content-box">
                     <h2 className="title">Select Icon</h2>
                     <div className="content-box-iconSelection">
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bathroom")}><img src={this.props.findPathRoom('bathroom', 0)} alt="Bathroom" /><br />Bathroom </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("office")}><img src={this.props.findPathRoom('office', 0)} alt="Office" /><br />Office </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("attic")}><img src={this.props.findPathRoom('attic', 0)} alt="Attic" /><br />Attic </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("basement")}><img src={this.props.findPathRoom('basement', 0)} alt="Basement" /><br />Basement </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("backyard")}><img src={this.props.findPathRoom('backyard', 0)} alt="Backyard" /><br />Backyard </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("garage")}><img src={this.props.findPathRoom('garage', 0)} alt="Garage" /><br />Garage </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bathroom")}><img src={this.props.findPathRoom('bathroom', 0)} alt="Bathroom" /><br />Bathroom </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("basement")}><img src={this.props.findPathRoom('basement', 0)} alt="Basement" /><br />Basement </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("dining-room")}><img src={this.props.findPathRoom('dining-room', 0)} alt="Dining" /><br />Dining Room</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("garage")}><img src={this.props.findPathRoom('garage', 0)} alt="Garage" /><br />Garage </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("generic-room")}><img src={this.props.findPathRoom('generic-room', 0)} alt="Generic" /><br />Generic</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("hallway")}><img src={this.props.findPathRoom('hallway', 0)} alt="Hallway" /><br />Hallway</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("house-front")}><img src={this.props.findPathRoom('house-front', 0)} alt="House" /><br />House</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("kitchen")}><img src={this.props.findPathRoom('kitchen', 0)} alt="Kitchen" /><br />Kitchen</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("living-room")}><img src={this.props.findPathRoom('living-room', 0)} alt="Living" /><br />Living</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("office")}><img src={this.props.findPathRoom('office', 0)} alt="Office" /><br />Office </button>
                     </div>
                     <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
                 </div>
