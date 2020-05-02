@@ -1,7 +1,8 @@
 /**
  * Generic fetch to POST and PUT
+ * @param fetchUrl
  * @param method
- * @param device
+ * @param body
  */
 function doFetch(fetchUrl, method, body) {
     const host = window.location.protocol + '//' + window.location.hostname + ':8080';
@@ -42,6 +43,15 @@ const devicesReducer = (state, action) => {
 
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
+            action.devices.forEach(device => {
+                if (device.slider !== null) {
+                    if (device.type === 11) { //Thermostat
+                        device.slider = device.slider
+                    } else { //Others
+                        device.slider = device.slider * 100
+                    }
+                }
+            })
             return action.devices;
 
         case 'UPDATE_STATE':
@@ -70,7 +80,7 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider / 100;
                         break;
                     case 11: //Thermostat
-                        body.slider = action.device.slider / 100;
+                        body.slider = action.device.slider;
                         body.state = action.device.state;
                         body.source = action.device.source;
                         break;
@@ -115,14 +125,20 @@ const devicesReducer = (state, action) => {
                     for (let parent of device.switched) {
                         if (parent === action.device.id) {
 
-                            if (device.slider !== null) {
-
+                            if (device.slider !== null && action.device.type !== 5) {
                                 if (device.on && action.device.on) {
                                     device.slider = action.device.slider
                                 }
+                            }
 
-                                if (device.on && action.device.type === 5) {
-                                    device.slider += action.device.slider
+                            if (device.on && action.device.type === 5) {
+                                let newSlider = device.slider + action.device.slider;
+                                if (newSlider > 100) {
+                                    device.slider = 100
+                                } else if (newSlider < 0) {
+                                    device.slider = 0
+                                } else {
+                                    device.slider = newSlider
                                 }
                             }
 
