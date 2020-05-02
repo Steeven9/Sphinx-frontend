@@ -44,12 +44,8 @@ const devicesReducer = (state, action) => {
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
             action.devices.forEach(device => {
-                if (device.slider !== null) {
-                    if (device.type === 11) { //Thermostat
-                        device.slider = device.slider
-                    } else { //Others
-                        device.slider = device.slider * 100
-                    }
+                if (device.slider !== null && device.type !== 11) { //Does not apply to Thermostat
+                    device.slider = device.slider * 100
                 }
             })
             return action.devices;
