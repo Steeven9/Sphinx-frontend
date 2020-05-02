@@ -32,7 +32,7 @@ function Thermostat({device}) {
     }));
     const classes = useStyles();
 
-    console.log(device.slider)
+    //console.log(device.slider)
 
     /**
      * Gets a string array to set the mode/state of a thermostat,
