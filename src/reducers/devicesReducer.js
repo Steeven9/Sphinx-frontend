@@ -20,7 +20,7 @@ function doFetch(fetchUrl, method, body) {
         body: body
     })
         .then((res) => {
-            if (res.status === 200 || res.status === 203) {
+            if (res.status === 200 || res.status === 204) {
                 console.log(method + ' successful!');
                 return res
             } else {

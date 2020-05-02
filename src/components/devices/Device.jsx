@@ -140,7 +140,7 @@ const Device = ({device}) => {
             case 12: //SmartCurtains
                 return getSlider(device.type);
             case 5: //StatelessDimmableSwitch
-                return (<StatelessDimmerButtons device={device} devices={devices} setIntensity={setIntensity}/>)
+                return (<StatelessDimmerButtons device={device} setIntensity={setIntensity}/>)
             case 6: //SmartPlug
                 return (<SmartPlug device={device}/>);
             case 7: //HumiditySensor
