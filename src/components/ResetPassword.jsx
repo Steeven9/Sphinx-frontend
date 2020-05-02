@@ -72,19 +72,16 @@ class ResetPassword extends React.Component {
      * Adds a new line in the page depending on the value of this.state.success
      */
     displayResult = () => {
-        if (this.state.successOrError === 0) {
+        if (this.state.successOrError === 0 || this.state.successOrError === 2) {
             return (
                 <>
-                    <span className="success-message">Password reset request processed!</span><br/>
+                    <span className="success-message">If you have an account, password reset request processed!</span><br/>
                     <span className="success-message">Please check your inbox and follow the link to change it.</span>
                 </>
             )
         }
         else if (this.state.successOrError === 1) {
             return (<span className="error-message">Insert email.</span>)
-        }
-        else if (this.state.successOrError === 2) {
-            return (<span className="error-message">No account with this email.</span>)
         }
         else if (this.state.successOrError === 3) {
             return (<span className="error-message">{this.state.errorType}</span>)
