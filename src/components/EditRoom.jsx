@@ -177,7 +177,7 @@ class EditRoom extends React.Component {
      */
     changeIconState = (path) => {
         this.setState({ type: path });
-        console.log(this.state.modifiedBackground)
+
         if (!this.state.modifiedBackground) document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
         this.moveToInformation();
     }
@@ -196,7 +196,7 @@ class EditRoom extends React.Component {
     moveToInformation = () => {
         document.getElementById("addRoomInfo1").hidden = false
         document.getElementById("addRoomIconSelection1").hidden = true
-        console.log(this.state.background)
+
         document.querySelector('main').style.backgroundImage = 'url(' + this.state.background + ')'
     }
 

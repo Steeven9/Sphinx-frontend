@@ -15,7 +15,7 @@ const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
-let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
+let roomBackground;
 let isRoom = false;
 let title = "";
 
@@ -82,8 +82,7 @@ const DevicesPanel = () => {
             .then((data) => {
                 setIsLoading(false)
                 let devices = JSON.parse(data)
-                // console.log(devices)
-                // console.log(devices.length)
+
                 if (devices.length === 0) {
                     setIsDataFound(false);
                 } else {
