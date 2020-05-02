@@ -1,7 +1,8 @@
 /**
  * Generic fetch to POST and PUT
+ * @param fetchUrl
  * @param method
- * @param device
+ * @param body
  */
 function doFetch(fetchUrl, method, body) {
     const host = window.location.protocol + '//' + window.location.hostname + ':8080';
@@ -19,7 +20,7 @@ function doFetch(fetchUrl, method, body) {
         body: body
     })
         .then((res) => {
-            if (res.status === 200 || res.status === 203) {
+            if (res.status === 200 || res.status === 204) {
                 console.log(method + ' successful!');
                 return res
             } else {
@@ -42,6 +43,11 @@ const devicesReducer = (state, action) => {
 
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
+            action.devices.forEach(device => {
+                if (device.slider !== null && device.type !== 11) { //Does not apply to Thermostat
+                    device.slider = device.slider * 100
+                }
+            })
             return action.devices;
 
         case 'UPDATE_STATE':
@@ -70,9 +76,8 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider / 100;
                         break;
                     case 11: //Thermostat
-                        body.quantity = action.device.quantity;
-                        body.targetTemp = action.device.targetTemp;
-                        body.stateTemp = action.device.stateTemp;
+                        body.slider = action.device.slider;
+                        body.state = action.device.state;
                         body.source = action.device.source;
                         break;
                     case 12: //SmartCurtains
@@ -106,27 +111,35 @@ const devicesReducer = (state, action) => {
                         device.on = action.device.on;
                     }
 
-                    if (device.type === 11) {
+                    if (device.type === 11) { //Thermostat
                         device.slider = action.device.slider
+                        device.state = action.device.state
+                        device.source = action.device.source
                     }
 
                 } else if (device.switched) {
                     for (let parent of device.switched) {
                         if (parent === action.device.id) {
 
-                            if (device.slider !== null) {
-
+                            if (device.slider !== null && action.device.type !== 5) {
                                 if (device.on && action.device.on) {
                                     device.slider = action.device.slider
                                 }
+                            }
 
-                                if (device.on && action.device.type === 5) {
-                                    device.slider += action.device.slider
+                            if (device.on && action.device.type === 5) {
+                                let newSlider = device.slider + action.device.slider;
+                                if (newSlider > 100) {
+                                    device.slider = 100
+                                } else if (newSlider < 0) {
+                                    device.slider = 0
+                                } else {
+                                    device.slider = newSlider
                                 }
                             }
 
                             if (action.device.clicked) {
-                                if (device.type !== 11) {
+                                if (device.type !== 11) { //Not thermostat
                                     device.on = action.device.on
                                     device.slider = action.device.slider
                                 } else {

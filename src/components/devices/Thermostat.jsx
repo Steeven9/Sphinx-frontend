@@ -15,9 +15,9 @@ import {getSliderMarks} from "../../helpers/getDeviceMetadataHelper";
 
 function Thermostat({device}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.quantity);
+    const [intensity, setIntensity] = useState(device.slider);
     const [source, setSource] = React.useState(device.source.toString());
-    const [modes, setModes] = React.useState(getModes(device.stateTemp));
+    const [modes, setModes] = React.useState(getModes(device.state));
     const [disabled, setDisabled] = useState(device.disabled);
     const useStyles = makeStyles((theme) => ({
         toggleContainer: {
@@ -31,6 +31,8 @@ function Thermostat({device}) {
         }
     }));
     const classes = useStyles();
+
+    //console.log(device.slider)
 
     /**
      * Gets a string array to set the mode/state of a thermostat,
@@ -58,7 +60,8 @@ function Thermostat({device}) {
      */
     const handleChange = (e, val) => {
         setIntensity(val);
-        device.averageTemp = val;
+        device.slider = val;
+        // device.source = parseInt(source);
         dispatch({type: 'SYNC_DEVICES', device: device});
     };
 
@@ -69,7 +72,7 @@ function Thermostat({device}) {
      */
     const handleChangeCommitted = (e, val) => {
         setIntensity(val);
-        device.averageTemp = val;
+        // device.source = parseInt(source);
         dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
 
@@ -85,20 +88,20 @@ function Thermostat({device}) {
     const handleMode = (event, incomingModes) => {
         if (incomingModes.length === 0) {
             incomingModes = ["0"];
-            device.stateTemp = 0;
+            device.state = 0;
         } else if (incomingModes.length === 1 && incomingModes[0] !== "1") {
             incomingModes = ["0"];
-            device.stateTemp = 0;
+            device.state = 0;
         } else if (incomingModes.length > 1 && incomingModes[0] === "0") {
             incomingModes.shift();
-            device.stateTemp = 1;
+            device.state = 1;
         } else if (incomingModes.length > 2 && incomingModes[0] === "1") {
             if (incomingModes[1] === "2") {
                 incomingModes = ["1", "3"];
-                device.stateTemp = 3;
+                device.state = 3;
             } else {
                 incomingModes = ["1", "2"];
-                device.stateTemp = 2;
+                device.state = 2;
             }
         }
         setModes(incomingModes);
@@ -117,10 +120,10 @@ function Thermostat({device}) {
      */
     function getThermostatTemp(d) {
         if (d.source === 0) {
-            return Number((d.quantity).toFixed(2)) + " ˚C"
+            return device.label
         }
         if (d.source === 1) {
-            return Number((d.averageTemp).toFixed(2)) + " ˚C"
+            return device.averageTemp
         }
     }
 
@@ -128,41 +131,40 @@ function Thermostat({device}) {
      * Disables the Thermostat slider on state 0 === Off
      */
     useEffect(() => {
-        if (device.stateTemp === 0) {
+        if (device.state === 0) {
             device.disabled = true;
             setDisabled(true)
         } else {
             device.disabled = false;
             setDisabled(false)
         }
-    }, [device, device.stateTemp]);
+    }, [device, device.state]);
 
     // Manages the state of the thermostats dynamically according to the target temp - temp relation
     useEffect(() => {
-        // let selfTemp = device.temp.split(' ')
-        // let averageTemp = device.averageTemp.split(' ')
-        let selfTemp = device.quantity
-        let averageTemp = device.averageTemp
+        let selfTemp = device.label.split(' ')
+        let averageTemp = device.averageTemp.split(' ')
         let evalTemp;
 
         if (source === "0") {
-            // evalTemp = parseFloat(selfTemp[0])
-            evalTemp = parseFloat(selfTemp)
+            evalTemp = parseFloat(selfTemp[0])
         } else {
-            // evalTemp = parseFloat(averageTemp[0])
-            evalTemp = parseFloat(averageTemp)
+            evalTemp = parseFloat(averageTemp[0])
         }
 
-        if (intensity < evalTemp) {
-            device.stateTemp = 2
-            setModes(["1", "2"])
-        } else if (intensity > evalTemp) {
-            device.stateTemp = 3
-            setModes(["1", "3"])
+        if (evalTemp < intensity + 0.5 && evalTemp > intensity - 0.5) {
+            setModes(["1"]) //idle
+            device.state = 1
         } else {
-            setModes(["1"])
-            device.stateTemp = 1
+            if (intensity > evalTemp) {
+                device.state = 3 //heating
+                setModes(["1", "3"])
+            } else {
+                device.state = 2 //cooling
+                setModes(["1", "2"])
+            }
         }
+
     }, [device, device.averageTemp, source, intensity]);
 
     return (
@@ -177,13 +179,14 @@ function Thermostat({device}) {
                         }}
                         valueLabelDisplay="auto"
                         value={intensity}
-                        min={0}
-                        max={100}
+                        step={0.5}
+                        min={5}
+                        max={40}
                         disabled={disabled}
                         marks={getSliderMarks(device)}/>
                 <div
-                    className={"col l12 col-custom display-info-thermostat" + (device.stateTemp !== 0 ? " display-active" : " display-inactive")}>
-                    <span>{device.stateTemp !== 0 ? getThermostatTemp(device) : "- - - - - -"}</span>
+                    className={"col l12 col-custom display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
+                    <span>{device.state !== 0 ? getThermostatTemp(device) : "- - - - - -"}</span>
                 </div>
             </div>
             <div className="col l2">
@@ -216,7 +219,7 @@ function Thermostat({device}) {
                             </ToggleButtonGroup>
                         </div>
 
-                        {/* Value source 0: self, 1: average */}
+                        {/* Value source "0": self, "1": average */}
                         <div className={classes.toggleContainer}>
                             <ToggleButtonGroup
                                 value={source}
@@ -241,4 +244,3 @@ function Thermostat({device}) {
 }
 
 export {Thermostat as default}
-
