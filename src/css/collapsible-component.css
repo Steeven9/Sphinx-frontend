@@ -234,7 +234,7 @@
 }
 
 .btn-video-active {
-    padding: 0.7vh;
+    font-family: 'Open Sans', sans-serif !important;
     margin-top: 0.75vh;
     height: 30px !important;
     border-radius: 21px;
@@ -249,7 +249,7 @@
 }
 
 .btn-video-inactive {
-    padding: 0.7vh;
+    font-family: 'Open Sans', sans-serif !important;
     margin-top: 0.75vh;
     height: 30px !important;
     border-radius: 21px;
@@ -363,7 +363,7 @@
 }
 
 form.device-form {
-    display: contents  !important;
+    display: contents !important;
     margin-top: 0 !important;
 }
 
