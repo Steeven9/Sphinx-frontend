@@ -13,9 +13,8 @@ class AddDevice extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            unknownError: "",
+            errorType: "",
             success: false,
-            error: false,
             incomplete: false,
             deviceName: "Device",
             type: "0",
@@ -115,10 +114,10 @@ class AddDevice extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.type === "0" || this.state.room === "0") {
-            this.setState({ success: false, error: false, incomplete: true })
+            this.setState({ success: false, incomplete: true })
         }
         else {
-            this.setState({isLoading: true, success: false, error: false, incomplete: false})
+            this.setState({isLoading: true, success: false, incomplete: false})
             fetch('http://localhost:8080/devices', {
                 method: 'POST',
                 headers: {
@@ -137,19 +136,28 @@ class AddDevice extends React.Component {
             .then((res) => {
                 this.setState({isLoading: false})
                 if (res.status === 201) {
-                    this.setState({ success: true, error: false, incomplete: false, unknownError: "" })
+                    this.setState({ success: true, incomplete: false, errorType: "" })
                 }
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
                 else if (res.status === 400) {
-                    this.setState({ success: false, error: false, incomplete: true, unknownError: "" })
+                    this.setState({ success: false, incomplete: false})
+                    return res.text();
                 }
                 else {
-                    this.setState({ success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
+                    this.setState({
+                        success: false,
+                        incomplete: false,
+                        unknownError: "Unexpected response status: " + res.status
+                    });
                 }
+                return null;
             })
-            .catch(e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
+            .then((data) => {
+                if (data !== null) this.setState({errorType: data});
+            })
+            .catch(e => this.setState({isLoading: false, success: false, incomplete: false, errorType: "Error: " + e.toString()}))
         }
     };
 
@@ -185,14 +193,11 @@ class AddDevice extends React.Component {
         if (this.state.success) {
             this.redirectToPrevious();
         }
-        else if (this.state.error) {
-            return (<span className="error-message">An error has occurred, please try again</span>)
-        }
         else if (this.state.incomplete) {
             return (<span className="error-message">Please insert all information</span>)
         }
-        else if (this.state.unknownError !== "") {
-            return (<span className="error-message">{this.state.unknownError}</span>)
+        else if (this.state.errorType !== "") {
+            return (<span className="error-message">{this.state.errorType}</span>)
         }
     }
 
