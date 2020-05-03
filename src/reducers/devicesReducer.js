@@ -61,10 +61,6 @@ const devicesReducer = (state, action) => {
 
                 action.devices.forEach(device => {
 
-                    if (device.type === 6) {
-                        console.log(JSON.stringify(device))
-                    }
-
                     if (device.id === sensor.id) {
                         device.label = sensor.label
                     }
@@ -82,7 +78,7 @@ const devicesReducer = (state, action) => {
             let fetchUrl = '';
             let body = {};
 
-            if (action.device.reset) {
+            if (action.device.reset) { //SmartPlug
                 fetchUrl = '/reset/' + action.device.id;
                 action.device.reset = false;
                 body = {};

@@ -122,61 +122,6 @@ const DevicesPanel = () => {
             setActionCompleted(false)
         }, []);
 
-        // // Fetches scenes on state change, after n milliseconds, on Reducer's actions completion
-        // useEffect(() => {
-        //     setTimeout(() => {
-        //         if (actionCompleted) {
-        //             const method = 'GET';
-        //             const headers = {
-        //                 'user': localStorage.getItem('username'),
-        //                 'session-token': localStorage.getItem('session_token')
-        //             };
-        //
-        //             fetch(fetchUrl, {
-        //                 method: method,
-        //                 headers: headers,
-        //             })
-        //                 .then((res) => {
-        //                     if (res.status === 401) {
-        //                         this.props.logOut(1);
-        //                     } else if (res.status === 200) {
-        //                         return res.text();
-        //                     } else {
-        //                         return null;
-        //                     }
-        //                 })
-        //                 .then((data) => {
-        //                     setIsLoading(false)
-        //
-        //                     if (data === null || data.length === 0) {
-        //                         setIsDataFound(false)
-        //                     } else {
-        //                         let devices = JSON.parse(data).sort(function (a, b) {
-        //                             let keyA = a.name.toLowerCase();
-        //                             let keyB = b.name.toLowerCase();
-        //
-        //                             if (keyA === keyB) {
-        //                                 if (a.id < b.id) return -1;
-        //                                 if (a.id > b.id) return 1;
-        //                             }
-        //                             if (keyA < keyB) return -1;
-        //                             return 1;
-        //
-        //                         });
-        //                         dispatch({type: 'POPULATE_DEVICES', devices: devices});
-        //                         setIsLoading(false)
-        //                     }
-        //                 })
-        //                 .catch(e => {
-        //                     console.log(e);
-        //                     setIsLoading(false)
-        //                     setIsNetworkError(true)
-        //                 });
-        //             setActionCompleted(false)
-        //         }
-        //     }, 10000);
-        // }, [actionCompleted]);
-
         // Discards cached state and extract the next one
         useEffect(() => {
         }, [devices]);
@@ -208,7 +153,7 @@ const DevicesPanel = () => {
                     } catch (e) {
                         console.log(e)
                     }
-                }, 3000);
+                }, 5000);
                 return () => clearInterval(interval);
             },
             [sensors, devices]
@@ -234,7 +179,7 @@ const DevicesPanel = () => {
         }
 
         return (
-            <DevicesContext.Provider value={{devices, dispatch, isRoom, setActionCompleted}}>
+            <DevicesContext.Provider value={{devices, dispatch, isRoom, actionCompleted, setActionCompleted}}>
                 <div id="wrapper" className="devices">
                     <main style={{
                         backgroundImage: isRoom && "url('" + roomBackground + "')",
