@@ -111,7 +111,13 @@ class Signup extends React.Component {
      */
     passwordMatch = () => {
         if (this.state.password !== '' && this.state.confirmPassword !== '' && this.state.password !== this.state.confirmPassword) {
-            return(<span>The two passwords don't match.</span>)
+            return(<span>The two passwords don't match.<br/></span>)
+        }
+    }
+
+    passwordLength = () => {
+        if (this.state.password.length > 0 && this.state.password.length < 6) {
+            return(<span>Password is too short (minimum 6 characters).</span>)
         }
     }
 
@@ -176,7 +182,7 @@ class Signup extends React.Component {
         else if (flag === 3) email = newInput;
         else if (flag === 4) password = newInput;
         else if (flag === 5) confirmPassword = newInput;
-        this.setState({isEnabled: (email.length > 0 && password.length > 0 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password)})
+        this.setState({isEnabled: (email.length > 0 && password.length >= 6 && username.length > 0 && firstname.length > 0 && lastname.length > 0 && confirmPassword.length > 0 && confirmPassword === password)})
     };
 
     /**
@@ -241,6 +247,7 @@ class Signup extends React.Component {
 
                                 <div className="message-two-lines center-text">
                                     {this.passwordMatch()} 
+                                    {this.passwordLength()} 
                                     <br/>
                                     <span>
                                         <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>

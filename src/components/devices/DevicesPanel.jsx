@@ -15,7 +15,7 @@ const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
-let roomBackground = '/img/backgrounds/rooms/background-hallway.svg';
+let roomBackground;
 let isRoom = false;
 let title = "";
 
@@ -28,6 +28,7 @@ const DevicesPanel = () => {
         const [actionCompleted, setActionCompleted] = React.useState(false);
         const [devices, dispatch] = useReducer(devicesReducer, []);
         const [isDataFound, setIsDataFound] = useState(true);
+        const [sensors, setSensors] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [isNetworkError, setIsNetworkError] = useState(false);
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
@@ -99,6 +100,16 @@ const DevicesPanel = () => {
 
                         });
 
+                        let filteredSensors = devices.filter(device => {
+                            return device.type === 6 ||
+                                device.type === 7 ||
+                                device.type === 8 ||
+                                device.type === 9 ||
+                                device.type === 10 ||
+                                device.type === 11
+                        })
+
+                        setSensors(filteredSensors)
                         dispatch({type: 'POPULATE_DEVICES', devices: devices});
                         setIsLoading(false)
                     }
@@ -111,123 +122,96 @@ const DevicesPanel = () => {
             setActionCompleted(false)
         }, []);
 
-        // Fetches scenes on state change, after n milliseconds, on Reducer's actions completion
+        // // Fetches scenes on state change, after n milliseconds, on Reducer's actions completion
+        // useEffect(() => {
+        //     setTimeout(() => {
+        //         if (actionCompleted) {
+        //             const method = 'GET';
+        //             const headers = {
+        //                 'user': localStorage.getItem('username'),
+        //                 'session-token': localStorage.getItem('session_token')
+        //             };
+        //
+        //             fetch(fetchUrl, {
+        //                 method: method,
+        //                 headers: headers,
+        //             })
+        //                 .then((res) => {
+        //                     if (res.status === 401) {
+        //                         this.props.logOut(1);
+        //                     } else if (res.status === 200) {
+        //                         return res.text();
+        //                     } else {
+        //                         return null;
+        //                     }
+        //                 })
+        //                 .then((data) => {
+        //                     setIsLoading(false)
+        //
+        //                     if (data === null || data.length === 0) {
+        //                         setIsDataFound(false)
+        //                     } else {
+        //                         let devices = JSON.parse(data).sort(function (a, b) {
+        //                             let keyA = a.name.toLowerCase();
+        //                             let keyB = b.name.toLowerCase();
+        //
+        //                             if (keyA === keyB) {
+        //                                 if (a.id < b.id) return -1;
+        //                                 if (a.id > b.id) return 1;
+        //                             }
+        //                             if (keyA < keyB) return -1;
+        //                             return 1;
+        //
+        //                         });
+        //                         dispatch({type: 'POPULATE_DEVICES', devices: devices});
+        //                         setIsLoading(false)
+        //                     }
+        //                 })
+        //                 .catch(e => {
+        //                     console.log(e);
+        //                     setIsLoading(false)
+        //                     setIsNetworkError(true)
+        //                 });
+        //             setActionCompleted(false)
+        //         }
+        //     }, 10000);
+        // }, [actionCompleted]);
+
+        // Discards cached state and extract the next one
         useEffect(() => {
-            setTimeout(() => {
-                if (actionCompleted) {
+        }, [devices]);
+
+        // Refreshes the devices state with setInterval
+        useEffect(() => {
+                const interval = setInterval(async () => {
                     const method = 'GET';
                     const headers = {
                         'user': localStorage.getItem('username'),
                         'session-token': localStorage.getItem('session_token')
                     };
 
-                    fetch(fetchUrl, {
-                        method: method,
-                        headers: headers,
-                    })
-                        .then((res) => {
-                            if (res.status === 401) {
-                                this.props.logOut(1);
-                            } else if (res.status === 200) {
-                                return res.text();
-                            } else {
-                                return null;
-                            }
-                        })
-                        .then((data) => {
-                            setIsLoading(false)
+                    try {
+                        let updatedSensors = []
 
-                            if (data === null || data.length === 0) {
-                                setIsDataFound(false)
-                            } else {
-                                let devices = JSON.parse(data).sort(function (a, b) {
-                                    let keyA = a.name.toLowerCase();
-                                    let keyB = b.name.toLowerCase();
-
-                                    if (keyA === keyB) {
-                                        if (a.id < b.id) return -1;
-                                        if (a.id > b.id) return 1;
-                                    }
-                                    if (keyA < keyB) return -1;
-                                    return 1;
-
-                                });
-                                dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                                setIsLoading(false)
-                            }
-                        })
-                        .catch(e => {
-                            console.log(e);
-                            setIsLoading(false)
-                            setIsNetworkError(true)
-                        });
-                    setActionCompleted(false)
-                }
-            }, 10000);
-        }, [actionCompleted]);
-
-        // Discards cached state and extract the next one
-        useEffect(() => {
-        }, [devices]);
-
-        // Refreshesh the devices state with setInterval
-        useEffect(() => {
-                const interval = setInterval(() => {
-                        if (!actionCompleted) {
-                            const method = 'GET';
-                            const headers = {
-                                'user': localStorage.getItem('username'),
-                                'session-token': localStorage.getItem('session_token')
-                            };
-
-                            fetch(fetchUrl, {
+                        async function fetchSensors(sensor) {
+                            return await (await fetch(fetchUrl + '/' + sensor.id, {
                                 method: method,
                                 headers: headers,
-                            })
-                                .then((res) => {
-                                    if (res.status === 401) {
-                                        this.props.logOut(1);
-                                    } else if (res.status === 200) {
-                                        return res.text();
-                                    } else {
-                                        return null;
-                                    }
-                                })
-                                .then((data) => {
-                                    setIsLoading(false)
-
-                                    if (data === null || data.length === 0) {
-                                        setIsDataFound(false)
-                                    } else {
-                                        let devices = JSON.parse(data).sort(function (a, b) {
-                                            let keyA = a.name.toLowerCase();
-                                            let keyB = b.name.toLowerCase();
-
-                                            if (keyA === keyB) {
-                                                if (a.id < b.id) return -1;
-                                                if (a.id > b.id) return 1;
-                                            }
-                                            if (keyA < keyB) return -1;
-                                            return 1;
-
-                                        });
-                                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                                        setIsLoading(false)
-                                    }
-                                })
-                                .catch(e => {
-                                    console.log(e);
-                                    setIsLoading(false)
-                                    setIsNetworkError(true)
-                                });
-                            setActionCompleted(false)
+                            })).json();
                         }
-                    }, 3000
-                    )
-                ;
+
+                        for (let sensor of sensors) {
+                            await updatedSensors.push(await fetchSensors(sensor))
+                        }
+
+                        dispatch({type: 'UPDATE_SENSORS', devices: devices, sensors: updatedSensors});
+                    } catch (e) {
+                        console.log(e)
+                    }
+                }, 3000);
                 return () => clearInterval(interval);
             },
-            [devices, actionCompleted]
+            [sensors, devices]
         );
 
         function redirectToAdd() {

@@ -42,10 +42,12 @@ describe('Testing the house page', function () {
         .its("requestBody")
         .should("deep.equal", {
             name: roomName,
-            icon: "./img/icons/rooms/icon-bedroom.svg",
-            background: "./img/backgrounds/rooms/background-bedroom.svg",
+            icon: "./img/icons/rooms/icon-office.svg",
+            background: "./img/backgrounds/rooms/background-office.svg",
             devices: []
         });
+       
+       
 
     })
 
