@@ -240,7 +240,13 @@ const DevicesPanel = () => {
                                     <div className="headline-box row row-custom row row-custom-custom">
                                         <h3 className="col col-custom l8 left-align headline-title">{title}</h3>
                                         <a href={redirectToAdd()}>
-                                            <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                                            {!isGuest ?
+                                                <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i>
+                                                :
+                                                <i className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
+                                                                                                                                              scenes</i>
+                                            }
+                                        </a>
                                     </div>
                                     <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                         <ColorCircularProgress/>
