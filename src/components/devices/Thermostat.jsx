@@ -15,7 +15,7 @@ import {getSliderMarks} from "../../helpers/getDeviceMetadataHelper";
 
 function Thermostat({device}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.slider);
+    const [intensity, setIntensity] = useState((Math.round(device.slider * 2) / 2).toFixed(2))
     const [source, setSource] = React.useState(device.source.toString());
     const [modes, setModes] = React.useState(getModes(device.state));
     const [disabled, setDisabled] = useState(device.disabled);
@@ -123,7 +123,7 @@ function Thermostat({device}) {
             return device.label
         }
         if (d.source === 1) {
-            return device.averageTemp
+            return device.averageTemp.toFixed(2) + " °C"
         }
     }
 
@@ -143,13 +143,13 @@ function Thermostat({device}) {
     // Manages the state of the thermostats dynamically according to the target temp - temp relation
     useEffect(() => {
         let selfTemp = device.label.split(' ')
-        let averageTemp = device.averageTemp.split(' ')
+        let averageTemp = device.averageTemp.toFixed(2)
         let evalTemp;
 
         if (source === "0") {
             evalTemp = parseFloat(selfTemp[0])
         } else {
-            evalTemp = parseFloat(averageTemp[0])
+            evalTemp = averageTemp
         }
 
         if (evalTemp < intensity + 0.5 && evalTemp > intensity - 0.5) {

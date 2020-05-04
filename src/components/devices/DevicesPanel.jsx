@@ -139,7 +139,7 @@ const DevicesPanel = () => {
                         let updatedSensors = []
 
                         async function fetchSensors(sensor) {
-                            return await (await fetch(fetchUrl + '/' + sensor.id, {
+                            return await (await fetch(devicesFetchUrl + '/' + sensor.id, {
                                 method: method,
                                 headers: headers,
                             })).json();
