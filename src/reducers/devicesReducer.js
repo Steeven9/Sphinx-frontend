@@ -54,12 +54,31 @@ const devicesReducer = (state, action) => {
             console.log('Dispatch: UPDATE_STATE');
             return state;
 
+        case 'UPDATE_SENSORS':
+            console.log('Dispatch: UPDATE_SENSORS');
+
+            action.sensors.forEach(sensor => {
+
+                action.devices.forEach(device => {
+
+                    if (device.id === sensor.id) {
+                        device.label = sensor.label
+                    }
+
+                    if (device.type === 11) {
+                        device.averageTemp = sensor.averageTemp
+                    }
+                })
+            })
+
+            return [...state];
+
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
             let fetchUrl = '';
             let body = {};
 
-            if (action.device.reset) {
+            if (action.device.reset) { //SmartPlug
                 fetchUrl = '/reset/' + action.device.id;
                 action.device.reset = false;
                 body = {};
