@@ -21,7 +21,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
  * @returns {*}
  * @constructor
  */
-const Device = ({device}) => {
+const Device = ({device, isGuest}) => {
     const {devices, dispatch, isRoom, setActionCompleted} = useContext(DevicesContext);
     const [intensity, setIntensity] = useState(device.slider * 100);
     const [disabled, setDisabled] = useState(device.disabled);
@@ -214,7 +214,7 @@ const Device = ({device}) => {
                 return (<div className="row row-custom l1">
                     <div>
                         <div className="col col-custom l2 m1 s1">
-                            <i className="material-icons btn-edit btn-edit-no-switch"
+                            <i className={isGuest.isGuest ? "material-icons btn-edit btn-edit-no-switch hidden" : "material-icons btn-edit btn-edit-no-switch"}
                                onClick={() => redirectToEdit(device.id)}>edit</i>
                         </div>
                     </div>
@@ -223,7 +223,7 @@ const Device = ({device}) => {
             case 11: //Thermostat
                 return (
                     <div className="col col-custom l1 m1 s1">
-                        <i className="material-icons btn-edit btn-edit-no-switch"
+                        <i className={isGuest.isGuest ? "material-icons btn-edit btn-edit-no-switch hidden" : "material-icons btn-edit btn-edit-no-switch"}
                            onClick={() => redirectToEdit(device.id)}>edit</i>
                     </div>
                 );
@@ -235,7 +235,8 @@ const Device = ({device}) => {
                         </div>
                     </div>
                     <div className="col col-custom l2 m1 s1 right-align">
-                        <i className="material-icons btn-edit" onClick={() => redirectToEdit(device.id)}>edit</i>
+                        <i className={isGuest.isGuest ? "material-icons btn-edit hidden" : "material-icons btn-edit"}
+                           onClick={() => redirectToEdit(device.id)}>edit</i>
                     </div>
                 </div>);
         }

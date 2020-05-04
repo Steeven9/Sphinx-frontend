@@ -14,10 +14,9 @@ const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
+const fetchOwnerUrl = host + '/user/' + params.get('owner');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground;
-let isRoom = false;
-let title = "";
 
 
 /**
@@ -31,25 +30,27 @@ const DevicesPanel = () => {
         const [sensors, setSensors] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [isNetworkError, setIsNetworkError] = useState(false);
+        const [title, setTitle] = useState('');
+        const [isRoom, setIsRoom] = useState(false);
+        const [isGuest, setIsGuest] = useState(false);
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
-        if (path[1] === 'room' && params.get('id')) {
-            isRoom = true
-        }
 
         // Fetches devices and room info on page load
         useEffect(() => {
-            const method = 'GET';
-            const headers = {
-                'user': localStorage.getItem('username'),
-                'session-token': localStorage.getItem('session_token')
-            };
+                const method = 'GET';
+                const headers = {
+                    'user': localStorage.getItem('username'),
+                    'session-token': localStorage.getItem('session_token')
+                };
 
-            if (isRoom) {
-                fetch(fetchRoomUrl, {
-                    method: method,
-                    headers: headers,
-                })
+                if (path[1].toLowerCase() === 'room' && params.get('id')) {
+                    setIsRoom(true)
+
+                    fetch(fetchRoomUrl, {
+                        method: method,
+                        headers: headers,
+                    })
                     .then((res) => {
                         if (res.status === 401) {
                             this.props.logOut(1);
@@ -62,69 +63,114 @@ const DevicesPanel = () => {
                     .then((data) => {
                         let room = JSON.parse(data);
                         roomBackground = room.background !== null && room.background;
-                        title = room.name;
+                        setTitle(room.name);
                     })
+                    .then(() => fetchDevices())
                     .catch(e => console.log(e));
-            }
 
-            fetch(fetchUrl, {
-                method: method,
-                headers: headers,
-            })
-                .then((res) => {
-                    if (res.status === 401) {
-                        this.props.logOut(1);
-                    } else if (res.status === 200) {
-                        return res.text();
-                    } else {
-                        return null;
-                    }
-                })
-                .then((data) => {
-                    setIsLoading(false)
-                    let devices = JSON.parse(data)
 
-                    if (devices.length === 0) {
-                        setIsDataFound(false);
-                    } else {
-                        devices.sort(function (a, b) {
-                            let keyA = a.name.toLowerCase();
-                            let keyB = b.name.toLowerCase();
+                } else if (path[1].toLowerCase() === 'housesharedwithme' && params.get('owner')) {
+                    setIsGuest(true)
 
-                            if (keyA === keyB) {
-                                if (a.id < b.id) return -1;
-                                if (a.id > b.id) return 1;
-                            }
-                            if (keyA < keyB) return -1;
-                            return 1;
+                    fetch(fetchOwnerUrl, {
+                        method: method,
+                        headers: headers,
+                    })
+                    .then((res) => {
+                        if (res.status === 401) {
+                            this.props.logOut(1);
+                        } else if (res.status === 200) {
+                            return res.text();
+                        } else {
+                            return null;
+                        }
+                    })
+                    .then((data) => {
+                        let owner = JSON.parse(data);
+                        let ownerName = owner.fullname.split(' ')[0]
+                        let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
 
-                        });
+                        if (nameEndsInS) {
+                            setTitle(ownerName + "' house")
+                        } else {
+                            setTitle(ownerName + "'s house")
+                        }
 
-                        let filteredSensors = devices.filter(device => {
-                            return device.type === 6 ||
-                                device.type === 7 ||
-                                device.type === 8 ||
-                                device.type === 9 ||
-                                device.type === 10 ||
-                                device.type === 11
-                        })
+                    })
+                    .then(() => fetchDevices())
+                    .catch(e => console.log(e));
 
-                        setSensors(filteredSensors)
-                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                } else { //House view
+                    setTitle('My Devices')
+                    fetchDevices()
+                }
+
+
+                function fetchDevices() {
+                    fetch(fetchUrl, {
+                        method: method,
+                        headers: headers,
+                    })
+                    .then((res) => {
+                        if (res.status === 401) {
+                            this.props.logOut(1);
+                        } else if (res.status === 200) {
+                            return res.text();
+                        } else {
+                            return null;
+                        }
+                    })
+                    .then((data) => {
+                        let devices = JSON.parse(data)
+
+                        if (devices.length === 0) {
+                            setIsLoading(false)
+                            setIsDataFound(false);
+                        } else {
+                            devices.sort(function (a, b) {
+                                let keyA = a.name.toLowerCase();
+                                let keyB = b.name.toLowerCase();
+
+                                if (keyA === keyB) {
+                                    if (a.id < b.id) return -1;
+                                    if (a.id > b.id) return 1;
+                                }
+                                if (keyA < keyB) return -1;
+                                return 1;
+
+                            });
+
+                            let filteredSensors = devices.filter(device => {
+                                return device.type === 6 ||
+                                       device.type === 7 ||
+                                       device.type === 8 ||
+                                       device.type === 9 ||
+                                       device.type === 10 ||
+                                       device.type === 11
+                            })
+
+                            setSensors(filteredSensors)
+                            dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                            setIsLoading(false)
+                        }
+                    })
+                    .catch(e => {
+                        console.log(e);
                         setIsLoading(false)
-                    }
-                })
-                .catch(e => {
-                    console.log(e);
-                    setIsLoading(false)
-                    setIsNetworkError(true)
-                });
-            setActionCompleted(false)
-        }, []);
+                        setIsNetworkError(true)
+                    });
+                }
+
+                setActionCompleted(false)
+            }
+            ,
+            []
+        )
+        ;
 
         // Discards cached state and extract the next one
         useEffect(() => {
-        }, [devices]);
+        }, [devices, isGuest]);
 
         // Refreshes the devices state with setInterval
         useEffect(() => {
@@ -192,7 +238,7 @@ const DevicesPanel = () => {
                                 <section
                                     className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                     <div className="headline-box row row-custom row row-custom-custom">
-                                        <h3 className="col col-custom l8 left-align headline-title">{(isRoom) ? title : "My Devices"}</h3>
+                                        <h3 className="col col-custom l8 left-align headline-title">{title}</h3>
                                         <a href={redirectToAdd()}>
                                             <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                                     </div>
@@ -205,7 +251,7 @@ const DevicesPanel = () => {
                                     </div>
                                     <ul className={(isLoading || !isDataFound) ? "hidden" : "collapsible expandable expandable-component"}>
                                         <li className="row row-custom row row-custom-custom">
-                                            <DeviceList/>
+                                            <DeviceList isGuest={isGuest}/>
                                         </li>
                                     </ul>
                                 </section>
