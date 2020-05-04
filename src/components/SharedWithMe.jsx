@@ -11,12 +11,13 @@ class SharedWithMe extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            owners: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+            owners: <div className="message-two-lines center-text"><span><ColorCircularProgress
+                className="loading-spinner"/></span></div>
         }
     }
 
     /**
-     * Fetches GET request to /guests/houses/ and if successful sets the answer into this.state.owners
+     * Fetches GET request to /shared/houses/ and if successful sets the answer into this.state.owners
      * If unsuccesfull, it display an error message
      */
     componentDidMount() {
@@ -58,7 +59,7 @@ class SharedWithMe extends React.Component {
      */
     mapOwners = (owners) => {
         if (owners.length === 0) {
-            this.setState({owners: <p><b>You're no-one guest.</b></p>});
+            this.setState({owners: <p><b>You're no one's guest yet.</b></p>});
         } else {
             let i = 0;
             let toSet = owners.map((owner) =>
@@ -79,7 +80,7 @@ class SharedWithMe extends React.Component {
 
     //Redirection to /houseSharedWithMe
     redirectToHouseSharedWithMe = (ownerUsername) => {
-        window.location.href = '/houseSharedWithMe?owner=' + ownerUsername
+        window.location.href = '/shared?owner=' + ownerUsername
     }
 
     /**

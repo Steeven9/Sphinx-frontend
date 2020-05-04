@@ -7,12 +7,12 @@ import ScenesContext from '../../context/scenesContext'
  * Generates a list of nested scenes
  * @returns {SceneList}
  */
-const SceneList = () => {
+const SceneList = (isGuest) => {
 
     const {scenes} = useContext(ScenesContext);
 
     return scenes.map((scene) => (
-        <Scene key={scene.id} scene={scene}/>
+        <Scene key={scene.id} scene={scene} isGuest={isGuest}/>
     ))
 };
 

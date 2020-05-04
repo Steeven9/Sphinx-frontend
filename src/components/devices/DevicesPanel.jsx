@@ -18,7 +18,6 @@ const fetchOwnerUrl = host + '/user/' + params.get('owner');
 const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
 let roomBackground;
 
-
 /**
  * Generates a panel with a DevicePanel
  * @returns {DevicePanel}
@@ -34,7 +33,6 @@ const DevicesPanel = () => {
         const [isRoom, setIsRoom] = useState(false);
         const [isGuest, setIsGuest] = useState(false);
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
-
 
         // Fetches devices and room info on page load
         useEffect(() => {
@@ -68,8 +66,7 @@ const DevicesPanel = () => {
                     .then(() => fetchDevices())
                     .catch(e => console.log(e));
 
-
-                } else if (path[1].toLowerCase() === 'housesharedwithme' && params.get('owner')) {
+                } else if (path[1].toLowerCase() === 'shared' && params.get('owner')) {
                     setIsGuest(true)
 
                     fetch(fetchOwnerUrl, {
@@ -104,7 +101,6 @@ const DevicesPanel = () => {
                     setTitle('My Devices')
                     fetchDevices()
                 }
-
 
                 function fetchDevices() {
                     fetch(fetchUrl, {
@@ -215,6 +211,10 @@ const DevicesPanel = () => {
             }
         }
 
+        function toggleScenesView() {
+            // setView(1)
+        }
+
         const errorMessage = () => {
             if (!isDataFound) {
                 return "You haven't added any devices yet. Please add a new one."
@@ -239,14 +239,17 @@ const DevicesPanel = () => {
                                     className={(isRoom) ? "content-box-collapsible z-depth-2 content-box-transparency" : "content-box-collapsible z-depth-2"}>
                                     <div className="headline-box row row-custom row row-custom-custom">
                                         <h3 className="col col-custom l8 left-align headline-title">{title}</h3>
-                                        <a href={redirectToAdd()}>
-                                            {!isGuest ?
+                                        {!isGuest ?
+                                            <a href={redirectToAdd()}>
                                                 <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i>
-                                                :
+                                            </a>
+
+                                            :
+                                            <a href={toggleScenesView()}>
                                                 <i className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
                                                                                                                                               scenes</i>
-                                            }
-                                        </a>
+                                            </a>
+                                        }
                                     </div>
                                     <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
                                         <ColorCircularProgress/>

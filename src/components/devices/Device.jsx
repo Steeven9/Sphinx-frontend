@@ -18,6 +18,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
  * Device factory that can create any type of device
 
  * @param device
+ * @param isGuest
  * @returns {*}
  * @constructor
  */

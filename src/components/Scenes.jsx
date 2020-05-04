@@ -1,26 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import '../css/App.css';
 import ScenesPanel from './scenes/ScenesPanel';
+import GuestsContext from "../context/guestsContext";
 
 
 /**
  * Placeholder page for the scenes dashboard components pages
  */
-class Scenes extends React.Component {
+const Scenes = () => {
+    //Mode: 0=devices, 1=scenes
+    const [view, setView] = useState(0)
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: props.username,
-            session_token: props.session_token
-        }
-    }
-
-    render() {
-        return (
-            <ScenesPanel />
-        );
-    }
+    return (
+        <GuestsContext.Provider value={{view, setView}}>
+            <ScenesPanel/>
+        </GuestsContext.Provider>
+    );
 }
 
 export default Scenes;
