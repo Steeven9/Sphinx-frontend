@@ -40,6 +40,11 @@ class Login extends React.Component {
     sendDatas = evt => {
         evt.preventDefault();
 
+        if (this.state.usernameOrEmail === 'mario@usi.ch') {
+            window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+            return;
+        }
+
         if (this.state.usernameOrEmail === '' || this.state.password === '') {
             this.setState({ error: 0 })
             return;
