@@ -267,7 +267,8 @@ const Device = ({device}) => {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                        <button type="button" name="button"
+                                className="display-inf btn-secondary btn waves-effect waves-light"
                                 onClick={handleClose}>Close
                         </button>
                     </DialogActions>
