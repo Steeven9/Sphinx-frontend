@@ -11,10 +11,16 @@ class House extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            rooms: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+            rooms: <div className="message-two-lines center-text"><span><ColorCircularProgress
+                className="loading-spinner"/></span></div>
         }
     }
 
+    /**
+     * Fetches GET request to /rooms/ and 
+     * if successful sets the response into this.state.rooms
+     * otherwise displays an error message
+     */
     componentDidMount() {
         fetch('http://localhost:8080/rooms/', {
             method: 'GET',
@@ -39,21 +45,39 @@ class House extends React.Component {
                     this.setState({rooms: <p><b>An error has occurred.</b></p>});
                 } else if (response.length === 0) {
                     this.setState({
-                        rooms: <p><b>You still have not create any rooms. Please click on the + button to add one.</b></p>
+                        rooms: <p>You haven't added any rooms yet. Please add a new one.</p>
                     });
                 } else {
-                    this.mapRooms(response);
+                    this.mapRooms(response.sort(this.sortRooms));
                 }
             });
     }
 
     /**
-     * Maps the received array of rooms and sets it as this.state.rooms. If no rooms are available, this.state.rooms gets changed with a specific phrase.
-     * @param rooms: array of rooms
+     * Sorts the two rooms 
+     * @param {room} a
+     * @param {room} b
+     * @return {number} -1 if a should be before b, 1 otherwise
+     */
+    sortRooms = (a, b) => {
+        let keyA = a.name.toLowerCase();
+        let keyB = b.name.toLowerCase();
+        if (keyA === keyB) {
+            if (a.id < b.id) return -1;
+            if (a.id > b.id) return 1;
+        }
+        if (keyA < keyB) return -1;
+        return 1;
+    }
+
+    /**
+     * Maps the received array of rooms and sets it as this.state.rooms. 
+     * If no rooms are available, this.state.rooms gets changed with a specific phrase.
+     * @param {room array} rooms: array of rooms
      */
     mapRooms = (rooms) => {
         if (rooms.length === 0) {
-            this.setState({rooms: <p><b>You have created no rooms yet. Click on the + button to add one.</b></p>});
+            this.setState({rooms: <p>You have created no rooms yet. Click on the + button to add one.</p>});
         } else {
             let i = 0;
             let toSet = rooms.map((room) =>
@@ -76,12 +100,16 @@ class House extends React.Component {
         }
     }
 
-    //Redirection to /room
+    /**
+     * Redirection to /room
+    */ 
     redirectToRoom = (roomID) => {
         window.location.href = '/room?id=' + roomID
     }
 
-    //Redirection to /editRoom
+    /**
+     * Redirection to /editRoom
+    */ 
     redirectToEditRoom = (roomID) => {
         window.location.href = '/editRoom?id=' + roomID
     }
@@ -95,7 +123,8 @@ class House extends React.Component {
                 <div className="rooms-content-box z-depth-2">
                     <div className="headline-box row row-custom">
                         <h2 className="col col-scene l8 left-align headline-title">My Rooms</h2>
-                        <a href="/addRoom"><i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
+                        <a href="/addRoom"><i
+                            className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i></a>
                     </div>
 
                     <div className="row rooms-headline">

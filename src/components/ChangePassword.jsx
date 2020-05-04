@@ -11,15 +11,20 @@ class ChangePassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, display error message
+            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, missing code or email in link.
+                     // If 3, wrong code. If 4, user not found. If 5, unexpected error.
             password: "",
             confirmPassword: "",
             isLoading: false,
             incomplete: false,
             mismatch: false,
+            errorType: ""
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -44,7 +49,7 @@ class ChangePassword extends React.Component {
         }
 
         if (!Object.keys(parsed).includes("code") || !Object.keys(parsed).includes("email")) {
-            this.setState({show: 3});
+            this.setState({show: 2});
             return;
         }
         this.setState({isLoading: true})
@@ -58,11 +63,14 @@ class ChangePassword extends React.Component {
         })
         .then((res) => {
             this.setState({isLoading: false})
-            res.status === 204 ? this.setState({show: 1}) : this.setState({show: 3})
+            if (res.status === 204) this.setState({show: 1})
+            else if (res.status === 401) this.setState({show: 3})
+            else if (res.status === 404) this.setState({show: 4})
+            else this.setState({show: 5, errorType: "Error code: " + res.status})
         })
-        .catch((error) => {
+        .catch((e) => {
             this.setState({isLoading: false})
-            this.setState({show: 3})
+            this.setState({show: 5, errorType: e.toString()})
         })
     }
 
@@ -80,6 +88,9 @@ class ChangePassword extends React.Component {
         this.setState({confirmPassword: event.target.value});
     }
 
+    /**
+     * Returns the error message depending on the value of this.state.incomplete and mismatch
+     */
     showIncomplete = (event) => {
         if (this.state.incomplete) {
             return (<span className="error-message">Please insert both passwords</span>)
@@ -120,10 +131,21 @@ class ChangePassword extends React.Component {
 
                 </div>
             </>)
-        } else if (this.state.show === 1) {
+        } 
+        else if (this.state.show === 1) {
             return (<span className="success-message">Password changed successfully. <a href="/login">Click here</a> to login</span>)
-        } else if (this.state.show === 2) {
-            return (<span className="error-message">The code is invalid or the user doesn't exit. Please, <a href="/reset">request a new link</a>.</span>)
+        } 
+        else if (this.state.show === 2) {
+            return (<span className="error-message">Link is invalid. Please, <a href="/reset">request a new link</a>.</span>)
+        }
+        else if (this.state.show === 3) {
+            return (<span className="error-message">Invalid code. Please, <a href="/reset">request a new link</a>.</span>)
+        }
+        else if (this.state.show === 4) {
+            return (<span className="error-message">User not found. Please, <a href="/reset">request a new link</a>.</span>)
+        }
+        else if (this.state.show === 5) {
+            return (<span className="error-message">Something went wrong ({this.state.errorType}).<br/>Please, <a href="/reset">request a new link</a>.</span>)
         }
     }
 

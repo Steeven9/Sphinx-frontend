@@ -14,7 +14,8 @@ class HouseSharedWithMe extends React.Component {
     }
 
     /**
-     * Changes this.state.flag value and depending on it it changes the view between Devices and Scenes
+     * Maps the received array of devices and sets it as this.state.devices. If no devices are available, this.state.devices gets changed with a specific phrase.
+     * @param {device array} devices: array of devices
      */
     toggleDevicesScenes = () => {
         let toggle = this.state.flag ? false : true
@@ -37,18 +38,22 @@ class HouseSharedWithMe extends React.Component {
             <div className="container">
                 <div className="rooms-content-box z-depth-2">
                     <div className="headline-box row row-collapsible row row-collapsible-custom">
-                        <h2 className="col l11 left-align headline-title">{this.state.flag ? "Devices" : "Scenes"} shared with me</h2>
+                        <h2 className="col l11 left-align headline-title">{this.state.flag ? "Devices" : "Scenes"} shared
+                                                                                                                   with
+                                                                                                                   me</h2>
                         <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons"
-                            onClick={this.toggleDevicesScenes}>add</i> {/* button to fix on design */}
+                           onClick={this.toggleDevicesScenes}>add</i> {/* button to fix on design */}
                     </div>
 
                     <div id="ownerDevices" className="ownerDevices">
-                        <DevicesPanel />
+                        <DevicesPanel/>
                     </div>
                     <div hidden id="ownerScenes" className="ownerScenes">
-                        <ScenesPanel />
+                        <ScenesPanel/>
                     </div>
-                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToSharedWithMe}>Back</button>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                            onClick={this.redirectToSharedWithMe}>Back
+                    </button>
                 </div>
             </div>
         );

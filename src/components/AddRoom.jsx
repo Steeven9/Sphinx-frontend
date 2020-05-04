@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/App.css';
-import '../css/editPages.css'
+import '../css/editPages.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -18,9 +18,14 @@ class AddRoom extends React.Component {
             roomName: "",
             type: "generic-room",
             isLoading: false,
+            background: "",
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     * Changes the page background based on the value of this.state.type
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -29,16 +34,16 @@ class AddRoom extends React.Component {
     }
 
     /**
-     * Sends informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /rooms/ with this.state.roomName, iconType and the background image of the page
+     * Display a different message depending on if it's successful or not.
      */
     sendDatas = evt => {
         evt.preventDefault();
         if (this.state.roomName.length === 0) {
-            this.setState({ success: false, error: false, incomplete: true })
-        }
-        else {
+            this.setState({success: false, error: false, incomplete: true})
+        } else {
             this.setState({isLoading: true, success: false, error: false, incomplete: false})
-
             fetch('http://localhost:8080/rooms/', {
                 method: 'POST',
                 headers: {
@@ -51,86 +56,106 @@ class AddRoom extends React.Component {
                     name: this.state.roomName,
                     icon: this.props.findPathRoom(this.state.type, 0),
 
-                    background: document.getElementById('imageURL').value !== "" ? 
-                    document.getElementById('imageURL').value : 
-                    this.props.findPathRoom(this.state.type, 1),
+                    background: this.state.background !== "" ?
+                        this.state.background :
+                        this.props.findPathRoom(this.state.type, 1),
 
                     devices: []
                 })
             })
-            .then( (res) => {
-                this.setState({isLoading: false})
-                if (res.status === 201) {
-                    this.setState({success: true, error: false, incomplete: false, unknownError: ""})
-                }
-                else if (res.status === 401) {
-                    this.props.logOut(1)
-                }
-                else if (res.status === 400) {
-                    this.setState({success: false, error: true, incomplete: false, unknownError: ""});
-                }
-                else {
-                    this.setState({success: false, error: false, incomplete: false, unknownError: "Unexpected response status: " + res.status});
-                }
-            })
-            .catch( e => this.setState({isLoading: false, success: false, error: false, incomplete: false, unknownError: "Error: " + e}))
+                .then((res) => {
+                    this.setState({isLoading: false})
+                    if (res.status === 201) {
+                        this.setState({success: true, error: false, incomplete: false, unknownError: ""})
+                    } else if (res.status === 401) {
+                        this.props.logOut(1)
+                    } else if (res.status === 400) {
+                        this.setState({success: false, error: true, incomplete: false, unknownError: ""});
+                    } else {
+                        this.setState({
+                            success: false,
+                            error: false,
+                            incomplete: false,
+                            unknownError: "Unexpected response status: " + res.status
+                        });
+                    }
+                })
+                .catch(e => this.setState({
+                    isLoading: false,
+                    success: false,
+                    error: false,
+                    incomplete: false,
+                    unknownError: "Error: " + e
+                }))
         }
     };
 
-    // function to handle state on input change
+    /**
+     * Handles changes in Room Name input
+     */
     handleRoomNameChange = evt => {
-        this.setState({ roomName: evt.target.value });
-    };
-    handleTypeChange = evt => {
-        this.setState({ type: evt.target.value })
+        this.setState({roomName: evt.target.value});
     };
 
     /**
-     * Display a message if a room has been successfully created, and if not an error message
+     * Handles changes in Type input
+     */
+    handleTypeChange = evt => {
+        this.setState({type: evt.target.value})
+    };
+
+    /**
+     * Redirects to /house if a room has been successfully created
+     * Displays an error message if not
      */
     roomCreated = () => {
         if (this.state.success) {
             window.location.href = '/house';
-        }
-        else if (this.state.error) {
+        } else if (this.state.error) {
             return (<span className="error-message">Bad Request</span>)
-        }
-        else if (this.state.incomplete) {
+        } else if (this.state.incomplete) {
             return (<span className="error-message">Please complete all fields</span>)
-        }
-        else if (this.state.unknownError !== "") {
+        } else if (this.state.unknownError !== "") {
             return (<span className="error-message">{this.state.unknownError}</span>)
         }
     }
 
-    /*
-    *
-    *   Functions for icon selection
-    * 
-    */
-
+    /**
+     * Changes the value of this.state.type and the background of this page based on the received path,
+     * then calls this.moveToInformation.
+     * @param {string} path
+     */
     changeIconState = (path) => {
-        this.setState({ type: path });
+        this.setState({type: path});
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
         this.moveToInformation();
     }
 
+    /**
+     * Changes the display view to the list of possible icons
+     */
     moveToSelection = () => {
         document.getElementById("addRoomInfo").hidden = true
         document.getElementById("addRoomIconSelection").hidden = false
     }
 
+    /**
+     * Changes the display view back to the default one
+     */
     moveToInformation = () => {
         document.getElementById("addRoomInfo").hidden = false
         document.getElementById("addRoomIconSelection").hidden = true
+        if (this.state.background !== "") {
+            document.querySelector('main').style.backgroundImage = "url(" + this.state.background + ")";
+            document.getElementById('imageURL').value = this.state.background;
+        }
     }
 
-    changeAndMove = () => {
-        this.moveToInformation();
-    }
-
+    /**
+     * Changes the background with a user selected one
+     * @param e
+     */
     changeDinamicallyBackground = (e) => {
-
         var reader = new FileReader();
         var file = e.target.files[0];
         if (file) {
@@ -138,21 +163,26 @@ class AddRoom extends React.Component {
                 const dataUrl = reader.result;
                 document.querySelector('main').style.backgroundImage = "url(" + dataUrl + ")";
                 document.getElementById('imageURL').value = dataUrl;
+                this.setState({background: dataUrl})
             });
             reader.readAsDataURL(file);
-        }
 
+        }
     }
 
-
+    /**
+     * Restore the background selected by the user and
+     * changes it back to the one stored in this.state.type
+     */
     resetBackground = () => {
         document.getElementById('inputPicture').value = "";
         document.getElementById('imageURL').value = "";
         document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
     }
 
-
-    //Redirection to /house
+    /**
+     * Redirection to /house
+     */
     redirectToHouse = () => {
         window.location.href = '/house'
     }
@@ -168,20 +198,25 @@ class AddRoom extends React.Component {
                     <div className="dates">
                         <div className="roomNameAndIcon">
                             <span className="textFields">
-                                <input type="text" name="roomName" placeholder="Room Name" onChange={this.handleRoomNameChange} required />
+                                <input type="text" name="roomName" placeholder="Room Name"
+                                       onChange={this.handleRoomNameChange} required/>
                             </span>
                             <div className="roomNameAndIcon">
                                 <p>Icon</p>
-                                <img className="fixedSizeIcon" src={this.props.findPathRoom(this.state.type, 0)} alt="icon error" />
-                                <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
+                                <img className="fixedSizeIcon" src={this.props.findPathRoom(this.state.type, 0)}
+                                     onClick={this.moveToSelection} alt="icon error"/>
+                                <button className="material-icons removeBorder toPointer"
+                                        onClick={this.moveToSelection}>edit
+                                </button>
                             </div>
 
                         </div>
-                        <br /><br /><br />
+                        <br/><br/><br/>
                         <div className="roomNameAndIcon2">
                             <p>Customize background</p>
-                            <input type="file" className="inputBackground" onClick={this.resetBackground} accept="image/*" onChange={this.changeDinamicallyBackground} id="inputPicture" />
-                            <input type="hidden" id="imageURL" value="" />
+                            <input type="file" className="inputBackground" onClick={this.resetBackground}
+                                   accept="image/*" onChange={this.changeDinamicallyBackground} id="inputPicture"/>
+                            <input type="hidden" id="imageURL" value=""/>
                         </div>
 
                         <div className="message-two-lines center-text">
@@ -193,29 +228,35 @@ class AddRoom extends React.Component {
                         </div>
                     </div>
                     <div className="center">
-                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToHouse}>Cancel</button>
-                        <button type="button" name="button" className="btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save room</button>
+                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                                onClick={this.redirectToHouse}>Cancel
+                        </button>
+                        <button type="button" name="button" className="btn-primary btn waves-effect waves-light"
+                                onClick={this.sendDatas}>Save room
+                        </button>
                     </div>
                 </div>
 
-                <div hidden id="addRoomIconSelection" className="content-box">
+                <div hidden id="addRoomIconSelection" className="content-box z-depth-2">
                     <h2 className="title">Select Icon</h2>
                     <div className="content-box-iconSelection">
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bathroom")}><img src={this.props.findPathRoom('bathroom', 0)} alt="Bathroom" /><br />Bathroom </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("office")}><img src={this.props.findPathRoom('office', 0)} alt="Office" /><br />Office </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("attic")}><img src={this.props.findPathRoom('attic', 0)} alt="Attic" /><br />Attic </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("basement")}><img src={this.props.findPathRoom('basement', 0)} alt="Basement" /><br />Basement </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("backyard")}><img src={this.props.findPathRoom('backyard', 0)} alt="Backyard" /><br />Backyard </button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("garage")}><img src={this.props.findPathRoom('garage', 0)} alt="Garage" /><br />Garage </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bathroom")}><img src={this.props.findPathRoom('bathroom', 0)} alt="Bathroom" /><br />Bathroom </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("basement")}><img src={this.props.findPathRoom('basement', 0)} alt="Basement" /><br />Basement </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("dining-room")}><img src={this.props.findPathRoom('dining-room', 0)} alt="Dining" /><br />Dining Room</button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("garage")}><img src={this.props.findPathRoom('garage', 0)} alt="Garage" /><br />Garage </button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("generic-room")}><img src={this.props.findPathRoom('generic-room', 0)} alt="Generic" /><br />Generic</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("hallway")}><img src={this.props.findPathRoom('hallway', 0)} alt="Hallway" /><br />Hallway</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("house-front")}><img src={this.props.findPathRoom('house-front', 0)} alt="House" /><br />House</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("kitchen")}><img src={this.props.findPathRoom('kitchen', 0)} alt="Kitchen" /><br />Kitchen</button>
                         <button className="selectionIconBtn" onClick={() => this.changeIconState("living-room")}><img src={this.props.findPathRoom('living-room', 0)} alt="Living" /><br />Living</button>
-                        <button className="selectionIconBtn" onClick={() => this.changeIconState("bedroom")}><img src={this.props.findPathRoom('bedroom', 0)} alt="Bedroom" /><br />Bedroom </button>
+                        <button className="selectionIconBtn" onClick={() => this.changeIconState("office")}><img src={this.props.findPathRoom('office', 0)} alt="Office" /><br />Office </button>
                     </div>
-                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.moveToInformation}>Cancel</button>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                            onClick={this.moveToInformation}>Cancel
+                    </button>
                 </div>
 
             </div>

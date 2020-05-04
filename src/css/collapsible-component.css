@@ -234,11 +234,12 @@
 }
 
 .btn-video-active {
-    padding: 0.7vh;
+    font-family: 'Open Sans', sans-serif !important;
     margin-top: 0.75vh;
     height: 30px !important;
     border-radius: 21px;
     font-style: normal;
+    font-weight: 600;
     font-size: 14px;
     width: 100% !important;
     text-align: center;
@@ -249,11 +250,12 @@
 }
 
 .btn-video-inactive {
-    padding: 0.7vh;
+    font-family: 'Open Sans', sans-serif !important;
     margin-top: 0.75vh;
     height: 30px !important;
     border-radius: 21px;
     font-style: normal;
+    font-weight: 600;
     font-size: 14px;
     width: 100% !important;
     text-align: center;
@@ -363,7 +365,7 @@
 }
 
 form.device-form {
-    display: contents  !important;
+    display: contents !important;
     margin-top: 0 !important;
 }
 

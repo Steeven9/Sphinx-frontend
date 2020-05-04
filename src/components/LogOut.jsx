@@ -7,6 +7,9 @@ const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularPr
 
 class LogOut extends React.Component {
     
+    /**
+     * Calls this.props.logOut
+     */
     componentDidMount() {
         this.props.logOut(0);
     }

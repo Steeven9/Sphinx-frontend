@@ -96,11 +96,11 @@ function getUsedDevices(allDevices, currentDevices) {
 function getDevicesTypesByEffectType(effectConfig) {
     switch (effectConfig.type) {
         case 1: //Light intensity
-            return [2, 4, 11]
+            return [2, 4]
         case 2: //Temperature
             return [11]
         case 3: //Power
-            return [1, 2, 3, 4, 5, 6, 11, 13]
+            return [1, 2, 3, 4, 6, 11, 13]
         case 4: //Curtains aperture
             return [12]
         default:

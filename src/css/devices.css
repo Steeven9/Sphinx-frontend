@@ -6,3 +6,7 @@
     border-radius: 10px !important;
     padding: 30px 80px 50px 80px !important;
 }
+
+.btn-false-disabled {
+    pointer-events: none;
+}

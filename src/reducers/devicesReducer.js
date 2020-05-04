@@ -1,7 +1,8 @@
 /**
  * Generic fetch to POST and PUT
+ * @param fetchUrl
  * @param method
- * @param device
+ * @param body
  */
 function doFetch(fetchUrl, method, body) {
     const host = window.location.protocol + '//' + window.location.hostname + ':8080';
@@ -19,7 +20,7 @@ function doFetch(fetchUrl, method, body) {
         body: body
     })
         .then((res) => {
-            if (res.status === 200 || res.status === 203) {
+            if (res.status === 200 || res.status === 204) {
                 console.log(method + ' successful!');
                 return res
             } else {
@@ -42,18 +43,42 @@ const devicesReducer = (state, action) => {
 
         case 'POPULATE_DEVICES':
             console.log('Dispatch: POPULATE_DEVICES');
+            action.devices.forEach(device => {
+                if (device.slider !== null && device.type !== 11) { //Does not apply to Thermostat
+                    device.slider = device.slider * 100
+                }
+            })
             return action.devices;
 
         case 'UPDATE_STATE':
             console.log('Dispatch: UPDATE_STATE');
             return state;
 
+        case 'UPDATE_SENSORS':
+            console.log('Dispatch: UPDATE_SENSORS');
+
+            action.sensors.forEach(sensor => {
+
+                action.devices.forEach(device => {
+
+                    if (device.id === sensor.id) {
+                        device.label = sensor.label
+                    }
+
+                    if (device.type === 11) {
+                        device.averageTemp = sensor.averageTemp
+                    }
+                })
+            })
+
+            return [...state];
+
         case 'MODIFY_DEVICE':
             console.log('Dispatch: MODIFY_DEVICE');
             let fetchUrl = '';
             let body = {};
 
-            if (action.device.reset) {
+            if (action.device.reset) { //SmartPlug
                 fetchUrl = '/reset/' + action.device.id;
                 action.device.reset = false;
                 body = {};
@@ -63,15 +88,19 @@ const devicesReducer = (state, action) => {
                 switch (action.device.type) {
                     case 2:  //DimmableLight
                     case 4:  //DimmableSwitch
-                    case 5:  //StatelessDimmableSwitch
-                    case 11: //Thermostat
-                        body.slider = action.device.slider / 100;
                         body.on = action.device.on;
+                        body.slider = action.device.slider / 100;
+                        break;
+                    case 5:  //StatelessDimmableSwitch
+                        body.slider = action.device.slider / 100;
+                        break;
+                    case 11: //Thermostat
+                        body.slider = action.device.slider;
+                        body.state = action.device.state;
+                        body.source = action.device.source;
                         break;
                     case 12: //SmartCurtains
                         body.slider = action.device.slider / 100;
-                        body.state = action.device.state;
-                        body.source = action.device.source;
                         break;
                     default:  //Light, Switch, SmartPlug, SecurityCamera
                         body.on = action.device.on;
@@ -84,42 +113,69 @@ const devicesReducer = (state, action) => {
             return state;
 
         case 'SYNC_DEVICES':
+            console.log('Dispatch: SYNC_DEVICES');
 
-            if (action.device.on !== undefined) {
-                state.forEach((d) => {
-                    if (action.device.switches && action.device.type !== 3) {
-                        // If parent is ON: powers children on and sets their slider value to the parent's
-                        if (action.device.on && action.device.clicked && d.switched === action.device.id) {
-                            d.on = action.device.on;
-                            d.slider = action.device.slider
-                        }
+            for (let device of state) {
+                if (device.id === action.device.id) {
 
-                        // Syncs parent-children sliders
-                        if (action.device.on && d.on && d.switched === action.device.id) {
-                            d.slider = action.device.slider
-                        }
+                    if (device.slider !== null && !device.on) {
+                        device.slider = action.device.slider
+                    }
 
-                        // If parent is OFF: allows children to set their own power switch
-                        if (!action.device.on && action.device.clicked && d.switched === action.device.id) {
-                            d.on = action.device.on;
+                    if (device.on !== null) {
+                        device.on = action.device.on
+                    }
 
-                            // Sets stateless dimmable switch's slider to 0 on self-power OFF
-                            if (action.device.type === 5) {
-                                action.device.slider = 0
+                    if (!device.clicked && !device.child) {
+                        device.on = action.device.on;
+                    }
+
+                    if (device.type === 11) { //Thermostat
+                        device.slider = action.device.slider
+                        device.state = action.device.state
+                        device.source = action.device.source
+                    }
+
+                } else if (device.switched) {
+                    for (let parent of device.switched) {
+                        if (parent === action.device.id) {
+
+                            if (device.slider !== null && action.device.type !== 5) {
+                                if (device.on && action.device.on) {
+                                    device.slider = action.device.slider
+                                }
+                            }
+
+                            if (device.on && action.device.type === 5) {
+                                let newSlider = device.slider + action.device.slider;
+                                if (newSlider > 100) {
+                                    device.slider = 100
+                                } else if (newSlider < 0) {
+                                    device.slider = 0
+                                } else {
+                                    device.slider = newSlider
+                                }
+                            }
+
+                            if (action.device.clicked) {
+                                if (device.type !== 11) { //Not thermostat
+                                    device.on = action.device.on
+                                    device.slider = action.device.slider
+                                } else {
+                                    if (action.device.on === true) {
+                                        device.state = 1
+                                        device.disabled = false;
+                                    } else {
+                                        device.state = 0
+                                        device.disabled = true;
+                                    }
+                                }
                             }
                         }
-
-                        // Allows self-power OFF of child
-                    } else if (d.id === action.device.id) {
-                        d.on = action.device.on;
-
-                        // Forbids regular switch to set a dimmable light's slider to 0 on power ON
-                    } else if (d.switched === action.device.id && action.device.switches !== null && action.device.type === 3) {
-                        d.on = action.device.on;
                     }
-                });
-                action.device.clicked = false
+                }
             }
+            action.device.clicked = false
             return [...state];
 
         default:

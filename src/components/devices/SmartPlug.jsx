@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useEffect} from 'react'
 import DevicesContext from "../../context/devicesContext";
 
 
@@ -8,16 +8,21 @@ import DevicesContext from "../../context/devicesContext";
  * @returns {SmartPlug}
  */
 const SmartPlug = (device) => {
-    const [consumption, setConsumption] = useState((device.device.label !== null) ? device.device.label + ' kWh' : '0 kWh');
+    const [consumption, setConsumption] = useState(device.device.label);
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
 
     const resetSmartPlug = (e) => {
         e.preventDefault();
-        setConsumption('0 kWh');
         device.device.label = '0 kWh';
+        setConsumption('0 kWh');
         device.device.reset = true;
-        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
+        dispatch({type: 'MODIFY_DEVICE', device: device.device, setActionCompleted: setActionCompleted});
     };
+
+    // Discards cached state and extract the next one
+    useEffect(() => {
+        setConsumption(device.device.label)
+    }, [device, consumption]);
 
     device.device.reset = false;
 

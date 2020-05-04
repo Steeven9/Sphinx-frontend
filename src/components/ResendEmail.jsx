@@ -18,6 +18,9 @@ class ResendEmail extends React.Component {
         }
     }
 
+    /**
+     * Adds an event listener to call sendDatas when key "Enter" is pressed
+     */
     componentDidMount() {
         document.addEventListener("keydown", (evt) => {
             if (evt.key === 'Enter') this.sendDatas(evt)
@@ -25,7 +28,9 @@ class ResendEmail extends React.Component {
     }
 
     /**
-     * Sends all informations contained in this.state to the backend
+     * If all informations aren't filled in, it displays an error message, otherwise:
+     * Fetches POST request to /auth/resend/:email
+     * Displays a message based on successful or not response
      */
     sendDatas = evt => {
         evt.preventDefault();
@@ -67,7 +72,7 @@ class ResendEmail extends React.Component {
     };
 
     /**
-     * Adds a new line in the page depending on the value of this.state.success
+     * Adds a new line in the page depending on the value of this.state.successOrError
      */
     displayResult = () => {
         if (this.state.successOrError === 0) {

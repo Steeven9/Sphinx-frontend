@@ -5,7 +5,6 @@ class Homepage extends React.Component {
 
     /**
      * Renders the initial logged out screen of the website.
-     * It has two buttons that link to the Sign up page. Everything else is just fancy graphics.
      */
     render() {
         return (
@@ -27,7 +26,7 @@ class Homepage extends React.Component {
 
                                 <p> Using <strong>SmartHut</strong> is as easy as creating rooms and then adding all your devices to them. You’ll get immediate control from our easy and intuitive web app.</p>
                                 <div className="center-align">
-                                    <a href="/signup" className="waves-effect waves-light btn btn-primary center-align">Join now</a>
+                                    <a href="/signup" className="join-now waves-effect waves-light btn btn-primary center-align">Join now</a>
                                 </div>
                             </section>
                         </article>

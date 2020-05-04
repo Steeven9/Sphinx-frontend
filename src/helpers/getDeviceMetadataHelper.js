@@ -142,7 +142,7 @@ export function getDeviceTypeName(type) {
 export function getMinMax(device) {
     switch (device.type) {
         case 11:
-            return [10, 30];
+            return [0, 100];
         default:
             return [0, 100]
     }
@@ -150,8 +150,8 @@ export function getMinMax(device) {
 
 /**
  * Returns the min and max marks to show on a slider according to device type
- * @param type {int}
  * @returns {[{label: string, value: number}, {label: string, value: number}]}
+ * @param device
  */
 export function getSliderMarks(device) {
     const lightMarks = [
@@ -171,8 +171,8 @@ export function getSliderMarks(device) {
             label: '5°C',
         },
         {
-            value: 30,
-            label: '30°C',
+            value: 40,
+            label: '40°C',
         },
     ];
 
