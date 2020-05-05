@@ -20,8 +20,7 @@ import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import MyGuests from './components/MyGuests';
 import AddGuest from './components/AddGuest';
-import SharedWithMe from './components/SharedWithMe';
-import HouseSharedWithMe from './components/HouseSharedWithMe';
+import SharedWithMe from './components/shared/SharedWithMe';
 import SharedWithGuests from './components/shared/SharedWithGuests';
 import Scenes from './components/Scenes';
 import AddScene from './components/AddScene';
@@ -376,16 +375,6 @@ class App extends React.Component {
                             <Route path="/sharedWithMe">
                                 {this.state.loggedIn ?
                                     <SharedWithMe
-                                        username={this.state.username}
-                                        session_token={this.state.session_token}
-                                        logOut={this.logOut}
-                                    />
-                                    : this.accessDenied()}
-                            </Route>
-
-                            <Route path="/houseSharedWithMe">
-                                {this.state.loggedIn ?
-                                    <HouseSharedWithMe
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}

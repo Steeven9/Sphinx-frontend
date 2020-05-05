@@ -32,6 +32,7 @@ const DevicesPanel = () => {
         const [sensors, setSensors] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [isShared, setIsShared] = useState(true);
+        const [isFakeOwner, setFakeOwner] = useState(false);
         const [fetchMode, setFetchMode] = useState('');
         const [isNetworkError, setIsNetworkError] = useState(false);
         const [title, setTitle] = useState('');
@@ -103,6 +104,7 @@ const DevicesPanel = () => {
                     } else {
                         setTitle(params.get('owner') + "'s House")
                         setIsShared(false)
+                        setFakeOwner(true)
                         return null
                     }
                 })
@@ -240,7 +242,7 @@ const DevicesPanel = () => {
         }
 
         const errorMessage = () => {
-            if (!isDataFound) {
+            if (!isDataFound || isFakeOwner) {
                 if (fetchMode === 'devices' || fetchMode === 'rooms')
                     return "You haven't added any devices yet. Please add a new one."
                 if (fetchMode === 'shared') {

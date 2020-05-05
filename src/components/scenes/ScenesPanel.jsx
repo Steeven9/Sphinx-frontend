@@ -27,6 +27,7 @@ const ScenesPanel = () => {
     const [isDataFound, setIsDataFound] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [isShared, setIsShared] = useState(true);
+    const [isFakeOwner, setFakeOwner] = useState(false);
     const [fetchMode, setFetchMode] = useState('');
     const [isNetworkError, setIsNetworkError] = useState(false);
     const [title, setTitle] = useState('');
@@ -67,7 +68,7 @@ const ScenesPanel = () => {
                 } else {
                     setTitle(params.get('owner') + "'s Scenes")
                     setIsShared(false)
-                    setIsLoading(false)
+                    setFakeOwner(true)
                     return null
                 }
             })
@@ -197,7 +198,7 @@ const ScenesPanel = () => {
     }, [scenes]);
 
     const errorMessage = () => {
-        if (!isDataFound) {
+        if (!isDataFound || isFakeOwner) {
             if (fetchMode === 'scenes')
                 return "You haven't added any scenes yet. Please add a new one."
             if (fetchMode === 'shared') {

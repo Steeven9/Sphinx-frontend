@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/App.css';
-import '../css/house.css';
+import '../../css/App.css';
+import '../../css/house.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -44,7 +44,7 @@ class SharedWithMe extends React.Component {
                 this.setState({owners: <p><b>An error has occurred.</b></p>});
             } else if (response.length === 0) {
                 this.setState({
-                    owners: <p><b>You're no-one guest.</b></p>
+                    owners: <p><b>You aren't anyone's guest yet.</b></p>
                 });
             } else {
                 this.mapOwners(response);
@@ -59,7 +59,7 @@ class SharedWithMe extends React.Component {
      */
     mapOwners = (owners) => {
         if (owners.length === 0) {
-            this.setState({owners: <p><b>You're no one's guest yet.</b></p>});
+            this.setState({owners: <p><b>You aren't anyone's guest yet.</b></p>});
         } else {
             let i = 0;
             let toSet = owners.map((owner) =>
@@ -80,7 +80,7 @@ class SharedWithMe extends React.Component {
 
     //Redirection to /houseSharedWithMe
     redirectToHouseSharedWithMe = (ownerUsername) => {
-        window.location.href = '/shared?owner=' + ownerUsername
+        window.location.href = '/shared?owner=' + ownerUsername + '&view=0'
     }
 
     /**
