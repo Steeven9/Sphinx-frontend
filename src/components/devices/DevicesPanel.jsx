@@ -14,10 +14,10 @@ const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
-// const guestDevicesFetchUrl = host + '/guests/' + params.get('owner') + '/devices';
+// const fetchOwnerUrl = host + '/guests/owner/' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
+const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/owner/' + params.get('owner');
 const guestDevicesFetchUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/' + params.get('owner') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
-const fetchOwnerUrl = host + '/user/' + params.get('owner');
 let fetchUrl;
 let roomBackground;
 
