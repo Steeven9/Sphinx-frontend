@@ -11,8 +11,8 @@ class ChangePassword extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: 0, // If 0, the page will have a form. If 1, display "password changed". If 2, missing code or email in link.
-                     // If 3, wrong code. If 4, user not found. If 5, unexpected error.
+            show: 0, // If 0, the page will have a form. If 1, display "password changed". 
+                     // If 2, missing code or email in link. If 3, everything else.
             password: "",
             confirmPassword: "",
             isLoading: false,
@@ -63,14 +63,21 @@ class ChangePassword extends React.Component {
         })
         .then((res) => {
             this.setState({isLoading: false})
-            if (res.status === 204) this.setState({show: 1})
-            else if (res.status === 401) this.setState({show: 3})
-            else if (res.status === 404) this.setState({show: 4})
-            else this.setState({show: 5, errorType: "Error code: " + res.status})
+            if (res.status === 204) {
+                this.setState({show: 1})
+                return null;
+            }
+            else {
+                this.setState({show: 3})
+                return res.json()
+            }
+        })
+        .then((data) => {
+            if (data !== null) this.setState({errorType: data.message})
         })
         .catch((e) => {
             this.setState({isLoading: false})
-            this.setState({show: 5, errorType: e.toString()})
+            this.setState({show: 3, errorType: e.toString()})
         })
     }
 
@@ -139,13 +146,7 @@ class ChangePassword extends React.Component {
             return (<span className="error-message">Link is invalid. Please, <a href="/reset">request a new link</a>.</span>)
         }
         else if (this.state.show === 3) {
-            return (<span className="error-message">Invalid code. Please, <a href="/reset">request a new link</a>.</span>)
-        }
-        else if (this.state.show === 4) {
-            return (<span className="error-message">User not found. Please, <a href="/reset">request a new link</a>.</span>)
-        }
-        else if (this.state.show === 5) {
-            return (<span className="error-message">Something went wrong ({this.state.errorType}).<br/>Please, <a href="/reset">request a new link</a>.</span>)
+            return (<span className="error-message">{this.state.errorType}<br/>Please, <a href="/reset">request a new link</a>.</span>)
         }
     }
 

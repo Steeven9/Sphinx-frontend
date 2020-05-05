@@ -58,22 +58,19 @@ class Login extends React.Component {
             if (res.status === 200) {
                 return res.text();
             }
-            else if (res.status === 401 || res.status === 404) {
-                this.setState({ error: 2 })
-                return res.text();
-            }
             else if (res.status === 403) {
                 this.setState({ error: 1 })
             }
             else {
-                this.setState({ error: 2, errorType: "Error Code: " + res.status })
+                this.setState({ error: 2 })
+                return res.json();
             }
             return null;
         })
         .then((data) => {
             if (data != null) {
                 if (this.state.error === 2) {
-                    this.setState({errorType: data})
+                    this.setState({errorType: data.message})
                     return null;
                 }
 
@@ -96,15 +93,12 @@ class Login extends React.Component {
                 if (res.status === 200) {
                     return res.text();
                 }
-                else if (res.status === 401 || res.status === 404) {
-                    this.setState({ error: 2 })
-                    return res.text();
-                }
                 else if (res.status === 403) {
                     this.setState({ error: 1 })
                 }
                 else {
-                    this.setState({ error: 2, errorType: "Error Code: " + res.status })
+                    this.setState({ error: 2 })
+                    return res.json();
                 }
                 return null;
             } else {
@@ -115,7 +109,7 @@ class Login extends React.Component {
             this.setState({ isLoading: false })
             if (data !== null) {
                 if (this.state.error === 2) {
-                    this.setState({errorType: data})
+                    this.setState({errorType: data.status})
                     return null;
                 }
                 this.props.logIn(data, this.state.sessionToken);

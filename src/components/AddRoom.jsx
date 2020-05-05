@@ -69,27 +69,21 @@ class AddRoom extends React.Component {
                     this.setState({success: true, incomplete: false, errorType: ""})
                 } else if (res.status === 401) {
                     this.props.logOut(1)
-                } else if (res.status === 400) {
-                    this.setState({success: false, incomplete: false});
-                    return res.text();
                 } else {
-                    this.setState({
-                        success: false,
-                        incomplete: false,
-                        errorType: "Unexpected response status: " + res.status
-                    });
-                }
+                    this.setState({success: false, incomplete: false});
+                    return res.json();
+                } 
                 return null
             })
             .then((data) => {
-                if (data !== null) this.setState({errorType: data});
+                if (data !== null) this.setState({errorType: data.message});
             })
             .catch(e => this.setState({
                 isLoading: false,
                 success: false,
                 error: false,
                 incomplete: false,
-                errorType: "Error: " + e.toString()
+                errorType: e.toString()
             }))
         }
     };

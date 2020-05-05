@@ -141,23 +141,16 @@ class AddDevice extends React.Component {
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 }
-                else if (res.status === 400) {
-                    this.setState({ success: false, incomplete: false})
-                    return res.text();
-                }
                 else {
-                    this.setState({
-                        success: false,
-                        incomplete: false,
-                        unknownError: "Unexpected response status: " + res.status
-                    });
+                    this.setState({ success: false, incomplete: false})
+                    return res.json();
                 }
                 return null;
             })
             .then((data) => {
-                if (data !== null) this.setState({errorType: data});
+                if (data !== null) this.setState({errorType: data.message});
             })
-            .catch(e => this.setState({isLoading: false, success: false, incomplete: false, errorType: "Error: " + e.toString()}))
+            .catch(e => this.setState({isLoading: false, success: false, incomplete: false, errorType: e.toString()}))
         }
     };
 
