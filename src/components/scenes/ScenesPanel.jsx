@@ -13,7 +13,7 @@ const path = window.location.pathname.toLowerCase().split('/');
 const host = window.location.protocol + '//' + window.location.hostname + ':8888';
 const scenesFetchUrl = host + '/scenes';
 const guestScenesFetchUrl = host + '/guests/' + params.get('owner') + '/scenes';
-const fetchUrl = path[1] === 'shared' ? guestScenesFetchUrl : scenesFetchUrl;
+let fetchUrl;
 // const fetchOwnerUrl = host + '/user/' + params.get('owner');
 const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8080/user/' + params.get('owner');
 
@@ -26,10 +26,22 @@ const ScenesPanel = () => {
     const [scenes, dispatchScene] = useReducer(scenesReducer, []);
     const [isDataFound, setIsDataFound] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
+    const [isShared, setIsShared] = useState(true);
+    const [fetchMode, setFetchMode] = useState('');
     const [isNetworkError, setIsNetworkError] = useState(false);
     const [title, setTitle] = useState('');
     const [isGuest, setIsGuest] = useState(false);
     const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
+
+    // Sets the fetchUrl to access the right route and sets the fetchMode to show the right error messages
+    useEffect(() => {
+        if (path[1] === 'shared') {
+            fetchUrl = guestScenesFetchUrl
+            setFetchMode('shared')
+        } else {
+            setFetchMode(scenesFetchUrl)
+        }
+    }, [fetchMode]);
 
     // Fetches scenes on page load
     useEffect(() => {
@@ -95,8 +107,8 @@ const ScenesPanel = () => {
 
                 if (scenes === null || scenes.length === 0) {
                     setIsDataFound(false)
+                    setIsShared(false)
                 } else {
-
                     scenes.sort(function (a, b) {
                         let keyA = a.name;
                         let keyB = b.name;

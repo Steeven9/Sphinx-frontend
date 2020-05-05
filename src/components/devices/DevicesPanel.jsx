@@ -14,24 +14,12 @@ const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
-// const guestDevicesFetchUrl = host + '/guests/' + params.get('id') + '/devices';
+// const guestDevicesFetchUrl = host + '/guests/' + params.get('owner') + '/devices';
 const guestDevicesFetchUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/' + params.get('owner') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchOwnerUrl = host + '/user/' + params.get('owner');
 let fetchUrl;
 let roomBackground;
-
-if (path[1] === 'devices') {
-    fetchUrl = devicesFetchUrl
-}
-
-if (path[1] === 'room' && params.get('id')) {
-    fetchUrl = roomDevicesFetchUrl
-}
-
-if (path[1] === 'shared') {
-    fetchUrl = guestDevicesFetchUrl
-}
 
 /**
  * Generates a panel with a DevicePanel
@@ -43,62 +31,83 @@ const DevicesPanel = () => {
         const [isDataFound, setIsDataFound] = useState(true);
         const [sensors, setSensors] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
+        const [isShared, setIsShared] = useState(true);
+        const [fetchMode, setFetchMode] = useState('');
         const [isNetworkError, setIsNetworkError] = useState(false);
         const [title, setTitle] = useState('');
         const [isRoom, setIsRoom] = useState(false);
         const [isGuest, setIsGuest] = useState(false);
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
 
+        // Sets the fetchUrl to access the right route and sets the fetchMode to show the right error messages
+        useEffect(() => {
+            if (path[1] === 'devices') {
+                fetchUrl = devicesFetchUrl
+                setFetchMode('devices')
+            }
+
+            if (path[1] === 'room' && params.get('id')) {
+                fetchUrl = roomDevicesFetchUrl
+                setFetchMode('rooms')
+            }
+
+            if (path[1] === 'shared') {
+                fetchUrl = guestDevicesFetchUrl
+                setFetchMode('shared')
+            }
+        }, [fetchMode]);
+
+
         // Fetches devices and room info on page load
         useEffect(() => {
-                const method = 'GET';
-                const headers = {
-                    'user': localStorage.getItem('username'),
-                    'session-token': localStorage.getItem('session_token')
-                };
+            const method = 'GET';
+            const headers = {
+                'user': localStorage.getItem('username'),
+                'session-token': localStorage.getItem('session_token')
+            };
 
-                if (path[1].toLowerCase() === 'room' && params.get('id')) {
-                    setIsRoom(true)
+            if (path[1].toLowerCase() === 'room' && params.get('id')) {
+                setIsRoom(true)
 
-                    fetch(fetchRoomUrl, {
-                        method: method,
-                        headers: headers,
-                    })
-                    .then((res) => {
-                        if (res.status === 401) {
-                            this.props.logOut(1);
-                        } else if (res.status === 200) {
-                            return res.text();
-                        } else {
-                            return null;
-                        }
-                    })
-                    .then((data) => {
-                        let room = JSON.parse(data);
-                        roomBackground = room.background !== null && room.background;
-                        setTitle(room.name);
-                    })
-                    .then(() => fetchDevices())
-                    .catch(e => console.log(e));
+                fetch(fetchRoomUrl, {
+                    method: method,
+                    headers: headers,
+                })
+                .then((res) => {
+                    if (res.status === 401) {
+                        this.props.logOut(1);
+                    } else if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    let room = JSON.parse(data);
+                    roomBackground = room.background !== null && room.background;
+                    setTitle(room.name);
+                })
+                .then(() => fetchDevices())
+                .catch(e => console.log(e));
 
-                } else if (path[1].toLowerCase() === 'shared' && params.get('owner')) {
-                    setIsGuest(true)
+            } else if (path[1].toLowerCase() === 'shared' && params.get('owner')) {
+                setIsGuest(true)
 
-                    fetch(fetchOwnerUrl, {
-                        method: method,
-                        headers: headers,
-                    })
-                    .then((res) => {
-                        if (res.status === 401) {
-                            this.props.logOut(1);
-                        } else if (res.status === 200) {
-                            return res.text();
-                        } else {
-                            setIsLoading(false)
-                            setIsDataFound(false);
-                        }
-                    })
-                    .then((data) => {
+                fetch(fetchOwnerUrl, {
+                    method: method,
+                    headers: headers,
+                })
+                .then((res) => {
+                    if (res.status === 200) {
+                        return res.text();
+                    } else {
+                        setTitle(params.get('owner') + "'s house")
+                        setIsShared(false)
+                        return null
+                    }
+                })
+                .then((data) => {
+                    if (data !== null) {
                         let owner = JSON.parse(data);
                         let ownerName = owner.fullname.split(' ')[0]
                         let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
@@ -108,77 +117,83 @@ const DevicesPanel = () => {
                         } else {
                             setTitle(ownerName + "'s house")
                         }
+                    }
+                })
+                .then(() => fetchDevices())
+                .catch(e => console.log(e));
 
-                    })
-                    .then(() => fetchDevices())
-                    .catch(e => console.log(e));
-
-                } else { //House view
-                    setTitle('My Devices')
-                    fetchDevices()
-                }
-
-                function fetchDevices() {
-                    fetch(fetchUrl, {
-                        method: method,
-                        headers: headers,
-                    })
-                    .then((res) => {
-                        if (res.status === 401) {
-                            this.props.logOut(1);
-                        } else if (res.status === 200) {
-                            return res.text();
-                        } else {
-                            return null;
-                        }
-                    })
-                    .then((data) => {
-                        let devices = JSON.parse(data)
-
-                        if (devices.length === 0) {
-                            setIsLoading(false)
-                            setIsDataFound(false);
-                        } else {
-                            devices.sort(function (a, b) {
-                                let keyA = a.name.toLowerCase();
-                                let keyB = b.name.toLowerCase();
-
-                                if (keyA === keyB) {
-                                    if (a.id < b.id) return -1;
-                                    if (a.id > b.id) return 1;
-                                }
-                                if (keyA < keyB) return -1;
-                                return 1;
-
-                            });
-
-                            let filteredSensors = devices.filter(device => {
-                                return device.type === 6 ||
-                                       device.type === 7 ||
-                                       device.type === 8 ||
-                                       device.type === 9 ||
-                                       device.type === 10 ||
-                                       device.type === 11
-                            })
-
-                            setSensors(filteredSensors)
-                            dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                            setIsLoading(false)
-                        }
-                    })
-                    .catch(e => {
-                        console.log(e);
-                        setIsLoading(false)
-                        setIsNetworkError(true)
-                    });
-                }
-
-                setActionCompleted(false)
+            } else { //House view
+                setTitle('My Devices')
+                fetchDevices()
             }
-            ,
-            []
-        )
-        ;
+
+            function fetchDevices() {
+                fetch(fetchUrl, {
+                    method: method,
+                    headers: headers,
+                })
+                .then((res) => {
+                    if (res.status === 401) {
+                        this.props.logOut(1);
+                        setIsShared(false)
+                    } else if (res.status === 200) {
+                        return res.text();
+                    } else if (res.status === 404) {
+                        setIsShared(false)
+                        return null;
+                    } else {
+                        return null;
+                    }
+                })
+                .then((data) => {
+                    let devices = JSON.parse(data)
+
+                    if (devices.length === 0) {
+                        setIsLoading(false)
+                        if (fetchMode === "shared") {
+                            console.log('1')
+                            setIsShared(false)
+                        } else {
+                            console.log('2')
+
+                            setIsDataFound(false);
+                        }
+                    } else {
+                        devices.sort(function (a, b) {
+                            let keyA = a.name.toLowerCase();
+                            let keyB = b.name.toLowerCase();
+
+                            if (keyA === keyB) {
+                                if (a.id < b.id) return -1;
+                                if (a.id > b.id) return 1;
+                            }
+                            if (keyA < keyB) return -1;
+                            return 1;
+                        });
+
+                        let filteredSensors = devices.filter(device => {
+                            return device.type === 6 ||
+                                   device.type === 7 ||
+                                   device.type === 8 ||
+                                   device.type === 9 ||
+                                   device.type === 10 ||
+                                   device.type === 11
+                        })
+
+                        setSensors(filteredSensors)
+                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
+                        setIsLoading(false)
+                    }
+                })
+                .catch(e => {
+                    console.log(e);
+                    setIsLoading(false)
+                    setIsNetworkError(true)
+                });
+            }
+
+            setActionCompleted(false)
+        }, [fetchMode]);
 
         // Discards cached state and extract the next one
         useEffect(() => {
@@ -228,9 +243,21 @@ const DevicesPanel = () => {
         }
 
         const errorMessage = () => {
+            console.log('isDataFound ' + isDataFound)
+            console.log('isShared ' + isShared)
+            console.log('isNetworkError ' + isNetworkError)
+
             if (!isDataFound) {
-                return "You haven't added any devices yet. Please add a new one."
+                if (fetchMode === 'devices' || fetchMode === 'rooms')
+                    return "You haven't added any devices yet. Please add a new one."
+                if (fetchMode === 'shared') {
+                    return "This owner hasn't shared any devices with you yet."
+                }
             }
+            if (isDataFound && !isShared && !isNetworkError) {
+                return "This owner hasn't shared any devices with you yet."
+            }
+
             if (isNetworkError) {
                 return "We are sorry. There was an error."
             }
@@ -273,9 +300,9 @@ const DevicesPanel = () => {
                                     </div>
                                     <div
                                         className={(!isDataFound || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
-                                        <p className={(isNetworkError) ? "error-message" : undefined}>{errorMessage()}</p>
+                                        <p className={(isNetworkError && isShared) ? "error-message" : undefined}>{errorMessage()}</p>
                                     </div>
-                                    <ul className={(isLoading || !isDataFound) ? "hidden" : "collapsible expandable expandable-component"}>
+                                    <ul className={(isLoading || !isDataFound || !isShared || isNetworkError) ? "hidden" : "collapsible expandable expandable-component"}>
                                         <li className="row row-custom row row-custom-custom">
                                             <DeviceList isGuest={isGuest}/>
                                         </li>
