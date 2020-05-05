@@ -6,6 +6,7 @@ import '../../css/collapsible-component.css';
 import '../../css/collapsible-devices.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {Link} from "react-router-dom";
 
 
 const host = window.location.protocol + '//' + window.location.hostname + ':8080';
@@ -211,10 +212,6 @@ const DevicesPanel = () => {
             }
         }
 
-        function toggleScenesView() {
-            // setView(1)
-        }
-
         const errorMessage = () => {
             if (!isDataFound) {
                 return "You haven't added any devices yet. Please add a new one."
@@ -245,10 +242,15 @@ const DevicesPanel = () => {
                                             </a>
 
                                             :
-                                            <a href={toggleScenesView()}>
-                                                <i className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
-                                                                                                                                              scenes</i>
-                                            </a>
+                                            <Link to={{
+                                                pathname: "/shared",
+                                                search: "?owner=erick&view=1"
+                                            }}>
+                                                <div
+                                                    className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
+                                                                                                                                               scenes
+                                                </div>
+                                            </Link>
                                         }
                                     </div>
                                     <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>

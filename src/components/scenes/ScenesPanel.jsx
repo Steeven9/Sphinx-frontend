@@ -5,6 +5,7 @@ import SceneList from './SceneList'
 import '../../css/scenes.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
+import {Link} from "react-router-dom";
 
 
 const params = (new URL(document.location)).searchParams;
@@ -166,10 +167,6 @@ const ScenesPanel = () => {
     useEffect(() => {
     }, [scenes]);
 
-    function toggleScenesView() {
-        // setView(0)
-    }
-
     const errorMessage = () => {
         if (!isDataFound) {
             return "You haven't added any scenes yet. Please add a new one."
@@ -194,10 +191,15 @@ const ScenesPanel = () => {
                                             <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i>
                                         </a>
                                         :
-                                        <div onClick={toggleScenesView}>
-                                            <i className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
-                                                                                                                                          devices</i>
-                                        </div>
+                                        <Link to={{
+                                            pathname: "/shared",
+                                            search: "?owner=erick&view=0"
+                                        }}>
+                                            <div
+                                                className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
+                                                                                                                                           devices
+                                            </div>
+                                        </Link>
                                     }
                                 </div>
                                 <div className={(isLoading) ? "centered-loading-data-message" : "hidden"}>
