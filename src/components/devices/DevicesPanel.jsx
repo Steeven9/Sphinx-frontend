@@ -101,7 +101,7 @@ const DevicesPanel = () => {
                     if (res.status === 200) {
                         return res.text();
                     } else {
-                        setTitle(params.get('owner') + "'s house")
+                        setTitle(params.get('owner') + "'s House")
                         setIsShared(false)
                         return null
                     }
@@ -113,9 +113,9 @@ const DevicesPanel = () => {
                         let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
 
                         if (nameEndsInS) {
-                            setTitle(ownerName + "' house")
+                            setTitle(ownerName + "' House")
                         } else {
-                            setTitle(ownerName + "'s house")
+                            setTitle(ownerName + "'s House")
                         }
                     }
                 })
@@ -151,11 +151,8 @@ const DevicesPanel = () => {
                     if (devices.length === 0) {
                         setIsLoading(false)
                         if (fetchMode === "shared") {
-                            console.log('1')
                             setIsShared(false)
                         } else {
-                            console.log('2')
-
                             setIsDataFound(false);
                         }
                     } else {
@@ -243,10 +240,6 @@ const DevicesPanel = () => {
         }
 
         const errorMessage = () => {
-            console.log('isDataFound ' + isDataFound)
-            console.log('isShared ' + isShared)
-            console.log('isNetworkError ' + isNetworkError)
-
             if (!isDataFound) {
                 if (fetchMode === 'devices' || fetchMode === 'rooms')
                     return "You haven't added any devices yet. Please add a new one."

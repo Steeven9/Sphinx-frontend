@@ -35,13 +35,16 @@ const ScenesPanel = () => {
 
     // Sets the fetchUrl to access the right route and sets the fetchMode to show the right error messages
     useEffect(() => {
+
         if (path[1] === 'shared') {
             fetchUrl = guestScenesFetchUrl
             setFetchMode('shared')
         } else {
-            setFetchMode(scenesFetchUrl)
+            setFetchMode('scenes')
+            fetchUrl = scenesFetchUrl
+
         }
-    }, [fetchMode]);
+    }, []);
 
     // Fetches scenes on page load
     useEffect(() => {
@@ -59,23 +62,26 @@ const ScenesPanel = () => {
                 headers: headers,
             })
             .then((res) => {
-                if (res.status === 401) {
-                    this.props.logOut(1);
-                } else if (res.status === 200) {
+                if (res.status === 200) {
                     return res.text();
                 } else {
-                    return null;
+                    setTitle(params.get('owner') + "'s Scenes")
+                    setIsShared(false)
+                    setIsLoading(false)
+                    return null
                 }
             })
             .then((data) => {
-                let owner = JSON.parse(data);
-                let ownerName = owner.fullname.split(' ')[0]
-                let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
+                if (data !== null) {
+                    let owner = JSON.parse(data);
+                    let ownerName = owner.fullname.split(' ')[0]
+                    let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
 
-                if (nameEndsInS) {
-                    setTitle(ownerName + "' scenes")
-                } else {
-                    setTitle(ownerName + "'s scenes")
+                    if (nameEndsInS) {
+                        setTitle(ownerName + "' Scenes")
+                    } else {
+                        setTitle(ownerName + "'s Scenes")
+                    }
                 }
 
             })
@@ -88,15 +94,17 @@ const ScenesPanel = () => {
         }
 
         function fetchScenes() {
+            console.log(fetchUrl)
             fetch(fetchUrl, {
                 method: method,
                 headers: headers,
             })
             .then((res) => {
-                if (res.status === 401) {
-                    this.props.logOut(1);
-                } else if (res.status === 200) {
+                if (res.status === 200) {
                     return res.text();
+                } else if (res.status === 404) {
+                    setIsShared(false)
+                    return null;
                 } else {
                     return null;
                 }
@@ -105,16 +113,25 @@ const ScenesPanel = () => {
                 setIsLoading(false)
                 let scenes = JSON.parse(data);
 
-                if (scenes === null || scenes.length === 0) {
+                if (scenes.length === 0) {
                     setIsDataFound(false)
                     setIsShared(false)
+                    if (fetchMode === "shared") {
+                        setIsShared(false)
+                    } else {
+                        setIsDataFound(false);
+                    }
                 } else {
                     scenes.sort(function (a, b) {
-                        let keyA = a.name;
-                        let keyB = b.name;
+                        let keyA = a.name.toLowerCase();
+                        let keyB = b.name.toLowerCase();
+
+                        if (keyA === keyB) {
+                            if (a.id < b.id) return -1;
+                            if (a.id > b.id) return 1;
+                        }
                         if (keyA < keyB) return -1;
-                        if (keyA > keyB) return 1;
-                        return 0;
+                        return 1;
                     });
                     dispatchScene({type: 'POPULATE_SCENES', scenes: scenes});
                     setIsLoading(false)
@@ -128,7 +145,7 @@ const ScenesPanel = () => {
         }
 
         setActionCompleted(false)
-    }, []);
+    }, [fetchMode]);
 
     // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
@@ -181,8 +198,16 @@ const ScenesPanel = () => {
 
     const errorMessage = () => {
         if (!isDataFound) {
-            return "You haven't added any scenes yet. Please add a new one."
+            if (fetchMode === 'scenes')
+                return "You haven't added any scenes yet. Please add a new one."
+            if (fetchMode === 'shared') {
+                return "This owner hasn't shared any scenes with you yet."
+            }
         }
+        if (isDataFound && !isShared && !isNetworkError) {
+            return "This owner hasn't shared any scenes with you yet."
+        }
+
         if (isNetworkError) {
             return "We are sorry. There was an error."
         }
@@ -219,13 +244,17 @@ const ScenesPanel = () => {
                                 </div>
                                 <div
                                     className={(!isDataFound || isNetworkError) ? "centered-loading-data-message" : "hidden"}>
-                                    <p className={(isNetworkError) ? "error-message" : undefined}>{errorMessage()}</p>
+                                    <p className={(isNetworkError && isShared) ? "error-message" : undefined}>{errorMessage()}</p>
                                 </div>
-                                <ul>
-                                    <li className="scenes-panel row">
-                                        <SceneList isGuest={isGuest}/>
-                                    </li>
-                                </ul>
+                                {(isDataFound && !isNetworkError && !isLoading) ?
+                                    <ul>
+                                        <li className="scenes-panel row">
+                                            <SceneList isGuest={isGuest}/>
+                                        </li>
+                                    </ul>
+                                    :
+                                    undefined
+                                }
                             </section>
                         </div>
                     </article>
