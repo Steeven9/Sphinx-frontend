@@ -12,8 +12,8 @@ const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const host = window.location.protocol + '//' + window.location.hostname + ':8888';
 const scenesFetchUrl = host + '/scenes';
-const guestScenesFetchUrl = host + '/shared/' + params.get('id') + '/scenes';
-const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
+const guestScenesFetchUrl = host + '/guests/' + params.get('owner') + '/scenes';
+const fetchUrl = path[1] === 'shared' ? guestScenesFetchUrl : scenesFetchUrl;
 // const fetchOwnerUrl = host + '/user/' + params.get('owner');
 const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8080/user/' + params.get('owner');
 

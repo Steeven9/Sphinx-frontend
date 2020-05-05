@@ -14,10 +14,24 @@ const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
+// const guestDevicesFetchUrl = host + '/guests/' + params.get('id') + '/devices';
+const guestDevicesFetchUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/' + params.get('owner') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 const fetchOwnerUrl = host + '/user/' + params.get('owner');
-const fetchUrl = path[1] === 'room' && params.get('id') ? roomDevicesFetchUrl : devicesFetchUrl;
+let fetchUrl;
 let roomBackground;
+
+if (path[1] === 'devices') {
+    fetchUrl = devicesFetchUrl
+}
+
+if (path[1] === 'room' && params.get('id')) {
+    fetchUrl = roomDevicesFetchUrl
+}
+
+if (path[1] === 'shared') {
+    fetchUrl = guestDevicesFetchUrl
+}
 
 /**
  * Generates a panel with a DevicePanel

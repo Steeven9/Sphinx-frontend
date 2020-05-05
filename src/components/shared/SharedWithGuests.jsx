@@ -42,7 +42,7 @@ const SharedWithGuests = () => {
             }
             // window.location.replace(host + "/shared?owner=" + params.owner + "&view=0")
         }
-    }, [])
+    }, [host, params.owner, params.view])
 
 
     /**
