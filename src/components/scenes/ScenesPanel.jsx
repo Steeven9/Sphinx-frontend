@@ -193,7 +193,7 @@ const ScenesPanel = () => {
                                         :
                                         <Link to={{
                                             pathname: "/shared",
-                                            search: "?owner=erick&view=0"
+                                            search: "?owner=" + params.get('owner') + "&view=0"
                                         }}>
                                             <div
                                                 className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See

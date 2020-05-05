@@ -80,7 +80,8 @@ const DevicesPanel = () => {
                         } else if (res.status === 200) {
                             return res.text();
                         } else {
-                            return null;
+                            setIsLoading(false)
+                            setIsDataFound(false);
                         }
                     })
                     .then((data) => {
@@ -244,7 +245,7 @@ const DevicesPanel = () => {
                                             :
                                             <Link to={{
                                                 pathname: "/shared",
-                                                search: "?owner=erick&view=1"
+                                                search: "?owner=" + params.get('owner') + "&view=1"
                                             }}>
                                                 <div
                                                     className="col col-custom l1 btn waves-effect waves-light btn-primary-semi-circular right">See
