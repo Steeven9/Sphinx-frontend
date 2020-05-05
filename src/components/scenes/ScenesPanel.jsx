@@ -14,8 +14,8 @@ const host = window.location.protocol + '//' + window.location.hostname + ':8888
 const scenesFetchUrl = host + '/scenes';
 const guestScenesFetchUrl = host + '/guests/' + params.get('owner') + '/scenes';
 let fetchUrl;
-// const fetchOwnerUrl = host + '/guests/owner/' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
-const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/owner/' + params.get('owner');
+// const fetchOwnerUrl = host + '/guests/houses' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
+const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/houses';
 
 /**
  * Generates a panel with a ScenesPanel
@@ -74,7 +74,8 @@ const ScenesPanel = () => {
             })
             .then((data) => {
                 if (data !== null) {
-                    let owner = JSON.parse(data);
+                    let owners = JSON.parse(data);
+                    let owner = owners.filter(owner => owner.username.toLowerCase() === params.get('owner').toLowerCase())[0]
                     let ownerName = owner.fullname.split(' ')[0]
                     let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
 

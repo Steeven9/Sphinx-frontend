@@ -14,8 +14,8 @@ const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = host + '/devices';
 const roomDevicesFetchUrl = host + '/rooms/' + params.get('id') + '/devices';
-// const fetchOwnerUrl = host + '/guests/owner/' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
-const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/owner/' + params.get('owner');
+// const fetchOwnerUrl = host + '/guests/houses' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
+const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/houses';
 const guestDevicesFetchUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/' + params.get('owner') + '/devices';
 const fetchRoomUrl = host + '/rooms/' + params.get('id');
 let fetchUrl;
@@ -110,7 +110,8 @@ const DevicesPanel = () => {
                 })
                 .then((data) => {
                     if (data !== null) {
-                        let owner = JSON.parse(data);
+                        let owners = JSON.parse(data);
+                        let owner = owners.filter(owner => owner.username.toLowerCase() === params.get('owner').toLowerCase())[0]
                         let ownerName = owner.fullname.split(' ')[0]
                         let nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's'
 
