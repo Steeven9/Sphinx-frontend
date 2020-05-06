@@ -15,7 +15,7 @@ import {getSliderMarks} from "../../helpers/getDeviceMetadataHelper";
 
 function Thermostat({device}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState((Math.round(device.slider * 2) / 2).toFixed(2))
+    const [intensity, setIntensity] = useState(parseFloat((Math.round(device.slider * 2) / 2).toFixed(2)))
     const [source, setSource] = React.useState(device.source.toString());
     const [modes, setModes] = React.useState(getModes(device.state));
     const [disabled, setDisabled] = useState(device.disabled);

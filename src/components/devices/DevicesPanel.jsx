@@ -28,7 +28,6 @@ const DevicesPanel = () => {
         const [actionCompleted, setActionCompleted] = React.useState(false);
         const [devices, dispatch] = useReducer(devicesReducer, []);
         const [isDataFound, setIsDataFound] = useState(true);
-        const [sensors, setSensors] = useState([]);
         const [isLoading, setIsLoading] = useState(true);
         const [isNetworkError, setIsNetworkError] = useState(false);
         const ColorCircularProgress = withStyles({root: {color: '#580B71'},})(CircularProgress);
@@ -50,27 +49,6 @@ const DevicesPanel = () => {
                     method: method,
                     headers: headers,
                 })
-                    .then((res) => {
-                        if (res.status === 401) {
-                            this.props.logOut(1);
-                        } else if (res.status === 200) {
-                            return res.text();
-                        } else {
-                            return null;
-                        }
-                    })
-                    .then((data) => {
-                        let room = JSON.parse(data);
-                        roomBackground = room.background !== null && room.background;
-                        title = room.name;
-                    })
-                    .catch(e => console.log(e));
-            }
-
-            fetch(fetchUrl, {
-                method: method,
-                headers: headers,
-            })
                 .then((res) => {
                     if (res.status === 401) {
                         this.props.logOut(1);
@@ -81,44 +59,55 @@ const DevicesPanel = () => {
                     }
                 })
                 .then((data) => {
-                    setIsLoading(false)
-                    let devices = JSON.parse(data)
-
-                    if (devices.length === 0) {
-                        setIsDataFound(false);
-                    } else {
-                        devices.sort(function (a, b) {
-                            let keyA = a.name.toLowerCase();
-                            let keyB = b.name.toLowerCase();
-
-                            if (keyA === keyB) {
-                                if (a.id < b.id) return -1;
-                                if (a.id > b.id) return 1;
-                            }
-                            if (keyA < keyB) return -1;
-                            return 1;
-
-                        });
-
-                        let filteredSensors = devices.filter(device => {
-                            return device.type === 6 ||
-                                device.type === 7 ||
-                                device.type === 8 ||
-                                device.type === 9 ||
-                                device.type === 10 ||
-                                device.type === 11
-                        })
-
-                        setSensors(filteredSensors)
-                        dispatch({type: 'POPULATE_DEVICES', devices: devices});
-                        setIsLoading(false)
-                    }
+                    let room = JSON.parse(data);
+                    roomBackground = room.background !== null && room.background;
+                    title = room.name;
                 })
-                .catch(e => {
-                    console.log(e);
+                .catch(e => console.log(e));
+            }
+
+            fetch(fetchUrl, {
+                method: method,
+                headers: headers,
+            })
+            .then((res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1);
+                } else if (res.status === 200) {
+                    return res.text();
+                } else {
+                    return null;
+                }
+            })
+            .then((data) => {
+                setIsLoading(false)
+                let devices = JSON.parse(data)
+
+                if (devices.length === 0) {
+                    setIsDataFound(false);
+                } else {
+                    devices.sort(function (a, b) {
+                        let keyA = a.name.toLowerCase();
+                        let keyB = b.name.toLowerCase();
+
+                        if (keyA === keyB) {
+                            if (a.id < b.id) return -1;
+                            if (a.id > b.id) return 1;
+                        }
+                        if (keyA < keyB) return -1;
+                        return 1;
+
+                    });
+
+                    dispatch({type: 'POPULATE_DEVICES', devices: devices});
                     setIsLoading(false)
-                    setIsNetworkError(true)
-                });
+                }
+            })
+            .catch(e => {
+                console.log(e);
+                setIsLoading(false)
+                setIsNetworkError(true)
+            });
             setActionCompleted(false)
         }, []);
 
@@ -126,7 +115,7 @@ const DevicesPanel = () => {
         useEffect(() => {
         }, [devices]);
 
-        // Refreshes the devices state with setInterval
+        // Refreshes the sensors and thermostats state with setInterval
         useEffect(() => {
                 const interval = setInterval(async () => {
                     const method = 'GET';
@@ -136,27 +125,34 @@ const DevicesPanel = () => {
                     };
 
                     try {
-                        let updatedSensors = []
+                        let updatedDevices = []
 
-                        async function fetchSensors(sensor) {
-                            return await (await fetch(devicesFetchUrl + '/' + sensor.id, {
+                        async function fetchDevices() {
+                            return await (await fetch(fetchUrl, {
                                 method: method,
                                 headers: headers,
                             })).json();
                         }
 
-                        for (let sensor of sensors) {
-                            await updatedSensors.push(await fetchSensors(sensor))
-                        }
+                        await updatedDevices.push(await fetchDevices())
 
-                        dispatch({type: 'UPDATE_SENSORS', devices: devices, sensors: updatedSensors});
+                        let filteredSensors = updatedDevices[0].filter(device => {
+                            return device.type === 6 ||
+                                   device.type === 7 ||
+                                   device.type === 8 ||
+                                   device.type === 9 ||
+                                   device.type === 10 ||
+                                   device.type === 11
+                        })
+
+                        dispatch({type: 'UPDATE_SENSORS', devices: devices, sensors: filteredSensors});
                     } catch (e) {
                         console.log(e)
                     }
                 }, 5000);
                 return () => clearInterval(interval);
             },
-            [sensors, devices]
+            [devices]
         );
 
         function redirectToAdd() {

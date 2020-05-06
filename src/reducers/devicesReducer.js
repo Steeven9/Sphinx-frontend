@@ -19,16 +19,16 @@ function doFetch(fetchUrl, method, body) {
         headers: headers,
         body: body
     })
-        .then((res) => {
-            if (res.status === 200 || res.status === 204) {
-                console.log(method + ' successful!');
-                return res
-            } else {
-                console.log(method + ' unsuccessful!');
-                return res
-            }
-        })
-        .catch(error => console.log(error))
+    .then((res) => {
+        if (res.status === 200 || res.status === 204) {
+            console.log(method + ' successful!');
+            return res
+        } else {
+            console.log(method + ' unsuccessful!');
+            return res
+        }
+    })
+    .catch(error => console.log(error))
 }
 
 /**
@@ -60,6 +60,8 @@ const devicesReducer = (state, action) => {
             action.sensors.forEach(sensor => {
 
                 action.devices.forEach(device => {
+
+                    // console.log(JSON.stringify(device.type) + ' ' + JSON.stringify(device.label))
 
                     if (device.id === sensor.id) {
                         device.label = sensor.label
