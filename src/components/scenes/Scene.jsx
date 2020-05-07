@@ -8,7 +8,7 @@ import PlayIcon from './PlayIcon'
  * @returns { An individual scene's HTML composed of several React components }
  * @constructor
  */
-const Scene = ({scene}) => {
+const Scene = ({scene, isGuest}) => {
     const {dispatchScene, setActionCompleted} = useContext(ScenesContext);
 
     const handleDuplicate = (e) => {
@@ -22,28 +22,33 @@ const Scene = ({scene}) => {
     };
 
     return (
-        <div className="scene row">
-            <div id={scene.id} className="item">
-                <div id={scene.id} className="scene-item col l1">
-                    <PlayIcon scene={scene}/>
-                </div>
-                <div className="scene-item col l1">
-                    <img alt={scene.name} className="img-scene-icon"
-                         src={scene.icon ? scene.icon : "/img/icons/scenes/icon-unknown.svg"}/>
-                </div>
-                <div className="scene-item col l7">
-                    <span className="scene-item scene-item-name">{scene.name}</span>
-                </div>
-                <div className="scene-item col l1">
-                    <a href={"/editScene?id=" + scene.id}><i className="scene-item material-icons btn-icon">edit</i></a>
-                </div>
-                <div className="scene-item col l1">
-                    <i className="scene-item material-icons btn-icon btn-icon-duplicate"
-                       onClick={(e) => handleDuplicate(e)}>file_copy</i>
-                </div>
-                <div className="scene-item col l1">
-                    <i className="scene-item material-icons btn-icon"
-                       onClick={(e) => handleDelete(e)}> highlight_off </i>
+        <div className={isGuest.isGuest ? "col l6" : undefined}>
+            <div className="scene row">
+                <div id={scene.id} className="item">
+                    <div id={scene.id} className={isGuest.isGuest ? "scene-item col l2" : "scene-item col l1"}>
+                        <PlayIcon scene={scene}/>
+                    </div>
+                    <div className={isGuest.isGuest ? "scene-item col l3" : "scene-item col l2"}>
+                        <img alt={scene.name} className="img-scene-icon"
+                             src={scene.icon ? scene.icon : "/img/icons/scenes/icon-unknown.svg"}/>
+                    </div>
+                    <div className={isGuest.isGuest ? "scene-item col l5" : "scene-item col l6"}>
+                        <span className="scene-item scene-item-name">{scene.name}</span>
+                    </div>
+                    <div className={isGuest.isGuest ? "hidden" : undefined}>
+                        <div className="scene-item col l1">
+                            <a href={"/editScene?id=" + scene.id}><i
+                                className="scene-item material-icons btn-icon">edit</i></a>
+                        </div>
+                        <div className="scene-item col l1">
+                            <i className="scene-item material-icons btn-icon btn-icon-duplicate"
+                               onClick={(e) => handleDuplicate(e)}>file_copy</i>
+                        </div>
+                        <div className="scene-item col l1">
+                            <i className="scene-item material-icons btn-icon"
+                               onClick={(e) => handleDelete(e)}> highlight_off </i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@ import DevicesContext from '../../context/devicesContext'
  * @returns {PowerSwitch}
  * @constructor
  */
-const PowerSwitch = ({device}) => {
+const PowerSwitch = ({device, isGuest}) => {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const [on, setPower] = useState(device.on);
 
@@ -31,12 +31,13 @@ const PowerSwitch = ({device}) => {
         dispatch({type: 'SYNC_DEVICES', device: device});
         dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
     };
-
+    
     return (
         <div>
             <label>
                 <input
                     type='checkbox'
+                    disabled={isGuest.isGuest && device.type === 6}
                     checked={on}
                     onChange={(e) => toggle(e)}
                 />

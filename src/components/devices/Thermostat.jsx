@@ -13,12 +13,12 @@ import Slider from "@material-ui/core/Slider";
 import {getSliderMarks} from "../../helpers/getDeviceMetadataHelper";
 
 
-function Thermostat({device}) {
+function Thermostat({device, isGuest}) {
     const {dispatch, setActionCompleted} = useContext(DevicesContext);
     const [intensity, setIntensity] = useState(parseFloat((Math.round(device.slider * 2) / 2).toFixed(2)))
     const [source, setSource] = React.useState(device.source.toString());
     const [modes, setModes] = React.useState(getModes(device.state));
-    const [disabled, setDisabled] = useState(device.disabled);
+    const [disabled, setDisabled] = useState(false);
     const useStyles = makeStyles((theme) => ({
         toggleContainer: {
             margin: theme.spacing(0.5, 0),
@@ -31,8 +31,6 @@ function Thermostat({device}) {
         }
     }));
     const classes = useStyles();
-
-    //console.log(device.slider)
 
     /**
      * Gets a string array to set the mode/state of a thermostat,
@@ -182,7 +180,7 @@ function Thermostat({device}) {
                         step={0.5}
                         min={5}
                         max={40}
-                        disabled={disabled}
+                        disabled={isGuest || disabled}
                         marks={getSliderMarks(device)}/>
                 <div
                     className={"col l12 col-custom display-info-thermostat" + (device.state !== 0 ? " display-active" : " display-inactive")}>
@@ -213,7 +211,8 @@ function Thermostat({device}) {
                                               disabled={modes[0] === "0"}>
                                     <HeatingIcon/>
                                 </ToggleButton>
-                                <ToggleButton value="1" className="btn-thermostat" aria-label="on/idle">
+                                <ToggleButton value="1" disabled={isGuest} className="btn-thermostat"
+                                              aria-label="on/idle">
                                     <PowerOnIcon/>
                                 </ToggleButton>
                             </ToggleButtonGroup>
