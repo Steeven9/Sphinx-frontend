@@ -56,23 +56,14 @@ const devicesReducer = (state, action) => {
 
         case 'UPDATE_SENSORS':
             console.log('Dispatch: UPDATE_SENSORS');
-
             action.sensors.forEach(sensor => {
-
                 action.devices.forEach(device => {
-
-                    // console.log(JSON.stringify(device.type) + ' ' + JSON.stringify(device.label))
-
                     if (device.id === sensor.id) {
                         device.label = sensor.label
-                    }
-
-                    if (device.type === 11) {
                         device.averageTemp = sensor.averageTemp
                     }
                 })
             })
-
             return [...state];
 
         case 'MODIFY_DEVICE':
