@@ -21,7 +21,7 @@ const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 // const host = window.location.protocol + '//' + window.location.hostname + ':8888';
 // const scenesFetchUrl = host + '/scenes';
-// const guestScenesFetchUrl = host + '/guests/' + params.get('id') + '/scenes';
+// const guestScenesFetchUrl = host + '/shared/' + params.get('id') + '/scenes';
 // const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
 
 // let isLoading = false;
@@ -100,6 +100,38 @@ const ScenesFactory = () => {
                 method: method,
                 headers: headers,
             })
+            .then((res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1);
+                } else if (res.status === 200) {
+                    return res.text();
+                } else {
+                    return null;
+                }
+            })
+            .then((data) => {
+                if (data === null || data.length === 0) {
+                } else {
+                    fetchedDevices = JSON.parse(data).sort(function (a, b) {
+                        let keyA = a.name;
+                        let keyB = b.name;
+                        if (keyA < keyB) return -1;
+                        if (keyA > keyB) return 1;
+                        return 0;
+                    });
+                    dispatchDevices({type: 'POPULATE_DEVICES', devices: fetchedDevices});
+                }
+            })
+            .catch(e => {
+                console.log(e);
+            });
+
+            if (isEditing) {
+                setLoading(true)
+                fetch(fetchUrl + ':8888/scenes/' + params.get('id'), {
+                    method: method,
+                    headers: headers,
+                })
                 .then((res) => {
                     if (res.status === 401) {
                         this.props.logOut(1);
@@ -112,66 +144,34 @@ const ScenesFactory = () => {
                 .then((data) => {
                     if (data === null || data.length === 0) {
                     } else {
-                        fetchedDevices = JSON.parse(data).sort(function (a, b) {
-                            let keyA = a.name;
-                            let keyB = b.name;
-                            if (keyA < keyB) return -1;
-                            if (keyA > keyB) return 1;
-                            return 0;
-                        });
-                        dispatchDevices({type: 'POPULATE_DEVICES', devices: fetchedDevices});
+                        // Sets the scene data into the form
+                        let scene = JSON.parse(data)
+                        setSceneName(scene.name)
+                        setIcon(scene.icon)
+                        setShared(scene.shared)
+
+                        // Mutates the devices[] content into actual devices
+                        scene.effects.forEach(effect => {
+                            let newDevices = effect.devices.map(id => fetchedDevices.find(device => device.id === id))
+                            effect.devices = newDevices
+                        })
+
+                        setLoading(false)
+                        // Adds a boolean label to trigger visibility of the effects and dispatches one at a time
+                        scene.effects.forEach(effect => {
+                                effect.visible = true
+                                effect.preexisting = true
+                                dispatchEffects({
+                                    type: 'LOAD_SCENE',
+                                    effectConfig: effect,
+                                });
+                            }
+                        )
                     }
                 })
                 .catch(e => {
                     console.log(e);
                 });
-
-            if (isEditing) {
-                setLoading(true)
-                fetch(fetchUrl + ':8888/scenes/' + params.get('id'), {
-                    method: method,
-                    headers: headers,
-                })
-                    .then((res) => {
-                        if (res.status === 401) {
-                            this.props.logOut(1);
-                        } else if (res.status === 200) {
-                            return res.text();
-                        } else {
-                            return null;
-                        }
-                    })
-                    .then((data) => {
-                        if (data === null || data.length === 0) {
-                        } else {
-                            // Sets the scene data into the form
-                            let scene = JSON.parse(data)
-                            setSceneName(scene.name)
-                            setIcon(scene.icon)
-                            setShared(scene.shared)
-
-                            // Mutates the devices[] content into actual devices
-                            scene.effects.forEach(effect => {
-                                let newDevices = effect.devices.map(id => fetchedDevices.find(device => device.id === id))
-                                effect.devices = newDevices
-                            })
-
-                            setLoading(false)
-                            // Adds a boolean label to trigger visibility of the effects and dispatches one at a time
-                            scene.effects.forEach(effect => {
-                                    effect.visible = true
-                                    effect.preexisting = true
-                                    dispatchEffects({
-                                        type: 'LOAD_SCENE',
-                                        effectConfig: effect,
-                                    });
-                                }
-                            )
-                        }
-                    })
-                    .catch(e => {
-                        console.log(e);
-                    });
             }
         }, [isEditing]);
 

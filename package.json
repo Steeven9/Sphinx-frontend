@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "cypress": "^4.3.0",
+    "sonarqube-scanner": "^2.6.0",
     "wait-on": "^4.0.1"
   }
 }

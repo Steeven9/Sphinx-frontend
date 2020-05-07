@@ -207,6 +207,24 @@ h3 {
     align-self: center;
 }
 
+.btn-primary-semi-circular {
+    background: #FFB800 !important;
+    border-radius: 160px !important;
+    width: 190px !important;
+    height: 40px !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    /* identical to box height */
+    text-align: center !important;
+    text-transform: none !important;
+    color: #580B71 !important;
+    margin: 2vh 0 0 0 !important;
+    line-height: 40px !important;
+    padding: 0 15px 0 15px !important;
+    align-self: center;
+}
+
 .headline-title {
     align-items: center !important;
 }
@@ -301,6 +319,10 @@ nav ul a:hover {
 
 .hidden {
     visibility: hidden !important;
+}
+
+.display-none {
+    display: none;
 }
 
 /* Action feedback to user starts here */

@@ -20,8 +20,8 @@ import EditDevice from './components/EditDevice';
 import AddDevice from './components/AddDevice';
 import MyGuests from './components/MyGuests';
 import AddGuest from './components/AddGuest';
-import SharedWithMe from './components/SharedWithMe';
-import HouseSharedWithMe from './components/HouseSharedWithMe';
+import SharedWithMe from './components/shared/SharedWithMe';
+import SharedWithGuests from './components/shared/SharedWithGuests';
 import Scenes from './components/Scenes';
 import AddScene from './components/AddScene';
 import EditScene from './components/EditScene';
@@ -76,16 +76,16 @@ class App extends React.Component {
                     'session-token': newSession_token
                 },
             })
-                .then((res) => res.status === 200 ?
-                    this.setState({
-                        username: newUsername,
-                        session_token: newSession_token,
-                        loggedIn: newLoggedIn,
-                        loginAccess: false
-                    })
-                    :
-                    this.logOut(0)
-                )
+            .then((res) => res.status === 200 ?
+                this.setState({
+                    username: newUsername,
+                    session_token: newSession_token,
+                    loggedIn: newLoggedIn,
+                    loginAccess: false
+                })
+                :
+                this.logOut(0)
+            )
         } else {
             this.setState({username: "", session_token: "", loggedIn: false, loginAccess: true})
         }
@@ -382,9 +382,9 @@ class App extends React.Component {
                                     : this.accessDenied()}
                             </Route>
 
-                            <Route path="/houseSharedWithMe">
+                            <Route path="/shared">
                                 {this.state.loggedIn ?
-                                    <HouseSharedWithMe
+                                    <SharedWithGuests
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}

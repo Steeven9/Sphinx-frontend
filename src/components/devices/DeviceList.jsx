@@ -7,7 +7,7 @@ import DevicesContext from '../../context/devicesContext'
  * Generates a list of nested devices
  * @returns {DeviceList}
  */
-const DeviceList = () => {
+const DeviceList = (isGuest) => {
         const {devices} = useContext(DevicesContext);
 
         let expandedDevices = [];
@@ -33,7 +33,7 @@ const DeviceList = () => {
             }
         }
         return expandedDevices.map((device) => (
-            <Device key={id++} device={device}/>
+            <Device key={id++} device={device} isGuest={isGuest}/>
         ))
     }
 ;

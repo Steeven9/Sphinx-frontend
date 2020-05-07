@@ -2,56 +2,64 @@ image: cypress/base
 
 # Environment variables to point at the folders we list as paths below
 variables:
-    CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
+  CYPRESS_CACHE_FOLDER: "$CI_PROJECT_DIR/cache/Cypress"
 
 # Cache yarn and cypress across all branches and jobs
 cache:
-    key: frontend-cache
-    paths:
-        - cache/Cypress
-        - node_modules
+  key: frontend-cache
+  paths:
+    - cache/Cypress
+    - node_modules
 
 stages:
-    - build
-    - deploy
+  - build
+  - analysis
+  - deploy
 
 yarn-build:
-    stage: build
-    script:
-        - yarn install
-        - yarn ci-test
-        - yarn build
-    artifacts:
-        paths: 
-            - build/
-            - cypress/screenshots/
+  stage: build
+  script:
+    - yarn install
+    - yarn ci-test
+    - yarn build
+  artifacts:
+    paths:
+      - build/
+      - cypress/screenshots/
+
+sonar-scanner:
+  stage: analysis
+  only: [dev]
+  script:
+    - yarn install
+    - yarn sonar-scanner -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_LOGIN -Dsonar.projectName=$CI_PROJECT_PATH_SLUG -Dsonar.projectKey=$CI_PROJECT_PATH_SLUG -Dsonar.exclusion=cypress -Dsonar.sources=src -Dsonar.javascript.file.suffixes=.js,.jsx -Dsonar.sourceEncoding=UTF-8 -Dsonar.scm.disabled=True
 
 docker-build:
-    only: [dev, master]
-    stage: deploy
-    image: docker
-    variables:
-        DOCKER_DRIVER: overlay2
-    services:
-        - docker:dind
-    tags: [dind]
-    before_script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PSW
-    script:
-        - docker build ./ -t $DOCKER_USER/sa4-sphinx-frontend:latest
-        - docker push $DOCKER_USER/sa4-sphinx-frontend:latest
+  only: [dev, master]
+  stage: deploy
+  image: docker
+  variables:
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  tags: [dind]
+  before_script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PSW
+  script:
+    - docker build ./ -t $DOCKER_USER/sa4-sphinx-frontend:latest
+    - docker push $DOCKER_USER/sa4-sphinx-frontend:latest
 
 docker-build-tags:
-    only: [tags]
-    stage: deploy
-    image: docker
-    variables:
-        DOCKER_DRIVER: overlay2
-    services:
-        - docker:dind
-    tags: [dind]
-    before_script:
-        - docker login -u $DOCKER_USER -p $DOCKER_PSW
-    script:
-        - docker build ./ -t $DOCKER_USER/sa4-sphinx-frontend:$CI_COMMIT_REF_NAME
-        - docker push $DOCKER_USER/sa4-sphinx-frontend:$CI_COMMIT_REF_NAME
+  only: [tags]
+  stage: deploy
+  image: docker
+  variables:
+    DOCKER_DRIVER: overlay2
+  services:
+    - docker:dind
+  tags: [dind]
+  before_script:
+    - docker login -u $DOCKER_USER -p $DOCKER_PSW
+  script:
+    - docker build ./ -t $DOCKER_USER/sa4-sphinx-frontend:$CI_COMMIT_REF_NAME
+    - docker push $DOCKER_USER/sa4-sphinx-frontend:$CI_COMMIT_REF_NAME

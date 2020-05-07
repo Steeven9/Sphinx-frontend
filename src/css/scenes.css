@@ -15,6 +15,7 @@
     padding: 15px 0 15px 0;
     align-items: center !important;
     border-bottom: 1px solid #C4C4C4;
+    width: 99.9%;
 }
 
 .scene-item-name {
@@ -110,6 +111,15 @@
         width: calc(60% + 10vmin) !important;
         border-radius: 10px !important;
         padding: 30px 40px 30px 40px !important;
+    }
+
+    .scene-content-box-shared {
+        margin: 10vh auto !important;
+        background-color: #FFFFFF;
+        color: #2C2C2C !important;
+        width: calc(71.5% + 5vmin) !important;
+        border-radius: 10px !important;
+        padding: 20px 40px 20px 40px !important;
     }
 
     .btn-edit {
@@ -261,9 +271,9 @@ form.scene-form {
     font-weight: 700;
 }
 
-.scenes-factory-name-input {
-    /*width: 35% !important;*/
-}
+/* .scenes-factory-name-input {
+    width: 35% !important;
+} */
 
 .scenes-factory-value-input {
     width: 99.44px !important;

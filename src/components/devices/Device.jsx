@@ -18,30 +18,23 @@ import DialogContentText from '@material-ui/core/DialogContentText';
  * Device factory that can create any type of device
 
  * @param device
+ * @param isGuest
  * @returns {*}
  * @constructor
  */
-const Device = ({device}) => {
+const Device = ({device, isGuest}) => {
     const {devices, dispatch, isRoom, setActionCompleted} = useContext(DevicesContext);
-    const [intensity, setIntensity] = useState(device.slider * 100);
-    const [disabled, setDisabled] = useState(device.disabled);
+    const [intensity, setIntensity] = useState(Math.trunc(device.slider));
     const [open, setOpen] = React.useState(false);
 
     /**
-     * Disables slider for stateless dimmers. As a secondary, needed effect, the call to this
-     * effect is also needed to extract the next value from the state via de dependencies call.
+     * Safeguards slider input for devices controlled by stateless dimmer
      */
     useEffect(() => {
-        if (device.slider < 1 && device.slider > 0) setIntensity(device.slider * 100);
-        else setIntensity(device.slider);
-        if (device.type === 5) {
-            if (!device.on) {
-                device.disabled = true;
-                setDisabled(true)
-            } else {
-                device.disabled = false;
-                setDisabled(false)
-            }
+        if (device.slider < 1 && device.slider > 0) {
+            setIntensity(Math.trunc(device.slider));
+        } else {
+            setIntensity(Math.trunc(device.slider));
         }
     }, [device, devices]);
 
@@ -142,7 +135,7 @@ const Device = ({device}) => {
             case 5: //StatelessDimmableSwitch
                 return (<StatelessDimmerButtons device={device} setIntensity={setIntensity}/>)
             case 6: //SmartPlug
-                return (<SmartPlug device={device}/>);
+                return (<SmartPlug device={device} isGuest={isGuest.isGuest}/>);
             case 7: //HumiditySensor
             case 8: //LightSensor
             case 9: //TempSensor
@@ -175,11 +168,10 @@ const Device = ({device}) => {
      */
     function getSlider(type) {
         const minMax = getMinMax(device.type);
-
         switch (type) {
             case 11: //Thermostat
                 return (
-                    <Thermostat device={device}/>
+                    <Thermostat device={device} isGuest={isGuest.isGuest}/>
                 )
             default:
                 return (<Slider name={"slider"}
@@ -194,7 +186,7 @@ const Device = ({device}) => {
                                 value={intensity}
                                 min={minMax[0]}
                                 max={minMax[1]}
-                                disabled={disabled}
+                                disabled={isGuest.isGuest && device.type === 12}
                                 marks={getSliderMarks(device)}/>);
         }
     }
@@ -214,7 +206,7 @@ const Device = ({device}) => {
                 return (<div className="row row-custom l1">
                     <div>
                         <div className="col col-custom l2 m1 s1">
-                            <i className="material-icons btn-edit btn-edit-no-switch"
+                            <i className={isGuest.isGuest ? "material-icons btn-edit btn-edit-no-switch hidden" : "material-icons btn-edit btn-edit-no-switch"}
                                onClick={() => redirectToEdit(device.id)}>edit</i>
                         </div>
                     </div>
@@ -223,7 +215,7 @@ const Device = ({device}) => {
             case 11: //Thermostat
                 return (
                     <div className="col col-custom l1 m1 s1">
-                        <i className="material-icons btn-edit btn-edit-no-switch"
+                        <i className={isGuest.isGuest ? "material-icons btn-edit btn-edit-no-switch hidden" : "material-icons btn-edit btn-edit-no-switch"}
                            onClick={() => redirectToEdit(device.id)}>edit</i>
                     </div>
                 );
@@ -231,11 +223,12 @@ const Device = ({device}) => {
                 return (<div className="col col-custom l4 device-control-switch">
                     <div className="switch col col-custom l2 m8 s11 right-align">
                         <div>
-                            <PowerSwitch device={device}/>
+                            <PowerSwitch device={device} isGuest={isGuest}/>
                         </div>
                     </div>
                     <div className="col col-custom l2 m1 s1 right-align">
-                        <i className="material-icons btn-edit" onClick={() => redirectToEdit(device.id)}>edit</i>
+                        <i className={isGuest.isGuest ? "material-icons btn-edit hidden" : "material-icons btn-edit"}
+                           onClick={() => redirectToEdit(device.id)}>edit</i>
                     </div>
                 </div>);
         }
@@ -267,7 +260,8 @@ const Device = ({device}) => {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                        <button type="button" name="button"
+                                className="display-inf btn-secondary btn waves-effect waves-light"
                                 onClick={handleClose}>Close
                         </button>
                     </DialogActions>
