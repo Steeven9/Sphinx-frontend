@@ -28,12 +28,12 @@ class AddGuest extends React.Component {
 
     //Input Handler
     handleGuestUsernameOrEmailChange = (evt) => {
-        this.setState({ guestUsernameOrEmail: evt.target.value });
+        this.setState({guestUsernameOrEmail: evt.target.value});
     }
 
-    //Redirection to /guests
+    //Redirection to /shared
     redirectToGuests = () => {
-        window.location.href = '/guests'
+        window.location.href = '/shared'
     }
 
     /**
@@ -45,37 +45,33 @@ class AddGuest extends React.Component {
 
         if (this.state.guestUsernameOrEmail === "") {
             this.setState({error: 0})
-        }
-        else {
+        } else {
             this.setState({isLoading: true, error: -1})
             fetch('http://localhost:8080/guests/', {
                 method: 'POST',
-                headers: { 
+                headers: {
                     'user': this.props.username,
                     'session-token': this.props.session_token,
-                    'Accept': 'application/json', 
-                    'Content-Type': 'application/json' 
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     guest: this.state.guestUsernameOrEmail,
                 })
             })
-            .then( (res) => {
+            .then((res) => {
                 this.setState({isLoading: false})
                 if (res.status === 200) {
                     this.redirectToGuests()
-                }
-                else if (res.status === 401) {
+                } else if (res.status === 401) {
                     this.props.logOut(1)
-                }
-                else if (res.status === 400) {
+                } else if (res.status === 400) {
                     this.setState({error: 1})
-                }
-                else {
+                } else {
                     this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
             })
-            .catch( e => this.setState({isLoading: false, error: 2, errorType: e.toString()}))
+            .catch(e => this.setState({isLoading: false, error: 2, errorType: e.toString()}))
         }
     }
 
@@ -85,11 +81,9 @@ class AddGuest extends React.Component {
     showError = () => {
         if (this.state.error === 0) {
             return (<span className="error-message">Please fill the guest's username or email</span>)
-        }
-        else if (this.state.error === 1) {
+        } else if (this.state.error === 1) {
             return (<span className="error-message">Error: bad request</span>)
-        }
-        else if (this.state.error === 2) {
+        } else if (this.state.error === 2) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     }
@@ -105,7 +99,9 @@ class AddGuest extends React.Component {
                         <h2 className="col l11 left-align headline-title">Add guest</h2>
                     </div>
                     <div className="textFields">
-                        <input type="text" name="guestUsername" value={this.state.guestUsernameOrEmail} placeholder="Insert Guest Username or Email" onChange={this.handleGuestUsernameOrEmailChange} required/>
+                        <input type="text" name="guestUsername" value={this.state.guestUsernameOrEmail}
+                               placeholder="Insert Guest Username or Email"
+                               onChange={this.handleGuestUsernameOrEmailChange} required/>
                     </div>
 
                     <div className="message-two-lines center-text">
@@ -114,8 +110,12 @@ class AddGuest extends React.Component {
                         </span>
                         {this.showError()}
                     </div>
-                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light" onClick={this.redirectToGuests}>Cancel</button>
-                    <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light" onClick={this.sendDatas}>Save</button>
+                    <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                            onClick={this.redirectToGuests}>Cancel
+                    </button>
+                    <button type="button" name="button" className="Handle-btn-primary btn waves-effect waves-light"
+                            onClick={this.sendDatas}>Save
+                    </button>
                 </div>
             </div>
         );

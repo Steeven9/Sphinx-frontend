@@ -1,6 +1,6 @@
 import React from 'react';
-import '../css/App.css';
-import '../css/house.css';
+import '../../css/App.css';
+import '../../css/house.css';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import withStyles from "@material-ui/core/styles/withStyles";
 
@@ -11,12 +11,17 @@ class SharedWithMe extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            owners: <div className="message-two-lines center-text"><span><ColorCircularProgress className="loading-spinner"/></span></div>
+            owners: <div className="message-two-lines center-text"><span><ColorCircularProgress
+                className="loading-spinner"/></span></div>
         }
     }
 
+    /**
+     * Fetches GET request to /shared/houses/ and if successful sets the answer into this.state.owners
+     * If unsuccesfull, it display an error message
+     */
     componentDidMount() {
-        fetch('http://localhost:8080/guests/houses', {
+        fetch('http://localhost:8080/guests/houses/', {
             method: 'GET',
             headers: {
                 'user': this.props.username,
@@ -39,7 +44,7 @@ class SharedWithMe extends React.Component {
                 this.setState({owners: <p><b>An error has occurred.</b></p>});
             } else if (response.length === 0) {
                 this.setState({
-                    owners: <p><b>You're no-one guest.</b></p>
+                    owners: <p><b>You aren't anyone's guest yet.</b></p>
                 });
             } else {
                 this.mapOwners(response);
@@ -54,15 +59,16 @@ class SharedWithMe extends React.Component {
      */
     mapOwners = (owners) => {
         if (owners.length === 0) {
-            this.setState({owners: <p><b>You're no-one guest.</b></p>});
+            this.setState({owners: <p><b>You aren't anyone's guest yet.</b></p>});
         } else {
             let i = 0;
             let toSet = owners.map((owner) =>
                 <div key={i++} className="row room">
-                    <div className="col l1 image vertical-center"><i className="material-icons account-circle">account_circle</i></div>
-                    <div className="col l5 vertical-center">{owner.username}</div>
-                    <div className="col l2"></div>
-                    <div className="col l1 room-button2 vertical-center">
+                    <div className="col l1 image vertical-center">{owner.username}</div>
+                    <div className="col l2 vertical-center"></div>
+                    <div className="col l3 vertical-center"><i>{owner.email}</i></div>
+                    <div className="col l2 vertical-center"></div>
+                    <div className="col l1 room-button1 vertical-center">
                         <i className="material-icons btn-edit"
                            onClick={() => this.redirectToHouseSharedWithMe(owner.username)}>visibility_outlined</i>
                     </div>
@@ -74,7 +80,7 @@ class SharedWithMe extends React.Component {
 
     //Redirection to /houseSharedWithMe
     redirectToHouseSharedWithMe = (ownerUsername) => {
-        window.location.href = '/houseSharedWithMe?owner=' + ownerUsername
+        window.location.href = '/shared?owner=' + ownerUsername + '&view=0'
     }
 
     /**
@@ -91,7 +97,7 @@ class SharedWithMe extends React.Component {
                     <div className="row rooms-headline">
                         <div className="col l1"></div>
                         <div className="col l5">Owner</div>
-                        <div className="col l4"></div>
+                        <div className="col l4">Email</div>
                     </div>
                     {this.state.owners}
                 </div>

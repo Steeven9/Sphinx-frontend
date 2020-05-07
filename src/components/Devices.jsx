@@ -5,14 +5,14 @@ import DevicesPanel from './devices/DevicesPanel';
 
 /**
  * Placeholder page for the whole devices dashboard components pages
+ * @returns {*}
+ * @constructor
  */
-class Devices extends React.Component {
+const Devices = () => {
+    return (
+        <DevicesPanel/>
+    )
+};
 
-    render() {
-        return (
-            <DevicesPanel />
-        );
-    }
-}
+export {Devices as default}
 
-export default Devices;
