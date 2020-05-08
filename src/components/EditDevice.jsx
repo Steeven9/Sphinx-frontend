@@ -17,7 +17,7 @@ class EditDevice extends React.Component {
             session_token: props.session_token,
             device_id: "",
             deviceName: "",
-            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
+            error: -1,  // -1 nothing, 0 incomplete, 1 everything else
             errorType: "",
             isLoading: false,
             iconType: "0",
@@ -59,6 +59,10 @@ class EditDevice extends React.Component {
                 }
             })
             .then((data) => {
+                if (data === null) {
+                    this.setState({error: 1, errorType: "An error has occurred."})
+                    return
+                }
                 this.setState({deviceName: data.name, type: data.type})
                 this.getIconType(data.icon)
             })
@@ -111,19 +115,22 @@ class EditDevice extends React.Component {
                     icon: this.props.findPathDevice(this.state.iconType),
                 })
             })
-                .then((res) => {
-                    this.setState({isLoading: false})
-                    if (res.status === 200) {
-                        this.redirectToPrevious()
-                    } else if (res.status === 401) {
-                        this.props.logOut(1)
-                    } else if (res.status === 400) {
-                        this.setState({error: 1})
-                    } else {
-                        this.setState({error: 2, errorType: "Error Code: " + res.status})
-                    }
-                })
-                .catch(e => this.setState({error: 2, errorType: e.toString()}))
+            .then((res) => {
+                this.setState({isLoading: false})
+                if (res.status === 200) {
+                    this.redirectToPrevious()
+                } else if (res.status === 401) {
+                    this.props.logOut(1)
+                } else {
+                    this.setState({error: 1})
+                    return res.json()
+                }
+                return null
+            })
+            .then((data) => {
+                if (data !== null) this.setState({errorType: data.message})
+            })
+            .catch(e => this.setState({error: 1, errorType: e.toString()}))
         }
     };
 
@@ -147,15 +154,18 @@ class EditDevice extends React.Component {
                     this.redirectToPrevious()
                 } else if (res.status === 401) {
                     this.props.logOut(1)
-                } else if (res.status === 400) {
-                    this.setState({error: 1})
                 } else {
-                    this.setState({error: 2, errorType: "Error Code: " + res.status})
+                    this.setState({error: 1})
+                    return res.json()
                 }
+                return null
+            })
+            .then((data) => {
+                if (data !== null) this.setState({errorType: data.message})
             })
             .catch(e => {
                 this.setState({isLoading: false})
-                this.setState({error: 2, errorType: e.toString()})
+                this.setState({error: 1, errorType: e.toString()})
             })
     };
 
@@ -181,8 +191,6 @@ class EditDevice extends React.Component {
         if (this.state.error === 0) {
             return (<span className="error-message">Please fill the name</span>)
         } else if (this.state.error === 1) {
-            return (<span className="error-message">Error: bad request</span>)
-        } else if (this.state.error === 2) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     }

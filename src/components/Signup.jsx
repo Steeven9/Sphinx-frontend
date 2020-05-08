@@ -71,12 +71,12 @@ class Signup extends React.Component {
                 return null;
             }
             else {
-                return res.text();
+                return res.json();
             }            
         })
         .then((data) => {
             if (data != null) {
-                this.setState({successOrError: 2, errorType: "Error: " + data})
+                this.setState({successOrError: 2, errorType: data.message})
                 this.updateIsEnabled("", -1)
             }            
         })

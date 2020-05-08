@@ -12,7 +12,7 @@ class AddGuest extends React.Component {
         super(props);
         this.state = {
             guestUsernameOrEmail: "",
-            error: -1,  // -1 nothing, 0 no guest username, 1 no devices or scenes selected, 2 bad request, 3 unexpected error
+            error: -1,  // -1 nothing, 0 no guest username, 1 error
             errorType: "",
         }
     }
@@ -65,13 +65,17 @@ class AddGuest extends React.Component {
                     this.redirectToGuests()
                 } else if (res.status === 401) {
                     this.props.logOut(1)
-                } else if (res.status === 400) {
-                    this.setState({error: 1})
-                } else {
-                    this.setState({error: 2, errorType: "Error Code: " + res.status})
                 }
+                else {
+                    this.setState({error: 1})
+                    return res.json();
+                }
+                return null;
             })
-            .catch(e => this.setState({isLoading: false, error: 2, errorType: e.toString()}))
+            .then((data) => {
+                if (data !== null) this.setState({errorType: data.message});
+            })
+            .catch( e => this.setState({isLoading: false, error: 1, errorType: e.toString()}))
         }
     }
 
@@ -81,9 +85,8 @@ class AddGuest extends React.Component {
     showError = () => {
         if (this.state.error === 0) {
             return (<span className="error-message">Please fill the guest's username or email</span>)
-        } else if (this.state.error === 1) {
-            return (<span className="error-message">Error: bad request</span>)
-        } else if (this.state.error === 2) {
+        }
+        else if (this.state.error === 1) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     }
