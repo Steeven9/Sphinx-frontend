@@ -128,6 +128,9 @@ class AddRoom extends React.Component {
     changeIconState = (path) => {
         this.setState({type: path});
         document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
+        if (this.state.background === "") {
+            this.resetBackground(path);
+        }
         this.moveToInformation();
     }
 
@@ -169,15 +172,24 @@ class AddRoom extends React.Component {
 
         }
     }
+    
+    /**
+     * Call this.resetBackground with this.state.type
+     */
+    resetBackgroundNoParam = () => {
+        this.resetBackground(this.state.type);
+    }
 
     /**
      * Restore the background selected by the user and
-     * changes it back to the one stored in this.state.type
+     * changes it back to the one received as type
+     * @param {string} type
      */
-    resetBackground = () => {
+    resetBackground = (type) => {
         document.getElementById('inputPicture').value = "";
         document.getElementById('imageURL').value = "";
-        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
+        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(type, 1) + ")";
+        this.setState({background: ""});
     }
 
     /**
@@ -214,9 +226,15 @@ class AddRoom extends React.Component {
                         <br/><br/><br/>
                         <div className="roomNameAndIcon2">
                             <p>Customize background</p>
-                            <input type="file" className="inputBackground" onClick={this.resetBackground}
-                                   accept="image/*" onChange={this.changeDinamicallyBackground} id="inputPicture"/>
+                            <input type="file" className="inputBackground" accept="image/*" 
+                                onChange={this.changeDinamicallyBackground} id="inputPicture"/>
                             <input type="hidden" id="imageURL" value=""/>
+                        </div>
+
+                        <div className="center">
+                            <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                                    onClick={this.resetBackgroundNoParam}>Restore Background
+                            </button>
                         </div>
 
                         <div className="message-two-lines center-text">
