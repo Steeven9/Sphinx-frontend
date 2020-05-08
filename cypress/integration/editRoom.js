@@ -15,7 +15,7 @@ describe('Testing the edit room page', function () {
         cy.contains('Customize background')
 
         cy.get(".btn-secondary")
-            .first()
+            .eq(1)
             .click()
         cy.url()
             .should('include', '/house')
