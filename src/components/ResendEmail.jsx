@@ -12,7 +12,7 @@ class ResendEmail extends React.Component {
         super(props);
         this.state = {
             email: '',
-            successOrError: -1, //if -1 nothing, if 0 display success, if 1 display incomplete, if 2 not found error, if 3 unexpected error
+            successOrError: -1, //if -1 nothing, if 0 display success, if 1 display incomplete, if 2 everything else
             errorType: '',
             isLoading: false
         }
@@ -48,19 +48,18 @@ class ResendEmail extends React.Component {
             if (res.status === 204) {
                 this.setState({successOrError: 0})
             }
-            else if (res.status === 404) {
-                this.setState({successOrError: 2})
-            }
-            else if (res.status === 403) {
-                this.setState({successOrError: 3})
-            }
             else {
-                this.setState({successOrError: 4, errorType: "Error Code: " + res.status})
+                this.setState({successOrError: 2})
+                return res.json()
             }
+            return null
+        })
+        .then((data) => {
+            if (data !== null) this.setState({errorType: data.message})
         })
         .catch( e => {
             this.setState({isLoading: false})
-            this.setState({successOrError: 4, errorType: e.toString()})
+            this.setState({successOrError: 2, errorType: e.toString()})
         });
     };
 
@@ -87,12 +86,6 @@ class ResendEmail extends React.Component {
             return (<span className="error-message">Insert email.</span>)
         }
         else if (this.state.successOrError === 2) {
-            return (<span className="error-message">No account with this email.</span>)
-        }
-        else if (this.state.successOrError === 3) {
-            return (<span className="error-message">Account already verified.</span>)
-        }
-        else if (this.state.successOrError === 4) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     };

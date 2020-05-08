@@ -12,7 +12,7 @@ class ResetPassword extends React.Component {
         super(props);
         this.state = {
             email: '',
-            successOrError: -1, //if -1 nothing, if 0 display success, if 1 display incomplete, if 2 not found error, if 3 unexpected error
+            successOrError: -1, //if -1 nothing, if 0 or 2 display success, if 1 display incomplete, if 3 everything else
             errorType: '',
             isLoading: false
         }
@@ -52,8 +52,13 @@ class ResetPassword extends React.Component {
                 this.setState({successOrError: 2})
             }
             else {
-                this.setState({successOrError: 3, errorType: "Error Code: " + res.status})
+                this.setState({successOrError: 3})
+                return res.json()
             }
+            return null
+        })
+        .then((data) => {
+            if (data !== null) this.setState({errorType: data.message})
         })
         .catch( e => {
             this.setState({isLoading: false})

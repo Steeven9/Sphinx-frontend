@@ -1,7 +1,7 @@
 import React from 'react';
 import '../css/App.css';
 
-class Template extends React.Component {
+class Error404 extends React.Component {
 
     /**
      * Renders Error404 page
@@ -29,4 +29,4 @@ class Template extends React.Component {
     }
 }
 
-export default Template;
+export default Error404;

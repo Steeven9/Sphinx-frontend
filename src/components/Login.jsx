@@ -16,7 +16,7 @@ class Login extends React.Component {
             sessionToken: '',
             statusCode: '',
             isLoading: false,
-            error: -1,  // -1 nothing, 0 incomplete, 1 wrong username or password, 2 not authenticated, 3 unexpected error
+            error: -1,  // -1 nothing, 0 incomplete, 1 not verified, 2 everything else
             errorType: "",
         }
     }
@@ -63,21 +63,23 @@ class Login extends React.Component {
             if (res.status === 200) {
                 return res.text();
             }
-            else if (res.status === 401 || res.status === 404) {
+            else if (res.status === 403) {
                 this.setState({ error: 1 })
             }
-            else if (res.status === 403) {
-                this.setState({ error: 2 })
-            }
             else {
-                this.setState({ error: 3, errorType: "Error Code: " + res.status })
+                this.setState({ error: 2 })
+                return res.json();
             }
             return null;
         })
         .then((data) => {
             if (data != null) {
-                this.setState({ sessionToken: data });
+                if (this.state.error === 2) {
+                    this.setState({errorType: data.message})
+                    return null;
+                }
 
+                this.setState({ sessionToken: data });
                 return fetch('http://localhost:8080/auth/validate', {
                     method: 'POST',
                     headers: {
@@ -96,14 +98,12 @@ class Login extends React.Component {
                 if (res.status === 200) {
                     return res.text();
                 }
-                else if (res.status === 401 || res.status === 404) {
+                else if (res.status === 403) {
                     this.setState({ error: 1 })
                 }
-                else if (res.status === 403) {
-                    this.setState({ error: 2 })
-                }
                 else {
-                    this.setState({ error: 3, errorType: "Error Code: " + res.status })
+                    this.setState({ error: 2 })
+                    return res.json();
                 }
                 return null;
             } else {
@@ -113,12 +113,16 @@ class Login extends React.Component {
         .then((data) => {
             this.setState({ isLoading: false })
             if (data !== null) {
+                if (this.state.error === 2) {
+                    this.setState({errorType: data.status})
+                    return null;
+                }
                 this.props.logIn(data, this.state.sessionToken);
             }
         })
         .catch(e => {
             this.setState({ isLoading: false })
-            this.setState({ error: 3, errorType: e.toString() })
+            this.setState({ error: 2, errorType: e.toString() })
         });
     };
 
@@ -130,12 +134,9 @@ class Login extends React.Component {
             return (<span className="error-message">Please fill all the informations</span>)
         }
         else if (this.state.error === 1) {
-            return (<span className="error-message">Wrong username or password</span>)
-        }
-        else if (this.state.error === 2) {
             return (<span className="error-message">Account not verified. <a className="primary-link" href="/resend">Resend email</a></span>)
         }
-        else if (this.state.error === 3) {
+        else if (this.state.error === 2) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     }

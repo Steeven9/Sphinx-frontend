@@ -29,28 +29,29 @@ class House extends React.Component {
                 'session-token': this.props.session_token,
             },
         })
-            .then((res) => {
-                if (res.status === 401) {
-                    this.props.logOut(1);
-                } else if (res.status === 200) {
-                    return res.text();
-                } else {
-                    return null;
-                }
-            })
-            .then((data) => {
-                let response = JSON.parse(data);
+        .then((res) => {
+            if (res.status === 401) {
+                this.props.logOut(1);
+            } else if (res.status === 200) {
+                return res.text();
+            } else {
+                return null;
+            }
+        })
+        .then((data) => {
+            let response = JSON.parse(data);
 
-                if (response === null) {
-                    this.setState({rooms: <p><b>An error has occurred.</b></p>});
-                } else if (response.length === 0) {
-                    this.setState({
-                        rooms: <p>You haven't added any rooms yet. Please add a new one.</p>
-                    });
-                } else {
-                    this.mapRooms(response.sort(this.sortRooms));
-                }
-            });
+            if (response === null) {
+                this.setState({rooms: <span className="error-message">An error has occurred.</span>});
+            } else if (response.length === 0) {
+                this.setState({
+                    rooms: <p>You haven't added any rooms yet. Please add a new one.</p>
+                });
+            } else {
+                this.mapRooms(response.sort(this.sortRooms));
+            }
+        })
+        .catch(e => this.setState({rooms: <span className="error-message">An error has occurred.</span>}))
     }
 
     /**

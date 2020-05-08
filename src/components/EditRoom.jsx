@@ -17,7 +17,7 @@ class EditRoom extends React.Component {
             room_id: "",
             roomName: "",
             type: "generic-room",
-            error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
+            error: -1,  // -1 nothing, 0 incomplete, 1 everything else
             errorType: "",
             isLoading: false,
             background: "",
@@ -56,6 +56,10 @@ class EditRoom extends React.Component {
             }
         })
         .then((data) => {
+            if (data === null) {
+                this.setState({error: 1, errorType: "An error has occurred."})
+                return
+            }
             this.setState({roomName: data.name, type: this.decomposeIconPath(data.icon)})
             document.getElementById('editRoomFixedSizeIcon').src = data.icon
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
@@ -114,16 +118,18 @@ class EditRoom extends React.Component {
                 else if (res.status === 401) {
                     this.props.logOut(1)
                 } 
-                else if (res.status === 400) {
-                    this.setState({error: 1})
-                }
                 else {
-                    this.setState({error: 2, errorType: "Error Code: " + res.status})
+                    this.setState({error: 1})
+                    return res.json()
                 }
+                return null
+            })
+            .then((data) => {
+                if (data !== null) this.setState({errorType: data.message})
             })
             .catch( e => {
                 this.setState({isLoading: false})
-                this.setState({error: 2, errorType: e.toString()})
+                this.setState({error: 1, errorType: e.toString()})
             })
         }
     };
@@ -150,14 +156,16 @@ class EditRoom extends React.Component {
             else if (res.status === 401) {
                 this.props.logOut(1)
             } 
-            else if (res.status === 400) {
-                this.setState({error: 1})
-            }
             else {
-                this.setState({error: 2, errorType: "Error Code: " + res.status})
+                this.setState({error: 1})
+                return res.json()
             }
+            return null
         })
-        .catch( e => this.setState({error: 2, errorType: e.toString()}))
+        .then((data) => {
+            if (data !== null) this.setState({errorType: data.message})
+        })
+        .catch( e => this.setState({isLoading: false, error: 1, errorType: e.toString()}))
     };
 
     /**
@@ -280,9 +288,6 @@ class EditRoom extends React.Component {
             return (<span className="error-message">Please fill all informations</span>)
         }
         else if (this.state.error === 1) {
-            return (<span className="error-message">Error: bad request</span>)
-        }
-        else if (this.state.error === 2) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     }

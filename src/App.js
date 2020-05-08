@@ -42,11 +42,11 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         let username = "";
-        let session_token = "";
+        let sessionToken = "";
 
         try {
             username = localStorage.getItem('username');
-            session_token = localStorage.getItem('session_token');
+            sessionToken = localStorage.getItem('session_token');
         } catch (e) {
             console.log(e);
         }
@@ -54,7 +54,7 @@ class App extends React.Component {
         this.state = {
             loggedIn: true,
             username: username,
-            session_token: session_token,
+            session_token: sessionToken,
 
             loginAccess: true,
         }
@@ -65,7 +65,7 @@ class App extends React.Component {
      */
     componentDidMount() {
         let newUsername = localStorage.getItem("username");
-        let newSession_token = localStorage.getItem("session_token");
+        let newSessionToken = localStorage.getItem("session_token");
         let newLoggedIn = localStorage.getItem("loggedIn");
 
         if (newLoggedIn === "true") {
@@ -73,13 +73,13 @@ class App extends React.Component {
                 method: 'POST',
                 headers: {
                     'user': newUsername,
-                    'session-token': newSession_token
+                    'session-token': newSessionToken
                 },
             })
             .then((res) => res.status === 200 ?
                 this.setState({
                     username: newUsername,
-                    session_token: newSession_token,
+                    session_token: newSessionToken,
                     loggedIn: newLoggedIn,
                     loginAccess: false
                 })

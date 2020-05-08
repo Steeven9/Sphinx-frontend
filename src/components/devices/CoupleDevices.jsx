@@ -157,6 +157,7 @@ const CoupleDevices = () => {
                 })
                 .then((data) => {
                     if (data === null || data.length === 0) {
+                        //Do nothing
                     } else {
                         fetchedDevices = JSON.parse(data).sort(function (a, b) {
                             let keyA = a.name;
@@ -281,11 +282,10 @@ const CoupleDevices = () => {
                 .then((res) => {
                     if (res.status === 200 || res.status === 204) {
                         console.log(method + ' successful!');
-                        return res
                     } else {
                         console.log(method + ' unsuccessful!');
-                        return res
                     }
+                    return res;
                 })
                 .catch(error => console.log(error))
         })

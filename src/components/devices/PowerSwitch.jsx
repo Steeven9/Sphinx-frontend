@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import DevicesContext from '../../context/devicesContext'
 
 
@@ -8,8 +8,8 @@ import DevicesContext from '../../context/devicesContext'
  * @returns {PowerSwitch}
  * @constructor
  */
-const PowerSwitch = ({device, isGuest}) => {
-    const {dispatch, setActionCompleted} = useContext(DevicesContext);
+const PowerSwitch = ({ device, isGuest }) => {
+    const { dispatch, setActionCompleted } = useContext(DevicesContext);
     const [on, setPower] = useState(device.on);
 
     /**
@@ -27,11 +27,10 @@ const PowerSwitch = ({device, isGuest}) => {
         setPower(e.target.checked);
         device.on = e.target.checked;
         device.clicked = true;
-        // console.log('Turning -> ' + device.name + ' ' + (device.on ? 'ON' : 'OFF'));
-        dispatch({type: 'SYNC_DEVICES', device: device});
-        dispatch({type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted});
+        dispatch({ type: 'SYNC_DEVICES', device: device });
+        dispatch({ type: 'MODIFY_DEVICE', device: device, setActionCompleted: setActionCompleted });
     };
-    
+
     return (
         <div>
             <label>
@@ -47,4 +46,4 @@ const PowerSwitch = ({device, isGuest}) => {
     )
 };
 
-export {PowerSwitch as default}
+export { PowerSwitch as default }

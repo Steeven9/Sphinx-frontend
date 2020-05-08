@@ -15,7 +15,7 @@ class MyGuests extends React.Component {
                 className="loading-spinner"/></span></div>,
             guestToDelete: "",
             isLoading: false,
-            error: -1,  // -1 nothing, 0 bad request, 1 unexpected error
+            error: false,
             errorType: "",
             allowSecurityCameras: true,
         }
@@ -38,7 +38,6 @@ class MyGuests extends React.Component {
             if (res.status === 401) {
                 this.props.logOut(1);
             } else if (res.status === 200) {
-                console.log(res)
                 return res.text();
             } else {
                 return null;
@@ -48,7 +47,7 @@ class MyGuests extends React.Component {
             let response = JSON.parse(data);
 
             if (response === null) {
-                this.setState({guests: <p><b>An error has occurred.</b></p>});
+                this.setState({guests: <span className="error-message">An error has occurred.</span>});
             } else if (response.length === 0) {
                 this.setState({
                     guests: <p><b>You haven't authorized any guest yet. Click on the + button to authorize one.</b></p>
@@ -57,7 +56,7 @@ class MyGuests extends React.Component {
                 this.mapGuests(response);
             }
         })
-        .catch(e => this.setState({guests: <p><b>Error.</b></p>}))
+        .catch(e => this.setState({guests: <span className="error-message">An error has occurred.</span>}))
 
         fetch('http://localhost:8080/user/' + this.props.username, {
             method: 'GET',
@@ -79,12 +78,13 @@ class MyGuests extends React.Component {
             let response = JSON.parse(data);
 
             if (response === null) {
-                this.setState({guests: <p><b>An error has occurred.</b></p>});
-            } else {
+                this.setState({guests: <span className="error-message">An error has occurred.</span>});
+            } 
+            else {
                 this.setState({allowSecurityCameras: response.allowSecurityCameras});
             }
         })
-        .catch(e => this.setState({guests: <p><b>Error.</b></p>}))
+        .catch(e => this.setState({guests: <span className="error-message">An error has occurred.</span>}))
     }
 
     /**
@@ -164,7 +164,7 @@ class MyGuests extends React.Component {
      * If unsuccessfull, changes the value of this.state.error
      */
     deleteGuest = () => {
-        this.setState({isLoading: true, error: -1})
+        this.setState({isLoading: true, error: false})
         fetch('http://localhost:8080/guests/' + this.state.guestToDelete, {
             method: 'DELETE',
             headers: {
@@ -179,15 +179,19 @@ class MyGuests extends React.Component {
                 window.location.href = '/shared'
             } else if (res.status === 401) {
                 this.props.logOut(1)
-            } else if (res.status === 400) {
-                this.setState({error: 0})
-            } else {
-                this.setState({error: 1, errorType: "Error Code: " + res.status})
             }
+            else {
+                this.setState({error: true})
+                return res.json()
+            }
+            return null
+        })
+        .then((data) => {
+            if (data !== null) this.setState({errorType: data.message})
         })
         .catch(e => {
             this.setState({isLoading: false})
-            this.setState({error: 1, errorType: e.toString()})
+            this.setState({error: true, errorType: e.toString()})
         })
     }
 
@@ -195,9 +199,7 @@ class MyGuests extends React.Component {
      * Returns HTML with error message to display based on this.state.error
      */
     showError = () => {
-        if (this.state.error === 0) {
-            return (<span className="error-message">Error: bad request</span>)
-        } else if (this.state.error === 1) {
+         if (this.state.error) {
             return (<span className="error-message">{this.state.errorType}</span>)
         }
     }

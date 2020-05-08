@@ -41,16 +41,16 @@ class SharedWithMe extends React.Component {
             let response = JSON.parse(data);
 
             if (response === null) {
-                this.setState({owners: <p><b>An error has occurred.</b></p>});
+                this.setState({owners: <span className="error-message">An error has occurred.</span>});
             } else if (response.length === 0) {
                 this.setState({
-                    owners: <p><b>You aren't anyone's guest yet.</b></p>
+                    owners: <span className="error-message">You aren't anyone's guest yet.</span>
                 });
             } else {
                 this.mapOwners(response);
             }
         })
-        .catch(e => this.setState({owners: <p><b>Error.</b></p>}))
+        .catch(e => this.setState({owners: <span className="error-message">An error has occurred.</span>}))
     }
 
     /**
@@ -59,7 +59,7 @@ class SharedWithMe extends React.Component {
      */
     mapOwners = (owners) => {
         if (owners.length === 0) {
-            this.setState({owners: <p><b>You aren't anyone's guest yet.</b></p>});
+            this.setState({owners: <span className="error-message">You aren't anyone's guest yet.</span>});
         } else {
             let i = 0;
             let toSet = owners.map((owner) =>
