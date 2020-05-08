@@ -20,7 +20,6 @@ class EditRoom extends React.Component {
             error: -1,  // -1 nothing, 0 incomplete, 1 bad request, 2 unexpected error
             errorType: "",
             isLoading: false,
-            modifiedBackground: false,
             background: "",
         }
     }
@@ -57,9 +56,15 @@ class EditRoom extends React.Component {
             }
         })
         .then((data) => {
-            this.setState({roomName: data.name, type: this.decomposeIconPath(data.icon), background: data.background})
+            this.setState({roomName: data.name, type: this.decomposeIconPath(data.icon)})
             document.getElementById('editRoomFixedSizeIcon').src = data.icon
             document.querySelector('main').style.backgroundImage = 'url(' + data.background + ')'
+            if (data.background === this.props.findPathRoom(this.decomposeIconPath(data.icon), 1)) {
+                this.setState({background: ""})
+            }
+            else {
+                this.setState({background: data.background})
+            }
         })
         .catch(error => console.log(error))
     }
@@ -77,19 +82,18 @@ class EditRoom extends React.Component {
         else {
             this.setState({isLoading: true, error: -1})
             let toSend;
-            if (this.state.modifiedBackground) {
+            if (this.state.background !== "") {
                 toSend = JSON.stringify({
                     name: this.state.roomName,
                     icon: this.props.findPathRoom(this.state.type, 0),
-                    background: this.state.background !== "" ?
-                        this.state.background :
-                        this.props.findPathRoom(this.state.type, 1),
+                    background: this.state.background
                 })
             }
             else {
                 toSend = JSON.stringify({
                     name: this.state.roomName,
-                    icon: this.props.findPathRoom(this.state.type, 0)
+                    icon: this.props.findPathRoom(this.state.type, 0),
+                    background: this.props.findPathRoom(this.state.type, 1)
                 })
             }
             fetch('http://localhost:8080/rooms/' + this.state.room_id, {
@@ -177,8 +181,9 @@ class EditRoom extends React.Component {
      */
     changeIconState = (path) => {
         this.setState({ type: path });
-
-        if (!this.state.modifiedBackground) document.querySelector('main').style.backgroundImage = 'url(' + this.props.findPathRoom(path, 1) + ')';
+        if (this.state.background === "") {
+            this.resetBackground(path);
+        }
         this.moveToInformation();
     }
 
@@ -196,8 +201,10 @@ class EditRoom extends React.Component {
     moveToInformation = () => {
         document.getElementById("addRoomInfo1").hidden = false
         document.getElementById("addRoomIconSelection1").hidden = true
-
-        document.querySelector('main').style.backgroundImage = 'url(' + this.state.background + ')'
+        if (this.state.background !== "") {
+            document.querySelector('main').style.backgroundImage = "url(" + this.state.background + ")";
+            document.getElementById('imageURL1').value = this.state.background;
+        }
     }
 
     /**
@@ -205,7 +212,6 @@ class EditRoom extends React.Component {
      * @param e
      */
     changeDinamicallyBackground = (e) => {
-        this.setState({modifiedBackground: true})
         var reader = new FileReader();
         var file = e.target.files[0];
         if (file) {
@@ -218,15 +224,24 @@ class EditRoom extends React.Component {
             reader.readAsDataURL(file);
         }
     }
+    
+    /**
+     * Call this.resetBackground with this.state.type
+     */
+    resetBackgroundNoParam = () => {
+        this.resetBackground(this.state.type);
+    }
 
     /**
-     * Restore the background selected by the user and 
-     * changes it back to the one stored in this.state.type
+     * Restore the background selected by the user and
+     * changes it back to the one received as type
+     * @param {string} type
      */
-    resetBackground = () => {
+    resetBackground = (type) => {
         document.getElementById('inputPicture1').value = "";
         document.getElementById('imageURL1').value = "";
-        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(this.state.type, 1) + ")";
+        document.querySelector('main').style.backgroundImage = "url(" + this.props.findPathRoom(type, 1) + ")";
+        this.setState({background: ""});
     }
 
     /**
@@ -298,13 +313,19 @@ class EditRoom extends React.Component {
                             <input type="file" className="inputBackground" accept="image/*" onClick={this.resetBackground} onChange={this.changeDinamicallyBackground} id="inputPicture1" />
                             <input type="hidden" id="imageURL1" value="" />
                         </div>
-                    </div>
 
-                    <div className="message-two-lines center-text">
-                        <span>
-                            <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
-                        </span>
-                        {this.showError()}
+                        <div className="center">
+                            <button type="button" name="button" className="btn-secondary btn waves-effect waves-light"
+                                    onClick={this.resetBackgroundNoParam}>Restore Background
+                            </button>
+                        </div>
+
+                        <div className="message-two-lines center-text">
+                            <span>
+                                <ColorCircularProgress className={this.state.isLoading ? "loading-spinner" : "hidden"}/>
+                            </span>
+                            {this.showError()}
+                        </div>
                     </div>
 
                     <div className="center">
