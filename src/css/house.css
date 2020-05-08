@@ -11,7 +11,7 @@ h2 {
 .btn-primary-circular2 {
     background: #FFB800 !important;
     border-radius: 80px !important;
-    font-family: Open Sans;
+    font-family: 'Open Sans', Verdana, sans-serif;
     font-style: normal !important;
     font-weight: 600 !important;
     font-size: 30px !important;
@@ -71,6 +71,7 @@ h2 {
 .room{
     height: 90px;
     display: flex;
+    border-bottom: 1px solid rgb(199, 199, 199);
 }
 
 .vertical-center{
@@ -125,10 +126,6 @@ h2 {
     width: calc(60% + 10vmin) !important;
     border-radius: 10px !important;
     padding: 20px 60px 60px 60px !important;
-}
-
-.room {
-    border-bottom: 1px solid rgb(199, 199, 199);
 }
 
 .room-content-box {

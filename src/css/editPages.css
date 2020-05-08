@@ -8,7 +8,7 @@
 .Handle-btn-primary {
     background: #FFB800 !important;
     border-radius: 23px !important;
-    font-family: Open Sans;
+    font-family: 'Open Sans', Verdana, sans-serif;
     font-style: normal !important;
     font-weight: bold !important;
     font-size: 14px !important;
@@ -24,7 +24,7 @@
 .Handle-btn-secondary {
     background: white !important;
     border-radius: 23px !important;
-    font-family: Open Sans;
+    font-family: 'Open Sans', Verdana, sans-serif;
     font-style: normal !important;
     font-weight: bold !important;
     font-size: 14px !important;
