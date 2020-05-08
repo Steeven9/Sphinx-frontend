@@ -29,7 +29,7 @@ describe('Testing the edit room page', function () {
         cy.server()
         cy.route("DELETE", "**/rooms/1",).as("deleteRoom");
 
-        cy.get(".btn-secondary").eq(1)
+        cy.get(".btn-secondary").eq(2)
         .click()
        
 
@@ -69,6 +69,7 @@ describe('Testing the edit room page', function () {
         .should("deep.equal", {
             name: editRoomName,
             icon: "./img/icons/rooms/icon-dining-room.svg",
+            backgroud: "./img/icons/rooms/icon-dining-room.svg"
         });
        
 
