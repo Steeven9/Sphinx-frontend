@@ -27,7 +27,9 @@
     "eject": "react-scripts eject",
     "cy-open": "cypress open",
     "cy-run": "cypress run",
-    "ci-test": "react-scripts start & wait-on http://localhost:3000 && cypress run"
+    "ci-test": "react-scripts start & wait-on http://localhost:3000 && cypress run",
+    "eslint": "eslint src cypress",
+    "eslint:report": "eslint src cypress -f json -o eslint-report.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -46,6 +48,9 @@
   },
   "devDependencies": {
     "cypress": "^4.3.0",
+    "eslint-config-airbnb": "^18.1.0",
+    "eslint-plugin-chai-friendly": "^0.6.0",
+    "eslint-plugin-cypress": "^2.10.3",
     "sonarqube-scanner": "^2.6.0",
     "wait-on": "^4.0.1"
   }
