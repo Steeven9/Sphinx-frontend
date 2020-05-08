@@ -161,7 +161,7 @@ const SceneEffectConfig = (config) => {
 
     return (
         <>
-            {getEffectFilter(effectConfig)}
+            {getEffectFilter()}
         </>
     )
 };

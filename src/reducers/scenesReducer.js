@@ -17,7 +17,8 @@ function prepareSceneForFetch(scene) {
  * @returns {state[]}
  */
 
-const scenesReducer = (state, action) => {
+const scenesReducer = (stateParam, action) => {
+    let state = stateParam;
     const host = window.location.protocol + '//' + window.location.hostname + ':8888';
     let fetchUrl = host + '/scenes';
     const headers = {
