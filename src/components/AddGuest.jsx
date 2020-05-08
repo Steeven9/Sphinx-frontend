@@ -55,9 +55,7 @@ class AddGuest extends React.Component {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    guest: this.state.guestUsernameOrEmail,
-                })
+                body: this.state.guestUsernameOrEmail
             })
             .then((res) => {
                 this.setState({isLoading: false})
