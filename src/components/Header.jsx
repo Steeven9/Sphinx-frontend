@@ -2,23 +2,22 @@ import React from 'react';
 import '../css/App.css';
 
 
-const active = window.location.pathname.toLowerCase().split('/')
+const active = window.location.pathname.toLowerCase().split('/');
 
 class Header extends React.Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            loggedIn: false
-        }
+            loggedIn: false,
+        };
     }
 
     /**
      * Checks localStorage "loggedIn" value and updates the state accordingly
      */
     componentDidMount() {
-        let newLoggedIn = localStorage.getItem("loggedIn") === "true";
-        this.setState({loggedIn: newLoggedIn})
+        const newLoggedIn = localStorage.getItem('loggedIn') === 'true';
+        this.setState({ loggedIn: newLoggedIn });
     }
 
     /**
@@ -28,54 +27,126 @@ class Header extends React.Component {
      */
     render() {
         return (
-            <header id="page-header" className="header">
-                <div className="navbar-fixed">
-                    <nav className="navbar-fixed">
-                        <div className="nav-wrapper">
-                            <a href="/" className="brand-logo">
-                                <img className="nav-left nav-logo-horizontal responsive-img"
-                                     src="/img/logo/logo-horizontal.svg" alt="SmartHut logo"/>
-                            </a>
+          <header id="page-header" className="header">
+            <div className="navbar-fixed">
+              <nav className="navbar-fixed">
+                <div className="nav-wrapper">
+                  <a href="/" className="brand-logo">
+                    <img
+                      className="nav-left nav-logo-horizontal responsive-img"
+                      src="/img/logo/logo-horizontal.svg"
+                      alt="SmartHut logo"
+                    />
+                  </a>
 
-                            {
-                                this.state.loggedIn ?
-                                    <>
+                  {
+                                this.state.loggedIn
+                                    ? (
+                                      <>
                                         <ul className="right hide-on-med-and-down">
-                                            <li><a className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
-                                                   href="/">Dashboard</a></li>
-                                            <li><a
-                                                className={(active[1] === 'devices') ? 'nav-link active' : 'nav-link'}
-                                                href="/devices">Devices</a></li>
-                                            <li><a
-                                                className={(active[1] === 'house' || active[1] === 'room') ? 'nav-link active' : 'nav-link'}
-                                                href="/house">Rooms</a></li>
-                                            <li><a className={(active[1] === 'scenes') ? 'nav-link active' : 'nav-link'}
-                                                   href="/scenes">Scenes</a></li>
-                                            <li><a
-                                                className={(active[1] === 'automations') ? 'nav-link active' : 'nav-link'}
-                                                href="/automations">Automations</a></li>
-                                            <li><a className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'}
-                                                   href="/guests">Guests</a></li>
-                                            <li><a
-                                                className={(active[1] === 'sharedwithme') || (active[1] === 'shared') ? 'nav-link active' : 'nav-link'}
-                                                href="/sharedWithMe">Shared with me</a></li>
-                                            <li><a className='nav-link' href="/logout">Log out</a></li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
+                                              href="/"
+                                            >
+                                              Dashboard
+                                            </a>
+
+                                          </li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === 'devices') ? 'nav-link active' : 'nav-link'}
+                                              href="/devices"
+                                            >
+                                              Devices
+                                            </a>
+
+                                          </li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === 'house' || active[1] === 'room') ? 'nav-link active' : 'nav-link'}
+                                              href="/house"
+                                            >
+                                              Rooms
+                                            </a>
+
+                                          </li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === 'scenes') ? 'nav-link active' : 'nav-link'}
+                                              href="/scenes"
+                                            >
+                                              Scenes
+                                            </a>
+
+                                          </li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === 'automations') ? 'nav-link active' : 'nav-link'}
+                                              href="/automations"
+                                            >
+                                              Automations
+                                            </a>
+
+                                          </li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === 'guests') ? 'nav-link active' : 'nav-link'}
+                                              href="/guests"
+                                            >
+                                              Guests
+                                            </a>
+
+                                          </li>
+                                          <li>
+                                            <a
+                                              className={(active[1] === 'sharedwithme') || (active[1] === 'shared') ? 'nav-link active' : 'nav-link'}
+                                              href="/sharedWithMe"
+                                            >
+                                              Shared with me
+                                            </a>
+
+                                          </li>
+                                          <li><a className="nav-link" href="/logout">Log out</a></li>
                                         </ul>
-                                    </>
-                                    :
-                                    <ul className="right hide-on-med-and-down">
-                                        <li><a className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
-                                               href="/">Home</a></li>
-                                        <li><a className={(active[1] === 'signup') ? 'nav-link active' : 'nav-link'}
-                                               href="/signup">Create account</a></li>
-                                        <li><a className={(active[1] === 'login') ? 'nav-link active' : 'nav-link'}
-                                               href="/login">Log in</a></li>
-                                    </ul>
+                                      </>
+)
+                                    : (
+                                      <ul className="right hide-on-med-and-down">
+                                        <li>
+                                          <a
+                                            className={(active[1] === '') ? 'nav-link active' : 'nav-link'}
+                                            href="/"
+                                          >
+                                            Home
+                                          </a>
+
+                                        </li>
+                                        <li>
+                                          <a
+                                            className={(active[1] === 'signup') ? 'nav-link active' : 'nav-link'}
+                                            href="/signup"
+                                          >
+                                            Create account
+                                          </a>
+
+                                        </li>
+                                        <li>
+                                          <a
+                                            className={(active[1] === 'login') ? 'nav-link active' : 'nav-link'}
+                                            href="/login"
+                                          >
+                                            Log in
+                                          </a>
+
+                                        </li>
+                                      </ul>
+)
                             }
-                        </div>
-                    </nav>
                 </div>
-            </header>
+              </nav>
+            </div>
+          </header>
         );
     }
 }

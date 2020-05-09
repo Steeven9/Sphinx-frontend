@@ -8,11 +8,8 @@ import DevicesPanel from './devices/DevicesPanel';
  * @returns {*}
  * @constructor
  */
-const Devices = () => {
-    return (
-        <DevicesPanel/>
-    )
-};
+const Devices = () => (
+  <DevicesPanel />
+    );
 
-export {Devices as default}
-
+export { Devices as default };
