@@ -15,8 +15,8 @@ const path = window.location.pathname.toLowerCase().split('/');
 const devicesFetchUrl = `${host}/devices`;
 const roomDevicesFetchUrl = `${host}/rooms/${params.get('id')}/devices`;
 // const fetchOwnerUrl = host + '/guests/houses' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
-const fetchOwnerUrl = `${window.location.protocol}//${window.location.hostname}:8888/guests/houses`;
-const guestDevicesFetchUrl = `${window.location.protocol}//${window.location.hostname}:8888/guests/${params.get('owner')}/devices`;
+const fetchOwnerUrl = `${window.location.protocol}//${window.location.hostname}:8080/guests/houses`;
+const guestDevicesFetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/guests/${params.get('owner')}/devices`;
 const fetchRoomUrl = `${host}/rooms/${params.get('id')}`;
 let fetchUrl;
 let roomBackground;

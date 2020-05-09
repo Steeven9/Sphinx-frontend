@@ -128,7 +128,7 @@ const ScenesFactory = () => {
 
             if (isEditing) {
                 setLoading(true)
-                fetch(fetchUrl + ':8888/scenes/' + params.get('id'), {
+                fetch(fetchUrl + ':8080/scenes/' + params.get('id'), {
                     method: method,
                     headers: headers,
                 })

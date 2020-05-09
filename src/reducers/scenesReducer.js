@@ -19,7 +19,7 @@ function prepareSceneForFetch(scene) {
 
 const scenesReducer = (stateParam, action) => {
     let state = stateParam;
-    const host = window.location.protocol + '//' + window.location.hostname + ':8888';
+    const host = window.location.protocol + '//' + window.location.hostname + ':8080';
     let fetchUrl = host + '/scenes';
     const headers = {
         'user': localStorage.getItem('username'),

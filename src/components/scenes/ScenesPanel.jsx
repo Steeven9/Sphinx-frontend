@@ -10,12 +10,12 @@ import {Link} from "react-router-dom";
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const host = window.location.protocol + '//' + window.location.hostname + ':8888';
+const host = window.location.protocol + '//' + window.location.hostname + ':8080';
 const scenesFetchUrl = host + '/scenes';
 const guestScenesFetchUrl = host + '/guests/' + params.get('owner') + '/scenes';
 let fetchUrl;
 // const fetchOwnerUrl = host + '/guests/houses' + params.get('owner'); //Uncomment this and delete next line when the API route is ready
-const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8888/guests/houses';
+const fetchOwnerUrl = window.location.protocol + '//' + window.location.hostname + ':8080/guests/houses';
 
 /**
  * Generates a panel with a ScenesPanel

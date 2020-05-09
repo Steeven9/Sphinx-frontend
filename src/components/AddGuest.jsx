@@ -30,9 +30,9 @@ class AddGuest extends React.Component {
         this.setState({ guestUsernameOrEmail: evt.target.value });
     }
 
-    // Redirection to /shared
+    // Redirection to /guests
     redirectToGuests = () => {
-        window.location.href = '/shared';
+        window.location.href = '/guests';
     }
 
     /**
@@ -58,7 +58,7 @@ class AddGuest extends React.Component {
             })
             .then((res) => {
                 this.setState({ isLoading: false });
-                if (res.status === 200) {
+                if (res.status === 201) {
                     this.redirectToGuests();
                 } else if (res.status === 401) {
                     this.props.logOut(1);

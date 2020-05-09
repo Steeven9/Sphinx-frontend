@@ -185,7 +185,7 @@ class MyGuests extends React.Component {
             this.setState({ isLoading: false });
             if (res.status === 204) {
                 this.moveToGuestList();
-                window.location.href = '/shared';
+                window.location.href = '/guests';
             } else if (res.status === 401) {
                 this.props.logOut(1);
             } else {
