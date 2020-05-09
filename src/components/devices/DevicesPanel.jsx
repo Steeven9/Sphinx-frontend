@@ -260,12 +260,12 @@ const DevicesPanel = () => {
                     backgroundPosition: 'center',
                 }}
                 >
-                    <article className="row row-custom row row-custom-custom">
+                    <article className="row row-custom">
                         <div id="content">
                             <section
                                 className={(isRoom) ? 'content-box-collapsible z-depth-2 content-box-transparency' : 'content-box-collapsible z-depth-2'}
                             >
-                                <div className="headline-box row row-custom row row-custom-custom">
+                                <div className="headline-box row row-custom">
                                     <h3 className="col col-custom l8 left-align headline-title">{title}</h3>
                                     {!isGuest
                                         ? (
@@ -298,7 +298,7 @@ const DevicesPanel = () => {
                                     <p className={(isNetworkError && isShared) ? 'error-message' : undefined}>{errorMessage()}</p>
                                 </div>
                                 <ul className={(isLoading || !isDataFound || !isShared || isNetworkError) ? 'hidden' : 'collapsible expandable expandable-component'}>
-                                    <li className="row row-custom row row-custom-custom">
+                                    <li className="row row-custom">
                                         <DeviceList isGuest={isGuest}/>
                                     </li>
                                 </ul>
@@ -310,4 +310,5 @@ const DevicesPanel = () => {
         </DevicesContext.Provider>
     );
 };
+
 export { DevicesPanel as default };
