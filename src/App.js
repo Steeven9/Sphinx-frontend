@@ -2,6 +2,11 @@ import React from 'react';
 import './css/App.css';
 import 'materialize-css'; // It installs the JS asset only
 import 'materialize-css/dist/css/materialize.min.css';
+import {
+    BrowserRouter as Router,
+    Switch,
+    Route,
+} from 'react-router-dom';
 import Header from './components/Header';
 import Homepage from './components/Homepage';
 import Login from './components/Login';
@@ -30,19 +35,13 @@ import ResendEmail from './components/ResendEmail';
 import Error404 from './components/Error404';
 
 
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-} from "react-router-dom";
-import Footer from "./components/Footer";
+import Footer from './components/Footer';
 
 class App extends React.Component {
-
     constructor(props) {
         super(props);
-        let username = "";
-        let sessionToken = "";
+        let username = '';
+        let sessionToken = '';
 
         try {
             username = localStorage.getItem('username');
@@ -53,41 +52,41 @@ class App extends React.Component {
 
         this.state = {
             loggedIn: true,
-            username: username,
+            username,
             session_token: sessionToken,
 
             loginAccess: true,
-        }
+        };
     }
 
     /**
      * Checks localStorage values and updates the state accordingly
      */
     componentDidMount() {
-        let newUsername = localStorage.getItem("username");
-        let newSessionToken = localStorage.getItem("session_token");
-        let newLoggedIn = localStorage.getItem("loggedIn");
+        const newUsername = localStorage.getItem('username');
+        const newSessionToken = localStorage.getItem('session_token');
+        const newLoggedIn = localStorage.getItem('loggedIn');
 
-        if (newLoggedIn === "true") {
+        if (newLoggedIn === 'true') {
             fetch('http://localhost:8080/auth/validate/', {
                 method: 'POST',
                 headers: {
-                    'user': newUsername,
-                    'session-token': newSessionToken
+                    user: newUsername,
+                    'session-token': newSessionToken,
                 },
             })
-            .then((res) => res.status === 200 ?
-                this.setState({
+            .then((res) => (res.status === 200
+                ? this.setState({
                     username: newUsername,
                     session_token: newSessionToken,
                     loggedIn: newLoggedIn,
-                    loginAccess: false
+                    loginAccess: false,
                 })
-                :
-                this.logOut(0)
-            )
+                : this.logOut(0)));
         } else {
-            this.setState({username: "", session_token: "", loggedIn: false, loginAccess: true})
+            this.setState({
+username: '', session_token: '', loggedIn: false, loginAccess: true,
+});
         }
     }
 
@@ -102,12 +101,12 @@ class App extends React.Component {
             loggedIn: true,
         });
 
-        localStorage.setItem("username", user);
-        localStorage.setItem("session_token", token);
-        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem('username', user);
+        localStorage.setItem('session_token', token);
+        localStorage.setItem('loggedIn', 'true');
 
         if (this.state.loggedIn) {
-            window.location.href = "/";
+            window.location.href = '/';
         }
     }
 
@@ -118,18 +117,18 @@ class App extends React.Component {
      */
     logOut = (exitCode) => {
         this.setState({
-            username: "",
-            session_token: "",
+            username: '',
+            session_token: '',
             loggedIn: false,
-            loginAccess: true
+            loginAccess: true,
         });
 
-        localStorage.setItem("username", "");
-        localStorage.setItem("session_token", "");
-        localStorage.setItem("loggedIn", "false");
+        localStorage.setItem('username', '');
+        localStorage.setItem('session_token', '');
+        localStorage.setItem('loggedIn', 'false');
 
         if (exitCode === 1) {
-            alert("Session expired. Please log in again.")
+            alert('Session expired. Please log in again.');
         }
 
         window.location.href = '/';
@@ -138,17 +137,15 @@ class App extends React.Component {
     /**
      * It returns the "Access Denied" page
      */
-    accessDenied = () => {
-        return (
-            <div id="content" className="container">
-                <section className="content-box z-depth-2">
-                    <div>
-                        <p><b>Access Denied</b></p>
-                    </div>
-                </section>
-            </div>
+    accessDenied = () => (
+      <div id="content" className="container">
+        <section className="content-box z-depth-2">
+          <div>
+            <p><b>Access Denied</b></p>
+          </div>
+        </section>
+      </div>
         )
-    }
 
     /**
      * Return Device icon path
@@ -156,22 +153,22 @@ class App extends React.Component {
      * @return {string} the path to the device icon
      */
     findPathDevice = (type) => {
-        let path = '/img/icons/devices/'
-        if (type === "1") path += 'bulb-regular'
-        else if (type === "2") path += 'bulb-led'
-        else if (type === "3") path += 'switch'
-        else if (type === "4") path += 'dimmer-state'
-        else if (type === "5") path += 'dimmer-regular'
-        else if (type === "6") path += 'smart-plug'
-        else if (type === "7") path += 'sensor-humidity'
-        else if (type === "8") path += 'sensor-light'
-        else if (type === "9") path += 'sensor-temperature'
-        else if (type === "10") path += 'sensor-motion'
-        else if (type === "11") path += 'automation-thermostat'
-        else if (type === "12") path += 'smart-curtains'
-        else if (type === "13") path += 'security-camera'
-        else path += 'unknown-device'
-        path += '.svg'
+        let path = '/img/icons/devices/';
+        if (type === '1') path += 'bulb-regular';
+        else if (type === '2') path += 'bulb-led';
+        else if (type === '3') path += 'switch';
+        else if (type === '4') path += 'dimmer-state';
+        else if (type === '5') path += 'dimmer-regular';
+        else if (type === '6') path += 'smart-plug';
+        else if (type === '7') path += 'sensor-humidity';
+        else if (type === '8') path += 'sensor-light';
+        else if (type === '9') path += 'sensor-temperature';
+        else if (type === '10') path += 'sensor-motion';
+        else if (type === '11') path += 'automation-thermostat';
+        else if (type === '12') path += 'smart-curtains';
+        else if (type === '13') path += 'security-camera';
+        else path += 'unknown-device';
+        path += '.svg';
         return path;
     }
 
@@ -181,14 +178,14 @@ class App extends React.Component {
      * @param {boolean} flag: if false icon, if true background
      */
     findPathRoom = (type, flag) => {
-        let path = './img/'
+        let path = './img/';
         if (flag) {
-            path += 'backgrounds/rooms/background-'
+            path += 'backgrounds/rooms/background-';
         } else {
-            path += 'icons/rooms/icon-'
+            path += 'icons/rooms/icon-';
         }
-        path += type
-        path += '.svg'
+        path += type;
+        path += '.svg';
         return path;
     }
 
@@ -199,237 +196,268 @@ class App extends React.Component {
      */
     render() {
         return (
-            <Router>
+          <Router>
 
-                <div id="wrapper">
-                    <Header
-                        loggedIn={this.state.loggedIn}
-                    />
+            <div id="wrapper">
+              <Header
+                loggedIn={this.state.loggedIn}
+              />
 
-                    <main>
-                        <Switch>
+              <main>
+                <Switch>
 
-                            <Route path="/login">
-                                {this.state.loginAccess ?
-                                    <Login
+                  <Route path="/login">
+                    {this.state.loginAccess
+                                    ? (
+                                      <Login
                                         logIn={this.logIn}
-                                    />
-                                    :
-                                    this.accessDenied()
-                                }
-                            </Route>
+                                      />
+)
+                                    : this.accessDenied()}
+                  </Route>
 
-                            <Route path="/signup">
-                                {this.state.loggedIn ? this.accessDenied() :
-                                    <Signup/>
-                                }
-                            </Route>
+                  <Route path="/signup">
+                    {this.state.loggedIn ? this.accessDenied()
+                                    : <Signup />}
+                  </Route>
 
-                            <Route path="/reset">
-                                <ResetPassword/>
-                            </Route>
+                  <Route path="/reset">
+                    <ResetPassword />
+                  </Route>
 
-                            <Route path="/verification">
-                                <Verification/>
-                            </Route>
+                  <Route path="/verification">
+                    <Verification />
+                  </Route>
 
-                            <Route path="/changepassword">
-                                <ChangePassword/>
-                            </Route>
+                  <Route path="/changepassword">
+                    <ChangePassword />
+                  </Route>
 
-                            <Route path="/house">
-                                {this.state.loggedIn ?
-                                    <House
+                  <Route path="/house">
+                    {this.state.loggedIn
+                                    ? (
+                                      <House
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                        )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/editRoom">
-                                {this.state.loggedIn ?
-                                    <EditRoom
-                                        username={this.state.username}
-                                        session_token={this.state.session_token}
-                                        logOut={this.logOut}
-                                        findPathRoom={this.findPathRoom}
-                                    />
-                                    : this.accessDenied()}
-                            </Route>
-
-                            <Route path="/addRoom">
-                                {this.state.loggedIn ?
-                                    <AddRoom
+                  <Route path="/editRoom">
+                    {this.state.loggedIn
+                                    ? (
+                                      <EditRoom
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                         findPathRoom={this.findPathRoom}
-                                    />
+                                      />
+                                        )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/room">
-                                {this.state.loggedIn ?
-                                    <Room
+                  <Route path="/addRoom">
+                    {this.state.loggedIn
+                                    ? (
+                                      <AddRoom
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                        findPathRoom={this.findPathRoom}
+                                      />
+                                        )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/devices">
-                                {this.state.loggedIn ?
-                                    <Devices
+                  <Route path="/room">
+                    {this.state.loggedIn
+                                    ? (
+                                      <Room
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/editDevice">
-                                {this.state.loggedIn ?
-                                    <EditDevice
+                  <Route path="/devices">
+                    {this.state.loggedIn
+                                    ? (
+                                      <Devices
+                                        username={this.state.username}
+                                        session_token={this.state.session_token}
+                                        logOut={this.logOut}
+                                      />
+                                      )
+                                    : this.accessDenied()}
+                  </Route>
+
+                  <Route path="/editDevice">
+                    {this.state.loggedIn
+                                    ? (
+                                      <EditDevice
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                         findPathDevice={this.findPathDevice}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/addDevice">
-                                {this.state.loggedIn ?
-                                    <AddDevice
+                  <Route path="/addDevice">
+                    {this.state.loggedIn
+                                    ? (
+                                      <AddDevice
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                         findPathDevice={this.findPathDevice}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/devicesCoupling">
-                                {this.state.loggedIn ?
-                                    <CoupleDevices
+                  <Route path="/devicesCoupling">
+                    {this.state.loggedIn
+                                    ? (
+                                      <CoupleDevices
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
                                         findPathDevice={this.findPathDevice}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/scenes">
-                                {this.state.loggedIn ?
-                                    <Scenes
+                  <Route path="/scenes">
+                    {this.state.loggedIn
+                                    ? (
+                                      <Scenes
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/addScene">
-                                {this.state.loggedIn ?
-                                    <AddScene
+                  <Route path="/addScene">
+                    {this.state.loggedIn
+                                    ? (
+                                      <AddScene
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/editScene">
-                                {this.state.loggedIn ?
-                                    <EditScene
+                  <Route path="/editScene">
+                    {this.state.loggedIn
+                                    ? (
+                                      <EditScene
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/guests">
-                                {this.state.loggedIn ?
-                                    <MyGuests
+                  <Route path="/guests">
+                    {this.state.loggedIn
+                                    ? (
+                                      <MyGuests
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/addGuest">
-                                {this.state.loggedIn ?
-                                    <AddGuest
+                  <Route path="/addGuest">
+                    {this.state.loggedIn
+                                    ? (
+                                      <AddGuest
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/sharedWithMe">
-                                {this.state.loggedIn ?
-                                    <SharedWithMe
+                  <Route path="/sharedWithMe">
+                    {this.state.loggedIn
+                                    ? (
+                                      <SharedWithMe
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/shared">
-                                {this.state.loggedIn ?
-                                    <SharedWithGuests
+                  <Route path="/shared">
+                    {this.state.loggedIn
+                                    ? (
+                                      <SharedWithGuests
                                         username={this.state.username}
                                         session_token={this.state.session_token}
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/logout">
-                                {this.state.loggedIn ?
-                                    <LogOut
+                  <Route path="/logout">
+                    {this.state.loggedIn
+                                    ? (
+                                      <LogOut
                                         logOut={this.logOut}
-                                    />
+                                      />
+                                      )
                                     : this.accessDenied()}
-                            </Route>
+                  </Route>
 
-                            <Route path="/changepassword">
-                                <ChangePassword/>
-                            </Route>
+                  <Route path="/changepassword">
+                    <ChangePassword />
+                  </Route>
 
-                            <Route path="/resend">
-                                <ResendEmail/>
-                            </Route>
+                  <Route path="/resend">
+                    <ResendEmail />
+                  </Route>
 
-                            <Route exact path="/">
-                                {this.state.loggedIn ?
-                                    <Dashboard
+                  <Route exact path="/">
+                    {this.state.loggedIn
+                                    ? (
+                                      <Dashboard
                                         username={this.state.username}
                                         session_token={this.state.session_token}
-                                    />
-                                    :
-                                    <Homepage/>
-                                }
-                            </Route>
+                                      />
+                                      )
+                                    : <Homepage />}
+                  </Route>
 
-                            <Route path="*">
-                                <Error404/>
-                            </Route>
+                  <Route path="*">
+                    <Error404 />
+                  </Route>
 
 
-                        </Switch>
-                    </main>
+                </Switch>
+              </main>
 
-                    <Footer/>
-                </div>
-            </Router>
+              <Footer />
+            </div>
+          </Router>
         );
     }
 }
