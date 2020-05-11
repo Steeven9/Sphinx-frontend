@@ -22,7 +22,7 @@ class MyGuests extends React.Component {
             isLoading: false,
             error: false,
             errorType: '',
-            allowSecurityCameras: true,
+            allowSecurityCameras: false,
         };
     }
 
@@ -149,6 +149,7 @@ class MyGuests extends React.Component {
      */
     changeSecurityCameraPermissions = () => {
         const toSet = !this.state.allowSecurityCameras;
+        this.setState({ allowSecurityCameras: toSet })
         fetch(`http://localhost:8080/user/${this.props.username}`, {
             method: 'PUT',
             headers: {
