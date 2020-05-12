@@ -13,6 +13,26 @@ import DevicesContext from '../../context/devicesContext';
 import { getSliderMarks } from '../../helpers/getDeviceMetadataHelper';
 
 
+/**
+ * Gets a string array to set the mode/state of a thermostat,
+ * just for re-rendering purposes
+ * @param originalState
+ * @returns {string[]}
+ */
+function getModes(originalState) {
+    switch (originalState) {
+        case 1:
+            return ['1'];
+        case 2:
+            return ['1', '2'];
+        case 3:
+            return ['1', '3'];
+        default:
+            return ['0'];
+    }
+    return ['0'];
+}
+
 // eslint-disable-next-line react/prop-types
 function Thermostat({ device, isGuest }) {
     const { dispatch, setActionCompleted } = useContext(DevicesContext);
@@ -33,27 +53,8 @@ function Thermostat({ device, isGuest }) {
     }));
     const classes = useStyles();
 
-    /**
-     * Gets a string array to set the mode/state of a thermostat,
-     * just for re-rendering purposes
-     * @param originalState
-     * @returns {string[]}
-     */
-    function getModes(originalState) {
-        switch (originalState) {
-            case 1:
-                return ['1'];
-            case 2:
-                return ['1', '2'];
-            case 3:
-                return ['1', '3'];
-            default:
-                return ['0'];
-        }
-    }
-
     // Triggers the synchronization (render) and updating of devices (backend)
-    const updateDevice = (device) => {
+    const updateDevice = () => {
         dispatch({ type: 'MODIFY_DEVICE', device, setActionCompleted });
     };
 
@@ -128,9 +129,7 @@ function Thermostat({ device, isGuest }) {
         if (d.source === 0) {
             return device.label;
         }
-        if (d.source === 1) {
-            return `${device.averageTemp.toFixed(2)} °C`;
-        }
+        return `${device.averageTemp.toFixed(2)} °C`;
     }
 
     /**
@@ -152,21 +151,25 @@ function Thermostat({ device, isGuest }) {
         const averageTemp = device.averageTemp.toFixed(2);
         let evalTemp;
 
-        if (source === '0') {
-            evalTemp = parseFloat(selfTemp[0]);
-        } else {
-            evalTemp = averageTemp;
-        }
+        if (device.on) {
+            if (source === '0') {
+                evalTemp = parseFloat(selfTemp[0]);
+            } else {
+                evalTemp = averageTemp;
+            }
 
-        if (evalTemp < intensity + 0.5 && evalTemp > intensity - 0.5) {
-            setModes(['1']); // idle
-            device.state = 1;
-        } else if (intensity > evalTemp) {
-            device.state = 3; // heating
-            setModes(['1', '3']);
+            if (evalTemp < intensity + 0.5 && evalTemp > intensity - 0.5) {
+                setModes(['1']); // idle
+                device.state = 1;
+            } else if (intensity > evalTemp) {
+                device.state = 3; // heating
+                setModes(['1', '3']);
+            } else {
+                device.state = 2; // cooling
+                setModes(['1', '2']);
+            }
         } else {
-            device.state = 2; // cooling
-            setModes(['1', '2']);
+            setDisabled(true);
         }
     }, [device, device.averageTemp, source, intensity]);
 
