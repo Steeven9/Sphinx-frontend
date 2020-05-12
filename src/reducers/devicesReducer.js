@@ -177,3 +177,4 @@ const devicesReducer = (state, action) => {
 };
 
 export { devicesReducer as default }
+
