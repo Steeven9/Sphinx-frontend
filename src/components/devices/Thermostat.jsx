@@ -30,7 +30,6 @@ function getModes(originalState) {
         default:
             return ['0'];
     }
-    return ['0'];
 }
 
 // eslint-disable-next-line react/prop-types
