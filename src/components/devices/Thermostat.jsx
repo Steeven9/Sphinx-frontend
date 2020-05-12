@@ -263,3 +263,4 @@ function Thermostat({ device, isGuest }) {
 }
 
 export { Thermostat as default };
+
