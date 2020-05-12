@@ -90,6 +90,7 @@ const devicesReducer = (state, action) => {
                         body.slider = action.device.slider;
                         body.state = action.device.state;
                         body.source = action.device.source;
+                        body.on = action.device.on;
                         break;
                     case 12: //SmartCurtains
                         body.slider = action.device.slider / 100;
@@ -175,4 +176,5 @@ const devicesReducer = (state, action) => {
     }
 };
 
-export {devicesReducer as default}
+export { devicesReducer as default }
+
