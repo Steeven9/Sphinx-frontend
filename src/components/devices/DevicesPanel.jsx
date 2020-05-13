@@ -37,6 +37,7 @@ const DevicesPanel = () => {
     const [title, setTitle] = useState('');
     const [isRoom, setIsRoom] = useState(false);
     const [isGuest, setIsGuest] = useState(false);
+    const [hasRooms, setHasRooms] = useState(false);
     const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(CircularProgress);
 
     // Sets the fetchUrl to access the right route and sets the fetchMode to show the right error messages
@@ -57,6 +58,30 @@ const DevicesPanel = () => {
         }
     }, [fetchMode]);
 
+    // Corroborates if user has rooms created and disables the add button
+    useEffect(() => {
+        const method = 'GET';
+        const headers = {
+            user: localStorage.getItem('username'),
+            'session-token': localStorage.getItem('session_token'),
+        };
+
+        async function fetchRooms() {
+            return (await fetch(`${host}/rooms`, {
+                method,
+                headers,
+            })).json();
+        }
+
+        try {
+            const rooms = fetchRooms();
+            if (rooms.length > 0) {
+                setHasRooms(true);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
 
     // Fetches devices and room info on page load
     useEffect(() => {
@@ -65,6 +90,63 @@ const DevicesPanel = () => {
             user: localStorage.getItem('username'),
             'session-token': localStorage.getItem('session_token'),
         };
+
+        function fetchDevices() {
+            fetch(fetchUrl, {
+                method,
+                headers,
+            })
+            .then((res) => {
+                if (res.status === 401) {
+                    this.props.logOut(1);
+                    setIsShared(false);
+                } else if (res.status === 200) {
+                    return res.text();
+                } else if (res.status === 404) {
+                    setIsShared(false);
+                    return null;
+                }
+                return null;
+            })
+            .then((data) => {
+                const devices = JSON.parse(data);
+
+                if (devices.length === 0) {
+                    setIsLoading(false);
+                    if (fetchMode === 'shared') {
+                        setIsShared(false);
+                    } else {
+                        setIsDataFound(false);
+                    }
+                } else {
+                    devices.sort((a, b) => {
+                        const keyA = a.name.toLowerCase();
+                        const keyB = b.name.toLowerCase();
+
+                        if (keyA === keyB) {
+                            if (a.id < b.id) {
+                                return -1;
+                            }
+                            if (a.id > b.id) {
+                                return 1;
+                            }
+                        }
+                        if (keyA < keyB) {
+                            return -1;
+                        }
+                        return 1;
+                    });
+
+                    dispatch({ type: 'POPULATE_DEVICES', devices });
+                    setIsLoading(false);
+                }
+            })
+            .catch((e) => {
+                console.log(e);
+                setIsLoading(false);
+                setIsNetworkError(true);
+            });
+        }
 
         if (path[1].toLowerCase() === 'room' && params.get('id')) {
             setIsRoom(true);
@@ -78,9 +160,8 @@ const DevicesPanel = () => {
                     this.props.logOut(1);
                 } else if (res.status === 200) {
                     return res.text();
-                } else {
-                    return null;
                 }
+                return null;
             })
             .then((data) => {
                 const room = JSON.parse(data);
@@ -108,7 +189,7 @@ const DevicesPanel = () => {
             .then((data) => {
                 if (data !== null) {
                     const owners = JSON.parse(data);
-                    const owner = owners.filter((owner) => owner.username.toLowerCase() === params.get('owner').toLowerCase())[0];
+                    const owner = owners.filter((o) => o.username.toLowerCase() === params.get('owner').toLowerCase())[0];
                     const ownerName = owner.fullname.split(' ')[0];
                     const nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's';
 
@@ -124,58 +205,6 @@ const DevicesPanel = () => {
         } else { // House view
             setTitle('My Devices');
             fetchDevices();
-        }
-
-        function fetchDevices() {
-            fetch(fetchUrl, {
-                method,
-                headers,
-            })
-            .then((res) => {
-                if (res.status === 401) {
-                    this.props.logOut(1);
-                    setIsShared(false);
-                } else if (res.status === 200) {
-                    return res.text();
-                } else if (res.status === 404) {
-                    setIsShared(false);
-                    return null;
-                } else {
-                    return null;
-                }
-            })
-            .then((data) => {
-                const devices = JSON.parse(data);
-
-                if (devices.length === 0) {
-                    setIsLoading(false);
-                    if (fetchMode === 'shared') {
-                        setIsShared(false);
-                    } else {
-                        setIsDataFound(false);
-                    }
-                } else {
-                    devices.sort((a, b) => {
-                        const keyA = a.name.toLowerCase();
-                        const keyB = b.name.toLowerCase();
-
-                        if (keyA === keyB) {
-                            if (a.id < b.id) return -1;
-                            if (a.id > b.id) return 1;
-                        }
-                        if (keyA < keyB) return -1;
-                        return 1;
-                    });
-
-                    dispatch({ type: 'POPULATE_DEVICES', devices });
-                    setIsLoading(false);
-                }
-            })
-            .catch((e) => {
-                console.log(e);
-                setIsLoading(false);
-                setIsNetworkError(true);
-            });
         }
 
         setActionCompleted(false);
@@ -231,9 +260,21 @@ const DevicesPanel = () => {
         return '/addDevice';
     }
 
+    // eslint-disable-next-line consistent-return
     const errorMessage = () => {
         if (!isDataFound || isFakeOwner) {
-            if (fetchMode === 'devices' || fetchMode === 'rooms') return "You haven't added any devices yet. Please add a new one.";
+            if (fetchMode === 'devices' || fetchMode === 'rooms') {
+                if (!hasRooms) {
+                    return (
+                        <>
+                            <span>You haven't added any rooms yet. </span>
+                            <a href="/addRoom">Add one now</a>
+                            <span>.</span>
+                        </>
+                    );
+                }
+                return "You haven't added any devices yet. Please add a new one.";
+            }
             if (fetchMode === 'shared') {
                 return "This owner hasn't shared any devices with you yet.";
             }
@@ -270,7 +311,7 @@ const DevicesPanel = () => {
                                     {!isGuest
                                         ? (
                                             <a href={redirectToAdd()}>
-                                                <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i>
+                                                <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons" disabled={!hasRooms}>add</i>
                                             </a>
                                         )
 
@@ -290,7 +331,7 @@ const DevicesPanel = () => {
                                         )}
                                 </div>
                                 <div className={(isLoading) ? 'centered-loading-data-message' : 'hidden'}>
-                                    <ColorCircularProgress/>
+                                    <ColorCircularProgress />
                                 </div>
                                 <div
                                     className={(!isDataFound || isNetworkError) ? 'centered-loading-data-message' : 'hidden'}
@@ -299,7 +340,7 @@ const DevicesPanel = () => {
                                 </div>
                                 <ul className={(isLoading || !isDataFound || !isShared || isNetworkError) ? 'hidden' : 'collapsible expandable expandable-component'}>
                                     <li className="row row-custom">
-                                        <DeviceList isGuest={isGuest}/>
+                                        <DeviceList isGuest={isGuest} />
                                     </li>
                                 </ul>
                             </section>
@@ -312,4 +353,3 @@ const DevicesPanel = () => {
 };
 
 export { DevicesPanel as default };
-
