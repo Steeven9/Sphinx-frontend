@@ -86,7 +86,7 @@ function Thermostat({ device, isGuest }) {
             setSource(newSource);
             device.source = parseInt(newSource);
         }
-        updateDevice(device);
+        updateDevice();
     };
 
     // Controls the fours states of the thermostat and avoids forbidden combinations
@@ -116,7 +116,7 @@ function Thermostat({ device, isGuest }) {
         }
 
         setModes(incomingModes);
-        updateDevice(device);
+        updateDevice();
     };
 
     /**
