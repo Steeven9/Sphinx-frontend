@@ -66,6 +66,9 @@ const ScenesPanel = () => {
                 const fetchedRooms = JSON.parse(data);
                 if (fetchedRooms.length > 0) {
                     setHasRooms(true);
+                } else {
+                    setIsDataFound(false);
+                    setIsLoading(false);
                 }
             })
             .catch((e) => console.log(e));
@@ -86,6 +89,9 @@ const ScenesPanel = () => {
                 const fetchedDevices = JSON.parse(data);
                 if (fetchedDevices.length > 0) {
                     setHasDevices(true);
+                } else {
+                    setIsDataFound(false);
+                    setIsLoading(false);
                 }
             })
             .catch((e) => console.log(e));
@@ -110,6 +116,7 @@ const ScenesPanel = () => {
                 const fetchedScenes = JSON.parse(data);
 
                 if (fetchedScenes.length === 0) {
+                    setIsLoading(false);
                     setIsDataFound(false);
                     setIsShared(false);
 
@@ -246,6 +253,26 @@ const ScenesPanel = () => {
     }, [scenes]);
 
     const errorMessage = () => {
+        if (path[1] === 'scenes') {
+            if (!hasRooms) {
+                return (
+                    <>
+                        <span>You haven't added any rooms yet.&nbsp;</span>
+                        <a href="/addRoom">Add one now</a>
+                        <span>.</span>
+                    </>
+                );
+            } else if (!hasDevices) {
+                return (
+                    <>
+                        <span>You haven't added any devices yet.&nbsp;</span>
+                        <a href="/addDevice">Add one now</a>
+                        <span>.</span>
+                    </>
+                );
+            }
+        }
+
         if (!isDataFound || isFakeOwner) {
             if (path[1] === 'scenes') return "You haven't added any scenes yet. Please add a new one.";
             if (path[1] === 'shared') {
@@ -275,7 +302,7 @@ const ScenesPanel = () => {
                                     {!isGuest
                                         ? (
                                             <a href="/addScene">
-                                                <i className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i>
+                                                <i disabled={!hasDevices} className="col col-custom l1 btn waves-effect waves-light btn-primary-circular right material-icons">add</i>
                                             </a>
                                         )
                                         : (
