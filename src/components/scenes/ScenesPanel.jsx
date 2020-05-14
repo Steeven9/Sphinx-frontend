@@ -262,7 +262,9 @@ const ScenesPanel = () => {
                         <span>.</span>
                     </>
                 );
-            } else if (!hasDevices) {
+            }
+
+            if (!hasDevices) {
                 return (
                     <>
                         <span>You haven't added any devices yet.&nbsp;</span>
@@ -320,14 +322,17 @@ const ScenesPanel = () => {
                                             </Link>
                                         )}
                                 </div>
+
                                 <div className={(isLoading) ? 'centered-loading-data-message' : 'hidden'}>
                                     <ColorCircularProgress />
                                 </div>
+
                                 <div
                                     className={(!isDataFound || isNetworkError) ? 'centered-loading-data-message' : 'hidden'}
                                 >
                                     <p className={(isNetworkError && isShared) ? 'error-message' : undefined}>{errorMessage()}</p>
                                 </div>
+
                                 {(isDataFound && !isNetworkError && !isLoading)
                                     ? (
                                         <ul>

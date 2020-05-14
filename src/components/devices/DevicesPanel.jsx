@@ -37,6 +37,7 @@ const DevicesPanel = () => {
     const [title, setTitle] = useState('');
     const [isRoom, setIsRoom] = useState(false);
     const [isGuest, setIsGuest] = useState(false);
+    const [hasDevices, setHasDevices] = useState(false);
     const [hasRooms, setHasRooms] = useState(false);
     const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(CircularProgress);
 
@@ -60,27 +61,37 @@ const DevicesPanel = () => {
 
     // Corroborates if user has rooms created and disables the add button
     useEffect(() => {
+        const roomsFetchUrl = `${host}/rooms`;
         const method = 'GET';
         const headers = {
             user: localStorage.getItem('username'),
             'session-token': localStorage.getItem('session_token'),
         };
 
-        async function fetchRooms() {
-            return (await fetch(`${host}/rooms`, {
+        function fetchRooms() {
+            fetch(roomsFetchUrl, {
                 method,
                 headers,
-            })).json();
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.text();
+                }
+                return null;
+            })
+            .then((data) => {
+                const fetchedRooms = JSON.parse(data);
+                if (fetchedRooms.length > 0) {
+                    setHasRooms(true);
+                } else {
+                    setIsDataFound(false);
+                    setIsLoading(false);
+                }
+            })
+            .catch((e) => console.log(e));
         }
 
-        try {
-            const rooms = fetchRooms();
-            if (rooms.length > 0) {
-                setHasRooms(true);
-            }
-        } catch (e) {
-            console.log(e);
-        }
+        fetchRooms();
     }, []);
 
     // Fetches devices and room info on page load
@@ -109,17 +120,20 @@ const DevicesPanel = () => {
                 return null;
             })
             .then((data) => {
-                const devices = JSON.parse(data);
+                const fetchedDevices = JSON.parse(data);
 
-                if (devices.length === 0) {
+                if (fetchedDevices.length === 0) {
+                    setHasDevices(false);
                     setIsLoading(false);
+
                     if (fetchMode === 'shared') {
                         setIsShared(false);
                     } else {
                         setIsDataFound(false);
                     }
                 } else {
-                    devices.sort((a, b) => {
+                    setHasDevices(true);
+                    fetchedDevices.sort((a, b) => {
                         const keyA = a.name.toLowerCase();
                         const keyB = b.name.toLowerCase();
 
@@ -137,7 +151,7 @@ const DevicesPanel = () => {
                         return 1;
                     });
 
-                    dispatch({ type: 'POPULATE_DEVICES', devices });
+                    dispatch({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
                     setIsLoading(false);
                 }
             })
@@ -267,13 +281,20 @@ const DevicesPanel = () => {
                 if (!hasRooms) {
                     return (
                         <>
-                            <span>You haven't added any rooms yet. </span>
+                            <span>You haven't added any rooms yet.&nbsp;</span>
                             <a href="/addRoom">Add one now</a>
                             <span>.</span>
                         </>
                     );
                 }
-                return "You haven't added any devices yet. Please add a new one.";
+
+                if (!hasDevices) {
+                    return (
+                        <>
+                            <span>You haven't added any devices yet. Add one now.</span>
+                        </>
+                    );
+                }
             }
             if (fetchMode === 'shared') {
                 return "This owner hasn't shared any devices with you yet.";
