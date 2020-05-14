@@ -10,8 +10,6 @@ import SceneList from './SceneList';
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
 const host = `${window.location.protocol}//${window.location.hostname}:8888`;
-const roomsFetchUrl = `${host}/rooms`;
-const devicesFetchUrl = `${host}/devices`;
 const scenesFetchUrl = `${host}/scenes`;
 const guestScenesFetchUrl = `${host}/guests/${params.get('owner')}/scenes`;
 const fetchOwnerUrl = `${host}/guests/houses`;
@@ -28,6 +26,8 @@ const ScenesPanel = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isShared, setIsShared] = useState(true);
     const [isFakeOwner, setFakeOwner] = useState(false);
+    const [hasRooms, setHasRooms] = useState(false);
+    const [hasDevices, setHasDevices] = useState(false);
     const [isNetworkError, setIsNetworkError] = useState(false);
     const [title, setTitle] = useState('');
     const [isGuest, setIsGuest] = useState(false);
@@ -35,6 +35,8 @@ const ScenesPanel = () => {
 
     // Fetches scenes on page load
     useEffect(() => {
+        const roomsFetchUrl = `${host}/rooms`;
+        const devicesFetchUrl = `${host}/devices`;
         const method = 'GET';
         const headers = {
             user: localStorage.getItem('username'),
@@ -49,8 +51,47 @@ const ScenesPanel = () => {
             fetchUrl = scenesFetchUrl;
         }
 
+        function fetchRooms() {
+            fetch(roomsFetchUrl, {
+                method,
+                headers,
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.text();
+                }
+                return null;
+            })
+            .then((data) => {
+                const fetchedRooms = JSON.parse(data);
+                if (fetchedRooms.length > 0) {
+                    setHasRooms(true);
+                }
+            })
+            .catch((e) => console.log(e));
+        }
+
+        function fetchDevices() {
+            fetch(devicesFetchUrl, {
+                method,
+                headers,
+            })
+            .then((res) => {
+                if (res.status === 200) {
+                    return res.text();
+                }
+                return null;
+            })
+            .then((data) => {
+                const fetchedDevices = JSON.parse(data);
+                if (fetchedDevices.length > 0) {
+                    setHasDevices(true);
+                }
+            })
+            .catch((e) => console.log(e));
+        }
+
         function fetchScenes() {
-            console.log(fetchUrl);
             fetch(fetchUrl, {
                 method,
                 headers,
@@ -66,7 +107,6 @@ const ScenesPanel = () => {
                 return null;
             })
             .then((data) => {
-                setIsLoading(false);
                 const fetchedScenes = JSON.parse(data);
 
                 if (fetchedScenes.length === 0) {
@@ -130,7 +170,7 @@ const ScenesPanel = () => {
                     if (!owner) {
                         window.location.href = '/sharedWithMe';
                     }
-                    
+
                     const ownerName = owner.fullname.split(' ')[0];
                     const nameEndsInS = ownerName[ownerName.length - 1].toLowerCase() === 's';
 
@@ -145,11 +185,18 @@ const ScenesPanel = () => {
             .catch((e) => console.log(e));
         } else { // House view
             setTitle('My Scenes');
-            fetchScenes();
+            fetchRooms();
+
+            if (hasRooms) {
+                fetchDevices();
+                if (hasDevices) {
+                    fetchScenes();
+                }
+            }
         }
 
         setActionCompleted(false);
-    }, []);
+    }, [hasRooms, hasDevices]);
 
     // Fetches scenes on state change, on Reducer's actions completion
     useEffect(() => {
@@ -171,19 +218,17 @@ const ScenesPanel = () => {
                 }
             })
             .then((data) => {
-                setIsLoading(false);
-
                 if (data === null || data.length === 0) {
                     setIsDataFound(false);
                 } else {
-                    const scenes = JSON.parse(data).sort((a, b) => {
+                    const fetchedScenes = JSON.parse(data).sort((a, b) => {
                         const keyA = a.name;
                         const keyB = b.name;
                         if (keyA < keyB) return -1;
                         if (keyA > keyB) return 1;
                         return 0;
                     });
-                    dispatchScene({ type: 'POPULATE_SCENES', scenes });
+                    dispatchScene({ type: 'POPULATE_SCENES', scene: fetchedScenes });
                     setIsLoading(false);
                 }
             })
