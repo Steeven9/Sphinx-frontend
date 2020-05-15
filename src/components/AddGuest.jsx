@@ -107,7 +107,7 @@ class AddGuest extends React.Component {
               type="text"
               name="guestUsername"
               value={this.state.guestUsername}
-              placeholder="Insert Guest Username or Email"
+              placeholder="Insert Guest Username"
               onChange={this.handleGuestUsernameChange}
               required
             />
