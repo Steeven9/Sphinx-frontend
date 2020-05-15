@@ -8,31 +8,31 @@ const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(Circula
 
 class AddGuest extends React.Component {
   constructor(props) {
-      super(props);
-      this.state = {
-          guestUsername: '',
-          error: -1, // -1 nothing, 0 no guest username, 1 guest = this user, 2 everything else
-          errorType: '',
-      };
+    super(props);
+    this.state = {
+      guestUsername: '',
+      error: -1, // -1 nothing, 0 no guest username, 1 guest = this user, 2 everything else
+      errorType: '',
+    };
   }
 
   /**
    * Adds an event listener to call sendDatas when key "Enter" is pressed
    */
   componentDidMount() {
-      document.addEventListener('keydown', (evt) => {
-          if (evt.key === 'Enter') this.sendDatas(evt);
-      });
+    document.addEventListener('keydown', (evt) => {
+      if (evt.key === 'Enter') this.sendDatas(evt);
+    });
   }
 
   // Input Handler
   handleGuestUsernameChange = (evt) => {
-      this.setState({ guestUsername: evt.target.value });
+    this.setState({ guestUsername: evt.target.value });
   }
 
   // Redirection to /guests
   redirectToGuests = () => {
-      window.location.href = '/guests';
+    window.location.href = '/guests';
   }
 
   /**
