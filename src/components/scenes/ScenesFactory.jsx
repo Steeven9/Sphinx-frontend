@@ -98,7 +98,7 @@ const ScenesFactory = () => {
     };
     let fetchedDevices = [];
 
-    fetch(`${fetchUrl}:8080/devices`, {
+    fetch(`${fetchUrl}:8888/devices`, {
       method,
       headers,
     })
@@ -182,6 +182,10 @@ const ScenesFactory = () => {
   // Discards cached state and extract the next one
   useEffect(() => {
   }, [effects]);
+
+  useEffect(() => {
+    dispatchDevices({ type: 'POPULATE_DEVICES', devices });
+  }, [devices, globalRight, globalLeft]);
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -328,28 +332,31 @@ const ScenesFactory = () => {
                   <span
                     className="center-text bold"
                   >
-                                        {!isEditing ? 'Creation successful!' : 'Modification successful!'}
-                                      </span>
+                    {!isEditing ? 'Creation successful!' : 'Modification successful!'}
+                  </span>
                 )
                 : (
                   <div>
-                                        <span className="center-tex bold">
-                                          {!isEditing ? 'Creation failed!' : 'Modification failed!'}
-                                        </span>
+                    <span className="center-tex bold">
+                      {!isEditing ? 'Creation failed!' : 'Modification failed!'}
+                    </span>
                     <span className="center-text">Please review your scene and try again.</span>
                   </div>
                 )}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <button type="button" name="button" className="btn-secondary btn waves-effect waves-light center"
-                    onClick={() => {
-                      if (actionCompleted) {
-                        handleRedirect();
-                      } else {
-                        setConfirmation(false);
-                      }
-                    }}
+            <button
+              className="btn-secondary btn waves-effect waves-light center"
+              type="button"
+              name="button"
+              onClick={() => {
+                if (actionCompleted) {
+                  handleRedirect();
+                } else {
+                  setConfirmation(false);
+                }
+              }}
             >
               OK
             </button>
@@ -372,7 +379,7 @@ const ScenesFactory = () => {
         globalLeft,
         setGlobalLeft,
         globalRight,
-        setGlobalRight
+        setGlobalRight,
       }}
     >
       <div className="container scene-factory-box">
@@ -386,13 +393,14 @@ const ScenesFactory = () => {
                   <div className="col l4">
                     <div>
                       <label>
-                                <span
-                                  className="row align-left lbl-scene-name-align"
-                                >
-Scene name
-                                  </span>
+                        <span
+                          className="row align-left lbl-scene-name-align"
+                        >
+                          Scene name
+                        </span>
                         <input
-                          className="row scenes-factory-name-input" type="text"
+                          className="row scenes-factory-name-input"
+                          type="text"
                           name="name"
                           placeholder="Type a name"
                           onChange={(e) => {
@@ -406,15 +414,16 @@ Scene name
                               effects,
                             });
                           }}
-                          value={sceneName} required
+                          value={sceneName}
+                          required
                         />
                       </label>
                     </div>
                     <span
                       className={hasName ? 'float-left l12 error-message align-error-message-scene-name' : 'hidden'}
                     >
-Scenes must have a name
-                          </span>
+                      Scenes must have a name
+                    </span>
 
                   </div>
 
@@ -422,7 +431,8 @@ Scenes must have a name
                     <label className="row">Icon</label>
                     <div className="row">
                       <img
-                        className="fixedSizeIcon btn-icon" src={icon}
+                        className="fixedSizeIcon btn-icon"
+                        src={icon}
                         alt="icon error"
                         onClick={() => setOpen(true)}
                       />
@@ -432,9 +442,7 @@ Scenes must have a name
                         className="material-icons btn-icon btn-icon-edit-fix"
                         onClick={() => setOpen(true)}
                       >
-                        {' '}
                         edit
-                        {' '}
                       </i>
                     </div>
                     {open && <IconModal />}
@@ -445,7 +453,9 @@ Scenes must have a name
                       <label className="col">
                         <span className="col">Shared with guests:</span>
                         <input
-                          className="col" type="checkbox" checked={shared}
+                          className="col"
+                          type="checkbox"
+                          checked={shared}
                           onChange={(e) => toggleShared(e)}
                         />
                         <span className="lever" />
@@ -464,7 +474,8 @@ Scenes must have a name
                   <div className="col l12">
                     <div className="row right-text">
                       <button
-                        type="button" name="button"
+                        type="button"
+                        name="button"
                         className="btn-secondary btn waves-effect waves-light"
                         onClick={() => {
                           handleRedirect();
@@ -473,7 +484,8 @@ Scenes must have a name
                         Cancel
                       </button>
                       <button
-                        type="button" name="button"
+                        type="button"
+                        name="button"
                         className={isEditing ? 'btn-secondary btn waves-effect waves-light' : 'hidden'}
                         onClick={() => {
                         }}
@@ -481,7 +493,9 @@ Scenes must have a name
                         Delete
                       </button>
                       <button
-                        type=" button" name=" button" disabled={!isValid || isLoading}
+                        type=" button"
+                        name=" button"
+                        disabled={!isValid || isLoading}
                         className="btn-primary btn waves-effect waves-light"
                         onClick={(e) => {
                           e.preventDefault();
@@ -524,14 +538,12 @@ Scenes must have a name
 
             <Grid item lg={12} className=" scene-content-box-instructions">
               <span className=" bold">Step 1: </span>
-              {' '}
               <span>Set your scene configuration</span>
-              {' '}
               <span
                 className="text-emphasis"
               >
-                      (every effect must have at least one device assigned)
-                    </span>
+                (every effect must have at least one device assigned)
+              </span>
             </Grid>
             <Grid item xs={12} sm={12} md={12} lg={12}>
               <Paper xs={12} sm={12} md={12} lg={12} elevation={3} className={classes.paper}>
@@ -568,8 +580,7 @@ Scenes must have a name
               {!effects[0] || effects[0].type === 0 || !effects[0].visible
                 ? (
                   <p className="text-emphasis">
-                    Add an effect to see the available devices for
-                    it.
+                    Add an effect to see the available devices for it.
                   </p>
                 ) : undefined}
             </Grid>
@@ -580,4 +591,5 @@ Scenes must have a name
     </ScenesContext.Provider>
   );
 };
+
 export { ScenesFactory as default };

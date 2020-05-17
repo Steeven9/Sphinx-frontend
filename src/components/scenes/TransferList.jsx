@@ -81,7 +81,8 @@ function getMeasureUnit(effectConfig) {
  * @param {} otherArray
  */
 function compareArrays(otherArray) {
-  return (current) => otherArray.filter((other) => other.id === current.id || other === current.id).length === 0;
+  return (current) => otherArray.filter((other) => other.id === current.id
+                                                   || other === current.id).length === 0;
 }
 
 function getNotUsedDevices(allDevices, currentDevices) {
@@ -121,7 +122,14 @@ function getDevicesByEffectType(devices, types) {
 
 const TransferList = (config) => {
   const {
-    devices, dispatchScenes, dispatchEffects, isEditing, globalLeft, globalRight, setGlobalLeft, setGlobalRight,
+    devices,
+    dispatchScenes,
+    dispatchEffects,
+    isEditing,
+    globalLeft,
+    setGlobalLeft,
+    globalRight,
+    setGlobalRight,
   } = useContext(ScenesContext);
   const classes = useStyles();
   const [checked, setChecked] = React.useState([]);
@@ -130,6 +138,37 @@ const TransferList = (config) => {
   const { effectConfig } = config;
   const leftLength = left.length;
   const rightLength = right.length;
+
+  /**
+   * Filters all devices that are not available for a same type of effect
+   * @param rightDevices
+   * @returns {*}
+   */
+  function getAvailableDevices(rightDevices) {
+    const unavailableDevices = globalLeft.filter((g) => g.effectType === effectConfig.type
+                                                        && g.effectId !== effectConfig.id);
+    const availableDevices = getNotUsedDevices(rightDevices, unavailableDevices);
+    availableDevices.sort((a, b) => {
+      const keyA = a.name.toLowerCase();
+      const keyB = b.name.toLowerCase();
+      if (keyA === keyB) {
+        if (a.id < b.id) {
+          return -1;
+        }
+        if (a.id > b.id) {
+          return 1;
+        }
+      }
+      if (keyA < keyB) {
+        return -1;
+      }
+      return 1;
+    });
+
+    console.log(`configId: ${config.effectConfig.id} | type: ${effectConfig.type} | name: ${effectConfig.name} | value: ${effectConfig.slider}`);
+    availableDevices.forEach((d) => console.log(`id: ${d.id} | name: ${d.name}`));
+    return availableDevices;
+  }
 
   // Loads the devices to the left or right sides of the Transfer List on page load
   useEffect(() => {
@@ -142,10 +181,13 @@ const TransferList = (config) => {
       setLeft(usedDevices);
       setRight(unusedDevices);
     } else if (leftLength === 0 && rightLength === 0) {
-      setRight(filteredDevices);
+      // setRight(filteredDevices);
+      setRight(getAvailableDevices(filteredDevices));
     }
   }, [config, devices, leftLength, rightLength, isEditing]);
 
+  useEffect(() => {
+  }, [left, right]);
 
   const handleDelete = (e) => {
     e.preventDefault();
@@ -197,10 +239,15 @@ const TransferList = (config) => {
     const newGlobalLeft = getNotUsedDevices(globalLeft, toGlobalLeft);
     setGlobalLeft([...toGlobalLeft, ...newGlobalLeft]);
     setLeft(leftDevices);
-    setRight(rightDevices);
+    // setRight(rightDevices);
+    setRight(getAvailableDevices(rightDevices));
     setChecked(checkedDevices);
 
-    dispatchScenes({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: effectConfig });
+    dispatchScenes({
+      type: 'UPDATE_TRANSFER_LIST_STATE',
+      devices: leftDevices,
+      config: effectConfig,
+    });
   };
 
   const handleCheckedRight = () => {
@@ -209,16 +256,62 @@ const TransferList = (config) => {
     const checkedDevices = not(checked, leftChecked);
     const newGlobalLeft = getNotUsedDevices(globalLeft, rightDevices);
 
+    setGlobalRight(leftChecked);
     setGlobalLeft(newGlobalLeft);
     setRight(rightDevices);
     setLeft(leftDevices);
     setChecked(checkedDevices);
-    dispatchScenes({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: effectConfig });
+    dispatchScenes({
+      type: 'UPDATE_TRANSFER_LIST_STATE',
+      devices: leftDevices,
+      config: effectConfig,
+    });
   };
 
-  useEffect(() => {
-    const filteredRight = right.filter((device) => filter.id &&);
-  }, [globalLeft]);
+  // useEffect(() => {
+  //   console.log('re-rendering...')
+  // const filteredRight = getNotUsedDevices(right, globalLeft);
+
+  // const filteredRight = right.filter((notUsedDevice) =>
+  //   globalLeft.filter((usedDevice) => {
+  //     console.log(!usedDevice.effectType)
+  //     return !usedDevice.effectType
+  //   }));
+
+  // const filteredGlobalLeft = globalLeft.filter((g) => {
+  //   // console.log(g)
+  //   // console.log(effectConfig)
+  //   return g.effectType === effectConfig.type;
+  // });
+
+  //   const unavailableDevices = globalLeft.filter((g) => g.effectType === effectConfig.type && g.effectId !== effectConfig.id);
+  //   const availableDevices = getNotUsedDevices(right, unavailableDevices);
+  //   availableDevices.sort((a, b) => {
+  //     const keyA = a.name.toLowerCase();
+  //     const keyB = b.name.toLowerCase();
+  //     if (keyA === keyB) {
+  //       if (a.id < b.id) {
+  //         return -1;
+  //       }
+  //       if (a.id > b.id) {
+  //         return 1;
+  //       }
+  //     }
+  //     if (keyA < keyB) {
+  //       return -1;
+  //     }
+  //     return 1;
+  //   });
+  //
+  //   console.log(`configId: ${config.effectConfig.id} | type: ${effectConfig.type} | name: ${effectConfig.name} | value: ${effectConfig.slider}`);
+  //   availableDevices.forEach((d) => console.log(`id: ${d.id} | name: ${d.name}`))
+  //   // console.log(JSON.stringify(availableDevices));
+  //   // console.log(JSON.stringify(sort(availableDevices)));
+  //
+  //   // setRight(filteredRight);
+  //   // console.log(`configId: ${config.effectConfig.id} | type: ${config.effectConfig.type}  | name: ${config.effectConfig.name} | value: ${config.effectConfig.slider}`);
+  //   // console.log(JSON.stringify(filteredRight));
+  // }, [globalLeft]);
 
   const gridClasses = useGridStyles();
 
@@ -323,5 +416,4 @@ const TransferList = (config) => {
     </Grid>
   );
 };
-
 export { TransferList as default };
