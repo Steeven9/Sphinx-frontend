@@ -44,7 +44,6 @@ const ScenesFactory = () => {
   const [scenes, dispatchScenes] = useReducer(scenesReducer, []);
   const [effects, dispatchEffects] = useReducer(effectsReducer, []);
   const [devices, dispatchDevices] = useReducer(devicesReducer, []);
-  const [globalLeft, setGlobalLeft] = React.useState([]);
   const [globalRight, setGlobalRight] = React.useState([]);
   const [confirmation, setConfirmation] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -67,18 +66,6 @@ const ScenesFactory = () => {
     devices: [],
     visible: false,
   };
-
-  // // Controls if a guest is accessing this view
-  // if (path[1] === 'guest' && params.get('id')) {
-  //     isGuest = true
-  // }
-
-  // function getDeviceById(id) {
-  //     return devices.filter(device => {
-  //         console.log(device.id)
-  //         return device.id === id
-  //     })
-  // }
 
   // Validates if all data necessary for a POST or PUT is available and enables or disables the 'Save' button
   useEffect(() => {
@@ -185,7 +172,7 @@ const ScenesFactory = () => {
 
   useEffect(() => {
     dispatchDevices({ type: 'POPULATE_DEVICES', devices });
-  }, [devices, globalRight, globalLeft]);
+  }, [devices, globalRight]);
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -377,8 +364,6 @@ const ScenesFactory = () => {
         devices,
         setValid,
         isEditing,
-        globalLeft,
-        setGlobalLeft,
         globalRight,
         setGlobalRight,
       }}
