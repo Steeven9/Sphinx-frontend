@@ -177,22 +177,49 @@ const TransferList = (config) => {
   function removeDeviceFlags(device) {
     switch (effectConfig.type) {
       case 1: // Light intensity
-        delete device.usedIntensityId;
+        if (effectConfig.id === device.usedIntensityId) {
+          delete device.usedIntensityId;
+        }
         break;
       case 2: // Temperature
-        delete device.usedTemperatureId;
+        if (effectConfig.id === device.usedTemperatureId) {
+          delete device.usedTemperatureId;
+        }
         break;
       case 3: // Power
-        delete device.usedPowerId;
-        delete device.usedPowerOn;
+        if (effectConfig.id === device.usedPowerId) {
+          delete device.usedPowerId;
+          delete device.usedPowerOn;
+        }
         break;
       case 4: // Curtains aperture
-        delete device.usedApertureId;
+        if (effectConfig.id === device.usedApertureId) {
+          delete device.usedApertureId;
+        }
         break;
       default:
         break;
     }
   }
+
+  const sortDevices = useCallback((devicesToSort) => {
+    devicesToSort.sort((a, b) => {
+      const keyA = a.name.toLowerCase();
+      const keyB = b.name.toLowerCase();
+      if (keyA === keyB) {
+        if (a.id < b.id) {
+          return -1;
+        }
+        if (a.id > b.id) {
+          return 1;
+        }
+      }
+      if (keyA < keyB) {
+        return -1;
+      }
+      return 1;
+    });
+  }, []);
 
   const isValidLeftDevice = useCallback(
     (device) => {
@@ -220,10 +247,6 @@ const TransferList = (config) => {
           return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
                  || (device.usedIntensityId === undefined && device.usedPowerOn);
         case 2: // Temperature
-          // console.log('-------')
-          // console.log(device.usedTemperatureId === undefined && device.usedPowerId === undefined)
-          // console.log(device.usedTemperatureId === undefined && device.usedPowerOn)
-          // console.log(device)
           return (device.usedTemperatureId === undefined && device.usedPowerId === undefined)
                  || (device.usedTemperatureId === undefined && device.usedPowerOn);
         case 3: // Power
@@ -238,54 +261,6 @@ const TransferList = (config) => {
       }
     }, [effectConfig.type, effectConfig.on],
   );
-
-  // function isValidLeftDevice(device) {
-  //   switch (effectConfig.type) {
-  //     case 1: // Light intensity
-  //       return (device.usedIntensityId === effectConfig.id && !device.usedPowerId)
-  //              || (device.usedIntensityId === effectConfig.id && device.usedPowerOn);
-  //     case 2: // Temperature
-  //       return (device.usedTemperatureId === effectConfig.id && !device.usedPowerId)
-  //              || (device.usedTemperatureId === effectConfig.id && device.usedPowerOn);
-  //     case 3: // Power
-  //       return device.usedPowerId === effectConfig.id;
-  //     case 4: // Curtains aperture
-  //       return device.usedApertureId === effectConfig.id;
-  //     default:
-  //       return false;
-  //   }
-  // }
-
-  // function isValidRightDevice(device) {
-  //   switch (effectConfig.type) {
-  //     case 1: // Light intensity
-  //       return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
-  //              || (device.usedIntensityId === undefined && device.usedPowerOn);
-  //     case 2: // Temperature
-  //             // console.log('-------')
-  //             // console.log(device.usedTemperatureId === undefined && device.usedPowerId === undefined)
-  //             // console.log(device.usedTemperatureId === undefined && device.usedPowerOn)
-  //             // console.log(device)
-  //       return (device.usedTemperatureId === undefined && device.usedPowerId === undefined)
-  //              || (device.usedTemperatureId === undefined && device.usedPowerOn);
-  //     case 3: // Power
-  //       return (effectConfig.on && device.usedPowerId === undefined)
-  //              || (!effectConfig.on && device.usedPowerId === undefined
-  //                  && device.usedIntensityId === undefined
-  //                  && device.usedTemperatureId === undefined);
-  //     case 4: // Curtains aperture
-  //       return device.usedApertureId === undefined;
-  //     default:
-  //       return false;
-  //   }
-  // }
-
-  // function getValidDevices(side, devicesToEvaluate) {
-  //   if (side === 'right') {
-  //     return devicesToEvaluate.filter((device) => isValidRightDevice(device));
-  //   }
-  //   return devicesToEvaluate.filter((device) => isValidLeftDevice(device));
-  // }
 
   const getValidDevices = useCallback(
     (side, devicesToEvaluate) => {
@@ -312,26 +287,10 @@ const TransferList = (config) => {
       let availableDevices = getNotUsedDevices(filteredDevices, unavailableDevices);
 
       availableDevices = getValidDevices('right', availableDevices);
-
-      availableDevices.sort((a, b) => {
-        const keyA = a.name.toLowerCase();
-        const keyB = b.name.toLowerCase();
-        if (keyA === keyB) {
-          if (a.id < b.id) {
-            return -1;
-          }
-          if (a.id > b.id) {
-            return 1;
-          }
-        }
-        if (keyA < keyB) {
-          return -1;
-        }
-        return 1;
-      });
+      availableDevices = sortDevices(availableDevices);
       setRight(availableDevices);
     }
-  }, [config, devices, leftLength, rightLength, isEditing, getValidDevices]);
+  }, [config, devices, leftLength, rightLength, isEditing, getValidDevices, sortDevices]);
 
   useEffect(() => {
     const devicesTypes = getDevicesTypesByEffectType(config.effectConfig);
@@ -373,25 +332,6 @@ const TransferList = (config) => {
       setChecked(union(checked, items));
     }
   };
-
-  function sortDevices(devicesToSort) {
-    devicesToSort.sort((a, b) => {
-      const keyA = a.name.toLowerCase();
-      const keyB = b.name.toLowerCase();
-      if (keyA === keyB) {
-        if (a.id < b.id) {
-          return -1;
-        }
-        if (a.id > b.id) {
-          return 1;
-        }
-      }
-      if (keyA < keyB) {
-        return -1;
-      }
-      return 1;
-    });
-  }
 
   const handleCheckedLeft = () => {
     let leftDevices = left.concat(rightChecked);
@@ -529,4 +469,5 @@ const TransferList = (config) => {
     </Grid>
   );
 };
+
 export { TransferList as default };
