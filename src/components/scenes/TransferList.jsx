@@ -166,6 +166,14 @@ const TransferList = (config) => {
     }
   }
 
+  useEffect(() => {
+    left.forEach((device) => {
+      if (device.usedPowerId === effectConfig.id) {
+        device.usedPowerOn = effectConfig.on;
+      }
+    });
+  }, [effectConfig.id, effectConfig.on, left]);
+
   function removeDeviceFlags(device) {
     switch (effectConfig.type) {
       case 1: // Light intensity
@@ -195,10 +203,9 @@ const TransferList = (config) => {
         return (device.usedTemperatureId === effectConfig.id && !device.usedPowerId)
                || (device.usedTemperatureId === effectConfig.id && device.usedPowerOn);
       case 3: // Power
-        return (device.usedPowerId === effectConfig.id && device.usedPowerOn)
-               || (device.usedPowerId === effectConfig.id && !device.usedPowerOn && !device.usedIntensityId);
+        return device.usedPowerId === effectConfig.id;
       case 4: // Curtains aperture
-        return (device.usedApertureId === effectConfig.id);
+        return device.usedApertureId === effectConfig.id;
       default:
         return false;
     }
@@ -210,9 +217,17 @@ const TransferList = (config) => {
         return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
                || (device.usedIntensityId === undefined && device.usedPowerOn);
       case 2: // Temperature
-        return device.usedTemperatureId === undefined;
+              // console.log('-------')
+              // console.log(device.usedTemperatureId === undefined && device.usedPowerId === undefined)
+              // console.log(device.usedTemperatureId === undefined && device.usedPowerOn)
+              // console.log(device)
+        return (device.usedTemperatureId === undefined && device.usedPowerId === undefined)
+               || (device.usedTemperatureId === undefined && device.usedPowerOn);
       case 3: // Power
-        return device.usedPowerId === undefined;
+        return (effectConfig.on && device.usedPowerId === undefined)
+               || (!effectConfig.on && device.usedPowerId === undefined
+                   && device.usedIntensityId === undefined
+                   && device.usedTemperatureId === undefined);
       case 4: // Curtains aperture
         return device.usedApertureId === undefined;
       default:
