@@ -19,6 +19,9 @@ function prepareSceneForFetch(scene) {
 
 const scenesReducer = (stateParam, action) => {
   let state = stateParam;
+  let copyCount = 1;
+  let duplicatedScene = {};
+
   const host = `${window.location.protocol}//${window.location.hostname}:8888`;
   const fetchUrl = `${host}/scenes`;
   const headers = {
@@ -71,6 +74,19 @@ const scenesReducer = (stateParam, action) => {
         shared: action.shared,
         effects: action.effects,
       };
+
+      newScene.effects.forEach((effect) => {
+        delete effect.visible;
+        delete effect.preexisting;
+
+        if (effect.slider !== undefined) {
+          if (effect.type === 1 || effect.type === 4) {
+            effect.slider = parseFloat(effect.slider) / 100;
+          } else {
+            effect.slider = parseFloat(effect.slider);
+          }
+        }
+      });
 
       // Mutates the devices[] into IDs only in each effect
       prepareSceneForFetch(newScene);
@@ -139,8 +155,6 @@ const scenesReducer = (stateParam, action) => {
 
     case 'DUPLICATE_SCENE':
       // console.log('Dispatch: DUPLICATE_SCENE');
-      let copyCount = 1;
-      let duplicatedScene = {};
 
       // Renames a copy of a scene sequentially, respecting the existing copy numbers from 1 to n
       state.forEach((scene) => {

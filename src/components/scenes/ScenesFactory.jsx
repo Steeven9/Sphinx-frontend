@@ -148,6 +148,33 @@ const ScenesFactory = () => {
           scene.effects.forEach((effect) => {
             effect.visible = true;
             effect.preexisting = true;
+
+            if (effect.slider !== undefined) {
+              if (effect.type === 1 || effect.type === 4) {
+                effect.slider = parseFloat(effect.slider) * 100;
+              }
+            }
+
+            effect.devices.forEach((device) => {
+              switch (effect.type) {
+                case 1: // Light intensity
+                  device.usedIntensityId = effect.id;
+                  break;
+                case 2: // Temperature
+                  device.usedTemperatureId = effect.id;
+                  break;
+                case 3: // Power
+                  device.usedPowerId = effect.id;
+                  device.usedPowerOn = effectConfig.on;
+                  break;
+                case 4: // Curtains aperture
+                  device.usedApertureId = effect.id;
+                  break;
+                default:
+                  break;
+              }
+            });
+
             dispatchEffects({
               type: 'LOAD_SCENE',
               effectConfig: effect,
@@ -164,11 +191,7 @@ const ScenesFactory = () => {
 
   // Gets rid of cached state and extracts the next one
   useEffect(() => {
-  }, [scenes]);
-
-  // Discards cached state and extract the next one
-  useEffect(() => {
-  }, [effects]);
+  }, [scenes, effects]);
 
   useEffect(() => {
     dispatchDevices({ type: 'POPULATE_DEVICES', devices });
