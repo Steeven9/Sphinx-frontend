@@ -21,7 +21,9 @@ const scenesReducer = (stateParam, action) => {
   let state = stateParam;
   let copyCount = 1;
   let duplicatedScene = {};
-
+  let sceneCopyNumber = 0;
+  let newScenes = [];
+  const sceneCopyNumbers = [];
   const host = `${window.location.protocol}//${window.location.hostname}:8888`;
   const fetchUrl = `${host}/scenes`;
   const headers = {
@@ -155,23 +157,29 @@ const scenesReducer = (stateParam, action) => {
 
     case 'DUPLICATE_SCENE':
       // console.log('Dispatch: DUPLICATE_SCENE');
-
       // Renames a copy of a scene sequentially, respecting the existing copy numbers from 1 to n
       state.forEach((scene) => {
         let sceneName = scene.name.split(' ');
-        let sceneCopyNumber = 0;
+        const originalName = action.scene.name;
 
         if (sceneName.length > 3 && sceneName[0] === 'Copy' && sceneName[1] === 'of') {
-          sceneName.splice(0, 2);
-          sceneCopyNumber = parseInt(sceneName[sceneName.length - 1]);
-        }
-        sceneName.pop();
-        sceneName = sceneName.join(' ');
+          sceneCopyNumber = parseInt(sceneName.pop(), 10);
+          sceneName = sceneName.join(' ');
 
-        if (sceneName === action.scene.name) {
-          if (copyCount === sceneCopyNumber) {
-            copyCount++;
+          if (sceneName === `Copy of ${originalName}`) {
+            sceneCopyNumbers.push(sceneCopyNumber);
           }
+        }
+      });
+
+      if (sceneCopyNumbers.length > 0) {
+        sceneCopyNumbers.sort((a, b) => a - b);
+      }
+
+      sceneCopyNumbers.forEach(() => {
+        const found = sceneCopyNumbers.includes(copyCount);
+        if (found) {
+          copyCount += 1;
         }
       });
 
@@ -198,8 +206,26 @@ const scenesReducer = (stateParam, action) => {
       .catch((e) => console.log(e));
 
       duplicatedScene.id = Math.floor((Math.random() * 1000) * 5);
-      return [duplicatedScene, ...state];
 
+      newScenes = [duplicatedScene, ...state];
+      newScenes.sort((a, b) => {
+        const keyA = a.name.toLowerCase();
+        const keyB = b.name.toLowerCase();
+
+        if (keyA === keyB) {
+          if (a.id < b.id) {
+            return -1;
+          }
+          if (a.id > b.id) {
+            return 1;
+          }
+        }
+        if (keyA < keyB) {
+          return -1;
+        }
+        return 1;
+      });
+      return newScenes;
 
     case 'MODIFY_SCENE':
       // console.log('Dispatch: MODIFY_SCENE');
@@ -237,5 +263,4 @@ const scenesReducer = (stateParam, action) => {
       return state;
   }
 };
-
 export { scenesReducer as default };
