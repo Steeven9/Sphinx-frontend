@@ -24,7 +24,7 @@ const scenesReducer = (stateParam, action) => {
   let sceneCopyNumber = 0;
   let newScenes = [];
   const sceneCopyNumbers = [];
-  const host = `${window.location.protocol}//${window.location.hostname}:8888`;
+  const host = `${window.location.protocol}//${window.location.hostname}:8080`;
   const fetchUrl = `${host}/scenes`;
   const headers = {
     user: localStorage.getItem('username'),

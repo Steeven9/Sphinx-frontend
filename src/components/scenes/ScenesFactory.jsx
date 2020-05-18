@@ -19,21 +19,7 @@ import SceneEffectConfig from './SceneEffectConfig';
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-// const host = window.location.protocol + '//' + window.location.hostname + ':8888';
-// const scenesFetchUrl = host + '/scenes';
-// const guestScenesFetchUrl = host + '/shared/' + params.get('id') + '/scenes';
-// const fetchUrl = path[1] === 'guest' && +params.get('id') ? guestScenesFetchUrl : scenesFetchUrl;
-
-// let isLoading = false;
-// let isGuest = false;
 let hasName = false;
-
-// const headers = {
-//     'user': localStorage.getItem('username'),
-//     'session-token': localStorage.getItem('session_token'),
-//     'Accept': 'application/json',
-//     'Content-Type': 'application/json'
-// };
 
 /**
  * Creates customizable scenes
@@ -85,7 +71,7 @@ const ScenesFactory = () => {
     };
     let fetchedDevices = [];
 
-    fetch(`${fetchUrl}:8888/devices`, {
+    fetch(`${fetchUrl}:8080/devices`, {
       method,
       headers,
     })
@@ -115,7 +101,7 @@ const ScenesFactory = () => {
 
     if (isEditing) {
       setLoading(true);
-      fetch(`${fetchUrl}:8888/scenes/${params.get('id')}`, {
+      fetch(`${fetchUrl}:8080/scenes/${params.get('id')}`, {
         method,
         headers,
       })

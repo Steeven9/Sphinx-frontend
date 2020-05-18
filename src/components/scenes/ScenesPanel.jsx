@@ -9,7 +9,7 @@ import SceneList from './SceneList';
 
 const params = (new URL(document.location)).searchParams;
 const path = window.location.pathname.toLowerCase().split('/');
-const host = `${window.location.protocol}//${window.location.hostname}:8888`;
+const host = `${window.location.protocol}//${window.location.hostname}:8080`;
 const scenesFetchUrl = `${host}/scenes`;
 const guestScenesFetchUrl = `${host}/guests/${params.get('owner')}/scenes`;
 const fetchOwnerUrl = `${host}/guests/houses`;
