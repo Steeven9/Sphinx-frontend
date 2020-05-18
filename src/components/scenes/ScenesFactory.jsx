@@ -94,6 +94,7 @@ const ScenesFactory = () => {
         });
         dispatchDevices({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
       }
+      throw new Error('Devices array is null!');
     })
     .catch((e) => {
       console.log(e);
