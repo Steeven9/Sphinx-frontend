@@ -186,7 +186,7 @@ const ScenesFactory = () => {
         console.log(e);
       });
     }
-  }, [isEditing]);
+  }, [isEditing, effectConfig.on]);
 
 
   // Gets rid of cached state and extracts the next one

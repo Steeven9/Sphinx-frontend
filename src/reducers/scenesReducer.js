@@ -191,6 +191,19 @@ const scenesReducer = (stateParam, action) => {
         effects: action.scene.effects,
       };
 
+      duplicatedScene.effects.forEach((effect) => {
+        delete effect.visible;
+        delete effect.preexisting;
+
+        if (effect.slider !== undefined) {
+          if (effect.type === 1 || effect.type === 4) {
+            effect.slider = parseFloat(effect.slider) / 100;
+          } else {
+            effect.slider = parseFloat(effect.slider);
+          }
+        }
+      });
+
       fetch(fetchUrl, {
         method: 'POST',
         headers,
@@ -236,6 +249,19 @@ const scenesReducer = (stateParam, action) => {
         shared: action.shared,
         effects: action.effects,
       };
+
+      editedScene.effects.forEach((effect) => {
+        delete effect.visible;
+        delete effect.preexisting;
+
+        if (effect.slider !== undefined) {
+          if (effect.type === 1 || effect.type === 4) {
+            effect.slider = parseFloat(effect.slider) / 100;
+          } else {
+            effect.slider = parseFloat(effect.slider);
+          }
+        }
+      });
 
       // Mutates the devices[] into IDs only in each effect
       prepareSceneForFetch(editedScene);

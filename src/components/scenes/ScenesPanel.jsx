@@ -206,7 +206,7 @@ const ScenesPanel = () => {
   }, [hasRooms, hasDevices]);
 
   // Fetches scenes on state change, on Reducer's actions completion
-  useEffect(() => { //xx
+  useEffect(() => {
     if (actionCompleted) {
       fetch(fetchUrl, {
         method: 'GET',
