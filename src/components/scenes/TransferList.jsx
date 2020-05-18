@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -194,53 +194,107 @@ const TransferList = (config) => {
     }
   }
 
-  function isValidLeftDevice(device) {
-    switch (effectConfig.type) {
-      case 1: // Light intensity
-        return (device.usedIntensityId === effectConfig.id && !device.usedPowerId)
-               || (device.usedIntensityId === effectConfig.id && device.usedPowerOn);
-      case 2: // Temperature
-        return (device.usedTemperatureId === effectConfig.id && !device.usedPowerId)
-               || (device.usedTemperatureId === effectConfig.id && device.usedPowerOn);
-      case 3: // Power
-        return device.usedPowerId === effectConfig.id;
-      case 4: // Curtains aperture
-        return device.usedApertureId === effectConfig.id;
-      default:
-        return false;
-    }
-  }
+  const isValidLeftDevice = useCallback(
+    (device) => {
+      switch (effectConfig.type) {
+        case 1: // Light intensity
+          return (device.usedIntensityId === effectConfig.id && !device.usedPowerId)
+                 || (device.usedIntensityId === effectConfig.id && device.usedPowerOn);
+        case 2: // Temperature
+          return (device.usedTemperatureId === effectConfig.id && !device.usedPowerId)
+                 || (device.usedTemperatureId === effectConfig.id && device.usedPowerOn);
+        case 3: // Power
+          return device.usedPowerId === effectConfig.id;
+        case 4: // Curtains aperture
+          return device.usedApertureId === effectConfig.id;
+        default:
+          return false;
+      }
+    }, [effectConfig.id, effectConfig.type],
+  );
 
-  function isValidRightDevice(device) {
-    switch (effectConfig.type) {
-      case 1: // Light intensity
-        return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
-               || (device.usedIntensityId === undefined && device.usedPowerOn);
-      case 2: // Temperature
-              // console.log('-------')
-              // console.log(device.usedTemperatureId === undefined && device.usedPowerId === undefined)
-              // console.log(device.usedTemperatureId === undefined && device.usedPowerOn)
-              // console.log(device)
-        return (device.usedTemperatureId === undefined && device.usedPowerId === undefined)
-               || (device.usedTemperatureId === undefined && device.usedPowerOn);
-      case 3: // Power
-        return (effectConfig.on && device.usedPowerId === undefined)
-               || (!effectConfig.on && device.usedPowerId === undefined
-                   && device.usedIntensityId === undefined
-                   && device.usedTemperatureId === undefined);
-      case 4: // Curtains aperture
-        return device.usedApertureId === undefined;
-      default:
-        return false;
-    }
-  }
+  const isValidRightDevice = useCallback(
+    (device) => {
+      switch (effectConfig.type) {
+        case 1: // Light intensity
+          return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
+                 || (device.usedIntensityId === undefined && device.usedPowerOn);
+        case 2: // Temperature
+          // console.log('-------')
+          // console.log(device.usedTemperatureId === undefined && device.usedPowerId === undefined)
+          // console.log(device.usedTemperatureId === undefined && device.usedPowerOn)
+          // console.log(device)
+          return (device.usedTemperatureId === undefined && device.usedPowerId === undefined)
+                 || (device.usedTemperatureId === undefined && device.usedPowerOn);
+        case 3: // Power
+          return (effectConfig.on && device.usedPowerId === undefined)
+                 || (!effectConfig.on && device.usedPowerId === undefined
+                     && device.usedIntensityId === undefined
+                     && device.usedTemperatureId === undefined);
+        case 4: // Curtains aperture
+          return device.usedApertureId === undefined;
+        default:
+          return false;
+      }
+    }, [effectConfig.type, effectConfig.on],
+  );
 
-  function getValidDevices(side, devicesToEvaluate) {
-    if (side === 'right') {
-      return devicesToEvaluate.filter((device) => isValidRightDevice(device));
-    }
-    return devicesToEvaluate.filter((device) => isValidLeftDevice(device));
-  }
+  // function isValidLeftDevice(device) {
+  //   switch (effectConfig.type) {
+  //     case 1: // Light intensity
+  //       return (device.usedIntensityId === effectConfig.id && !device.usedPowerId)
+  //              || (device.usedIntensityId === effectConfig.id && device.usedPowerOn);
+  //     case 2: // Temperature
+  //       return (device.usedTemperatureId === effectConfig.id && !device.usedPowerId)
+  //              || (device.usedTemperatureId === effectConfig.id && device.usedPowerOn);
+  //     case 3: // Power
+  //       return device.usedPowerId === effectConfig.id;
+  //     case 4: // Curtains aperture
+  //       return device.usedApertureId === effectConfig.id;
+  //     default:
+  //       return false;
+  //   }
+  // }
+
+  // function isValidRightDevice(device) {
+  //   switch (effectConfig.type) {
+  //     case 1: // Light intensity
+  //       return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
+  //              || (device.usedIntensityId === undefined && device.usedPowerOn);
+  //     case 2: // Temperature
+  //             // console.log('-------')
+  //             // console.log(device.usedTemperatureId === undefined && device.usedPowerId === undefined)
+  //             // console.log(device.usedTemperatureId === undefined && device.usedPowerOn)
+  //             // console.log(device)
+  //       return (device.usedTemperatureId === undefined && device.usedPowerId === undefined)
+  //              || (device.usedTemperatureId === undefined && device.usedPowerOn);
+  //     case 3: // Power
+  //       return (effectConfig.on && device.usedPowerId === undefined)
+  //              || (!effectConfig.on && device.usedPowerId === undefined
+  //                  && device.usedIntensityId === undefined
+  //                  && device.usedTemperatureId === undefined);
+  //     case 4: // Curtains aperture
+  //       return device.usedApertureId === undefined;
+  //     default:
+  //       return false;
+  //   }
+  // }
+
+  // function getValidDevices(side, devicesToEvaluate) {
+  //   if (side === 'right') {
+  //     return devicesToEvaluate.filter((device) => isValidRightDevice(device));
+  //   }
+  //   return devicesToEvaluate.filter((device) => isValidLeftDevice(device));
+  // }
+
+  const getValidDevices = useCallback(
+    (side, devicesToEvaluate) => {
+      if (side === 'right') {
+        return devicesToEvaluate.filter((device) => isValidRightDevice(device));
+      }
+      return devicesToEvaluate.filter((device) => isValidLeftDevice(device));
+    }, [isValidLeftDevice, isValidRightDevice],
+  );
 
   // Loads the devices to the left or right sides of the Transfer List on page load
   useEffect(() => {
@@ -277,7 +331,7 @@ const TransferList = (config) => {
       });
       setRight(availableDevices);
     }
-  }, [config, devices, leftLength, rightLength, isEditing]);
+  }, [config, devices, leftLength, rightLength, isEditing, getValidDevices]);
 
   useEffect(() => {
     const devicesTypes = getDevicesTypesByEffectType(config.effectConfig);
@@ -427,13 +481,13 @@ const TransferList = (config) => {
         <Grid container spacing={0}>
           <div className="transfer-list-header-max-width">
             <div className="transfer-list-header">
-              <span>
-                {effectConfig.name}
-                {' '}
-                {(effectConfig.type !== 3) ? effectConfig.slider : undefined}
-                {' '}
-                {getMeasureUnit(effectConfig)}
-              </span>
+                <span>
+                  {effectConfig.name}
+                  {' '}
+                  {(effectConfig.type !== 3) ? effectConfig.slider : undefined}
+                  {' '}
+                  {getMeasureUnit(effectConfig)}
+                </span>
               <i
                 className="material-icons btn-icon-transfer-list right"
                 onClick={(e) => handleDelete(e)}
@@ -444,7 +498,7 @@ const TransferList = (config) => {
           </div>
         </Grid>
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
-          <Grid item>{customList('Controlling', getValidDevices('left', left))}</Grid>
+          <Grid item>{customList('Controlling', ('left', left))}</Grid>
           <Grid item>
             <Grid container direction="column" alignItems="center">
               <Button
