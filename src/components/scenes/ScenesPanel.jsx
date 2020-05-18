@@ -205,48 +205,58 @@ const ScenesPanel = () => {
     setActionCompleted(false);
   }, [hasRooms, hasDevices]);
 
-  // // Fetches scenes on state change, on Reducer's actions completion
-  // useEffect(() => {
-  //     if (actionCompleted) {
-  //         fetch(fetchUrl, {
-  //             method: 'GET',
-  //             headers: {
-  //                 user: localStorage.getItem('username'),
-  //                 'session-token': localStorage.getItem('session_token'),
-  //             },
-  //         })
-  //         .then((res) => {
-  //             if (res.status === 401) {
-  //                 this.props.logOut(1);
-  //             } else if (res.status === 200) {
-  //                 return res.text();
-  //             } else {
-  //                 return null;
-  //             }
-  //         })
-  //         .then((data) => {
-  //             if (data === null || data.length === 0) {
-  //                 setIsDataFound(false);
-  //             } else {
-  //                 const fetchedScenes = JSON.parse(data).sort((a, b) => {
-  //                     const keyA = a.name;
-  //                     const keyB = b.name;
-  //                     if (keyA < keyB) return -1;
-  //                     if (keyA > keyB) return 1;
-  //                     return 0;
-  //                 });
-  //                 dispatchScene({ type: 'POPULATE_SCENES', scene: fetchedScenes });
-  //                 setIsLoading(false);
-  //             }
-  //         })
-  //         .catch((e) => {
-  //             console.log(e);
-  //             setIsLoading(false);
-  //             setIsNetworkError(true);
-  //         });
-  //         setActionCompleted(false);
-  //     }
-  // }, [actionCompleted]);
+  // Fetches scenes on state change, on Reducer's actions completion
+  useEffect(() => { //xx
+    if (actionCompleted) {
+      fetch(fetchUrl, {
+        method: 'GET',
+        headers: {
+          user: localStorage.getItem('username'),
+          'session-token': localStorage.getItem('session_token'),
+        },
+      })
+      .then((res) => {
+        if (res.status === 401) {
+          this.props.logOut(1);
+        } else if (res.status === 200) {
+          return res.text();
+        } else {
+          return null;
+        }
+      })
+      .then((data) => {
+        if (data === null || data.length === 0) {
+          setIsDataFound(false);
+        } else {
+          const fetchedScenes = JSON.parse(data).sort((a, b) => {
+            const keyA = a.name.toLowerCase();
+            const keyB = b.name.toLowerCase();
+
+            if (keyA === keyB) {
+              if (a.id < b.id) {
+                return -1;
+              }
+              if (a.id > b.id) {
+                return 1;
+              }
+            }
+            if (keyA < keyB) {
+              return -1;
+            }
+            return 1;
+          });
+          dispatchScene({ type: 'POPULATE_SCENES', scenes: fetchedScenes });
+          setIsLoading(false);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+        setIsLoading(false);
+        setIsNetworkError(true);
+      });
+      setActionCompleted(false);
+    }
+  }, [actionCompleted]);
 
   // Discards cached state and extract the next one
   useEffect(() => {
