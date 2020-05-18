@@ -242,7 +242,7 @@ const TransferList = (config) => {
                                                        && g.effectId !== config.effectConfig.id);
       let availableDevices = getNotUsedDevices(filteredDevices, unavailableDevices);
 
-      availableDevices = getValidDevices('right', availableDevices)
+      availableDevices = getValidDevices('right', availableDevices);
 
       availableDevices.sort((a, b) => {
         const keyA = a.name.toLowerCase();

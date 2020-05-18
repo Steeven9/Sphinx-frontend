@@ -12,7 +12,7 @@ function prepareSceneForFetch(scene) {
 /**
  * This reducer controls the actions triggered by the events
  * handled by the scene components and its children
- * @param state
+ * @param stateParam
  * @param action
  * @returns {state[]}
  */
@@ -30,11 +30,11 @@ const scenesReducer = (stateParam, action) => {
 
   switch (action.type) {
     case 'POPULATE_SCENES':
-      console.log('Dispatch: POPULATE_SCENES');
+      // console.log('Dispatch: POPULATE_SCENES');
       return action.scenes;
 
     case 'UPDATE_STATE':
-      console.log('Dispatch: UPDATE_STATE');
+      // console.log('Dispatch: UPDATE_STATE');
       state = {
         name: action.name,
         icon: action.icon,
@@ -44,26 +44,26 @@ const scenesReducer = (stateParam, action) => {
       return state;
 
     case 'UPDATE_TRANSFER_LIST_STATE':
-      console.log('Dispatch: UPDATE_TRANSFER_LIST_STATE');
+      // console.log('Dispatch: UPDATE_TRANSFER_LIST_STATE');
       action.config.devices = action.devices;
 
       return action.config;
 
     case 'UPDATE_EFFECTS_STATE':
-      console.log('Dispatch: UPDATE_STATE');
+      // console.log('Dispatch: UPDATE_STATE');
       state.devices = action.devices;
       return [...state];
 
     case 'LOAD_SCENE':
-      console.log('Dispatch: LOAD_SCENE');
+      // console.log('Dispatch: LOAD_SCENE');
       return [action.effectConfig, ...state];
 
     case 'CREATE_BLANK_EFFECT':
-      console.log('Dispatch: CREATE_BLANK_EFFECT');
+      // console.log('Dispatch: CREATE_BLANK_EFFECT');
       return [...state, action.effectConfig];
 
     case 'CREATE_SCENE':
-      console.log('Dispatch: CREATE_SCENE');
+      // console.log('Dispatch: CREATE_SCENE');
 
       const newScene = {
         name: action.name,
@@ -94,7 +94,7 @@ const scenesReducer = (stateParam, action) => {
       return state;
 
     case 'DELETE_SCENE':
-      console.log('Dispatch: DELETE_SCENE');
+      // console.log('Dispatch: DELETE_SCENE');
       state = state.filter((s) => s.id !== action.scene.id);
 
       fetch(`${fetchUrl}/${action.scene.id}`, {
@@ -113,12 +113,12 @@ const scenesReducer = (stateParam, action) => {
       return state;
 
     case 'DELETE_SCENE_EFFECT':
-      console.log('Dispatch: DELETE_SCENE_EFFECT');
+      // console.log('Dispatch: DELETE_SCENE_EFFECT');
       state = state.filter((e) => e.id !== action.effectConfig.id);
       return [...state];
 
     case 'RUN_SCENE':
-      console.log('Dispatch: RUN_SCENE');
+      // console.log('Dispatch: RUN_SCENE');
 
       fetch(`${fetchUrl}/run/${action.scene.id}`, {
         method: 'PUT',
@@ -138,12 +138,12 @@ const scenesReducer = (stateParam, action) => {
       return state;
 
     case 'DUPLICATE_SCENE':
-      console.log('Dispatch: DUPLICATE_SCENE');
+      // console.log('Dispatch: DUPLICATE_SCENE');
       let copyCount = 1;
       let duplicatedScene = {};
 
       // Renames a copy of a scene sequentially, respecting the existing copy numbers from 1 to n
-      for (const scene of state) {
+      state.forEach((scene) => {
         let sceneName = scene.name.split(' ');
         let sceneCopyNumber = 0;
 
@@ -159,7 +159,7 @@ const scenesReducer = (stateParam, action) => {
             copyCount++;
           }
         }
-      }
+      });
 
       duplicatedScene = {
         id: null,
@@ -188,7 +188,7 @@ const scenesReducer = (stateParam, action) => {
 
 
     case 'MODIFY_SCENE':
-      console.log('Dispatch: MODIFY_SCENE');
+      // console.log('Dispatch: MODIFY_SCENE');
 
       const editedScene = {
         name: action.name,
@@ -219,7 +219,7 @@ const scenesReducer = (stateParam, action) => {
       return state;
 
     default:
-      console.log('Dispatch: DEFAULT');
+      // console.log('Dispatch: DEFAULT');
       return state;
   }
 };
