@@ -46,9 +46,7 @@ const scenesReducer = (stateParam, action) => {
     case 'UPDATE_TRANSFER_LIST_STATE':
       console.log('Dispatch: UPDATE_TRANSFER_LIST_STATE');
       action.config.devices = action.devices;
-      console.log(`action.config ${action.config.id}`)
-      console.log('action.devices')
-      console.log(action.devices)
+
       return action.config;
 
     case 'UPDATE_EFFECTS_STATE':

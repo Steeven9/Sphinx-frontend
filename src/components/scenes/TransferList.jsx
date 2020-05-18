@@ -109,14 +109,6 @@ function getDevicesTypesByEffectType(effectConfig) {
 }
 
 function getDevicesByEffectType(devices, types) {
-  // const filteredDevices = [];
-  // for (const type of types) {
-  //   for (const device of devices) {
-  //     if (device.type === type) {
-  //       filteredDevices.push(device);
-  //     }
-  //   }
-  // }
   const filteredDevices = [];
 
   types.forEach((type) => devices.forEach((device) => {
@@ -135,8 +127,6 @@ const TransferList = (config) => {
     dispatchEffects,
     dispatchDevices,
     isEditing,
-    globalLeft,
-    setGlobalLeft,
     globalRight,
     setGlobalRight,
   } = useContext(ScenesContext);
@@ -232,33 +222,10 @@ const TransferList = (config) => {
 
   function getValidDevices(side, devicesToEvaluate) {
     if (side === 'right') {
-      // const derecha = devicesToEvaluate.filter((device) => isValidRightDevice(device))
-      // console.log(`${effectConfig.name} ${effectConfig.slider}`)
-      // console.log('derecha')
-      // console.log(derecha)
-      // console.log(devices)
-      // return derecha;
-
       return devicesToEvaluate.filter((device) => isValidRightDevice(device));
     }
     return devicesToEvaluate.filter((device) => isValidLeftDevice(device));
   }
-
-  // /**
-  //  * Filters all devices that are not available for a same type of effect
-  //  * @param rightDevices
-  //  * @returns {*}
-  //  */
-  // function getAvailableDevices(rightDevices) {
-  //   const unavailableDevices = globalLeft.filter((g) => g.effectType === effectConfig.type
-  //                                                       && g.effectId !== effectConfig.id);
-  //   const availableDevices = getNotUsedDevices(rightDevices, unavailableDevices);
-  //   sortDevices(availableDevices);
-  //
-  //   // // console.log(`configId: ${config.effectConfig.id} | type: ${effectConfig.type} | name: ${effectConfig.name} | value: ${effectConfig.slider}`);
-  //   // // availableDevices.forEach((d) => console.log(`id: ${d.id} | name: ${d.name}`));
-  //   return availableDevices;
-  // }
 
   // Loads the devices to the left or right sides of the Transfer List on page load
   useEffect(() => {
@@ -293,12 +260,6 @@ const TransferList = (config) => {
         }
         return 1;
       });
-
-      console.log('unavailableDevices')
-      console.log(unavailableDevices)
-      console.log('availableDevices')
-      console.log(availableDevices)
-
       setRight(availableDevices);
     }
   }, [config, devices, leftLength, rightLength, isEditing]);
@@ -306,12 +267,8 @@ const TransferList = (config) => {
   useEffect(() => {
     const devicesTypes = getDevicesTypesByEffectType(config.effectConfig);
     const filteredDevices = getDevicesByEffectType(devices, devicesTypes);
-
     const usedDevices = getUsedDevices(filteredDevices, config.effectConfig.devices);
     const unusedDevices = getNotUsedDevices(filteredDevices, config.effectConfig.devices);
-
-    // console.log(config.effectConfig.id)
-    // console.log(usedDevices)
 
     setLeft(usedDevices);
     setRight(unusedDevices);
@@ -335,7 +292,6 @@ const TransferList = (config) => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setChecked(newChecked);
   };
 
@@ -375,7 +331,6 @@ const TransferList = (config) => {
     leftDevices.forEach((device) => addDeviceFlags(device));
     leftDevices = leftDevices.filter((device) => isValidLeftDevice(device));
     rightDevices = rightDevices.filter((device) => isValidRightDevice(device));
-
     sortDevices(leftDevices);
     sortDevices(rightDevices);
     setLeft(leftDevices);
@@ -396,10 +351,6 @@ const TransferList = (config) => {
     setGlobalRight(...rightDevices, ...right);
     sortDevices(leftDevices);
     sortDevices(rightDevices);
-
-    // console.log('--handleCheckedRight--');
-    // console.log(effectConfig.id);
-    // console.log(rightDevices);
     setLeft(leftDevices);
     setChecked(not(checked, leftChecked));
 
@@ -407,13 +358,7 @@ const TransferList = (config) => {
     dispatchScenes({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: effectConfig });
   };
 
-  // console.log('--out--');
-  // console.log(effectConfig.id);
-  // console.log(left);
-  // console.log(right);
-
   const gridClasses = useGridStyles();
-
   const customList = (title, items) => (
     <Card>
       <CardHeader
