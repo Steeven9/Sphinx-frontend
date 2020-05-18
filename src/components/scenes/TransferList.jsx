@@ -109,14 +109,22 @@ function getDevicesTypesByEffectType(effectConfig) {
 }
 
 function getDevicesByEffectType(devices, types) {
+  // const filteredDevices = [];
+  // for (const type of types) {
+  //   for (const device of devices) {
+  //     if (device.type === type) {
+  //       filteredDevices.push(device);
+  //     }
+  //   }
+  // }
   const filteredDevices = [];
-  for (const type of types) {
-    for (const device of devices) {
-      if (device.type === type) {
-        filteredDevices.push(device);
-      }
+
+  types.forEach((type) => devices.forEach((device) => {
+    if (device.type === type) {
+      filteredDevices.push(device);
     }
-  }
+  }));
+
   return filteredDevices;
 }
 
@@ -125,6 +133,7 @@ const TransferList = (config) => {
     devices,
     dispatchScenes,
     dispatchEffects,
+    dispatchDevices,
     isEditing,
     globalLeft,
     setGlobalLeft,
@@ -139,36 +148,117 @@ const TransferList = (config) => {
   const leftLength = left.length;
   const rightLength = right.length;
 
-  /**
-   * Filters all devices that are not available for a same type of effect
-   * @param rightDevices
-   * @returns {*}
-   */
-  function getAvailableDevices(rightDevices) {
-    const unavailableDevices = globalLeft.filter((g) => g.effectType === effectConfig.type
-                                                        && g.effectId !== effectConfig.id);
-    const availableDevices = getNotUsedDevices(rightDevices, unavailableDevices);
-    availableDevices.sort((a, b) => {
-      const keyA = a.name.toLowerCase();
-      const keyB = b.name.toLowerCase();
-      if (keyA === keyB) {
-        if (a.id < b.id) {
-          return -1;
+  function addDeviceFlags(device) {
+    switch (effectConfig.type) {
+      case 1: // Light intensity
+        if (!device.usedIntensityId) {
+          device.usedIntensityId = effectConfig.id;
         }
-        if (a.id > b.id) {
-          return 1;
+        break;
+      case 2: // Temperature
+        if (!device.usedTemperatureId) {
+          device.usedTemperatureId = effectConfig.id;
         }
-      }
-      if (keyA < keyB) {
-        return -1;
-      }
-      return 1;
-    });
-
-    console.log(`configId: ${config.effectConfig.id} | type: ${effectConfig.type} | name: ${effectConfig.name} | value: ${effectConfig.slider}`);
-    availableDevices.forEach((d) => console.log(`id: ${d.id} | name: ${d.name}`));
-    return availableDevices;
+        break;
+      case 3: // Power
+        if (!device.usedPowerId && !device.usedPowerOn) {
+          device.usedPowerId = effectConfig.id;
+          device.usedPowerOn = effectConfig.on;
+        }
+        break;
+      case 4: // Curtains aperture
+        if (!device.usedApertureId) {
+          device.usedApertureId = effectConfig.id;
+        }
+        break;
+      default:
+        break;
+    }
   }
+
+  function removeDeviceFlags(device) {
+    switch (effectConfig.type) {
+      case 1: // Light intensity
+        delete device.usedIntensityId;
+        break;
+      case 2: // Temperature
+        delete device.usedTemperatureId;
+        break;
+      case 3: // Power
+        delete device.usedPowerId;
+        delete device.usedPowerOn;
+        break;
+      case 4: // Curtains aperture
+        delete device.usedApertureId;
+        break;
+      default:
+        break;
+    }
+  }
+
+  function isValidLeftDevice(device) {
+    switch (effectConfig.type) {
+      case 1: // Light intensity
+        return (device.usedIntensityId === effectConfig.id && !device.usedPowerId)
+               || (device.usedIntensityId === effectConfig.id && device.usedPowerOn);
+      case 2: // Temperature
+        return (device.usedTemperatureId === effectConfig.id && !device.usedPowerId)
+               || (device.usedTemperatureId === effectConfig.id && device.usedPowerOn);
+      case 3: // Power
+        return (device.usedPowerId === effectConfig.id && device.usedPowerOn)
+               || (device.usedPowerId === effectConfig.id && !device.usedPowerOn && !device.usedIntensityId);
+      case 4: // Curtains aperture
+        return (device.usedApertureId === effectConfig.id);
+      default:
+        return false;
+    }
+  }
+
+  function isValidRightDevice(device) {
+    switch (effectConfig.type) {
+      case 1: // Light intensity
+        return (device.usedIntensityId === undefined && device.usedPowerId === undefined)
+               || (device.usedIntensityId === undefined && device.usedPowerOn);
+      case 2: // Temperature
+        return device.usedTemperatureId === undefined;
+      case 3: // Power
+        return device.usedPowerId === undefined;
+      case 4: // Curtains aperture
+        return device.usedApertureId === undefined;
+      default:
+        return false;
+    }
+  }
+
+  function getValidDevices(side, devicesToEvaluate) {
+    if (side === 'right') {
+      // const derecha = devicesToEvaluate.filter((device) => isValidRightDevice(device))
+      // console.log(`${effectConfig.name} ${effectConfig.slider}`)
+      // console.log('derecha')
+      // console.log(derecha)
+      // console.log(devices)
+      // return derecha;
+
+      return devicesToEvaluate.filter((device) => isValidRightDevice(device));
+    }
+    return devicesToEvaluate.filter((device) => isValidLeftDevice(device));
+  }
+
+  // /**
+  //  * Filters all devices that are not available for a same type of effect
+  //  * @param rightDevices
+  //  * @returns {*}
+  //  */
+  // function getAvailableDevices(rightDevices) {
+  //   const unavailableDevices = globalLeft.filter((g) => g.effectType === effectConfig.type
+  //                                                       && g.effectId !== effectConfig.id);
+  //   const availableDevices = getNotUsedDevices(rightDevices, unavailableDevices);
+  //   sortDevices(availableDevices);
+  //
+  //   // // console.log(`configId: ${config.effectConfig.id} | type: ${effectConfig.type} | name: ${effectConfig.name} | value: ${effectConfig.slider}`);
+  //   // // availableDevices.forEach((d) => console.log(`id: ${d.id} | name: ${d.name}`));
+  //   return availableDevices;
+  // }
 
   // Loads the devices to the left or right sides of the Transfer List on page load
   useEffect(() => {
@@ -181,16 +271,55 @@ const TransferList = (config) => {
       setLeft(usedDevices);
       setRight(unusedDevices);
     } else if (leftLength === 0 && rightLength === 0) {
-      // setRight(filteredDevices);
-      setRight(getAvailableDevices(filteredDevices));
+      const unavailableDevices = devices.filter((g) => g.effectType === config.effectConfig.type
+                                                       && g.effectId !== config.effectConfig.id);
+      let availableDevices = getNotUsedDevices(filteredDevices, unavailableDevices);
+
+      availableDevices = getValidDevices('right', availableDevices)
+
+      availableDevices.sort((a, b) => {
+        const keyA = a.name.toLowerCase();
+        const keyB = b.name.toLowerCase();
+        if (keyA === keyB) {
+          if (a.id < b.id) {
+            return -1;
+          }
+          if (a.id > b.id) {
+            return 1;
+          }
+        }
+        if (keyA < keyB) {
+          return -1;
+        }
+        return 1;
+      });
+
+      console.log('unavailableDevices')
+      console.log(unavailableDevices)
+      console.log('availableDevices')
+      console.log(availableDevices)
+
+      setRight(availableDevices);
     }
   }, [config, devices, leftLength, rightLength, isEditing]);
 
   useEffect(() => {
-  }, [left, right]);
+    const devicesTypes = getDevicesTypesByEffectType(config.effectConfig);
+    const filteredDevices = getDevicesByEffectType(devices, devicesTypes);
+
+    const usedDevices = getUsedDevices(filteredDevices, config.effectConfig.devices);
+    const unusedDevices = getNotUsedDevices(filteredDevices, config.effectConfig.devices);
+
+    // console.log(config.effectConfig.id)
+    // console.log(usedDevices)
+
+    setLeft(usedDevices);
+    setRight(unusedDevices);
+  }, [devices, globalRight, config]);
 
   const handleDelete = (e) => {
     e.preventDefault();
+    left.forEach((device) => removeDeviceFlags(device));
     dispatchEffects({ type: 'DELETE_SCENE_EFFECT', effectConfig });
   };
 
@@ -220,98 +349,68 @@ const TransferList = (config) => {
     }
   };
 
+  function sortDevices(devicesToSort) {
+    devicesToSort.sort((a, b) => {
+      const keyA = a.name.toLowerCase();
+      const keyB = b.name.toLowerCase();
+      if (keyA === keyB) {
+        if (a.id < b.id) {
+          return -1;
+        }
+        if (a.id > b.id) {
+          return 1;
+        }
+      }
+      if (keyA < keyB) {
+        return -1;
+      }
+      return 1;
+    });
+  }
+
   const handleCheckedLeft = () => {
-    const leftDevices = left.concat(rightChecked);
-    const rightDevices = not(right, rightChecked);
-    const checkedDevices = not(checked, rightChecked);
-    const toGlobalLeft = [];
+    let leftDevices = left.concat(rightChecked);
+    let rightDevices = not(right, rightChecked);
 
-    leftDevices.forEach((device) => {
-      const newDevice = {
-        id: device.id,
-        effectId: effectConfig.id,
-        effectType: effectConfig.type,
-        on: effectConfig.on,
-      };
-      toGlobalLeft.push(newDevice);
-    });
+    leftDevices.forEach((device) => addDeviceFlags(device));
+    leftDevices = leftDevices.filter((device) => isValidLeftDevice(device));
+    rightDevices = rightDevices.filter((device) => isValidRightDevice(device));
 
-    const newGlobalLeft = getNotUsedDevices(globalLeft, toGlobalLeft);
-    setGlobalLeft([...toGlobalLeft, ...newGlobalLeft]);
+    sortDevices(leftDevices);
+    sortDevices(rightDevices);
     setLeft(leftDevices);
-    // setRight(rightDevices);
-    setRight(getAvailableDevices(rightDevices));
-    setChecked(checkedDevices);
+    setRight(rightDevices);
+    setChecked(not(checked, rightChecked));
 
-    dispatchScenes({
-      type: 'UPDATE_TRANSFER_LIST_STATE',
-      devices: leftDevices,
-      config: effectConfig,
-    });
+    dispatchDevices({ type: 'POPULATE_DEVICES', devices });
+    dispatchScenes({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: effectConfig });
   };
 
   const handleCheckedRight = () => {
-    const leftDevices = not(left, leftChecked);
-    const rightDevices = right.concat(leftChecked);
-    const checkedDevices = not(checked, leftChecked);
-    const newGlobalLeft = getNotUsedDevices(globalLeft, rightDevices);
+    let leftDevices = not(left, leftChecked);
+    let rightDevices = right.concat(leftChecked);
 
-    setGlobalRight(leftChecked);
-    setGlobalLeft(newGlobalLeft);
-    setRight(rightDevices);
+    rightDevices.forEach((device) => removeDeviceFlags(device));
+    leftDevices = leftDevices.filter((device) => isValidLeftDevice(device));
+    rightDevices = rightDevices.filter((device) => isValidRightDevice(device));
+    setGlobalRight(...rightDevices, ...right);
+    sortDevices(leftDevices);
+    sortDevices(rightDevices);
+
+    // console.log('--handleCheckedRight--');
+    // console.log(effectConfig.id);
+    // console.log(rightDevices);
     setLeft(leftDevices);
-    setChecked(checkedDevices);
-    dispatchScenes({
-      type: 'UPDATE_TRANSFER_LIST_STATE',
-      devices: leftDevices,
-      config: effectConfig,
-    });
+    setChecked(not(checked, leftChecked));
+
+    dispatchDevices({ type: 'POPULATE_DEVICES', devices });
+    dispatchScenes({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: effectConfig });
   };
 
-  // useEffect(() => {
-  //   console.log('re-rendering...')
-  // const filteredRight = getNotUsedDevices(right, globalLeft);
-
-  // const filteredRight = right.filter((notUsedDevice) =>
-  //   globalLeft.filter((usedDevice) => {
-  //     console.log(!usedDevice.effectType)
-  //     return !usedDevice.effectType
-  //   }));
-
-  // const filteredGlobalLeft = globalLeft.filter((g) => {
-  //   // console.log(g)
-  //   // console.log(effectConfig)
-  //   return g.effectType === effectConfig.type;
-  // });
-
-  //   const unavailableDevices = globalLeft.filter((g) => g.effectType === effectConfig.type && g.effectId !== effectConfig.id);
-  //   const availableDevices = getNotUsedDevices(right, unavailableDevices);
-  //   availableDevices.sort((a, b) => {
-  //     const keyA = a.name.toLowerCase();
-  //     const keyB = b.name.toLowerCase();
-  //     if (keyA === keyB) {
-  //       if (a.id < b.id) {
-  //         return -1;
-  //       }
-  //       if (a.id > b.id) {
-  //         return 1;
-  //       }
-  //     }
-  //     if (keyA < keyB) {
-  //       return -1;
-  //     }
-  //     return 1;
-  //   });
-  //
-  //   console.log(`configId: ${config.effectConfig.id} | type: ${effectConfig.type} | name: ${effectConfig.name} | value: ${effectConfig.slider}`);
-  //   availableDevices.forEach((d) => console.log(`id: ${d.id} | name: ${d.name}`))
-  //   // console.log(JSON.stringify(availableDevices));
-  //   // console.log(JSON.stringify(sort(availableDevices)));
-  //
-  //   // setRight(filteredRight);
-  //   // console.log(`configId: ${config.effectConfig.id} | type: ${config.effectConfig.type}  | name: ${config.effectConfig.name} | value: ${config.effectConfig.slider}`);
-  //   // console.log(JSON.stringify(filteredRight));
-  // }, [globalLeft]);
+  // console.log('--out--');
+  // console.log(effectConfig.id);
+  // console.log(left);
+  // console.log(right);
 
   const gridClasses = useGridStyles();
 
@@ -332,6 +431,7 @@ const TransferList = (config) => {
         title={title}
         subheader={`${numberOfChecked(items)}/${items.length} selected`}
       />
+
       <Divider />
       <List className={classes.list} dense component="div" role="list">
         {items.map((value) => {
@@ -367,25 +467,24 @@ const TransferList = (config) => {
         <Grid container spacing={0}>
           <div className="transfer-list-header-max-width">
             <div className="transfer-list-header">
-                <span>
-                  {effectConfig.name}
-                  {' '}
-                  {(effectConfig.type !== 3) ? effectConfig.slider : undefined}
-                  {' '}
-                  {getMeasureUnit(effectConfig)}
-                </span>
+              <span>
+                {effectConfig.name}
+                {' '}
+                {(effectConfig.type !== 3) ? effectConfig.slider : undefined}
+                {' '}
+                {getMeasureUnit(effectConfig)}
+              </span>
               <i
                 className="material-icons btn-icon-transfer-list right"
                 onClick={(e) => handleDelete(e)}
               >
-                {' '}
                 highlight_off
               </i>
             </div>
           </div>
         </Grid>
         <Grid container spacing={2} justify="center" alignItems="center" className={classes.root}>
-          <Grid item>{customList('Controlling', left)}</Grid>
+          <Grid item>{customList('Controlling', getValidDevices('left', left))}</Grid>
           <Grid item>
             <Grid container direction="column" alignItems="center">
               <Button
@@ -410,7 +509,7 @@ const TransferList = (config) => {
               </Button>
             </Grid>
           </Grid>
-          <Grid item>{customList('Not controlling', right)}</Grid>
+          <Grid item>{customList('Not controlling', getValidDevices('right', right))}</Grid>
         </Grid>
       </Paper>
     </Grid>

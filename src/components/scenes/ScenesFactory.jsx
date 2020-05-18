@@ -369,10 +369,11 @@ const ScenesFactory = () => {
   return (
     <ScenesContext.Provider
       value={{
-        scenes,
         dispatchScenes,
-        effects,
         dispatchEffects,
+        dispatchDevices,
+        scenes,
+        effects,
         devices,
         setValid,
         isEditing,
