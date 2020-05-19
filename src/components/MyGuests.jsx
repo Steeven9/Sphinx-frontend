@@ -22,7 +22,7 @@ class MyGuests extends React.Component {
             isLoading: false,
             error: false,
             errorType: '',
-            allowSecurityCameras: true,
+            allowSecurityCameras: false,
         };
     }
 
@@ -149,6 +149,7 @@ class MyGuests extends React.Component {
      */
     changeSecurityCameraPermissions = () => {
         const toSet = !this.state.allowSecurityCameras;
+        this.setState({ allowSecurityCameras: toSet })
         fetch(`http://localhost:8080/user/${this.props.username}`, {
             method: 'PUT',
             headers: {
@@ -185,7 +186,7 @@ class MyGuests extends React.Component {
             this.setState({ isLoading: false });
             if (res.status === 204) {
                 this.moveToGuestList();
-                window.location.href = '/shared';
+                window.location.href = '/guests';
             } else if (res.status === 401) {
                 this.props.logOut(1);
             } else {
