@@ -84,7 +84,7 @@ const ScenesFactory = () => {
       return null;
     })
     .then((data) => {
-      if (data !== null || data.length !== 0) {
+      if (data !== null && data.length !== 0) {
         fetchedDevices = JSON.parse(data).sort((a, b) => {
           const keyA = a.name;
           const keyB = b.name;
@@ -94,7 +94,6 @@ const ScenesFactory = () => {
         });
         dispatchDevices({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
       }
-      throw new Error('Devices array is null!');
     })
     .catch((e) => {
       console.log(e);
