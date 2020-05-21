@@ -159,14 +159,24 @@ const CoupleDevices = () => {
         // Do nothing
       } else {
         fetchedDevices = JSON.parse(data).sort((a, b) => {
-          const keyA = a.name;
-          const keyB = b.name;
-          if (keyA < keyB) return -1;
-          if (keyA > keyB) return 1;
-          return 0;
+          const keyA = a.name.toLowerCase();
+          const keyB = b.name.toLowerCase();
+
+          if (keyA === keyB) {
+            if (a.id < b.id) {
+              return -1;
+            }
+            if (a.id > b.id) {
+              return 1;
+            }
+          }
+          if (keyA < keyB) {
+            return -1;
+          }
+          return 1;
         });
 
-        setParent(fetchedDevices.filter((device) => device.id === parseInt(params.get('id')))[0]);
+        setParent(fetchedDevices.filter((device) => device.id === parseInt(params.get('id'), 10))[0]);
         dispatchDevices({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
       }
     })
