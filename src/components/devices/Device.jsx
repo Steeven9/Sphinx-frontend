@@ -37,6 +37,8 @@ const Device = ({ device, isGuest }) => {
   useEffect(() => {
     if (device.slider < 1 && device.slider > 0) {
       setIntensity(Math.trunc(device.slider));
+    } else {
+      setIntensity(device.slider);
     }
   }, [device, devices]);
 
