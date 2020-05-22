@@ -88,11 +88,11 @@ function getNotUsedDevices(allDevices, currentDevices) {
 function getDevicesTypesByCoupling(parent) {
   switch (parent.type) {
     case 3: // Switch
-      return [1, 2, 6, 13];
+      return [1, 2, 6, 11, 13];
     case 4: // DimmableSwitch
-      return [2, 12];
+      return [2];
     case 5: // StatelessDimmer
-      return [2, 12];
+      return [2];
     default:
       return [];
   }

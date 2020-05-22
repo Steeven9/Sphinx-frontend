@@ -58,6 +58,8 @@ function Thermostat({ device, isGuest }) {
 
   // Triggers the synchronization (render) and updating of devices (backend)
   const updateDevice = () => {
+    device.clicked = true;
+    dispatch({ type: 'SYNC_DEVICES', device });
     dispatch({ type: 'MODIFY_DEVICE', device, setActionCompleted });
   };
 
@@ -70,7 +72,8 @@ function Thermostat({ device, isGuest }) {
   const handleChange = (e, val) => {
     setIntensity(val);
     device.slider = val;
-    // device.source = parseInt(source);
+    device.source = source;
+    device.clicked = true;
     dispatch({ type: 'SYNC_DEVICES', device });
   };
 
@@ -81,13 +84,16 @@ function Thermostat({ device, isGuest }) {
    */
   const handleChangeCommitted = (e, val) => {
     setIntensity(val);
-    // device.source = parseInt(source);
+    device.slider = val;
+    device.clicked = true;
+    device.source = source;
     dispatch({ type: 'MODIFY_DEVICE', device, setActionCompleted });
   };
 
   const handleSource = (event, newSource) => {
     if (newSource !== null) {
       setSource(newSource);
+      device.clicked = true;
       device.source = parseInt(newSource, 10);
     }
     updateDevice();
@@ -146,21 +152,33 @@ function Thermostat({ device, isGuest }) {
       device.disabled = false;
       setDisabled(false);
     }
-  }, [device, device.state]);
-  console.log(disabled)
+  }, [device, device.state, device.on]);
 
   /**
    * Controls device disabled state
    * */
   useEffect(() => {
-    console.log(disabled)
-
     if (device.on) {
       setDisabled(false);
     } else {
+      setModes(['0']);
       setDisabled(true);
     }
   }, [disabled, device.on]);
+
+  /**
+   * Synchronizes source on coupled devices
+   * */
+  useEffect(() => {
+    setSource(device.source.toString());
+  }, [device, device.source]);
+
+  /**
+   * Synchronizes source on coupled devices
+   * */
+  useEffect(() => {
+    setIntensity(parseFloat((Math.round(device.slider * 2) / 2).toFixed(2)));
+  }, [device, device.slider]);
 
   // Manages the state of the thermostats dynamically according to the target temp - temp relation
   useEffect(() => {
@@ -172,6 +190,7 @@ function Thermostat({ device, isGuest }) {
       if (source === '0') {
         evalTemp = parseFloat(selfTemp[0]);
       } else {
+        setDisabled(false);
         evalTemp = averageTemp;
       }
 
@@ -188,7 +207,7 @@ function Thermostat({ device, isGuest }) {
     } else {
       setDisabled(true);
     }
-  }, [device, device.averageTemp, source, intensity]);
+  }, [device, device.on, device.averageTemp, source, intensity]);
 
   return (
     <div className="row">
@@ -210,9 +229,9 @@ function Thermostat({ device, isGuest }) {
           marks={getSliderMarks(device)}
         />
         <div
-          className={`col l12 col-custom display-info-thermostat${device.state !== 0 ? ' display-active' : ' display-inactive'}`}
+          className={`col l12 col-custom display-info-thermostat${!disabled ? ' display-active' : ' display-inactive'}`}
         >
-          <span>{device.state !== 0 ? getThermostatTemp(device) : '- - - - - -'}</span>
+          <span>{!disabled ? getThermostatTemp(device) : '- - - - - -'}</span>
         </div>
       </div>
       <div className="col l2">

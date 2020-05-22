@@ -108,8 +108,44 @@ const devicesReducer = (state, action) => {
       // console.log('Dispatch: SYNC_DEVICES');
 
       state.forEach((device) => {
-        if (device.id === action.device.id) {
-          if (device.slider !== null && !device.on) {
+        if (device.switched) {
+          device.switched.forEach((parentId) => {
+            if (parentId === action.device.id) {
+              // If parent is turned ON/OFF
+              if (action.device.clicked && device.on !== null) {
+                device.on = action.device.on;
+              }
+
+              // If child is ON
+              if (device.on && action.device.on && device.slider !== null) {
+                if (device.on !== null) {
+                  device.on = action.device.on;
+                }
+
+                // Slider for non stateless dimmer children
+                if (device.slider && action.device.type !== 5 && device.type !== 11) {
+                  device.slider = action.device.slider;
+                }
+
+                // Slider for stateless dimmer children
+                if (device.on && action.device.type === 5) {
+                  const newSlider = device.slider + action.device.slider;
+                  if (newSlider > 100) {
+                    device.slider = 100;
+                  } else if (newSlider < 0) {
+                    device.slider = 0;
+                  } else {
+                    device.slider = newSlider;
+                  }
+                }
+              }
+            }
+          });
+        }
+
+        // Controls original and child copies of same device
+        if (action.device.clicked && device.id === action.device.id) {
+          if (device.slider) {
             device.slider = action.device.slider;
           }
 
@@ -117,52 +153,12 @@ const devicesReducer = (state, action) => {
             device.on = action.device.on;
           }
 
-          if (!device.clicked && !device.child) {
-            device.on = action.device.on;
-          }
-
-          if (device.type === 11) { // Thermostat
-            device.slider = action.device.slider;
-            device.state = action.device.state;
+          if (device.source !== null) {
             device.source = action.device.source;
           }
-        } else if (device.switched) {
-          device.switched.forEach((parent) => {
-            if (parent === action.device.id) {
-              if (device.slider !== null && action.device.type !== 5) {
-                if (device.on && action.device.on) {
-                  device.slider = action.device.slider;
-                }
-              }
-
-              if (device.on && action.device.type === 5) {
-                const newSlider = device.slider + action.device.slider;
-                if (newSlider > 100) {
-                  device.slider = 100;
-                } else if (newSlider < 0) {
-                  device.slider = 0;
-                } else {
-                  device.slider = newSlider;
-                }
-              }
-
-              if (action.device.clicked) {
-                if (device.type !== 11) { // Not thermostat
-                  device.on = action.device.on;
-                  device.slider = action.device.slider;
-                } else if (action.device.on === true) {
-                  device.state = 1;
-                  device.disabled = false;
-                } else {
-                  device.state = 0;
-                  device.disabled = true;
-                }
-              }
-            }
-          });
         }
       });
-      
+
       action.device.clicked = false;
       return [...state];
 
@@ -170,5 +166,4 @@ const devicesReducer = (state, action) => {
       return state;
   }
 };
-
 export { devicesReducer as default };

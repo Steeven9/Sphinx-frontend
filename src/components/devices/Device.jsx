@@ -40,7 +40,7 @@ const Device = ({ device, isGuest }) => {
     } else {
       setIntensity(device.slider);
     }
-  }, [device, devices]);
+  }, [device.slider]);
 
   /**
    * Synchronizes and re-renders devices state for view purposes dispatching the action to the devices reducer
@@ -193,7 +193,7 @@ const Device = ({ device, isGuest }) => {
               handleChangeCommitted(e, val);
             }}
             valueLabelDisplay="auto"
-            value={intensity}
+            value={parseInt(intensity, 10)}
             min={minMax[0]}
             max={minMax[1]}
             disabled={isGuest.isGuest && device.type === 12}
