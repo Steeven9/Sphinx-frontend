@@ -365,16 +365,14 @@ const CoupleDevices = () => {
 
   return (
     <>
-      <div className="editRoom container">
-        <div id="editDeviceInfo" className="device-edit-content-box z-depth-2 content-box-transparency">
-          <h2 className="title">Edit device coupling</h2>
+      <div className="addDevice">
+        <div className="device-content-box z-depth-2">
+          <h2 className="title">Edit coupling</h2>
           <div className="coupling-container">
             <Grid container spacing={0}>
               <div className="transfer-list-header-max-width">
                 <div className="transfer-list-header">
-                    <span>
-                      {parent.name}
-                    </span>
+                  <h5 className="center">{parent.name}</h5>
                 </div>
               </div>
             </Grid>
