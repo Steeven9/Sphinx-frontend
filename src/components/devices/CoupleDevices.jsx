@@ -123,8 +123,10 @@ const CoupleDevices = () => {
   const [isEditing, setIsEditing] = React.useState(false);
   const [isValid, setIsValid] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
-  const [errorMessage, setErrorMessage] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [actionCompleted, setActionCompleted] = React.useState(false);
+  const [backButtonText, setBackButtonText] = React.useState('Cancel');
   const classes = useStyles();
 
   const sortDevices = useCallback((devicesToSort) => {
@@ -219,8 +221,7 @@ const CoupleDevices = () => {
         console.log(e);
       });
     },
-    [])
-  ;
+    [sortDevices]);
 
   // Enables/disables 'save/modify coupling' button
   useEffect(() => {
@@ -230,17 +231,24 @@ const CoupleDevices = () => {
       setIsValid(false);
     }
 
-    if (isEditing) {
-      const newDevicesInLeft = left.filter((device) => device.new);
-      const oldDevicesInRight = right.filter((device) => device.old);
+    const newDevicesInLeft = left.filter((device) => device.new);
+    const oldDevicesInRight = right.filter((device) => device.old);
 
-      if (newDevicesInLeft.length > 0 || oldDevicesInRight.length > 0) {
-        setIsValid(true);
+    if (newDevicesInLeft.length > 0 || oldDevicesInRight.length > 0) {
+      setIsValid(true);
+    }
+  }, [left, right, originalLeft]);
+
+  // Changes text of cancel/back button
+  useEffect(() => {
+    if (actionCompleted) {
+      if (params.get('room')) {
+        setBackButtonText('Go to room');
       } else {
-        setIsValid(false);
+        setBackButtonText('Go to devices');
       }
     }
-  }, [left, right, originalLeft, isEditing]);
+  }, [actionCompleted]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -342,7 +350,9 @@ const CoupleDevices = () => {
         })
         .then((res) => {
           if (res.status === 200 || res.status === 204) {
+            setActionCompleted(true);
             setIsError(false);
+            setIsEditing(true);
             setErrorMessage('Coupling successful!');
           } else {
             setIsError(true);
@@ -366,7 +376,7 @@ const CoupleDevices = () => {
             if (!isEditing) {
               setIsEditing(true);
             }
-
+            setActionCompleted(true);
             setIsError(false);
             setErrorMessage('Devices coupling updated successfully!');
             return res;
@@ -378,6 +388,20 @@ const CoupleDevices = () => {
         .catch((error) => console.log(error));
       });
     }
+
+    left.forEach((device) => {
+      delete device.new;
+      device.old = true;
+      device.used = true;
+    });
+
+    right.forEach((device) => {
+      delete device.new;
+      delete device.old;
+      device.used = false;
+    });
+
+    setOriginalLeft(left);
     setIsLoading(false);
   }
 
@@ -483,14 +507,25 @@ const CoupleDevices = () => {
                 name="button"
                 className="btn-secondary waves-effect waves-light btn"
                 onClick={() => {
-                  if (params.get('room')) {
-                    window.location.href = `/editDevice?id=${params.get('id')}&room=${params.get('room')}`;
-                  } else {
-                    window.location.href = `/editDevice?id=${params.get('id')}`;
+                  console.log(actionCompleted)
+                  if (!actionCompleted) {
+                    if (params.get('room')) {
+                      window.location.href = `/editDevice?id=${params.get('id')}&room?id=${params.get('room')}`;
+                    } else {
+                      window.location.href = `/editDevice?id=${params.get('id')}`;
+                    }
+                  }
+
+                  if (actionCompleted) {
+                    if (params.get('room')) {
+                      window.location.href = `/room?id=${params.get('room')}`;
+                    } else {
+                      window.location.href = '/devices';
+                    }
                   }
                 }}
               >
-                Cancel
+                {backButtonText}
               </button>
               <button
                 type="button"
@@ -499,7 +534,7 @@ const CoupleDevices = () => {
                 className="btn-primary waves-effect waves-light btn"
                 onClick={(e) => coupleDevices(e)}
               >
-                {isEditing ? 'Modify coupling' : 'Save coupling'}
+                {isEditing ? ' Modify coupling' : ' Save coupling'}
               </button>
             </div>
           </div>
