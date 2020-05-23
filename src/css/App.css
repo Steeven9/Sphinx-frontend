@@ -276,6 +276,10 @@ h3 {
     width: 40px;
 }
 
+.devices-coupling-subtitle {
+    margin: 100px 0 10px 0;
+}
+
 .scene-item {
     height: 40px !important;
     display: flex !important;
