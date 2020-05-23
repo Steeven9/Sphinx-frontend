@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -10,7 +10,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import devicesReducer from '../../reducers/devicesReducer';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import withStyles from '@material-ui/core/styles/withStyles';
+
+const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(CircularProgress);
 
 const params = (new URL(document.location)).searchParams;
 const fetchUrl = `${window.location.protocol}//${window.location.hostname}`;
@@ -112,7 +115,6 @@ function getCopulableDevicesByParentTypeAndRoom(parent, devices, types) {
 
 // const CoupleDevices = (parent) => {
 const CoupleDevices = () => {
-  // const [devices, dispatchDevices] = useReducer(devicesReducer, []);
   const [parent, setParent] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
   const [originalLeft, setOriginalLeft] = React.useState([]);
@@ -120,7 +122,8 @@ const CoupleDevices = () => {
   const [right, setRight] = React.useState([]);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isValid, setIsValid] = React.useState(false);
-  const [hasLoadedDevices, setHasLoadedDevices] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
   const classes = useStyles();
 
@@ -226,10 +229,6 @@ const CoupleDevices = () => {
       const newDevicesInLeft = left.filter((device) => device.new);
       const oldDevicesInRight = right.filter((device) => device.old);
 
-      console.log(newDevicesInLeft);
-      console.log(oldDevicesInRight);
-      console.log('');
-
       if (newDevicesInLeft.length > 0 || oldDevicesInRight.length > 0) {
         setIsValid(true);
       } else {
@@ -314,6 +313,7 @@ const CoupleDevices = () => {
    */
   function coupleDevices(e) {
     e.preventDefault();
+    setIsLoading(true);
 
     const host = `${window.location.protocol}//${window.location.hostname}:8080`;
     const headers = {
@@ -330,8 +330,6 @@ const CoupleDevices = () => {
 
     if (childrenIds.length > 0) {
       childrenIds.forEach((id) => {
-        console.log(`${host}/devices/couple/${parent.id}/${id}`);
-
         const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
         fetch(devicesFetchUrl, {
           method: 'POST',
@@ -339,9 +337,11 @@ const CoupleDevices = () => {
         })
         .then((res) => {
           if (res.status === 200 || res.status === 204) {
-            console.log('POST successful!');
+            setIsError(false);
+            setErrorMessage('Coupling successful!');
           } else {
-            console.log('POST unsuccessful!');
+            setIsError(true);
+            setErrorMessage('There was an error! The devices couldn\'t be coupled.');
           }
           return res;
         })
@@ -349,11 +349,8 @@ const CoupleDevices = () => {
       });
     }
 
-    console.log(noChildrenIds)
     if (noChildrenIds.length > 0) {
       noChildrenIds.forEach((id) => {
-        console.log(`${host}/devices/couple/${parent.id}/${id}`);
-
         const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
         fetch(devicesFetchUrl, {
           method: 'DELETE',
@@ -361,15 +358,18 @@ const CoupleDevices = () => {
         })
         .then((res) => {
           if (res.status === 200 || res.status === 204) {
-            console.log('DELETE successful!');
+            setIsError(false);
+            setErrorMessage('Devices coupling updated successfully!');
             return res;
           }
-          console.log('DELETE unsuccessful!');
+          setIsError(true);
+          setErrorMessage("There was an error! The devices couldn't be decoupled.");
           return res;
         })
         .catch((error) => console.log(error));
       });
     }
+    setIsLoading(false);
   }
 
   const customList = (title, items) => (
@@ -464,12 +464,22 @@ const CoupleDevices = () => {
               <Grid item>{customList('Not controlling', right)}</Grid>
             </Grid>
             <div className="center">
+              <div>
+                <ColorCircularProgress className={isLoading ? 'loading-spinner' : 'hidden'} />
+              </div>
+              <p className={!isError ? 'message-one-line success-message' : 'message-one-line error-message'}>
+                {errorMessage}
+              </p>
               <button
                 type="button"
                 name="button"
                 className="btn-secondary waves-effect waves-light btn"
                 onClick={() => {
-                  window.location.href = `/editDevice?id=${params.get('id')}`;
+                  if (params.get('room')) {
+                    window.location.href = `/editDevice?id=${params.get('id')}&room=${params.get('room')}`;
+                  } else {
+                    window.location.href = `/editDevice?id=${params.get('id')}`;
+                  }
                 }}
               >
                 Cancel
