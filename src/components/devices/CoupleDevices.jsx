@@ -113,7 +113,6 @@ function getCopulableDevicesByParentTypeAndRoom(parent, devices, types) {
   return filteredDevices;
 }
 
-// const CoupleDevices = (parent) => {
 const CoupleDevices = () => {
   const [parent, setParent] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
@@ -124,7 +123,7 @@ const CoupleDevices = () => {
   const [isValid, setIsValid] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState(<>&#160;</>);
   const [actionCompleted, setActionCompleted] = React.useState(false);
   const [backButtonText, setBackButtonText] = React.useState('Cancel');
   const classes = useStyles();
@@ -456,7 +455,7 @@ const CoupleDevices = () => {
       <div className="addDevice">
         <div className="device-content-box z-depth-2">
           <h2 className="title">Edit coupling</h2>
-          <h6 className={!isLoading ? 'center' : 'devices-coupling-subtitle center hidden'}>
+          <h6 className={!isLoading ? 'devices-coupling-subtitle center' : 'devices-coupling-subtitle center hidden'}>
             {!isEditing ? 'Select the devices to be controlled by' : 'Devices controlled by'}
             {' '}
             <strong>{parent.name}</strong>
@@ -497,9 +496,9 @@ const CoupleDevices = () => {
             </Grid>
             <div className="center">
               <div>
-                <ColorCircularProgress className={isLoading ? 'loading-spinner' : 'hidden'} />
+                <ColorCircularProgress className={isLoading ? 'loading-spinner' : 'loading-spinner hidden'} />
               </div>
-              <p className={!isError ? 'message-one-line success-message' : 'message-one-line error-message'}>
+              <p className={!isError ? 'success-message' : 'error-message'}>
                 {errorMessage}
               </p>
               <button
@@ -507,7 +506,6 @@ const CoupleDevices = () => {
                 name="button"
                 className="btn-secondary waves-effect waves-light btn"
                 onClick={() => {
-                  console.log(actionCompleted)
                   if (!actionCompleted) {
                     if (params.get('room')) {
                       window.location.href = `/editDevice?id=${params.get('id')}&room?id=${params.get('room')}`;
