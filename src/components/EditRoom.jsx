@@ -249,19 +249,19 @@ class EditRoom extends React.Component {
    * @return {string} the type of the icon
    */
   decomposeIconPath = (path) => {
-    if (path.includes("bathroom")) return "bathroom"
-    if (path.includes("office")) return "office"
-    if (path.includes("attic")) return "attic"
-    if (path.includes("basement")) return "basement"
-    if (path.includes("backyard")) return "backyard"
-    if (path.includes("garage")) return "garage"
-    if (path.includes("dining-room")) return "dining-room"
-    if (path.includes("generic-room")) return "generic-room"
-    if (path.includes("hallway")) return "hallway"
-    if (path.includes("house-front")) return "house-front"
-    if (path.includes("kitchen")) return "kitchen"
-    if (path.includes("living-room")) return "living-room"
-    else if (path.includes("bedroom")) return "bedroom"
+    if (path.includes('bathroom')) return 'bathroom';
+    if (path.includes('office')) return 'office';
+    if (path.includes('attic')) return 'attic';
+    if (path.includes('basement')) return 'basement';
+    if (path.includes('backyard')) return 'backyard';
+    if (path.includes('garage')) return 'garage';
+    if (path.includes('dining-room')) return 'dining-room';
+    if (path.includes('generic-room')) return 'generic-room';
+    if (path.includes('hallway')) return 'hallway';
+    if (path.includes('house-front')) return 'house-front';
+    if (path.includes('kitchen')) return 'kitchen';
+    if (path.includes('living-room')) return 'living-room';
+    if (path.includes('bedroom')) return 'bedroom';
   }
 
   /**
@@ -293,9 +293,9 @@ class EditRoom extends React.Component {
           <h2 className="title">Edit room</h2>
           <div className="dates">
             <div className="roomNameAndIcon">
-                  <span className="textFields">
-                    <input type="text" name="roomName" value={this.state.roomName} placeholder="Room Name" onChange={this.handleRoomNameChange} required />
-                  </span>
+              <span className="textFields">
+                <input type="text" name="roomName" value={this.state.roomName} placeholder="Room Name" onChange={this.handleRoomNameChange} required />
+              </span>
               <div className="roomNameAndIcon">
                 <p>Icon</p>
                 <img className="fixedSizeIcon" id="editRoomFixedSizeIcon" src={this.props.findPathRoom(this.state.type, 0)} alt="icon error" onClick={this.moveToSelection} />
@@ -324,9 +324,9 @@ class EditRoom extends React.Component {
             </div>
 
             <div className="message-two-lines center-text">
-                  <span>
-                    <ColorCircularProgress className={this.state.isLoading ? 'loading-spinner' : 'hidden'} />
-                  </span>
+              <span>
+                <ColorCircularProgress className={this.state.isLoading ? 'loading-spinner' : 'hidden'} />
+              </span>
               {this.showError()}
             </div>
           </div>

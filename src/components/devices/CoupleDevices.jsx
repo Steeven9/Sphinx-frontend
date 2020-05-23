@@ -58,11 +58,6 @@ function getNotUsedDevices(allDevices, currentDevices) {
   return allDevices.filter(compareArrays(currentDevices));
 }
 
-// Do not delete!
-// function getUsedDevices(allDevices, currentDevices) {
-//     return allDevices.filter(compareArrays(allDevices.filter(compareArrays(currentDevices))));
-// }
-
 // // Device types guide:
 //  1: Light
 //  2: DimmableLight
@@ -117,21 +112,17 @@ function getCopulableDevicesByParentTypeAndRoom(parent, devices, types) {
 
 // const CoupleDevices = (parent) => {
 const CoupleDevices = () => {
-  const [devices, dispatchDevices] = useReducer(devicesReducer, []);
+  // const [devices, dispatchDevices] = useReducer(devicesReducer, []);
   const [parent, setParent] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
   const [originalLeft, setOriginalLeft] = React.useState([]);
-  const [devicesToDecouple, setDevicesToDecouple] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [right, setRight] = React.useState([]);
   const [isEditing, setIsEditing] = React.useState(false);
   const [isValid, setIsValid] = React.useState(false);
+  const [hasLoadedDevices, setHasLoadedDevices] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
-  // const isEditing = path[1].toLowerCase() === 'editdevice';
-  const leftLength = left.length;
-  const rightLength = right.length;
   const classes = useStyles();
-
 
   const sortDevices = useCallback((devicesToSort) => {
     devicesToSort.sort((a, b) => {
@@ -180,26 +171,41 @@ const CoupleDevices = () => {
       if (data === null || data.length === 0) {
         // Do nothing
       } else {
-        fetchedDevices = JSON.parse(data).sort((a, b) => {
-          const keyA = a.name.toLowerCase();
-          const keyB = b.name.toLowerCase();
+        fetchedDevices = JSON.parse(data);
+        sortDevices(fetchedDevices);
 
-          if (keyA === keyB) {
-            if (a.id < b.id) {
-              return -1;
-            }
-            if (a.id > b.id) {
-              return 1;
-            }
+        const parentDevice = fetchedDevices.filter((device) => device.id === parseInt(params.get('id'), 10))[0];
+        setParent(parentDevice);
+
+        const devicesTypes = getDevicesTypesByCoupling(parentDevice);
+        const filteredDevices = getCopulableDevicesByParentTypeAndRoom(parentDevice, fetchedDevices, devicesTypes);
+
+        const usedDevices = filteredDevices.filter((device) => {
+          let foundDevices;
+          if (device.switched) {
+            foundDevices = device.switched.filter((parentId) => parentId === parent.id);
           }
-          if (keyA < keyB) {
-            return -1;
-          }
-          return 1;
+          return foundDevices;
         });
 
-        setParent(fetchedDevices.filter((device) => device.id === parseInt(params.get('id'), 10))[0]);
-        dispatchDevices({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
+        if (usedDevices.length > 0) {
+          usedDevices.forEach((device) => {
+            device.old = true;
+            device.used = true;
+          });
+        }
+
+        const unusedDevices = getNotUsedDevices(filteredDevices, usedDevices);
+
+        setRight(unusedDevices);
+        setLeft(usedDevices);
+        setOriginalLeft(usedDevices);
+
+        if (usedDevices.length > 0) {
+          setIsEditing(true);
+        }
+
+        // dispatchDevices({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
         setIsLoading(false);
       }
     })
@@ -208,7 +214,7 @@ const CoupleDevices = () => {
     });
   }, []);
 
-  // Enables/disables 'save coupling' button
+  // Enables/disables 'save/modify coupling' button
   useEffect(() => {
     if (left.length > originalLeft.length && originalLeft.length === 0) {
       setIsValid(true);
@@ -217,42 +223,20 @@ const CoupleDevices = () => {
     }
 
     if (isEditing) {
-      setIsValid(true);
-    }
-    console.log(left)
-    console.log(right)
-  }, [left, originalLeft, isEditing]);
+      const newDevicesInLeft = left.filter((device) => device.new);
+      const oldDevicesInRight = right.filter((device) => device.old);
 
-  // Loads the devices to the left or right sides of the Transfer List on page load
-  useEffect(() => {
-    const devicesTypes = getDevicesTypesByCoupling(parent);
-    const filteredDevices = getCopulableDevicesByParentTypeAndRoom(parent, devices, devicesTypes);
+      console.log(newDevicesInLeft);
+      console.log(oldDevicesInRight);
+      console.log('');
 
-    if (parent.switches !== null) {
-      const usedDevices = filteredDevices.filter((device) => {
-        let foundDevices;
-        if (device.switched) {
-          foundDevices = device.switched.filter((parentId) => parentId === parent.id);
-        }
-        return foundDevices;
-      });
-
-      usedDevices.forEach((device) => {
-        device.old = true;
-        device.used = true;
-      });
-
-      setRight(getNotUsedDevices(filteredDevices, usedDevices));
-      setLeft(usedDevices);
-      setOriginalLeft(usedDevices);
-
-      if (usedDevices.length < 0) {
-        setIsEditing(true);
+      if (newDevicesInLeft.length > 0 || oldDevicesInRight.length > 0) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
       }
-    } else if (leftLength === 0 && rightLength === 0) {
-      setRight(filteredDevices);
     }
-  }, [parent, devices, leftLength, rightLength]);
+  }, [left, right, originalLeft, isEditing]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -284,7 +268,7 @@ const CoupleDevices = () => {
     const rightDevices = not(right, rightChecked);
 
     leftDevices.forEach((device) => {
-      if (!device.old && device.new === undefined) {
+      if (device.old === undefined && device.new === undefined) {
         device.new = true;
         device.used = true;
       } else {
@@ -309,7 +293,6 @@ const CoupleDevices = () => {
       }
     });
 
-
     sortDevices(leftDevices);
     sortDevices(rightDevices);
     setLeft(leftDevices);
@@ -331,7 +314,7 @@ const CoupleDevices = () => {
    */
   function coupleDevices(e) {
     e.preventDefault();
-    console.log('coupling');
+
     const host = `${window.location.protocol}//${window.location.hostname}:8080`;
     const headers = {
       user: localStorage.getItem('username'),
@@ -340,48 +323,53 @@ const CoupleDevices = () => {
       'Content-Type': 'application/json',
     };
 
-    const childrenIds = convertDevicesToIds(left);
-    const noChildrenIds = convertDevicesToIds(right);
+    const newUsedDevices = left.filter((device) => device.new);
+    const newUnusedDevices = right.filter((device) => device.old);
+    const childrenIds = convertDevicesToIds(newUsedDevices);
+    const noChildrenIds = convertDevicesToIds(newUnusedDevices);
 
-    let method = 'POST';
-    childrenIds.forEach((id) => {
-      console.log(`${host}/devices/couple/${parent.id}/${id}`);
+    if (childrenIds.length > 0) {
+      childrenIds.forEach((id) => {
+        console.log(`${host}/devices/couple/${parent.id}/${id}`);
 
-      const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
-      fetch(devicesFetchUrl, {
-        method,
-        headers,
-      })
-      .then((res) => {
-        if (res.status === 200 || res.status === 204) {
-          console.log(`${method} successful!`);
-        } else {
-          console.log(`${method} unsuccessful!`);
-        }
-        return res;
-      })
-      .catch((error) => console.log(error));
-    });
-
-    method = 'DELETE';
-    noChildrenIds.forEach((id) => {
-      console.log(`${host}/devices/couple/${parent.id}/${id}`);
-
-      const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
-      fetch(devicesFetchUrl, {
-        method,
-        headers,
-      })
-      .then((res) => {
-        if (res.status === 200 || res.status === 204) {
-          console.log(`${method} successful!`);
+        const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
+        fetch(devicesFetchUrl, {
+          method: 'POST',
+          headers,
+        })
+        .then((res) => {
+          if (res.status === 200 || res.status === 204) {
+            console.log('POST successful!');
+          } else {
+            console.log('POST unsuccessful!');
+          }
           return res;
-        }
-        console.log(`${method} unsuccessful!`);
-        return res;
-      })
-      .catch((error) => console.log(error));
-    });
+        })
+        .catch((error) => console.log(error));
+      });
+    }
+
+    console.log(noChildrenIds)
+    if (noChildrenIds.length > 0) {
+      noChildrenIds.forEach((id) => {
+        console.log(`${host}/devices/couple/${parent.id}/${id}`);
+
+        const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
+        fetch(devicesFetchUrl, {
+          method: 'DELETE',
+          headers,
+        })
+        .then((res) => {
+          if (res.status === 200 || res.status === 204) {
+            console.log('DELETE successful!');
+            return res;
+          }
+          console.log('DELETE unsuccessful!');
+          return res;
+        })
+        .catch((error) => console.log(error));
+      });
+    }
   }
 
   const customList = (title, items) => (
@@ -440,7 +428,7 @@ const CoupleDevices = () => {
               <div className="transfer-list-header-max-width">
                 <div className="transfer-list-header">
                   <h6 className={!isLoading ? 'center' : 'center hidden'}>
-                    Devices controlled by
+                    {!isEditing ? 'Select the devices to be controlled by' : 'Devices controlled by'}
                     {' '}
                     <strong>{parent.name}</strong>
                   </h6>
@@ -480,7 +468,9 @@ const CoupleDevices = () => {
                 type="button"
                 name="button"
                 className="btn-secondary waves-effect waves-light btn"
-                onClick={() => window.location.href = `/editDevice?id=${params.get('id')}`}
+                onClick={() => {
+                  window.location.href = `/editDevice?id=${params.get('id')}`;
+                }}
               >
                 Cancel
               </button>
@@ -491,7 +481,7 @@ const CoupleDevices = () => {
                 className="btn-primary waves-effect waves-light btn"
                 onClick={(e) => coupleDevices(e)}
               >
-                Save coupling
+                {isEditing ? 'Modify coupling' : 'Save coupling'}
               </button>
             </div>
           </div>
