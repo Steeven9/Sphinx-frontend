@@ -415,7 +415,7 @@ const ScenesFactory = () => {
                       </label>
                     </div>
                     <span
-                      className={hasName ? 'float-left l12 error-message align-error-message-scene-name' : 'hidden'}
+                      className={hasName ? 'float-left l12 error-message align-error-message-scene-name' : 'display-none'}
                     >
                       Scenes must have a name
                     </span>
@@ -481,7 +481,7 @@ const ScenesFactory = () => {
                       <button
                         type="button"
                         name="button"
-                        className={isEditing ? 'btn-secondary btn waves-effect waves-light' : 'hidden'}
+                        className={isEditing ? 'btn-secondary btn waves-effect waves-light' : 'display-none'}
                         onClick={() => {
                         }}
                       >

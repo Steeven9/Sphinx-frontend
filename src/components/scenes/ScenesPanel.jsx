@@ -333,12 +333,12 @@ const ScenesPanel = () => {
                     )}
                 </div>
 
-                <div className={(isLoading) ? 'centered-loading-data-message' : 'hidden'}>
+                <div className={(isLoading) ? 'centered-loading-data-message' : 'display-none'}>
                   <ColorCircularProgress />
                 </div>
 
                 <div
-                  className={(!isDataFound || isNetworkError) ? 'centered-loading-data-message' : 'hidden'}
+                  className={(!isDataFound || isNetworkError) ? 'centered-loading-data-message' : 'display-none'}
                 >
                   <p className={(isNetworkError && isShared) ? 'error-message' : undefined}>{errorMessage()}</p>
                 </div>

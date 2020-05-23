@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
@@ -10,14 +10,10 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import '../../css/scenes.css';
 import devicesReducer from '../../reducers/devicesReducer';
 
 const params = (new URL(document.location)).searchParams;
-const path = window.location.pathname.toLowerCase().split('/');
 const fetchUrl = `${window.location.protocol}//${window.location.hostname}`;
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: 'auto',
@@ -51,10 +47,11 @@ function union(a, b) {
 
 /**
  * Compares two arrays and returns the difference
- * @param {} otherArray
+ * @param otherArray
  */
 function compareArrays(otherArray) {
-  return (current) => otherArray.filter((other) => other.id === current.id || other === current.id).length === 0;
+  return (current) => otherArray.filter((other) => other.id === current.id
+                                                   || other === current.id).length === 0;
 }
 
 function getNotUsedDevices(allDevices, currentDevices) {
@@ -107,13 +104,14 @@ function getDevicesTypesByCoupling(parent) {
  */
 function getCopulableDevicesByParentTypeAndRoom(parent, devices, types) {
   const filteredDevices = [];
-  for (const type of types) {
-    for (const device of devices) {
+  types.forEach((type) => {
+    devices.forEach((device) => {
       if (device.type === type && device.roomId === parent.roomId) {
         filteredDevices.push(device);
       }
-    }
-  }
+    });
+  });
+
   return filteredDevices;
 }
 
@@ -122,13 +120,37 @@ const CoupleDevices = () => {
   const [devices, dispatchDevices] = useReducer(devicesReducer, []);
   const [parent, setParent] = React.useState([]);
   const [checked, setChecked] = React.useState([]);
+  const [originalLeft, setOriginalLeft] = React.useState([]);
+  const [devicesToDecouple, setDevicesToDecouple] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [right, setRight] = React.useState([]);
-  const isEditing = path[1].toLowerCase() === 'editdevice';
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  // const isEditing = path[1].toLowerCase() === 'editdevice';
   const leftLength = left.length;
   const rightLength = right.length;
   const classes = useStyles();
 
+
+  const sortDevices = useCallback((devicesToSort) => {
+    devicesToSort.sort((a, b) => {
+      const keyA = a.name.toLowerCase();
+      const keyB = b.name.toLowerCase();
+      if (keyA === keyB) {
+        if (a.id < b.id) {
+          return -1;
+        }
+        if (a.id > b.id) {
+          return 1;
+        }
+      }
+      if (keyA < keyB) {
+        return -1;
+      }
+      return 1;
+    });
+  }, []);
 
   // Fetches user's devices just once
   useEffect(() => {
@@ -178,12 +200,28 @@ const CoupleDevices = () => {
 
         setParent(fetchedDevices.filter((device) => device.id === parseInt(params.get('id'), 10))[0]);
         dispatchDevices({ type: 'POPULATE_DEVICES', devices: fetchedDevices });
+        setIsLoading(false);
       }
     })
     .catch((e) => {
       console.log(e);
     });
   }, []);
+
+  // Enables/disables 'save coupling' button
+  useEffect(() => {
+    if (left.length > originalLeft.length && originalLeft.length === 0) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+
+    if (isEditing) {
+      setIsValid(true);
+    }
+    console.log(left)
+    console.log(right)
+  }, [left, originalLeft, isEditing]);
 
   // Loads the devices to the left or right sides of the Transfer List on page load
   useEffect(() => {
@@ -199,12 +237,22 @@ const CoupleDevices = () => {
         return foundDevices;
       });
 
+      usedDevices.forEach((device) => {
+        device.old = true;
+        device.used = true;
+      });
+
       setRight(getNotUsedDevices(filteredDevices, usedDevices));
       setLeft(usedDevices);
+      setOriginalLeft(usedDevices);
+
+      if (usedDevices.length < 0) {
+        setIsEditing(true);
+      }
     } else if (leftLength === 0 && rightLength === 0) {
       setRight(filteredDevices);
     }
-  }, [parent, devices, leftLength, rightLength, isEditing]);
+  }, [parent, devices, leftLength, rightLength]);
 
   const leftChecked = intersection(checked, left);
   const rightChecked = intersection(checked, right);
@@ -218,7 +266,6 @@ const CoupleDevices = () => {
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
     setChecked(newChecked);
   };
 
@@ -232,28 +279,48 @@ const CoupleDevices = () => {
     }
   };
 
-  const handleCheckedRight = () => {
-    const leftDevices = not(left, leftChecked);
-    setRight(right.concat(leftChecked));
-    setLeft(leftDevices);
-    setChecked(not(checked, leftChecked));
-
-    dispatchDevices({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: parent });
-  };
-
   const handleCheckedLeft = () => {
     const leftDevices = left.concat(rightChecked);
-    setLeft(leftDevices);
-    setRight(not(right, rightChecked));
-    setChecked(not(checked, rightChecked));
+    const rightDevices = not(right, rightChecked);
 
-    dispatchDevices({ type: 'UPDATE_TRANSFER_LIST_STATE', devices: leftDevices, config: parent });
+    leftDevices.forEach((device) => {
+      if (!device.old && device.new === undefined) {
+        device.new = true;
+        device.used = true;
+      } else {
+        device.used = true;
+      }
+    });
+
+    sortDevices(leftDevices);
+    sortDevices(rightDevices);
+    setLeft(leftDevices);
+    setRight(rightDevices);
+    setChecked(not(checked, rightChecked));
+  };
+
+  const handleCheckedRight = () => {
+    const leftDevices = not(left, leftChecked);
+    const rightDevices = right.concat(leftChecked);
+
+    rightDevices.forEach((device) => {
+      if (device.used !== undefined) {
+        device.used = false;
+      }
+    });
+
+
+    sortDevices(leftDevices);
+    sortDevices(rightDevices);
+    setLeft(leftDevices);
+    setRight(rightDevices);
+    setChecked(not(checked, leftChecked));
   };
 
   /**
    * Converts all devices to an array of IDs
-   * @param scene
    * @returns {*}
+   * @param devicesArray
    */
   function convertDevicesToIds(devicesArray) {
     return devicesArray.map((device) => device.id);
@@ -372,7 +439,11 @@ const CoupleDevices = () => {
             <Grid container spacing={0}>
               <div className="transfer-list-header-max-width">
                 <div className="transfer-list-header">
-                  <h5 className="center">{parent.name}</h5>
+                  <h6 className={!isLoading ? 'center' : 'center hidden'}>
+                    Devices controlled by
+                    {' '}
+                    <strong>{parent.name}</strong>
+                  </h6>
                 </div>
               </div>
             </Grid>
@@ -416,6 +487,7 @@ const CoupleDevices = () => {
               <button
                 type="button"
                 name="button"
+                disabled={!isValid}
                 className="btn-primary waves-effect waves-light btn"
                 onClick={(e) => coupleDevices(e)}
               >

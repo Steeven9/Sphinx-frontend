@@ -254,19 +254,28 @@ class AddDevice extends React.Component {
             <div className="textFields">
               <select className="selector" onChange={this.handleTypeChange}>
                 <option value="0" style={{ display: 'none' }}>Device type</option>
-                <option value="2">Dimmable Light</option>
-                <option value="4">Dimmer</option>
-                <option value="5">Dimmer (no-memory)</option>
-                <option value="7">Humidity sensor</option>
-                <option value="1">Light</option>
-                <option value="8">Light sensor</option>
-                <option value="10">Motion sensor</option>
-                <option value="13">Security camera</option>
-                <option value="12">Smart curtains</option>
-                <option value="6">Smart plug</option>
-                <option value="3">Switch</option>
-                <option value="9">Temperature sensor</option>
-                <option value="11">Thermostat</option>
+                <option value="Lights" disabled>Switches</option>
+                <option value="5">&nbsp;&nbsp;Dimmer</option>
+                <option value="4">&nbsp;&nbsp;Smart dimmer</option>
+                <option value="3">&nbsp;&nbsp;Switch</option>
+
+                <option value="Lights" disabled>Lights</option>
+                <option value="2">&nbsp;&nbsp;Dimmable light</option>
+                <option value="1">&nbsp;&nbsp;Light</option>
+
+                <option value="Sensors" disabled>Sensors</option>
+                <option value="7">&nbsp;&nbsp;Humidity sensor</option>
+                <option value="8">&nbsp;&nbsp;Light sensor</option>
+                <option value="10">&nbsp;&nbsp;Motion sensor</option>
+                <option value="9">&nbsp;&nbsp;Temperature sensor</option>
+
+                <option value="Temperature" disabled>Temperature control</option>
+                <option value="11">&nbsp;&nbsp;Thermostat</option>
+
+                <option value="Other" disabled>Other</option>
+                <option value="13">&nbsp;&nbsp;Security camera</option>
+                <option value="12">&nbsp;&nbsp;Smart curtains</option>
+                <option value="6">&nbsp;&nbsp;Smart plug</option>
               </select>
             </div>
             <div className="textFields">
