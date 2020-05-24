@@ -1,5 +1,5 @@
 import React from 'react';
-import { getDeviceTypeName, getRowIcon } from '../../helpers/getDeviceMetadataHelper';
+import { getDeviceTypeName } from '../../helpers/getDeviceMetadataHelper';
 
 
 /**
