@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useReducer } from 'react';
 import DevicesContext from '../../context/devicesContext';
 import devicesReducer from '../../reducers/devicesReducer';
-import DeviceList from './DeviceList';
+import DeviceList from './SimulationsDeviceList';
 import '../../css/collapsible-component.css';
 import '../../css/collapsible-devices.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -48,13 +48,21 @@ const SimulationsPanel = () => {
         return null;
       })
       .then((data) => {
-        const fetchedDevices = JSON.parse(data);
+        let fetchedDevices = JSON.parse(data);
 
         if (fetchedDevices.length === 0) {
           setHasDevices(false);
           setIsLoading(false);
         }
         setHasDevices(true);
+
+        fetchedDevices = fetchedDevices.filter((d) => d.type === 7
+                                                      || d.type === 8
+                                                      || d.type === 9
+                                                      || d.type === 10
+                                                      || d.type === 11
+                                                      || d.type === 13);
+
         fetchedDevices.sort((a, b) => {
           const keyA = a.name.toLowerCase();
           const keyB = b.name.toLowerCase();
@@ -123,7 +131,7 @@ const SimulationsPanel = () => {
                   <ColorCircularProgress />
                 </div>
                 <div
-                  className={(!isNetworkError) ? 'centered-loading-data-message' : 'hidden'}
+                  className={(isNetworkError) ? 'centered-loading-data-message' : 'hidden'}
                 >
                   <p className={(isNetworkError) ? 'error-message' : undefined}>{errorMessage()}</p>
                 </div>
