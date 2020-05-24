@@ -225,7 +225,7 @@ const ScenesPanel = () => {
         }
       })
       .then((data) => {
-        if (data === null || data.length === 0) {
+        if (data === null) {
           setIsDataFound(false);
         } else {
           const fetchedScenes = JSON.parse(data).sort((a, b) => {
@@ -245,6 +245,9 @@ const ScenesPanel = () => {
             }
             return 1;
           });
+          if (fetchedScenes.length === 0) {
+            setIsDataFound(false);
+          }
           dispatchScene({ type: 'POPULATE_SCENES', scenes: fetchedScenes });
           setIsLoading(false);
         }
@@ -256,7 +259,7 @@ const ScenesPanel = () => {
       });
       setActionCompleted(false);
     }
-  }, [actionCompleted]);
+  }, [scenes, actionCompleted]);
 
   // Discards cached state and extract the next one
   useEffect(() => {
