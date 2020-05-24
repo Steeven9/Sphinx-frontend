@@ -51,7 +51,7 @@ describe('test the add device page', function () {
         cy.contains('Please insert all information');
     });
 
-    it.only('testing the request', function () {
+    it('testing the request', function () {
         cy.visit('/addDevice');
         cy.wait('@getRooms');
         cy.get('input[type=text]')
