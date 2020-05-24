@@ -333,10 +333,10 @@ const ScenesFactory = () => {
                 )
                 : (
                   <div>
-                    <span className="center-tex bold">
+                    <p className="center-tex bold">
                       {!isEditing ? 'Creation failed!' : 'Modification failed!'}
-                    </span>
-                    <span className="center-text">Please review your scene and try again.</span>
+                    </p>
+                    <p className="center-text">Please review your scene and try again.</p>
                   </div>
                 )}
             </DialogContentText>
@@ -415,7 +415,7 @@ const ScenesFactory = () => {
                       </label>
                     </div>
                     <span
-                      className={hasName ? 'float-left l12 error-message align-error-message-scene-name' : 'hidden'}
+                      className={hasName ? 'float-left l12 error-message align-error-message-scene-name' : 'display-none'}
                     >
                       Scenes must have a name
                     </span>
@@ -481,7 +481,7 @@ const ScenesFactory = () => {
                       <button
                         type="button"
                         name="button"
-                        className={isEditing ? 'btn-secondary btn waves-effect waves-light' : 'hidden'}
+                        className={isEditing ? 'btn-secondary btn waves-effect waves-light' : 'display-none'}
                         onClick={() => {
                         }}
                       >
@@ -499,7 +499,7 @@ const ScenesFactory = () => {
 
                           if (isEditing) {
                             dispatchScenes({
-                              id,
+                              id: params.get('id'),
                               type: 'MODIFY_SCENE',
                               name: sceneName,
                               icon,

@@ -99,7 +99,7 @@ const scenesReducer = (stateParam, action) => {
         body: JSON.stringify(newScene),
       })
       .then((res) => {
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 201) {
           action.setActionCompleted(true);
           action.setLoading(false);
         } else {
@@ -120,7 +120,7 @@ const scenesReducer = (stateParam, action) => {
         headers,
       })
       .then((res) => {
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 204) {
           action.setActionCompleted(true);
         } else {
           action.setActionCompleted(false);
@@ -128,7 +128,7 @@ const scenesReducer = (stateParam, action) => {
       })
       .catch((e) => console.log(e));
 
-      return state;
+      return [...state];
 
     case 'DELETE_SCENE_EFFECT':
       // console.log('Dispatch: DELETE_SCENE_EFFECT');
@@ -145,7 +145,7 @@ const scenesReducer = (stateParam, action) => {
       .then((res) => {
         action.setPlaying(false);
         action.setResultTriggered(true);
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 204) {
           action.setSuccess(true);
         } else {
           action.setSuccess(false);
@@ -197,7 +197,7 @@ const scenesReducer = (stateParam, action) => {
 
         if (effect.slider !== undefined) {
           if (effect.type === 1 || effect.type === 4) {
-            effect.slider = parseFloat(effect.slider) / 100;
+            effect.slider = parseFloat(effect.slider);
           } else {
             effect.slider = parseFloat(effect.slider);
           }
@@ -210,7 +210,7 @@ const scenesReducer = (stateParam, action) => {
         body: JSON.stringify(duplicatedScene),
       })
       .then((res) => {
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 201) {
           action.setActionCompleted(true);
         } else {
           action.setActionCompleted(false);
