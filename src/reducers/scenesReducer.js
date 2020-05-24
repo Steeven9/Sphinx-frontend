@@ -198,8 +198,6 @@ const scenesReducer = (stateParam, action) => {
         if (effect.slider !== undefined) {
           if (effect.type === 1 || effect.type === 4) {
             effect.slider = parseFloat(effect.slider);
-          } else {
-            effect.slider = parseFloat(effect.slider);
           }
         }
       });
