@@ -333,10 +333,10 @@ const ScenesFactory = () => {
                 )
                 : (
                   <div>
-                    <span className="center-tex bold">
+                    <p className="center-tex bold">
                       {!isEditing ? 'Creation failed!' : 'Modification failed!'}
-                    </span>
-                    <span className="center-text">Please review your scene and try again.</span>
+                    </p>
+                    <p className="center-text">Please review your scene and try again.</p>
                   </div>
                 )}
             </DialogContentText>

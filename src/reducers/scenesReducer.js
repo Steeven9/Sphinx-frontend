@@ -145,7 +145,7 @@ const scenesReducer = (stateParam, action) => {
       .then((res) => {
         action.setPlaying(false);
         action.setResultTriggered(true);
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 204) {
           action.setSuccess(true);
         } else {
           action.setSuccess(false);
@@ -210,7 +210,7 @@ const scenesReducer = (stateParam, action) => {
         body: JSON.stringify(duplicatedScene),
       })
       .then((res) => {
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 201) {
           action.setActionCompleted(true);
         } else {
           action.setActionCompleted(false);
