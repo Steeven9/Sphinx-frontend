@@ -99,7 +99,7 @@ const scenesReducer = (stateParam, action) => {
         body: JSON.stringify(newScene),
       })
       .then((res) => {
-        if (res.status === 200 || res.status === 203) {
+        if (res.status === 200 || res.status === 201) {
           action.setActionCompleted(true);
           action.setLoading(false);
         } else {
