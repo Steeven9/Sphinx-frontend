@@ -499,7 +499,7 @@ const ScenesFactory = () => {
 
                           if (isEditing) {
                             dispatchScenes({
-                              id,
+                              id: params.get('id'),
                               type: 'MODIFY_SCENE',
                               name: sceneName,
                               icon,
