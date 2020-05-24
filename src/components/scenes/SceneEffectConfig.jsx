@@ -173,10 +173,10 @@ const SceneEffectConfig = (config) => {
             value={effectConfig.type.toString()}
             disabled={effectConfig.preexisting}
             onChange={(e) => {
-              effectConfig.type = parseInt(e.target.value);
-              effectConfig.name = getEffectName(parseInt(e.target.value));
-              setEffectType(parseInt(e.target.value));
-              setEffectName(getEffectName(parseInt(e.target.value)));
+              effectConfig.type = parseInt(e.target.value, 10);
+              effectConfig.name = getEffectName(parseInt(e.target.value, 10));
+              setEffectType(parseInt(e.target.value, 10));
+              setEffectName(getEffectName(parseInt(e.target.value, 10)));
               dispatchScenes({ type: 'UPDATE_STATE' });
               effectConfig.preexisting = true;
             }}

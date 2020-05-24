@@ -225,7 +225,7 @@ const ScenesPanel = () => {
         }
       })
       .then((data) => {
-        if (data === null || data.length === 0) {
+        if (data === null) {
           setIsDataFound(false);
         } else {
           const fetchedScenes = JSON.parse(data).sort((a, b) => {
@@ -245,6 +245,9 @@ const ScenesPanel = () => {
             }
             return 1;
           });
+          if (fetchedScenes.length === 0) {
+            setIsDataFound(false);
+          }
           dispatchScene({ type: 'POPULATE_SCENES', scenes: fetchedScenes });
           setIsLoading(false);
         }
@@ -256,7 +259,7 @@ const ScenesPanel = () => {
       });
       setActionCompleted(false);
     }
-  }, [actionCompleted]);
+  }, [scenes, actionCompleted]);
 
   // Discards cached state and extract the next one
   useEffect(() => {
@@ -333,12 +336,12 @@ const ScenesPanel = () => {
                     )}
                 </div>
 
-                <div className={(isLoading) ? 'centered-loading-data-message' : 'hidden'}>
+                <div className={(isLoading) ? 'centered-loading-data-message' : 'display-none'}>
                   <ColorCircularProgress />
                 </div>
 
                 <div
-                  className={(!isDataFound || isNetworkError) ? 'centered-loading-data-message' : 'hidden'}
+                  className={(!isDataFound || isNetworkError) ? 'centered-loading-data-message' : 'display-none'}
                 >
                   <p className={(isNetworkError && isShared) ? 'error-message' : undefined}>{errorMessage()}</p>
                 </div>

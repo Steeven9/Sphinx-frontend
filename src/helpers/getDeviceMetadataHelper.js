@@ -44,7 +44,7 @@ export function getDeviceTypeName(type) {
 
     // Smart lights (with intensity state)
     case 2:
-      return 'Smart light';
+      return 'Dimmable light';
 
     // Light controllers
     case 3:
@@ -54,7 +54,7 @@ export function getDeviceTypeName(type) {
     case 5:
       return 'Dimmer';
     case 6:
-      return 'SmartPlug';
+      return 'Smart plug';
 
     // Sensors
     case 7:
