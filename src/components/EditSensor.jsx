@@ -104,8 +104,7 @@ const EditSensor = () => {
   function updateDevice() {
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
-      const fetchUrl2 = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
-      // const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
+      const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
@@ -113,8 +112,7 @@ const EditSensor = () => {
 
       setIsLoading(true);
       setIsValid(false);
-      fetch(fetchUrl2, {
-        // fetch(fetchUrl, {
+      fetch(fetchUrl, {
         method: 'PUT',
         headers,
         body: {
@@ -180,7 +178,7 @@ const EditSensor = () => {
   return (
     <div>
       <div id="addDeviceInfo" className="device-content-box z-depth-2">
-        <h2 className="title">Set sensor custom values</h2>
+        <h2 className="title">Set custom sensor values</h2>
 
         <div id={device.id} className="collapsible-header no-border">
           <form id="devicesForm" className="device-form row">
@@ -216,7 +214,7 @@ const EditSensor = () => {
                 />
               </div>
               <label className="col l1 scene-effect-value-label">{getMeasureUnit(device.type)}</label>
-              <div className="col l1 scene-effect-value-label">
+              <div className="col l1">
                 &nbsp;
               </div>
               {device.type !== 10
