@@ -71,8 +71,6 @@ const Device = ({ device, isGuest }) => {
 
   const handleClickOpen = () => {
     setOpen(true);
-    if (open) {
-    }
   };
 
   const handleClose = () => {

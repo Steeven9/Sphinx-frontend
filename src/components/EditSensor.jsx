@@ -104,7 +104,7 @@ const EditSensor = () => {
   function updateDevice() {
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
-      const fetchUrl2 = `${window.location.protocol}//${window.location.hostname}:8888/devices/${params.get('id')}`;
+      const fetchUrl2 = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
       // const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
       const headers = {
         user: localStorage.getItem('username'),
