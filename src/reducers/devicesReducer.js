@@ -40,7 +40,7 @@ function doFetch(fetchUrl, method, body) {
 const devicesReducer = (state, action) => {
   switch (action.type) {
     case 'POPULATE_DEVICES':
-      console.log('Dispatch: POPULATE_DEVICES');
+      // console.log('Dispatch: POPULATE_DEVICES');
       action.devices.forEach((device) => {
         if (device.slider !== null && device.type !== 11) { // Does not apply to Thermostat
           device.slider *= 100;
@@ -49,7 +49,7 @@ const devicesReducer = (state, action) => {
       return action.devices;
 
     case 'UPDATE_STATE':
-      console.log('Dispatch: UPDATE_STATE');
+      // console.log('Dispatch: UPDATE_STATE');
       if (action.actionCompleted) {
         state.forEach((d) => {
           action.devices.forEach((device) => {
@@ -80,7 +80,7 @@ const devicesReducer = (state, action) => {
       return [...state];
 
     case 'UPDATE_SENSORS':
-      console.log('Dispatch: UPDATE_SENSORS');
+      // console.log('Dispatch: UPDATE_SENSORS');
       state.forEach((d) => {
         action.sensors.forEach((sensor) => {
           if (d.id === sensor.id) {

@@ -263,8 +263,7 @@ const DevicesPanel = () => {
           clearInterval(interval);
         };
       },
-      [devices, sortDevices],
-    );
+      [devices, sortDevices, actionCompleted]);
 
     function redirectToAdd() {
       if (isRoom) {

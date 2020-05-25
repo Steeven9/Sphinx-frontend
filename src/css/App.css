@@ -138,6 +138,10 @@ h3 {
     padding: 20px 40px 20px 40px !important;
 }
 
+.no-border {
+    border: 0 !important;
+}
+
 .btn {
     margin-left: 2vh !important;
     margin-right: 2vh !important;

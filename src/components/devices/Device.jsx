@@ -267,7 +267,13 @@ const Device = ({ device, isGuest }) => {
    * @returns {AlertDialog}
    * */
   function AlertDialog() {
-    const video = 'https://res.cloudinary.com/erickgarro/video/upload/v1586203233/SmartHut/video-cabin.mp4';
+    let { video } = device;
+    if (video === null
+        || video === undefined
+        || video === ''
+        || video.length === 0) {
+      video = 'https://res.cloudinary.com/erickgarro/video/upload/v1586203233/SmartHut/video-cabin.mp4';
+    }
     return (
       <div>
         <Dialog
@@ -287,8 +293,8 @@ const Device = ({ device, isGuest }) => {
               <CardMedia
                 component="video"
                 image={video}
-                autoPlay="true"
-                loop="true"
+                autoPlay
+                loop
               />
             </DialogContentText>
           </DialogContent>
