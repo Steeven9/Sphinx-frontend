@@ -40,7 +40,7 @@ function doFetch(fetchUrl, method, body) {
 const devicesReducer = (state, action) => {
   switch (action.type) {
     case 'POPULATE_DEVICES':
-      // console.log('Dispatch: POPULATE_DEVICES');
+      console.log('Dispatch: POPULATE_DEVICES');
       action.devices.forEach((device) => {
         if (device.slider !== null && device.type !== 11) { // Does not apply to Thermostat
           device.slider *= 100;
@@ -49,16 +49,43 @@ const devicesReducer = (state, action) => {
       return action.devices;
 
     case 'UPDATE_STATE':
-      // console.log('Dispatch: UPDATE_STATE');
-      return state;
+      console.log('Dispatch: UPDATE_STATE');
+      if (action.actionCompleted) {
+        state.forEach((d) => {
+          action.devices.forEach((device) => {
+            if (d.id === device.id) {
+              if (device.on !== null) {
+                d.on = device.on;
+              }
+
+              if (device.slider !== null) {
+                if (device.type === 11) {
+                  d.slider = device.slider;
+                } else {
+                  d.slider = device.slider * 100;
+                }
+              }
+
+              if (device.source !== null) {
+                d.source = device.source;
+              }
+
+              if (device.video !== null) {
+                d.video = device.video;
+              }
+            }
+          });
+        });
+      }
+      return [...state];
 
     case 'UPDATE_SENSORS':
-      // console.log('Dispatch: UPDATE_SENSORS');
-      action.sensors.forEach((sensor) => {
-        action.devices.forEach((device) => {
-          if (device.id === sensor.id) {
-            device.label = sensor.label;
-            device.averageTemp = sensor.averageTemp;
+      console.log('Dispatch: UPDATE_SENSORS');
+      state.forEach((d) => {
+        action.sensors.forEach((sensor) => {
+          if (d.id === sensor.id) {
+            d.label = sensor.label;
+            d.averageTemp = sensor.averageTemp;
           }
         });
       });

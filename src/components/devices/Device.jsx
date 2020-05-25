@@ -158,7 +158,7 @@ const Device = ({ device, isGuest }) => {
               type="button"
               name="button"
               disabled={!device.on}
-              className={`waves-effect waves-light${device.on ? ' btn-video-active' : ' btn-video-inactive'}`}
+              className={`waves-effect waves-light ${device.on ? 'z-depth-1 btn-video-active' : 'btn-video-inactive'}`}
               onClick={handleClickOpen}
             >
               {(device.on ? 'Watch now' : 'No video feed')}

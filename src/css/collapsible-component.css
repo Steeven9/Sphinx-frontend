@@ -229,6 +229,10 @@
     color: #FFFFFF;
 }
 
+.btn-simulations-panel-fix {
+    margin-top: -2px !important;
+}
+
 .btn-video-active {
     font-family: 'Open Sans', Verdana, sans-serif !important;
     margin-top: 0.75vh;
@@ -243,6 +247,7 @@
     background: #FFB800 !important;
     text-transform: none !important;
     color: #580B71 !important;
+    border: none;
 }
 
 .btn-video-inactive {
@@ -259,6 +264,7 @@
     background: #848484;
     text-transform: none !important;
     color: #FFF;
+    border: none;
 }
 
 .btn-group {

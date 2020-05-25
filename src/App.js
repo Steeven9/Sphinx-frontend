@@ -30,6 +30,8 @@ import SharedWithGuests from './components/shared/SharedWithGuests';
 import Scenes from './components/Scenes';
 import AddScene from './components/AddScene';
 import EditScene from './components/EditScene';
+import EditSensor from './components/EditSensor';
+import EditSecurityCamera from './components/EditSecurityCamera';
 import Simulations from './components/Simulations';
 import LogOut from './components/LogOut';
 import ResendEmail from './components/ResendEmail';
@@ -423,6 +425,30 @@ class App extends React.Component {
                 {this.state.loggedIn
                   ? (
                     <Simulations
+                      username={this.state.username}
+                      session_token={this.state.session_token}
+                      logOut={this.logOut}
+                    />
+                  )
+                  : this.accessDenied()}
+              </Route>
+
+              <Route path="/editSensor">
+                {this.state.loggedIn
+                  ? (
+                    <EditSensor
+                      username={this.state.username}
+                      session_token={this.state.session_token}
+                      logOut={this.logOut}
+                    />
+                  )
+                  : this.accessDenied()}
+              </Route>
+
+              <Route path="/editCamera">
+                {this.state.loggedIn
+                  ? (
+                    <EditSecurityCamera
                       username={this.state.username}
                       session_token={this.state.session_token}
                       logOut={this.logOut}
