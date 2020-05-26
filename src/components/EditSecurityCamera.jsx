@@ -5,6 +5,7 @@ import '../css/editPages.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { getDeviceTypeName } from '../helpers/getDeviceMetadataHelper';
+import { render } from '@testing-library/react';
 
 const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(CircularProgress);
 
@@ -22,7 +23,7 @@ const EditSecurityCamera = () => {
   function updateDevice(mode) {
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
-      const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
+      const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8888/devices/${params.get('id')}`;
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
@@ -70,30 +71,42 @@ const EditSecurityCamera = () => {
 
   // Validates the size and resolution of the video file
   function validateVideoFile() {
-    const something = true;
-    // Implement function here
-    // ...
-    // ...
+    console.log("checking the size");
+    var upl = document.getElementById("upload-video");
+    var max_size = 2000000;
+    var file_size =  upl.files[0].size;
+    console.log(file_size);
 
-    // Change {something} for actual evaluation
-    if (something) {
-      setIsValid(true);
-      setIsError(false);
-      setShowMessage(false);
-    } else {
+    if(file_size > max_size){
       setIsValid(false);
       setIsError(true);
       setShowMessage(true);
     }
+    else{
+      setIsValid(true);
+      setIsError(false);
+      setShowMessage(false);
+    }
+
   }
 
   // Uploads video file to the frontend server
   function uploadVideo() {
-    // Implement function here
-    // ...
-    // ...
-
+    var newVideo = document.getElementById("upload-video");
     validateVideoFile();
+
+    if(setIsValid){
+      var reader = new FileReader();
+      reader.readAsDataURL(newVideo.files[0]);
+
+      reader.onload = function(){
+        setVideo(reader.result);
+      };
+
+      reader.onerror = function(){
+        console.log("error")
+      };
+    }
   }
 
   // Resets video file to default video URL
@@ -111,7 +124,7 @@ const EditSecurityCamera = () => {
   // Additional validation to enable saving
   useEffect(() => {
       if (showMessage) {
-        if (video.length === 0) {
+        if (video.length > 0) {
           setIsValid(true);
         } else {
           setIsValid(false);
@@ -123,12 +136,12 @@ const EditSecurityCamera = () => {
     },
     [video, device, isError, showMessage]);
 
-  // Extracts value is isLoading on change
+  // Disable message when something is loading
   useEffect(() => {
     setShowMessage(false);
   }, [isLoading]);
 
-  // Fetches devices and room info on page load
+  // Fetches devices on page loads
   useEffect(() => {
     const params = (new URL(document.location)).searchParams;
     const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
@@ -227,14 +240,19 @@ const EditSecurityCamera = () => {
                 &nbsp;
               </div>
               <div className="col l5">
-                <button
-                  type="button"
-                  name=" button"
-                  className=" btn-primary waves-effect waves-light btn"
-                  onClick={() => uploadVideo()}
-                >
-                  Choose file
-                </button>
+              <label for="upload-video" 
+                     className="btn-primary waves-effect waves-light btn"
+                     >
+                       Modify video
+              </label>
+              <input 
+                     type="file"
+                     name="video" 
+                     accept="video/*" 
+                     onChange={() => uploadVideo()} 
+                     id="upload-video"
+                     hidden 
+                    />
               </div>
             </div>
 
