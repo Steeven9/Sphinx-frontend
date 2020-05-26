@@ -199,7 +199,7 @@ const EditSensor = () => {
             <div className="device-control col col-custom l5">
               {device.type === 10 && <div className="col l4" />}
               <div className="col l4">
-                <label>Value</label>
+                {device.type === 10 ? <label>Probability</label> : <label>Value</label>}
                 <input
                   className="scenes-factory-effect-value-input"
                   type="number"
