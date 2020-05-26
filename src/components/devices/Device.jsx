@@ -1,9 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Slider from '@material-ui/core/Slider';
 import DevicesContext from '../../context/devicesContext';
-import {
-  getDeviceTypeName, getMinMax, getSliderMarks, getRowIcon,
-} from '../../helpers/getDeviceMetadataHelper';
+import { getDeviceTypeName, getMinMax, getSliderMarks, getRowIcon } from '../../helpers/getDeviceMetadataHelper';
 
 import PowerSwitch from './PowerSwitch';
 import SmartPlug from './SmartPlug';
@@ -147,8 +145,7 @@ const Device = ({ device, isGuest }) => {
       case 13: // MotionSensor
         return (
           <div className="col col-custom l9 s8">
-            {device.on &&
-             <VideoPlayer device={device} open={open} handleClose={handleClose} />}
+            {device.on && <VideoPlayer device={device} open={open} handleClose={handleClose} />}
             <button
               type="button"
               name="button"

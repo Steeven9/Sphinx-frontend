@@ -28,8 +28,6 @@ const DevicesPanel = () => {
     const [actionCompleted, setActionCompleted] = React.useState(true);
     const [devices, dispatch] = useReducer(devicesReducer, []);
     const [isDataFound, setIsDataFound] = useState(true);
-    // const [sensors, setSensors] = useState([]);
-    // const [updatedDevices, setUpdatedDevices] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isShared, setIsShared] = useState(true);
     const [isFakeOwner, setFakeOwner] = useState(false);
