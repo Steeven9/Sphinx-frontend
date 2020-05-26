@@ -23,7 +23,7 @@ const VideoPlayer = (device) => {
   // Makes interval fetches for state updating
   useEffect(() => {
       if (device.open) {
-        const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8888/devices/video/${device.device.id}`;
+        const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/video/${device.device.id}`;
         const method = 'GET';
         const headers = {
           user: localStorage.getItem('username'),
