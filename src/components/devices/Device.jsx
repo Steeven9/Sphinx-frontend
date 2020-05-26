@@ -1,18 +1,12 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Slider from '@material-ui/core/Slider';
-import CardMedia from '@material-ui/core/CardMedia';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DevicesContext from '../../context/devicesContext';
-import {
-  getDeviceTypeName, getMinMax, getSliderMarks, getRowIcon,
-} from '../../helpers/getDeviceMetadataHelper';
+import { getDeviceTypeName, getMinMax, getSliderMarks, getRowIcon } from '../../helpers/getDeviceMetadataHelper';
 
 import PowerSwitch from './PowerSwitch';
 import SmartPlug from './SmartPlug';
 import Thermostat from './Thermostat';
+import VideoPlayer from './VideoPlayer';
 import StatelessDimmerButtons from './StatelessDimmerButtons';
 
 
@@ -151,7 +145,7 @@ const Device = ({ device, isGuest }) => {
       case 13: // MotionSensor
         return (
           <div className="col col-custom l9 s8">
-            {device.on && <AlertDialog />}
+            {device.on && <VideoPlayer device={device} open={open} handleClose={handleClose} />}
             <button
               type="button"
               name="button"
@@ -258,57 +252,6 @@ const Device = ({ device, isGuest }) => {
           </div>
         );
     }
-  }
-
-  /**
-   * Generates a modal to play the security cam video
-   * @returns {AlertDialog}
-   * */
-  function AlertDialog() {
-    let { video } = device;
-    if (video === null
-        || video === undefined
-        || video === ''
-        || video.length === 0) {
-      video = 'https://res.cloudinary.com/erickgarro/video/upload/v1586203233/SmartHut/video-cabin.mp4';
-    }
-    return (
-      <div>
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <h2 className="center-text">
-            {device.roomName}
-            :
-            {' '}
-            {device.name}
-          </h2>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              <CardMedia
-                component="video"
-                image={video}
-                autoPlay
-                loop
-              />
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <button
-              type="button"
-              name="button"
-              className="display-inf btn-secondary btn waves-effect waves-light"
-              onClick={handleClose}
-            >
-              Close
-            </button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
   }
 
   return (

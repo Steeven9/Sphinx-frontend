@@ -15,8 +15,10 @@ const EditSensor = () => {
   const [isValid, setIsValid] = React.useState(false);
   const [showMessage, setShowMessage] = React.useState(false);
   const [device, setDevice] = React.useState({});
-  const [value, setValue] = React.useState(0);
-  const [tolerance, setTolerance] = React.useState(0);
+  const [value, setValue] = React.useState();
+  const [tolerance, setTolerance] = React.useState();
+  const defaultMesssage = (<p className="hidden">Secret message!</p>);
+  const [message, setMessage] = React.useState(defaultMesssage);
 
   // Get's measure unit for values according to sensor type
   function getMeasureUnit(type) {
@@ -33,30 +35,126 @@ const EditSensor = () => {
     }
   }
 
-  // Checks validity to save
+  // Get's min/max accepted values according to sensor type
+  function getMinMax(type) {
+    switch (type) {
+      case 9: // TempSensor
+      case 11: // Thermostat
+        return [undefined, undefined];
+      case 8: // LightSensor
+        return ['0', undefined];
+      case 7: // HumiditySensor
+      case 10: // MovementSensor
+      default:
+        return ['0', '100'];
+    }
+  }
+
+  // Checks validity to save and show feedback messages
   useEffect(() => {
+      const hiddenMessage = (<p className="hidden">Secret message!</p>);
+
       if (showMessage) {
-        if (device.type !== 10) {
-          if (value > 0 && tolerance > 0 && value <= 100 && tolerance <= 100) {
+        // TempSensor and Thermostat
+        if (device.type === 9 || device.type === 11) {
+          if (value && tolerance >= 0) {
             setIsValid(true);
-          } else if (value <= 0 || tolerance <= 0) {
             setShowMessage(false);
-          } else {
+            setMessage(hiddenMessage);
+          }
+
+          if ((!value && !tolerance) || (!value && tolerance < 0) || (value && tolerance < 0)) {
+            setShowMessage(true);
             setIsValid(false);
+            setMessage(
+              <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please fill both fields, and tolerance with a positive value.</p>,
+            );
+          }
+
+          if (value && !tolerance) {
+            setShowMessage(true);
+            setIsValid(false);
+            setMessage(
+              <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please fill tolerance with a positive value.</p>,
+            );
+          }
+
+          if (!value && tolerance >= 0) {
+            setShowMessage(true);
+            setIsValid(false);
+            setMessage(
+              <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please fill the value field.</p>,
+            );
           }
         }
 
+        // MovementSensor
         if (device.type === 10) {
-          if (value > 0 && value <= 100) {
+          if (value >= 0 && value <= 100) {
             setIsValid(true);
+            setShowMessage(false);
+            setMessage(hiddenMessage);
           }
-          if (isError) {
+
+          if (!value || value < 0 || value > 100) {
+            setIsValid(false);
             setShowMessage(true);
+            setMessage(
+              <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please enter a value between 0 and 100.</p>,
+            );
           }
+        }
+
+        // LightSensor
+        if (device.type === 8) {
+          if (value >= 0 && tolerance >= 0) {
+            setIsValid(true);
+            setShowMessage(false);
+            setMessage(hiddenMessage);
+          }
+
+          if (value < 0 || tolerance < 0 || !value || !tolerance) {
+            setIsValid(false);
+            setShowMessage(true);
+            setMessage(
+              <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please enter values greater or equal to 0.</p>,
+            );
+          }
+        }
+
+        // HumiditySensor
+        if (device.type === 7) {
+          if (value >= 0 && value <= 100 && tolerance >= 0 && tolerance <= 100) {
+            setIsValid(true);
+            setShowMessage(false);
+            setMessage(hiddenMessage);
+          }
+
+          if (!value || !tolerance || value < 0 || value > 100 || tolerance < 0 || tolerance > 100) {
+            setIsValid(false);
+            setShowMessage(true);
+            setMessage(
+              <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please enter values between 0 and 100.</p>,
+            );
+          }
+        }
+
+        if (success) {
+          setShowMessage(true);
+          setMessage(
+            <p className="enter-text success-message">Values successfully saved!</p>,
+          );
+        }
+
+        if (isError) {
+          setShowMessage(true);
+          setMessage(
+            <p className="enter-text error-message">There was an error!</p>,
+          );
         }
       }
     },
-    [device, value, tolerance, isError, showMessage]);
+    [device, value, tolerance, success, isError, showMessage]);
 
   // Extracts value is isLoading on change
   useEffect(() => {
@@ -108,17 +206,18 @@ const EditSensor = () => {
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
+        'Content-Type': 'application/json',
       };
-
+      const body = {
+        quantity: value,
+        tolerance,
+      };
       setIsLoading(true);
       setIsValid(false);
       fetch(fetchUrl, {
         method: 'PUT',
         headers,
-        body: {
-          sensorValue: value,
-          sensorTolerance: tolerance,
-        },
+        body: JSON.stringify(body),
       })
       .then((res) => {
         setIsLoading(false);
@@ -145,36 +244,6 @@ const EditSensor = () => {
     }
   }
 
-  /**
-   * Display feedback message
-   */
-  function showFeedbackMessage() {
-    if (showMessage) {
-      if (!isValid && !isError) {
-        if (device.type === 10) {
-          return (
-            <p className="enter-text error-message">Please fill with values between 0.01 and 100.00</p>
-          );
-        }
-      }
-
-      if (isValid || !isValid) {
-        if (isError) {
-          return (
-            <p className="enter-text error-message">There was an error!</p>
-          );
-        }
-      }
-
-      if (success) {
-        return (
-          <p className="enter-text success-message">Values successfully saved!</p>
-        );
-      }
-    }
-    return (<p>&nbsp;</p>);
-  }
-
   return (
     <div>
       <div id="addDeviceInfo" className="device-content-box z-depth-2">
@@ -199,17 +268,17 @@ const EditSensor = () => {
             <div className="device-control col col-custom l5">
               {device.type === 10 && <div className="col l4" />}
               <div className="col l4">
-                <label>Value</label>
+                {device.type === 10 ? <label>Probability</label> : <label>Value</label>}
                 <input
                   className="scenes-factory-effect-value-input"
                   type="number"
-                  min="0"
-                  max="100"
+                  min={getMinMax(device.type)[0]}
+                  max={getMinMax(device.type)[1]}
                   onChange={(e) => {
                     setValue(e.target.value);
                     setShowMessage(true);
                   }}
-                  placeholder="0.0"
+                  placeholder={parseFloat(device.quantity).toFixed(2).toString() || '0.00'}
                   required
                 />
               </div>
@@ -230,8 +299,8 @@ const EditSensor = () => {
                          setShowMessage(true);
                        }}
                        min="0"
-                       max="100"
-                       placeholder="&plusmn; 0.0"
+                       max={getMinMax(device.type)[1]}
+                       placeholder={parseFloat(device.tolerance).toFixed(2).toString() || '0.00'}
                        required
                      />
                    </div>
@@ -247,7 +316,7 @@ const EditSensor = () => {
             <ColorCircularProgress className={isLoading ? 'loading-spinner' : 'loading-spinner hidden'} />
           </div>
           <div className="col l12">
-            {showFeedbackMessage()}
+            {message}
           </div>
         </div>
 
@@ -278,5 +347,4 @@ const EditSensor = () => {
     </div>
   );
 };
-
 export default EditSensor;
