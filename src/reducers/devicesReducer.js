@@ -50,15 +50,42 @@ const devicesReducer = (state, action) => {
 
     case 'UPDATE_STATE':
       // console.log('Dispatch: UPDATE_STATE');
-      return state;
+      if (action.actionCompleted) {
+        state.forEach((d) => {
+          action.devices.forEach((device) => {
+            if (d.id === device.id) {
+              if (device.on !== null) {
+                d.on = device.on;
+              }
+
+              if (device.slider !== null) {
+                if (device.type === 11) {
+                  d.slider = device.slider;
+                } else {
+                  d.slider = device.slider * 100;
+                }
+              }
+
+              if (device.source !== null) {
+                d.source = device.source;
+              }
+
+              if (device.video !== null) {
+                d.video = device.video;
+              }
+            }
+          });
+        });
+      }
+      return [...state];
 
     case 'UPDATE_SENSORS':
       // console.log('Dispatch: UPDATE_SENSORS');
-      action.sensors.forEach((sensor) => {
-        action.devices.forEach((device) => {
-          if (device.id === sensor.id) {
-            device.label = sensor.label;
-            device.averageTemp = sensor.averageTemp;
+      state.forEach((d) => {
+        action.sensors.forEach((sensor) => {
+          if (d.id === sensor.id) {
+            d.label = sensor.label;
+            d.averageTemp = sensor.averageTemp;
           }
         });
       });

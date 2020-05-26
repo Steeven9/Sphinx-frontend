@@ -390,5 +390,4 @@ class AddDevice extends React.Component {
   }
 }
 
-
 export default AddDevice;

@@ -412,5 +412,4 @@ class EditDevice extends React.Component {
   }
 }
 
-
 export default EditDevice;

@@ -20,10 +20,13 @@
  * @param {object} device
  * @returns {string} SVG imported icon
  */
+// eslint-disable-next-line consistent-return
 export function getRowIcon(device) {
   if (device.parent) {
     return 'more_vert';
-  } else if (device.child) {
+  }
+
+  if (device.child) {
     return 'arrow_drop_up';
   }
 }

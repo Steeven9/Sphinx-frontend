@@ -71,8 +71,6 @@ const Device = ({ device, isGuest }) => {
 
   const handleClickOpen = () => {
     setOpen(true);
-    if (open) {
-    }
   };
 
   const handleClose = () => {
@@ -158,7 +156,7 @@ const Device = ({ device, isGuest }) => {
               type="button"
               name="button"
               disabled={!device.on}
-              className={`waves-effect waves-light${device.on ? ' btn-video-active' : ' btn-video-inactive'}`}
+              className={`waves-effect waves-light ${device.on ? 'z-depth-1 btn-video-active' : 'btn-video-inactive'}`}
               onClick={handleClickOpen}
             >
               {(device.on ? 'Watch now' : 'No video feed')}
@@ -267,7 +265,13 @@ const Device = ({ device, isGuest }) => {
    * @returns {AlertDialog}
    * */
   function AlertDialog() {
-    const video = 'https://res.cloudinary.com/erickgarro/video/upload/v1586203233/SmartHut/video-cabin.mp4';
+    let { video } = device;
+    if (video === null
+        || video === undefined
+        || video === ''
+        || video.length === 0) {
+      video = 'https://res.cloudinary.com/erickgarro/video/upload/v1586203233/SmartHut/video-cabin.mp4';
+    }
     return (
       <div>
         <Dialog
@@ -287,8 +291,8 @@ const Device = ({ device, isGuest }) => {
               <CardMedia
                 component="video"
                 image={video}
-                autoPlay="true"
-                loop="true"
+                autoPlay
+                loop
               />
             </DialogContentText>
           </DialogContent>

@@ -138,6 +138,10 @@ h3 {
     padding: 20px 40px 20px 40px !important;
 }
 
+.no-border {
+    border: 0 !important;
+}
+
 .btn {
     margin-left: 2vh !important;
     margin-right: 2vh !important;
@@ -297,7 +301,7 @@ nav ul a:hover {
 }
 
 .nav-link {
-    padding: 0 5vh 0 5vh !important;
+    padding: 0 3.2vh 0 3.2vh !important;
 }
 
 .btn-icon {
