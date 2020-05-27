@@ -69,13 +69,11 @@ const EditSecurityCamera = () => {
     }
   }
 
-  // Validates the size and resolution of the video file
+  // Validates the size of the video file
   function validateVideoFile() {
-    console.log("checking the size");
     var upl = document.getElementById("upload-video");
-    var max_size = 2000000;
+    var max_size = 70000000;
     var file_size =  upl.files[0].size;
-    console.log(file_size);
 
     if(file_size > max_size){
       setIsValid(false);
