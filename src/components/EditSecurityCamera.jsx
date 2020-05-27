@@ -20,7 +20,8 @@ const EditSecurityCamera = () => {
 
   // PUTS the customized security camera video file
   function updateDevice(mode) {
-    console.log(JSON.stringify(video))
+    var newVideo = JSON.stringify({video: video});
+    console.log("new video in json" + newVideo);
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
       const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
@@ -39,9 +40,9 @@ const EditSecurityCamera = () => {
       fetch(fetchUrl, {
         method: 'PUT',
         headers,
-        body: {
-          video: "video",
-        },
+        body: 
+          newVideo
+        ,
       })
       .then((res) => {
         setIsLoading(false);
