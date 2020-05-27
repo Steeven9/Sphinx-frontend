@@ -5,7 +5,6 @@ import '../css/editPages.css';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { getDeviceTypeName } from '../helpers/getDeviceMetadataHelper';
-import { render } from '@testing-library/react';
 
 const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(CircularProgress);
 
