@@ -79,6 +79,7 @@ const EditSecurityCamera = () => {
       setIsValid(false);
       setIsError(true);
       setShowMessage(true);
+      return;
     }
     else{
       setIsValid(true);
@@ -92,8 +93,7 @@ const EditSecurityCamera = () => {
   function uploadVideo() {
     var newVideo = document.getElementById("upload-video");
     validateVideoFile();
-
-    if(setIsValid){
+    if(isValid){
       var reader = new FileReader();
       reader.readAsDataURL(newVideo.files[0]);
 
