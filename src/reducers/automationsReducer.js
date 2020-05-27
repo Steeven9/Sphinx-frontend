@@ -17,7 +17,7 @@ function prepareSceneForFetch(scene) {
  * @returns {state[]}
  */
 
-const scenesReducer = (stateParam, action) => {
+const automationReducer = (stateParam, action) => {
   let state = stateParam;
   let copyCount = 1;
   let duplicatedScene = {};
@@ -34,19 +34,41 @@ const scenesReducer = (stateParam, action) => {
   };
 
   switch (action.type) {
-    case 'POPULATE_SCENES':
-      // console.log('Dispatch: POPULATE_SCENES');
-      return action.scenes;
+
+    case 'CREATE_BLANK_TRIGGER':
+      // console.log('Dispatch: CREATE_BLANK_TRIGGER');
+      return [...state, action.trigger];
+
+    case 'CREATE_BLANK_CONDITION':
+      // console.log('Dispatch: CREATE_BLANK_CONDITION');
+      return [...state, action.condition];
 
     case 'UPDATE_STATE':
       // console.log('Dispatch: UPDATE_STATE');
+      console.log(action)
       state = {
-        name: action.name,
-        icon: action.icon,
-        shared: action.shared,
-        effects: action.effects,
+        sourceId: action.sourceId,
+        conditionType: action.conditionType,
+        value: action.value,
+        effectValue: action.effectValue,
+        device: action.device,
       };
       return state;
+
+    case 'DELETE_TRIGGER':
+      // console.log('Dispatch: DELETE_TRIGGER');
+      state = state.filter((e) => e.id !== action.trigger.id);
+      return [...state];
+
+    case 'DELETE_CONDITION':
+      // console.log('Dispatch: DELETE_TRIGGER');
+      state = state.filter((e) => e.id !== action.condition.id);
+      return [...state];
+
+
+    case 'POPULATE_SCENES':
+      // console.log('Dispatch: POPULATE_SCENES');
+      return action.scenes;
 
     case 'UPDATE_TRANSFER_LIST_STATE':
       // console.log('Dispatch: UPDATE_TRANSFER_LIST_STATE');
@@ -62,10 +84,6 @@ const scenesReducer = (stateParam, action) => {
     case 'LOAD_SCENE':
       // console.log('Dispatch: LOAD_SCENE');
       return [action.effectConfig, ...state];
-
-    case 'CREATE_BLANK_EFFECT':
-      // console.log('Dispatch: CREATE_BLANK_EFFECT');
-      return [...state, action.effectConfig];
 
     case 'CREATE_SCENE':
       // console.log('Dispatch: CREATE_SCENE');
@@ -128,11 +146,6 @@ const scenesReducer = (stateParam, action) => {
       })
       .catch((e) => console.log(e));
 
-      return [...state];
-
-    case 'DELETE_SCENE_EFFECT':
-      // console.log('Dispatch: DELETE_SCENE_EFFECT');
-      state = state.filter((e) => e.id !== action.effectConfig.id);
       return [...state];
 
     case 'RUN_SCENE':
@@ -287,4 +300,4 @@ const scenesReducer = (stateParam, action) => {
       return state;
   }
 };
-export { scenesReducer as default };
+export { automationReducer as default };

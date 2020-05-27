@@ -30,6 +30,8 @@ import SharedWithGuests from './components/shared/SharedWithGuests';
 import Scenes from './components/Scenes';
 import AddScene from './components/AddScene';
 import EditScene from './components/EditScene';
+import AddAutomation from './components/AddAutomation';
+import EditAutomation from './components/EditAutomation';
 import EditSensor from './components/EditSensor';
 import EditSecurityCamera from './components/EditSecurityCamera';
 import Simulations from './components/Simulations';
@@ -365,6 +367,30 @@ class App extends React.Component {
                 {this.state.loggedIn
                   ? (
                     <EditScene
+                      username={this.state.username}
+                      session_token={this.state.session_token}
+                      logOut={this.logOut}
+                    />
+                  )
+                  : this.accessDenied()}
+              </Route>
+
+              <Route path="/addAutomation">
+                {this.state.loggedIn
+                  ? (
+                    <AddAutomation
+                      username={this.state.username}
+                      session_token={this.state.session_token}
+                      logOut={this.logOut}
+                    />
+                  )
+                  : this.accessDenied()}
+              </Route>
+
+              <Route path="/editAutomation">
+                {this.state.loggedIn
+                  ? (
+                    <EditAutomation
                       username={this.state.username}
                       session_token={this.state.session_token}
                       logOut={this.logOut}
