@@ -20,17 +20,17 @@ const EditSecurityCamera = () => {
 
   // PUTS the customized security camera video file
   function updateDevice(mode) {
+    console.log(JSON.stringify(video))
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
-      const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8888/devices/${params.get('id')}`;
+      const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
+        'Content-Type': 'application/json'
       };
 
-      if (mode === 'update') {
-        setVideo(video);
-      } else {
+      if (mode !== 'update') {
         setVideo(defaultVideo);
       }
 
@@ -40,7 +40,7 @@ const EditSecurityCamera = () => {
         method: 'PUT',
         headers,
         body: {
-          video,
+          video: "video",
         },
       })
       .then((res) => {
@@ -78,45 +78,34 @@ const EditSecurityCamera = () => {
       setIsValid(false);
       setIsError(true);
       setShowMessage(true);
-      return;
     }
     else{
       setIsValid(true);
       setIsError(false);
       setShowMessage(false);
-    }
 
-  }
-
-  // Uploads video file to the frontend server
-  function uploadVideo() {
-    var newVideo = document.getElementById("upload-video");
-    validateVideoFile();
-    if(isValid){
+      console.log('is valid')
       var reader = new FileReader();
-      reader.readAsDataURL(newVideo.files[0]);
+      reader.readAsDataURL(upl.files[0]);
 
       reader.onload = function(){
-        setVideo(reader.result);
+        setVideo(reader.result)
+        console.log(reader.result)
       };
 
       reader.onerror = function(){
         console.log("error")
       };
+      
+
     }
   }
-
+ 
   // Resets video file to default video URL
   function resetVideo() {
     setVideo(defaultVideo);
     setIsValid(true);
   }
-
-  // Implement here any other function
-  // ...
-  // ...
-  // ...
-  // end of implementation
 
   // Additional validation to enable saving
   useEffect(() => {
@@ -237,7 +226,7 @@ const EditSecurityCamera = () => {
                 &nbsp;
               </div>
               <div className="col l5">
-              <label for="upload-video" 
+              <label htmlFor="upload-video" 
                      className="btn-primary waves-effect waves-light btn"
                      >
                        Modify video
@@ -246,7 +235,7 @@ const EditSecurityCamera = () => {
                      type="file"
                      name="video" 
                      accept="video/*" 
-                     onChange={() => uploadVideo()} 
+                     onChange={() => validateVideoFile()} 
                      id="upload-video"
                      hidden 
                     />
@@ -281,7 +270,7 @@ const EditSecurityCamera = () => {
             disabled={!isValid || isLoading}
             name=" button"
             className=" btn-primary waves-effect waves-light btn"
-            onClick={() => updateDevice()}
+            onClick={() => updateDevice('save')}
           >
             Save
           </button>
