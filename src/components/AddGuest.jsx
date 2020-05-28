@@ -92,8 +92,6 @@ class AddGuest extends React.Component {
     }
   }
 
-
-
   /**
    * Renders the input for adding a new Guest
    */
