@@ -9,6 +9,9 @@
 
 .collapsible-header {
     align-items: center;
+    margin: auto !important;
+    /*padding: 1vh !important;*/
+    flex-wrap: wrap;
 }
 
 .collapsible-header p {
@@ -107,7 +110,6 @@
 
     .device-name, .device-location {
         white-space: pre !important;
-        white-space: pre !important;
         /*font-size: calc(0.8vh + 1.5vmin) !important;*/
     }
 
@@ -166,7 +168,7 @@
 
     .switch {
         margin-top: 1.25vh;
-        margin-left: 2vh !important;;
+        margin-left: 2vh !important;
         margin-right: 2.5vh;
     }
 
@@ -201,12 +203,6 @@
     display: flex;
 }
 
-.collapsible-header {
-    margin: auto !important;
-    /*padding: 1vh !important;*/
-    flex-wrap: wrap;
-}
-
 .collapsible-body {
     padding: 0 !important;
 }
@@ -233,12 +229,17 @@
     color: #FFFFFF;
 }
 
+.btn-simulations-panel-fix {
+    margin-top: -2px !important;
+}
+
 .btn-video-active {
-    padding: 0.7vh;
+    font-family: 'Open Sans', Verdana, sans-serif !important;
     margin-top: 0.75vh;
     height: 30px !important;
     border-radius: 21px;
     font-style: normal;
+    font-weight: 600;
     font-size: 14px;
     width: 100% !important;
     text-align: center;
@@ -246,14 +247,16 @@
     background: #FFB800 !important;
     text-transform: none !important;
     color: #580B71 !important;
+    border: none;
 }
 
 .btn-video-inactive {
-    padding: 0.7vh;
+    font-family: 'Open Sans', Verdana, sans-serif !important;
     margin-top: 0.75vh;
     height: 30px !important;
     border-radius: 21px;
     font-style: normal;
+    font-weight: 600;
     font-size: 14px;
     width: 100% !important;
     text-align: center;
@@ -261,6 +264,7 @@
     background: #848484;
     text-transform: none !important;
     color: #FFF;
+    border: none;
 }
 
 .btn-group {
@@ -352,7 +356,7 @@
 
 .no-switch {
     margin-top: 1.25vh;
-    margin-left: 2vh !important;;
+    margin-left: 2vh !important;
     margin-right: 1vh;
     visibility: hidden !important;
 }
@@ -363,7 +367,7 @@
 }
 
 form.device-form {
-    display: contents  !important;
+    display: contents !important;
     margin-top: 0 !important;
 }
 

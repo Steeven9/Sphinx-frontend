@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 /**
  * This is the context shared from ScenesPanel to all its children.
@@ -7,4 +7,4 @@ import React from 'react'
  */
 const ScenesContext = React.createContext();
 
-export {ScenesContext as default};
+export { ScenesContext as default };

@@ -594,3 +594,9 @@ db_data/
 
 # Cypress
 cypress/screenshots/
+
+#Eslint
+eslint-report.json
+
+# VSCode
+.vscode/

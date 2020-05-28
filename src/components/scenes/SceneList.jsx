@@ -1,19 +1,17 @@
-import React, {useContext} from 'react'
-import Scene from './Scene'
-import ScenesContext from '../../context/scenesContext'
+import React, { useContext } from 'react';
+import Scene from './Scene';
+import ScenesContext from '../../context/scenesContext';
 
 
 /**
  * Generates a list of nested scenes
  * @returns {SceneList}
  */
-const SceneList = () => {
-
-    const {scenes} = useContext(ScenesContext);
-
-    return scenes.map((scene) => (
-        <Scene key={scene.id} scene={scene}/>
-    ))
+const SceneList = (isGuest) => {
+  const { scenes } = useContext(ScenesContext);
+  return scenes.map((scene) => (
+    <Scene key={scene.id} scene={scene} isGuest={isGuest} />
+  ));
 };
 
-export {SceneList as default}
+export { SceneList as default };

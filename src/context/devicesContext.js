@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 /**
  * This is the context shared from DevicePanel to all its children.
@@ -7,4 +7,4 @@ import React from 'react'
  */
 const DevicesContext = React.createContext();
 
-export {DevicesContext as default};
+export { DevicesContext as default };

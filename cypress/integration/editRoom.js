@@ -15,7 +15,7 @@ describe('Testing the edit room page', function () {
         cy.contains('Customize background')
 
         cy.get(".btn-secondary")
-            .first()
+            .eq(1)
             .click()
         cy.url()
             .should('include', '/house')
@@ -29,7 +29,7 @@ describe('Testing the edit room page', function () {
         cy.server()
         cy.route("DELETE", "**/rooms/1",).as("deleteRoom");
 
-        cy.get(".btn-secondary").eq(1)
+        cy.get(".btn-secondary").eq(2)
         .click()
        
 
@@ -68,7 +68,8 @@ describe('Testing the edit room page', function () {
         .its("requestBody")
         .should("deep.equal", {
             name: editRoomName,
-            icon: "./img/icons/rooms/icon-garage.svg",
+            icon: "./img/icons/rooms/icon-dining-room.svg",
+            background: "./img/backgrounds/rooms/background-dining-room.svg"
         });
        
 
