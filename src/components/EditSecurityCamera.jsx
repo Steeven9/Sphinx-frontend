@@ -20,17 +20,18 @@ const EditSecurityCamera = () => {
 
   // PUTS the customized security camera video file
   function updateDevice(mode) {
+    var newVideo = JSON.stringify({video: video});
+    console.log("new video in json" + newVideo);
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
       const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
+        'Content-Type': 'application/json'
       };
 
-      if (mode === 'update') {
-        setVideo(video);
-      } else {
+      if (mode !== 'update') {
         setVideo(defaultVideo);
       }
 
@@ -39,9 +40,9 @@ const EditSecurityCamera = () => {
       fetch(fetchUrl, {
         method: 'PUT',
         headers,
-        body: {
-          video,
-        },
+        body: 
+          newVideo
+        ,
       })
       .then((res) => {
         setIsLoading(false);
@@ -68,50 +69,49 @@ const EditSecurityCamera = () => {
     }
   }
 
-  // Validates the size and resolution of the video file
+  // Validates the size of the video file
   function validateVideoFile() {
-    const something = true;
-    // Implement function here
-    // ...
-    // ...
+    var upl = document.getElementById("upload-video");
+    var max_size = 70000000;
+    var file_size =  upl.files[0].size;
 
-    // Change {something} for actual evaluation
-    if (something) {
-      setIsValid(true);
-      setIsError(false);
-      setShowMessage(false);
-    } else {
+    if(file_size > max_size){
       setIsValid(false);
       setIsError(true);
       setShowMessage(true);
     }
+    else{
+      setIsValid(true);
+      setIsError(false);
+      setShowMessage(false);
+
+      console.log('is valid')
+      var reader = new FileReader();
+      reader.readAsDataURL(upl.files[0]);
+
+      reader.onload = function(){
+        setVideo(reader.result)
+        console.log(reader.result)
+      };
+
+      reader.onerror = function(){
+        console.log("error")
+      };
+      
+
+    }
   }
-
-  // Uploads video file to the frontend server
-  function uploadVideo() {
-    // Implement function here
-    // ...
-    // ...
-
-    validateVideoFile();
-  }
-
+ 
   // Resets video file to default video URL
   function resetVideo() {
     setVideo(defaultVideo);
     setIsValid(true);
   }
 
-  // Implement here any other function
-  // ...
-  // ...
-  // ...
-  // end of implementation
-
   // Additional validation to enable saving
   useEffect(() => {
       if (showMessage) {
-        if (video.length === 0) {
+        if (video.length > 0) {
           setIsValid(true);
         } else {
           setIsValid(false);
@@ -123,12 +123,12 @@ const EditSecurityCamera = () => {
     },
     [video, device, isError, showMessage]);
 
-  // Extracts value is isLoading on change
+  // Disable message when something is loading
   useEffect(() => {
     setShowMessage(false);
   }, [isLoading]);
 
-  // Fetches devices and room info on page load
+  // Fetches devices on page loads
   useEffect(() => {
     const params = (new URL(document.location)).searchParams;
     const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
@@ -227,14 +227,19 @@ const EditSecurityCamera = () => {
                 &nbsp;
               </div>
               <div className="col l5">
-                <button
-                  type="button"
-                  name=" button"
-                  className=" btn-primary waves-effect waves-light btn"
-                  onClick={() => uploadVideo()}
-                >
-                  Choose file
-                </button>
+              <label htmlFor="upload-video" 
+                     className="btn-primary waves-effect waves-light btn"
+                     >
+                       Modify video
+              </label>
+              <input 
+                     type="file"
+                     name="video" 
+                     accept="video/*" 
+                     onChange={() => validateVideoFile()} 
+                     id="upload-video"
+                     hidden 
+                    />
               </div>
             </div>
 
@@ -266,7 +271,7 @@ const EditSecurityCamera = () => {
             disabled={!isValid || isLoading}
             name=" button"
             className=" btn-primary waves-effect waves-light btn"
-            onClick={() => updateDevice()}
+            onClick={() => updateDevice('save')}
           >
             Save
           </button>
