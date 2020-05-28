@@ -10,10 +10,9 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-// import devicesReducer from '../../reducers/devicesReducer';
 import automationsReducer from '../../reducers/automationsReducer';
-import triggersReducer from '../../reducers/automationsReducer';
-import conditionsReducer from '../../reducers/automationsReducer';
+// import triggersReducer from '../../reducers/automationsReducer';
+// import conditionsReducer from '../../reducers/automationsReducer';
 import TransferList from './TransferList';
 import Trigger from './Trigger';
 import Condition from './Condition';
@@ -29,22 +28,22 @@ let hasName = false;
  * @constructor
  */
 const AutomationsFactory = () => {
-  const [automations, dispatchAutomations] = useReducer(automationsReducer, []);
+  // const [automations, dispatchAutomations] = useReducer(automationsReducer, []);
+  const [automations, setAutomations] = React.useState([]);
   const [devices, setDevices] = React.useState([]);
   const [left, setLeft] = React.useState([]);
   const [right, setRight] = React.useState([]);
   const [name, setName] = React.useState('');
-  const [triggers, dispatchTriggers] = useReducer(triggersReducer, []);
-  const [conditions, dispatchConditions] = useReducer(conditionsReducer, []);
+  const [triggers, dispatchTriggers] = useReducer(automationsReducer, []);
+  const [conditions, dispatchConditions] = useReducer(automationsReducer, []);
   const [globalRight, setGlobalRight] = React.useState([]);
   const [confirmation, setConfirmation] = React.useState(false);
-  const [automationName, setAutomationName] = React.useState('');
   const [isValid, setValid] = React.useState(true);
   const [isLoading, setLoading] = React.useState(true);
   const [isError, setIsError] = React.useState(false);
   const [actionCompleted, setActionCompleted] = React.useState(false);
   const [id, setId] = React.useState(0);
-  const isEditing = path[1].toLowerCase() === 'editscene';
+  const isEditing = path[1].toLowerCase() === 'editautomation';
   const ColorCircularProgress = withStyles({ root: { color: '#580B71' } })(CircularProgress);
 
   function getRandomKey() {
@@ -99,16 +98,24 @@ const AutomationsFactory = () => {
       conditions: conditions,
     };
 
+    console.log(body)
+
+
     fetch(fetchUrl, {
       method: 'POST',
       headers,
       body: JSON.stringify(body),
     })
     .then((res) => {
+      console.log('res.status: ' + res.status)
       if (res.status === 200 || res.status === 201) {
+        setLoading(false);
         setConfirmation(true);
+        setActionCompleted(true);
       } else {
-        setConfirmation(false);
+        setLoading(false);
+        setConfirmation(true);
+        setActionCompleted(false);
       }
       setLoading(false);
     })
@@ -116,6 +123,44 @@ const AutomationsFactory = () => {
       setLoading(false);
       console.log(e);
     });
+  }
+
+
+  function updateAutomation() {
+    const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/automations/${params.get('id')}`;
+    const headers = {
+      user: localStorage.getItem('username'),
+      'session-token': localStorage.getItem('session_token'),
+      'Content-Type': 'application/json',
+    };
+
+    const body = {
+      id: id,
+      scenes: left.map((s) => s.id),
+      name: name,
+      triggers: triggers,
+      conditions: conditions,
+    };
+    console.log(body)
+
+    fetch(fetchUrl, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body),
+    })
+    .then((res) => {
+      console.log('res.status: ' + res.status)
+      if (res.status === 200) {
+        setLoading(false);
+        setConfirmation(true);
+        setActionCompleted(true);
+      } else {
+        setLoading(false);
+        setConfirmation(true);
+        setActionCompleted(false);
+      }
+    })
+    .catch((e) => console.log(e));
   }
 
   // Fetches user's devices just once
@@ -127,7 +172,6 @@ const AutomationsFactory = () => {
         'session-token': localStorage.getItem('session_token'),
       };
       let fetchedDevices = [];
-      let fetchedScenes = [];
 
       fetch(`${fetchUrl}:8080/devices`, {
         method,
@@ -144,7 +188,7 @@ const AutomationsFactory = () => {
       .then((data) => {
         if (data !== null && data.length !== 0) {
           fetchedDevices = JSON.parse(data);
-          fetchedDevices = fetchedDevices.filter((d) => d.type !== 5)
+          fetchedDevices = fetchedDevices.filter((d) => d.type !== 5);
           sort(fetchedDevices);
           setDevices(fetchedDevices);
         }
@@ -153,77 +197,95 @@ const AutomationsFactory = () => {
         console.log(e);
       });
 
-      // if (isEditing) {
-      //   setLoading(true);
-      //   fetch(`${fetchUrl}:8080/scenes/${params.get('id')}`, {
-      //     method,
-      //     headers,
-      //   })
-      //   .then((res) => {
-      //     if (res.status === 401) {
-      //       this.props.logOut(1);
-      //     } else if (res.status === 200) {
-      //       return res.text();
-      //     } else {
-      //       return null;
-      //     }
-      //   })
-      //   .then((data) => {
-      //     if (data === null || data.length === 0) {
-      //     } else {
-      //       // Sets the scene data into the form
-      //       const automation = JSON.parse(data);
-      //       setAutomationName(automation.name);
-      //
-      //       // Mutates the devices[] content into actual devices
-      //       scene.triggers.forEach((effect) => {
-      //         const newDevices = effect.devices.map((id) => fetchedDevices.find((device) => device.id === id));
-      //         effect.devices = newDevices;
-      //       });
-      //
-      //       setLoading(false);
-      //       // Adds a boolean label to trigger visibility of triggers and dispatches one at a time
-      //       automation.triggers.forEach((trigger) => {
-      //         trigger.visible = true;
-      //         trigger.preexisting = true;
-      //
-      //         if (trigger.slider !== undefined) {
-      //           if (trigger.type === 1 || trigger.type === 4) {
-      //             trigger.slider = parseFloat(trigger.slider) * 100;
-      //           }
-      //         }
-      //
-      //         effect.devices.forEach((device) => {
-      //           switch (effect.type) {
-      //             case 1: // Light intensity
-      //               device.usedIntensityId = effect.id;
-      //               break;
-      //             case 2: // Temperature
-      //               device.usedTemperatureId = effect.id;
-      //               break;
-      //             case 3: // Power
-      //               device.usedPowerId = effect.id;
-      //               device.usedPowerOn = effectConfig.on;
-      //               break;
-      //             case 4: // Curtains aperture
-      //               device.usedApertureId = effect.id;
-      //               break;
-      //             default:
-      //               break;
-      //           }
-      //         });
-      //
-      //         dispatchTriggers({
-      //           type: 'LOAD_SCENE',
-      //           effectConfig: effect,
-      //         });
-      //       });
-      //     }
-      //   })
-      //   .catch((e) => {
-      //     console.log(e);
-      //   });
-      // }
+      if (isEditing) {
+        setLoading(true);
+        fetch(`${fetchUrl}:8080/automations/${params.get('id')}`, {
+          method,
+          headers,
+        })
+        .then((res) => {
+          if (res.status === 401) {
+            this.props.logOut(1);
+          } else if (res.status === 200) {
+            return res.text();
+          } else {
+            return null;
+          }
+        })
+        .then((data) => {
+          if (data === null || data.length === 0) {
+          } else {
+            // Sets the scene data into the form
+            const automation = JSON.parse(data);
+
+            console.log(automation)
+
+            setName(automation.name);
+            setName(automation.name);
+            setAutomations(automation);
+
+            if (automation.triggers.length > 0) {
+              dispatchTriggers({
+                type: 'LOAD_TRIGGER',
+                triggers: automation.triggers,
+              });
+            }
+
+            if (automation.conditions.length > 0) {
+              dispatchConditions({
+                type: 'LOAD_CONDITIONS',
+                triggers: automation.conditions,
+              });
+            }
+            // // Mutates the devices[] content into actual devices
+            // scene.triggers.forEach((effect) => {
+            //   const newDevices = effect.devices.map((id) => fetchedDevices.find((device) => device.id === id));
+            //   effect.devices = newDevices;
+            // });
+
+            setLoading(false);
+            // Adds a boolean label to trigger visibility of triggers and dispatches one at a time
+            // automation.triggers.forEach((trigger) => {
+            //   trigger.visible = true;
+            //   trigger.preexisting = true;
+            //
+            //   if (trigger.slider !== undefined) {
+            //     if (trigger.type === 1 || trigger.type === 4) {
+            //       trigger.slider = parseFloat(trigger.slider) * 100;
+            //     }
+            //   }
+            //
+            //   effect.devices.forEach((device) => {
+            //     switch (effect.type) {
+            //       case 1: // Light intensity
+            //         device.usedIntensityId = effect.id;
+            //         break;
+            //       case 2: // Temperature
+            //         device.usedTemperatureId = effect.id;
+            //         break;
+            //       case 3: // Power
+            //         device.usedPowerId = effect.id;
+            //         device.usedPowerOn = effectConfig.on;
+            //         break;
+            //       case 4: // Curtains aperture
+            //         device.usedApertureId = effect.id;
+            //         break;
+            //       default:
+            //         break;
+            //     }
+            //   });
+            //
+            //   dispatchTriggers({
+            //     type: 'LOAD_SCENE',
+            //     effectConfig: effect,
+            //   });
+            // });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      }
     },
     [sort, isEditing]);
 
@@ -255,7 +317,7 @@ const AutomationsFactory = () => {
   const classes = useStyles();
 
   const handleRedirect = () => {
-    window.location.href = '/scenes';
+    window.location.href = '/automations';
   };
 
   /**
@@ -314,7 +376,7 @@ const AutomationsFactory = () => {
                     <p className="center-tex bold">
                       {!isEditing ? 'Creation failed!' : 'Modification failed!'}
                     </p>
-                    <p className="center-text">Please review your automation and try again.</p>
+                    <span className="center-text">Please review your automation and try again.</span>
                   </div>
                 )}
             </DialogContentText>
@@ -343,7 +405,7 @@ const AutomationsFactory = () => {
   return (
     <AutomationsContext.Provider
       value={{
-        dispatchAutomations,
+        // dispatchAutomations,
         dispatchConditions,
         dispatchTriggers,
         automations,
@@ -388,11 +450,10 @@ const AutomationsFactory = () => {
                           placeholder="Type a name"
                           onChange={(e) => {
                             hasName = e.target.value < 1;
-                            setAutomationName(e.target.value);
                             setName(e.target.value);
 
                           }}
-                          value={automationName}
+                          value={name}
                           required
                         />
                       </label>
@@ -448,25 +509,9 @@ const AutomationsFactory = () => {
                           setLoading(true);
 
                           if (isEditing) {
-                            dispatchAutomations({
-                              id: params.get('id'),
-                              type: 'MODIFY_SCENE',
-                              name: automationName,
-                              triggers,
-                              setActionCompleted,
-                              setConfirmation,
-                              setLoading,
-                            });
+                            updateAutomation();
                           } else {
                             createAutomation();
-                            // dispatchAutomations({
-                            //   type: 'CREATE_SCENE',
-                            //   name: automationName,
-                            //   triggers,
-                            //   setActionCompleted,
-                            //   setConfirmation,
-                            //   setLoading,
-                            // });
                           }
                         }}
                       >
@@ -477,6 +522,8 @@ const AutomationsFactory = () => {
                 </div>
               </Paper>
             </Grid>
+
+            {confirmation && <ConfirmationModal />}
 
             {/* Scenes */}
             <Grid item lg={12} className=" scene-content-box-instructions">
@@ -518,7 +565,7 @@ const AutomationsFactory = () => {
                   <div className=" steps-header col l1">
                     <i
                       onClick={() => {
-                        hasName = automationName.length < 1;
+                        hasName = name.length < 1;
                         createBlankTrigger();
                       }}
                       className="col col-custom btn waves-effect waves-light btn-primary-circular
@@ -555,7 +602,7 @@ const AutomationsFactory = () => {
                   <div className=" steps-header col l1">
                     <i
                       onClick={() => {
-                        hasName = automationName.length < 1;
+                        hasName = name.length < 1;
                         createBlankCondition();
                       }}
                       className="col col-custom btn waves-effect waves-light btn-primary-circular

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import '../../css/scenes.css';
 import AutomationsContext from '../../context/automationsContext';
 
@@ -7,7 +7,6 @@ import AutomationsContext from '../../context/automationsContext';
  * @returns {*}
  * @constructor
  * @param blankCondition
- * @param fetchedDevices
  */
 const Condition = (blankCondition) => {
   const { condition } = blankCondition;
@@ -22,6 +21,9 @@ const Condition = (blankCondition) => {
     dispatchConditions({ type: 'DELETE_CONDITION', condition });
   };
 
+  useEffect(() => {
+  }, [sourceId]);
+
   /**
    * Returns a device by its ID
    * @param deviceId
@@ -29,26 +31,6 @@ const Condition = (blankCondition) => {
    */
   function getDevice(deviceId) {
     return devices.filter((d) => d.id === deviceId)[0];
-  }
-
-  /**
-   * Gets effect name by conditionType
-   * @param conditionType
-   * @returns {string}
-   */
-  function getEffectName() {
-    switch (conditionType) {
-      case 1:
-        return 'Light intensity';
-      case 2:
-        return 'Temperature';
-      case 3:
-        return 'Power';
-      case 4:
-        return 'Curtains aperture';
-      default:
-        return 'Unknown effect conditionType';
-    }
   }
 
   // Get's measure unit for values according to conditionType

@@ -253,5 +253,4 @@ class Automations extends React.Component {
   }
 }
 
-
 export default Automations;

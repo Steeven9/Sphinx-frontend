@@ -1,19 +1,18 @@
 import React, { useContext, useEffect } from 'react';
 import '../../css/scenes.css';
 import AutomationsContext from '../../context/automationsContext';
-import { parse } from "query-string";
+
 
 /**
  * Configurator to set scene conditionType and target values
  * @returns {*}
  * @constructor
  * @param blankTrigger
- * @param fetchedDevices
  */
 const Trigger = (blankTrigger) => {
   const { trigger } = blankTrigger;
   const { devices } = blankTrigger;
-  const { getRandomKey, dispatchTriggers } = useContext(AutomationsContext);
+  const { automations, getRandomKey, dispatchTriggers } = useContext(AutomationsContext);
   const [device, setDevice] = React.useState({});
   const [sourceId, setSourceId] = React.useState(trigger.sourceId);
   const [conditionType, setConditionType] = React.useState(trigger.conditionType);
@@ -28,7 +27,11 @@ const Trigger = (blankTrigger) => {
     if (conditionType > 0 && setSourceId > 0) {
       trigger.valid = true;
     }
-  }, [conditionType, setSourceId]);
+  }, [trigger, automations, conditionType, setSourceId]);
+
+
+  useEffect(() => {
+  }, [trigger, sourceId, value]);
 
   /**
    * Returns a device by its ID

@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import AutomationsContext from '../../context/automationsContext';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: 'auto',
@@ -43,7 +44,7 @@ function union(a, b) {
 }
 
 export default function TransferList() {
-  const { left, right, setLeft, setRight } = useContext(AutomationsContext);
+  const { left, right, setLeft, setRight, isEditing, automations } = useContext(AutomationsContext);
   const {
     getRandomKey, sort, setLoading, setIsError,
   } = useContext(AutomationsContext);
@@ -80,8 +81,19 @@ export default function TransferList() {
         setIsError(false);
       } else {
         sort(fetchedScenes);
-        setRight(fetchedScenes);
         setLoading(false);
+
+        if (!isEditing) {
+          setRight(fetchedScenes);
+        }
+        if (isEditing) {
+          if (automations.scenes) {
+            const usedScenes = fetchedScenes.filter((s) => s.id === automations.scenes.map((id) => id)[0]);
+            const unusedScenes = fetchedScenes.filter((s) => s.id !== automations.scenes.map((id) => id)[0]);
+            setLeft(usedScenes);
+            setRight(unusedScenes);
+          }
+        }
       }
     })
     .catch((e) => {
@@ -89,7 +101,7 @@ export default function TransferList() {
       setLoading(false);
       setIsError(true);
     });
-  }, [sort, setIsError, setLoading]);
+  }, [sort, setLeft, setRight, setIsError, setLoading, isEditing, automations]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);

@@ -64,6 +64,13 @@ const automationReducer = (stateParam, action) => {
       state = state.filter((e) => e.id !== action.condition.id);
       return [...state];
 
+    case 'LOAD_TRIGGER':
+      // console.log('Dispatch: LOAD_TRIGGER');
+      return action.triggers;
+
+    case 'LOAD_CONDITIONS':
+      // console.log('Dispatch: LOAD_CONDITIONS');
+      return action.conditions;
 
     case 'POPULATE_SCENES':
       // console.log('Dispatch: POPULATE_SCENES');

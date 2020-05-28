@@ -28,36 +28,35 @@ const VideoPlayer = (device) => {
         const headers = {
           user: localStorage.getItem('username'),
           'session-token': localStorage.getItem('session_token'),
+          Accept: 'application/json',
         };
-
         fetch(fetchUrl, {
           method,
           headers,
         })
         .then((res) => {
-          if (res.status === 200) {
+          if (res.status === 200 || res.status === 206 || res.status === 304) {
             return res.text();
           }
           setIsError(true);
           return null;
         })
         .then((data) => {
-          const fetchedVideo = JSON.parse(data);
-
-          if (!fetchedVideo || fetchedVideo.length !== 0) {
-            setVideoSource(fetchedVideo);
-            setIsLoading(false);
+          if (data !== null) {
+            const fetchedVideo = JSON.parse(data);
+            if (!fetchedVideo || fetchedVideo.length !== 0) {
+              setVideoSource(fetchedVideo);
+              setIsLoading(false);
+            }
           }
         })
         .catch((e) => {
           console.log(e);
           setIsLoading(false);
-          setIsError(true);
         });
       }
     },
     [device]);
-
 
   return (
     <>
