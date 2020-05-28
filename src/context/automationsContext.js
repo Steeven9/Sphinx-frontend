@@ -5,6 +5,6 @@ import React from 'react';
  * This context is used to avoid passing props down the chain.
  * @type {React.Context<unknown>}
  */
-const ScenesContext = React.createContext();
+const AutomationsContext = React.createContext();
 
-export { ScenesContext as default };
+export { AutomationsContext as default };

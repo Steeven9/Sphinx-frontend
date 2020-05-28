@@ -20,15 +20,15 @@ const EditSecurityCamera = () => {
 
   // PUTS the customized security camera video file
   function updateDevice(mode) {
-    var newVideo = JSON.stringify({video: video});
-    console.log("new video in json" + newVideo);
+    const newVideo = JSON.stringify({ video });
+
     if (isValid) {
       const params = (new URL(document.location)).searchParams;
       const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/devices/${params.get('id')}`;
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       };
 
       if (mode !== 'update') {
@@ -40,8 +40,8 @@ const EditSecurityCamera = () => {
       fetch(fetchUrl, {
         method: 'PUT',
         headers,
-        body: 
-          newVideo
+        body:
+        newVideo
         ,
       })
       .then((res) => {
@@ -71,37 +71,32 @@ const EditSecurityCamera = () => {
 
   // Validates the size of the video file
   function validateVideoFile() {
-    var upl = document.getElementById("upload-video");
-    var max_size = 70000000;
-    var file_size =  upl.files[0].size;
+    const upl = document.getElementById('upload-video');
+    const max_size = 70000000;
+    const file_size = upl.files[0].size;
 
-    if(file_size > max_size){
+    if (file_size > max_size) {
       setIsValid(false);
       setIsError(true);
       setShowMessage(true);
-    }
-    else{
+    } else {
       setIsValid(true);
       setIsError(false);
       setShowMessage(false);
 
-      console.log('is valid')
-      var reader = new FileReader();
+      const reader = new FileReader();
       reader.readAsDataURL(upl.files[0]);
 
-      reader.onload = function(){
-        setVideo(reader.result)
-        console.log(reader.result)
+      reader.onload = function () {
+        setVideo(reader.result);
       };
 
-      reader.onerror = function(){
-        console.log("error")
+      reader.onerror = function () {
+        console.log('error');
       };
-      
-
     }
   }
- 
+
   // Resets video file to default video URL
   function resetVideo() {
     setVideo(defaultVideo);
@@ -227,19 +222,20 @@ const EditSecurityCamera = () => {
                 &nbsp;
               </div>
               <div className="col l5">
-              <label htmlFor="upload-video" 
-                     className="btn-primary waves-effect waves-light btn"
-                     >
-                       Modify video
-              </label>
-              <input 
-                     type="file"
-                     name="video" 
-                     accept="video/*" 
-                     onChange={() => validateVideoFile()} 
-                     id="upload-video"
-                     hidden 
-                    />
+                <label
+                  htmlFor="upload-video"
+                  className="btn-primary waves-effect waves-light btn"
+                >
+                  Modify video
+                </label>
+                <input
+                  type="file"
+                  name="video"
+                  accept="video/*"
+                  onChange={() => validateVideoFile()}
+                  id="upload-video"
+                  hidden
+                />
               </div>
             </div>
 
