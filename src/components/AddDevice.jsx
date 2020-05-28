@@ -283,7 +283,7 @@ class AddDevice extends React.Component {
             </div>
             <div className="roomNameAndIcon left">
               <p>Icon</p>
-              <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} alt="icon error" />
+              <img className="fixedSizeIcon" src={this.props.findPathDevice(this.state.iconType)} onClick={this.moveToSelection} alt="icon error" />
               <button className="material-icons removeBorder toPointer" onClick={this.moveToSelection}>edit</button>
             </div>
             <div className="message-two-lines center-text">
@@ -300,7 +300,7 @@ class AddDevice extends React.Component {
         </div>
 
         <div hidden id="addDeviceIconSelection" className="container">
-          <div className="content-box">
+          <div className="content-box z-depth-2">
             <h2 className="title">Select Icon</h2>
             <div className="content-box-iconSelection">
               <button className="selectionIconBtn" onClick={() => this.changeIconState('0')}>

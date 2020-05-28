@@ -149,13 +149,14 @@ const CoupleDevices = () => {
 
   // Fetches user's devices just once
   useEffect(() => {
-      // Fetches parent device
       const method = 'GET';
       const headers = {
         user: localStorage.getItem('username'),
         'session-token': localStorage.getItem('session_token'),
       };
       let fetchedDevices = [];
+
+      setIsLoading(true);
 
       // Fetches all devices
       fetch(`${fetchUrl}:8080/devices`, {
@@ -217,6 +218,8 @@ const CoupleDevices = () => {
         }
       })
       .catch((e) => {
+        setIsError(true);
+        setIsLoading(false);
         console.log(e);
       });
     },
@@ -357,13 +360,19 @@ const CoupleDevices = () => {
             setIsError(true);
             setErrorMessage('There was an error! The devices couldn\'t be coupled.');
           }
+          setIsLoading(false);
           return res;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          setIsError(true);
+          setIsLoading(false);
+        });
       });
     }
 
     if (noChildrenIds.length > 0) {
+      setIsLoading(true);
       noChildrenIds.forEach((id) => {
         const devicesFetchUrl = `${host}/devices/couple/${parent.id}/${id}`;
         fetch(devicesFetchUrl, {
@@ -371,6 +380,7 @@ const CoupleDevices = () => {
           headers,
         })
         .then((res) => {
+          setIsLoading(false);
           if (res.status === 200 || res.status === 204) {
             if (!isEditing) {
               setIsEditing(true);
@@ -384,7 +394,11 @@ const CoupleDevices = () => {
           setErrorMessage("There was an error! The devices couldn't be decoupled.");
           return res;
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {
+          console.log(error);
+          setIsError(true);
+          setIsLoading(false);
+        });
       });
     }
 
