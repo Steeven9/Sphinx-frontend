@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import '../css/App.css';
 import '../css/devices.css';
 import '../css/editPages.css';
@@ -49,6 +49,94 @@ const EditSensor = () => {
         return ['0', '100'];
     }
   }
+
+  const checkHumiditySensorTolerance = useCallback((devicesToSort) => {
+    const hiddenMessage = (<p className="hidden">Secret message!</p>);
+
+    if (value && !tolerance) {
+      if (Number(value) <= 50) {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>The tolerance should be between 0 % and {value} %</p>,
+        );
+      } else {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>The tolerance should be between 0 % and {100 - value} %</p>,
+        );
+      }
+    } else if (!value && tolerance) {
+      if (Number(tolerance) > 50) {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Tolerance is to high, there are no compatible values. Set the tolerance lesser or equal than 50%</p>,
+        );
+      } else if (Number(tolerance) === 50) {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>The only accepted value is 50%</p>,
+        );
+      } else {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>The value should be between {tolerance} % and {100 - tolerance} %</p>,
+        );
+      }
+    } else if (value && tolerance) {
+      if (Number(value) + Number(tolerance) <= 100 && Number(value) - Number(tolerance) >= 0) {
+        setIsValid(true);
+        setShowMessage(false);
+        setMessage(hiddenMessage);
+      } else if (Number(value) + Number(tolerance) <= 100 && Number(value) - Number(tolerance) < 0) {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Tolerance is to high, tolerance should not be greater than the value</p>,
+        );
+      } else if (Number(value) + Number(tolerance) > 100) {
+        setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Tolerance or value is to high, tolerance should not be greater than value and the value summed to the tolerance must not exceed 100%</p>,
+        );
+      }
+    }
+}, [value, tolerance, showMessage]);
+
+  const checkLightSensorTolerance = useCallback((devicesToSort) => {
+    const hiddenMessage = (<p className="hidden">Secret message!</p>);
+
+    if (value && !tolerance) {
+      setShowMessage(true);
+        setIsValid(false);
+        setMessage(
+        <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Tolerance should be lesser or equal to value</p>,
+        );
+    } else if (!value && tolerance) {
+      setShowMessage(true);
+      setIsValid(false);
+      setMessage(
+      <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Value must be greater or equal to tolerance</p>,
+      );
+    } else if (value && tolerance) {
+      if (value - tolerance < 0) {
+        setShowMessage(true);
+      setIsValid(false);
+      setMessage(
+      <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Tolerance must be lesser than vlaue</p>,
+      );
+      } else if (value - tolerance >= 0) {
+        setIsValid(true);
+        setShowMessage(false);
+        setMessage(hiddenMessage);
+      }
+    }
+  }, [value, tolerance, showMessage]);
 
   // Checks validity to save and show feedback messages
   useEffect(() => {
@@ -111,6 +199,7 @@ const EditSensor = () => {
             setIsValid(true);
             setShowMessage(false);
             setMessage(hiddenMessage);
+          checkLightSensorTolerance();          
           }
 
           if (value < 0 || tolerance < 0 || !value || !tolerance) {
@@ -119,6 +208,7 @@ const EditSensor = () => {
             setMessage(
               <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please enter values greater or equal to 0.</p>,
             );
+          checkLightSensorTolerance();          
           }
         }
 
@@ -128,6 +218,8 @@ const EditSensor = () => {
             setIsValid(true);
             setShowMessage(false);
             setMessage(hiddenMessage);
+
+          checkHumiditySensorTolerance();
           }
 
           if (!value || !tolerance || value < 0 || value > 100 || tolerance < 0 || tolerance > 100) {
@@ -136,6 +228,7 @@ const EditSensor = () => {
             setMessage(
               <p className={showMessage ? 'enter-text error-message' : 'hidden'}>Please enter values between 0 and 100.</p>,
             );
+          checkHumiditySensorTolerance();
           }
         }
 
@@ -154,7 +247,7 @@ const EditSensor = () => {
         }
       }
     },
-    [device, value, tolerance, success, isError, showMessage]);
+    [device, value, tolerance, success, isError, showMessage, checkHumiditySensorTolerance, checkLightSensorTolerance]);
 
   // Extracts value is isLoading on change
   useEffect(() => {
