@@ -93,6 +93,7 @@ const AutomationsFactory = () => {
     };
     const body = {
       id: id,
+      scenes: left.map((s) => s.id),
       name: name,
       triggers: triggers,
       conditions: conditions,
