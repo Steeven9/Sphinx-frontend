@@ -235,7 +235,7 @@ class Automations extends React.Component {
             type="button"
             name="button"
             className="btn-secondary btn waves-effect waves-light"
-            onClick={this.moveToAutomationList}
+            onClick={this.moveToAutomationsList}
           >
             No
           </button>
