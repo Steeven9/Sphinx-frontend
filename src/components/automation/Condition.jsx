@@ -147,39 +147,13 @@ const Condition = (blankCondition) => {
              }}
            >
              <option value="0" disabled>Choose a condition</option>
-             {(device.type === 1
-               || device.type === 2
-               || device.type === 3
-               || device.type === 4
-               || device.type === 6
-               || device.type === 11
-               || device.type === 13)
-              && (
-                <>
-                  <option value="1">Power On</option>
-                  <option value="2">Power Off</option>
-                </>
-              )}
-             {device.type === 10
-              && (
-                <>
-                  <option value="3">Motion detected</option>
-                  <option value="4">Motion not detected</option>
-                </>
-              )}
-             {(device.type === 2
-               || device.type === 4
-               || device.type === 7
-               || device.type === 8
-               || device.type === 9
-               || device.type === 11
-               || device.type === 12)
-              && (
-                <>
-                  <option value="5">Over or equal to</option>
-                  <option value="6">Under or equal to</option>
-                </>
-              )}
+             <option value="1">Power On</option>
+             <option value="2">Power Off</option>
+             <option value="3">Motion detected</option>
+             <option value="4">Motion not detected</option>
+             <option value="5">Over or equal to</option>
+             <option value="6">Under or equal to</option>
+             )}
            </select>
          </div>
         }

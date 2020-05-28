@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import '../../css/scenes.css';
 import AutomationsContext from '../../context/automationsContext';
 import { parse } from "query-string";
@@ -18,10 +18,17 @@ const Trigger = (blankTrigger) => {
   const [sourceId, setSourceId] = React.useState(trigger.sourceId);
   const [conditionType, setConditionType] = React.useState(trigger.conditionType);
   const [value, setValue] = React.useState(trigger.value);
+
   const handleDelete = (e) => {
     e.preventDefault();
     dispatchTriggers({ type: 'DELETE_TRIGGER', trigger });
   };
+
+  useEffect(() => {
+    if (conditionType > 0 && setSourceId > 0) {
+      trigger.valid = true;
+    }
+  }, [conditionType, setSourceId]);
 
   /**
    * Returns a device by its ID
@@ -30,26 +37,6 @@ const Trigger = (blankTrigger) => {
    */
   function getDevice(deviceId) {
     return devices.filter((d) => d.id === deviceId)[0];
-  }
-
-  /**
-   * Gets effect name by conditionType
-   * @param conditionType
-   * @returns {string}
-   */
-  function getEffectName() {
-    switch (conditionType) {
-      case 1:
-        return 'Light intensity';
-      case 2:
-        return 'Temperature';
-      case 3:
-        return 'Power';
-      case 4:
-        return 'Curtains aperture';
-      default:
-        return 'Unknown effect conditionType';
-    }
   }
 
   // Get's measure unit for values according to conditionType
@@ -88,7 +75,7 @@ const Trigger = (blankTrigger) => {
                 trigger.effectValue = parseInt(e.target.value, 10);
                 trigger.visible = true;
 
-                dispatchTriggers({ conditionType: 'UPDATE_TRIGGER_STATE', trigger });
+                // dispatchTriggers({ conditionType: 'UPDATE_TRIGGER_STATE', trigger });
               }}
             />
           </div>
@@ -141,48 +128,20 @@ const Trigger = (blankTrigger) => {
              value={trigger.conditionType.toString()}
              // disabled={trigger.conditionType}
              onChange={(e) => {
-               console.log(trigger.conditionType)
                trigger.conditionType = parseInt(e.target.value, 10);
                setConditionType(trigger.conditionType);
-               dispatchTriggers({ conditionType: 'UPDATE_STATE' });
                trigger.preexisting = true;
+               // dispatchTriggers({ type: 'UPDATE_STATE', trigger });
              }}
            >
              <option value="0" disabled>Choose a condition</option>
-             {console.log('device.type: ' + device.type)}
-             {(device.type === 1
-               || device.type === 2
-               || device.type === 3
-               || device.type === 4
-               || device.type === 6
-               || device.type === 11
-               || device.type === 13)
-              && (
-                <>
-                  <option value="1">Power On</option>
-                  <option value="2">Power Off</option>
-                </>
-              )}
-             {device.type === 10
-              && (
-                <>
-                  <option value="3">Motion detected</option>
-                  <option value="4">Motion not detected</option>
-                </>
-              )}
-             {(device.type === 2
-               || device.type === 4
-               || device.type === 7
-               || device.type === 8
-               || device.type === 9
-               || device.type === 11
-               || device.type === 12)
-              && (
-                <>
-                  <option value="5">Over or equal to</option>
-                  <option value="6">Under or equal to</option>
-                </>
-              )}
+             <option value="1">Power On</option>
+             <option value="2">Power Off</option>
+             <option value="3">Motion detected</option>
+             <option value="4">Motion not detected</option>
+             <option value="5">Over or equal to</option>
+             <option value="6">Under or equal to</option>
+             )}
            </select>
          </div>
         }
@@ -205,8 +164,6 @@ const Trigger = (blankTrigger) => {
 
     );
   }
-
-  console.log(trigger.value)
 
   return (
     <>

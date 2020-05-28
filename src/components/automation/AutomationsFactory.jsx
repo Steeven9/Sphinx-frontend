@@ -39,7 +39,7 @@ const AutomationsFactory = () => {
   const [globalRight, setGlobalRight] = React.useState([]);
   const [confirmation, setConfirmation] = React.useState(false);
   const [automationName, setAutomationName] = React.useState('');
-  const [isValid, setValid] = React.useState(false);
+  const [isValid, setValid] = React.useState(true);
   const [isLoading, setLoading] = React.useState(true);
   const [isError, setIsError] = React.useState(false);
   const [actionCompleted, setActionCompleted] = React.useState(false);
@@ -84,24 +84,38 @@ const AutomationsFactory = () => {
     });
   }, []);
 
+  function createAutomation() {
+    const fetchUrl = `${window.location.protocol}//${window.location.hostname}:8080/automations`;
+    const headers = {
+      user: localStorage.getItem('username'),
+      'session-token': localStorage.getItem('session_token'),
+      'Content-Type': 'application/json',
+    };
+    const body = {
+      id: id,
+      name: name,
+      triggers: triggers,
+      conditions: conditions,
+    };
 
-  // Validates if all data necessary for a POST or PUT is available and enables or disables the 'Save' button
-  useEffect(() => {
-    let count = 0;
-    triggers.forEach((t) => {
-      console.log('t.sourceId   :' + t.sourceId)
-      console.log('conditionType:' + t.conditionType)
-      if (t.sourceId >= 0 && t.conditionType >= 0) {
-        count += 1;
+    fetch(fetchUrl, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    })
+    .then((res) => {
+      if (res.status === 200 || res.status === 201) {
+        setConfirmation(true);
+      } else {
+        setConfirmation(false);
       }
+      setLoading(false);
+    })
+    .catch((e) => {
+      setLoading(false);
+      console.log(e);
     });
-
-    setValid(left.length >= 1 && triggers.length >= 1 && (triggers.length === count));
-  }, [left, triggers]);
-
-  useEffect(() => {
-    console.log(isValid);
-  }, [left, triggers, isValid]);
+  }
 
   // Fetches user's devices just once
   useEffect(() => {
@@ -443,14 +457,15 @@ const AutomationsFactory = () => {
                               setLoading,
                             });
                           } else {
-                            dispatchAutomations({
-                              type: 'CREATE_SCENE',
-                              name: automationName,
-                              triggers,
-                              setActionCompleted,
-                              setConfirmation,
-                              setLoading,
-                            });
+                            createAutomation();
+                            // dispatchAutomations({
+                            //   type: 'CREATE_SCENE',
+                            //   name: automationName,
+                            //   triggers,
+                            //   setActionCompleted,
+                            //   setConfirmation,
+                            //   setLoading,
+                            // });
                           }
                         }}
                       >
@@ -512,7 +527,7 @@ const AutomationsFactory = () => {
                     </i>
                   </div>
                 </Grid>
-            
+
                 {/* Configure triggers */}
                 <Grid className="row" container>
                   {triggers.map((trigger) => (

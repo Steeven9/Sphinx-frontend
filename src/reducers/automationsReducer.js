@@ -45,7 +45,6 @@ const automationReducer = (stateParam, action) => {
 
     case 'UPDATE_STATE':
       // console.log('Dispatch: UPDATE_STATE');
-      console.log(action)
       state = {
         sourceId: action.sourceId,
         conditionType: action.conditionType,
